@@ -1,0 +1,32 @@
+<div class="form">
+  <div class="row">
+    <div class="col-md-4">
+      <label for="ddlChar">Field:</label>
+    </div>
+    <div class="col-md-8">
+      <nb-select (selectedChange)="onFieldSelected($event)" name="ddlField" status="primary" fullWidth>
+        <nb-option *ngFor="let field of fields" [value]="field"> {{ field }}</nb-option>
+      </nb-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <label for="txtFrom">Value From:</label>
+    </div>
+    <div class="col-md-8">
+      <input nbInput name='txtFrom' type="text" [(ngModel)]='txtFrom'>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <label for="txtTo">Translates To:</label>
+    </div>
+    <div class="col-md-8">
+      <input nbInput name='txtTo' type="text" [(ngModel)]='txtTo'>
+    </div>
+  </div>
+  <div class="row">
+    <button nbButton (click)='onAddTranslate2Clicked()' class="mr-2" id='btnAddTranslate2' name='btnAddChar2' status='Basic'>Save</button>
+    <button nbButton (click)='onCloseModel1Clicked()' id='btnCloseModal1' name='btnCloseModal1' status='Basic'>Cancel</button>
+  </div>
+</div>

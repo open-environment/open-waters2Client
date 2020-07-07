@@ -1,0 +1,26 @@
+<nb-card status="success">
+  <nb-card-header>
+    Confirm your Selection
+  </nb-card-header>
+
+  <nb-card-body>
+<form>
+  <div class="form-group row">
+    <label for="inputOrg1" class="label col-sm-3 col-form-label">You have selected organization:</label>
+    <div class="col-sm-9">
+      <input type="org" nbInput fullWidth id="inputOrg1" placeholder="OrganizationID" [(ngModel)]="_orgId" [ngModelOptions]="{standalone: true}">
+    </div>
+  </div>
+  <div class="form-group row">
+    <label for="lblMsg1" class="label col-sm-12 col-form-label">{{ msg1 }}</label>
+  </div>
+  <div class="form-group row">
+    <nb-checkbox status="primary">I attest that I am authorized to maintain and submit water quality data for the Organization listed above. Any misrepresentation of this may result in account termination.</nb-checkbox>
+  </div>
+  <div class="form-group row">
+    <button nbButton (click)="onConfirm()">Confirm</button>
+  </div>
+</form>
+
+  </nb-card-body>
+</nb-card>

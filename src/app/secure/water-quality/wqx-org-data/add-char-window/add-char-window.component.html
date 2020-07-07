@@ -1,0 +1,91 @@
+<form class="form">
+  <div class="row">
+    <div class="col-md-4">
+      <label for="ddlChar">Characteristic Name:</label>
+    </div>
+    <div class="col-md-8">
+      <nb-select (selectedChange)="onCharSelected($event)" name="ddlChar" status="primary" fullWidth>
+        <nb-option *ngFor="let char of chars" [value]="char.charName"> {{ char.charName }}</nb-option>
+      </nb-select>
+    </div>
+  </div>
+   <div class="row">
+    <div class="col-md-4">
+      <label for="ddlUnit">Default Unit:</label>
+    </div>
+    <div class="col-md-8">
+      <nb-select (selectedChange)="onUnitSelected($event)" name="ddlUnit" status="primary" fullWidth>
+        <nb-option *ngFor="let unit of units" [value]="unit.value"> {{ unit.value }}</nb-option>
+      </nb-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <label for="txtDetectLimit">Detection Limit:</label>
+    </div>
+    <div class="col-md-8">
+      <input nbInput name='txtDetectLimit' type="text" [(ngModel)]='txtDetectLimit'>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <label class="text-label" for="txtQuantLower">Lower Quant Limit:</label>
+    </div>
+    <div class="col-md-8">
+      <input nbInput name="txtQuantLower" type="text" [(ngModel)]='txtQuantLower'>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <label class="text-label" for="txtQuantUpper">Upper Quant Limit:</label>
+    </div>
+    <div class="col-md-8">
+      <input nbInput name="txtQuantUpper" type="text" [(ngModel)]='txtQuantUpper'>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <label for="ddlAnalMethod">Analysis Method:</label>
+    </div>
+    <div class="col-md-8">
+      <nb-select (selectedChange)="onAnalSelected($event)" name="ddlAnalMethod" status="primary" fullWidth>
+        <nb-option *ngFor="let anal of anals" [value]="anal.analytiC_METHOD_IDX"> {{ anal.analMethodDisplayName }}</nb-option>
+      </nb-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <label for="ddlFraction">Sample Fraction:</label>
+    </div>
+    <div class="col-md-8">
+      <nb-select (selectedChange)="onFracSelected($event)" name="ddlFraction" status="primary" fullWidth>
+        <nb-option *ngFor="let frac of fracs" [value]="frac.value"> {{ frac.value }}</nb-option>
+      </nb-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <label for="ddlStatus">Result Status:</label>
+    </div>
+    <div class="col-md-8">
+      <nb-select (selectedChange)="onStatusSelected($event)" name="ddlStatus" status="primary" fullWidth>
+        <nb-option *ngFor="let stat of stats" [value]="stat.value"> {{ stat.value }}</nb-option>
+      </nb-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <label for="ddlValueType">Result Value Type:</label>
+    </div>
+    <div class="col-md-8">
+      <nb-select (selectedChange)="onResultValuesSelected($event)" name="ddlValueType" status="primary" fullWidth>
+        <nb-option *ngFor="let resultValue of resultValues" [value]="resultValue.value"> {{ resultValue.value }}</nb-option>
+      </nb-select>
+    </div>
+  </div>
+  <div class="row">
+    <button nbButton (click)='onAddChar2Clicked()' class="mr-2" id='btnAddChar2' name='btnAddChar2' status='Basic'>Save</button>
+    <button nbButton (click)='onCloseModel2Clicked()' id='btnCloseModal2' name='btnCloseModal2' status='Basic'>Cancel</button>
+  </div>
+</form>

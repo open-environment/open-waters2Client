@@ -1,0 +1,200 @@
+
+<div class="row">
+  <div class="col-xxl-5">
+    <div class="row">
+      <div class="col-md-4">
+
+          <div class="row">
+            <nb-card>
+              <nb-card-header>Data Collection Metrics</nb-card-header>
+              <nb-card-body>
+                <div class="indent">
+                  <div class="row">
+                      <div class="fldLbl" style="width:250px; ">Organizations Using Open Waters: </div>
+                      <label for="lblOrg"  style="font-weight:bold" >{{lblOrg}}</label>
+                  </div>
+                  <div id="pnlOrgSpecific" style="visibility:visible;">
+                    <ng-container *ngIf='pnlOrgSpecificShow'>
+                      <div class="row">
+                          <label for="lblOrgName">{{lblOrgName}}</label> <div class="bold" > Data Counts</div>
+                      </div>
+                      <div class="indent">
+                          <div class="row">
+                              <div class="fldLbl" style="width:250px; ">Number of Projects: </div>
+                              <label for="lblProject2" style="font-weight:bold" >{{lblProject2}}</label>
+                          </div>
+                          <div class="row">
+                              <div class="fldLbl" style="width:250px; ">Number of Samples: </div>
+                              <label for="lblSamp" style="font-weight:bold" >{{lblSamp}}</label>
+                          </div>
+                          <div class="row">
+                              <div class="fldLbl" style="width:250px; ">Samples Pending Transfer to EPA: </div>
+                              <label for="lblSampPend2" style="font-weight:bold" >{{lblSampPend2}}</label>
+                          </div>
+                          <div class="row">
+                              <div class="fldLbl" style="width:250px; ">Number of Results: </div>
+                              <label for="lblResult" style="font-weight:bold" >{{lblResult}}</label>
+                          </div>
+                      </div>
+                    </ng-container>
+                    </div>
+
+                  <br />
+                  <br />
+              </div>
+              </nb-card-body>
+              <nb-card-footer></nb-card-footer>
+            </nb-card>
+          </div>
+          <div class="row">
+            <nb-card>
+              <nb-card-header>Admin Tasks</nb-card-header>
+              <nb-card-body>
+                <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (custom)="onCustom($event)">
+                </ng2-smart-table>
+              </nb-card-body>
+              <nb-card-footer></nb-card-footer>
+            </nb-card>
+          </div>
+      </div>
+      <div class="col-md-8">
+        <!-- <ngx-earning-card></ngx-earning-card> -->
+        <nb-card size="medium">
+          <nb-card-body>
+           <!--  <nb-stepper orientation="vertical">
+              <nb-step label="">
+                <h3>Create or Join an Organization</h3>
+                <div *ngIf="myOrgusers.length <= 0; else message">
+                  <p class="lorem">
+                    To use Open Waters, you must first be linked with an Organization. This is the water monitoring agency you represent. If you intend to submit your data to EPA, this organization must first be created by EPA in their WQX system. Otherwise, if you never intend to submit your data to EPA, you can create any Organization ID you wish.
+                  </p>
+                  <button nbButton nbStepperNext (click)="Step1GetStarted()">Get Started</button>
+                </div>
+                <ng-template #message>
+                  Click the checkbox above to read the secret message!
+                </ng-template>
+              </nb-step>
+              <nb-step label="Authorize Open Waters to Submit Data">
+                <h3>Step content #2</h3>
+                <p class="lorem">
+                  Curabitur luctus mattis risus nec condimentum. Donec at dui turpis. Sed vehicula fringilla rutrum. Nullam
+                  sed ornare magna. Mauris vitae laoreet diam. Mauris fermentum ligula at lacinia semper. Nulla placerat dui
+                  eu sapien pellentesque, eu placerat leo luctus. Cras pharetra blandit fermentum.
+                </p>
+                <button nbButton nbStepperPrevious>prev</button>
+                <button nbButton nbStepperNext>next</button>
+              </nb-step>
+              <nb-step label="Enter 1 or more monitoring locations">
+                <h3>Step content #3</h3>
+                <p class="lorem">
+                  Proin varius accumsan semper. Praesent consequat tincidunt sagittis. Curabitur egestas sem a ipsum bibendum,
+                  sit amet fringilla orci efficitur. Nam bibendum lectus ut viverra tristique. Fusce eu pulvinar magna, quis
+                  viverra ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent metus turpis, commodo vel
+                  placerat quis, lobortis in ligula.
+                </p>
+                <p class="lorem">
+                  Curabitur luctus mattis risus nec condimentum. Donec at dui turpis. Sed vehicula fringilla rutrum. Nullam
+                  sed ornare magna. Mauris vitae laoreet diam. Mauris fermentum ligula at lacinia semper. Nulla placerat dui
+                  eu sapien pellentesque, eu placerat leo luctus. Cras pharetra blandit fermentum.
+                </p>
+                <button nbButton nbStepperPrevious>prev</button>
+                <button nbButton nbStepperNext>next</button>
+              </nb-step>
+              <nb-step label="Enter 1 or more projects">
+                <h3>Step content #4</h3>
+                <p class="lorem">
+                  Proin varius accumsan semper. Praesent consequat tincidunt sagittis. Curabitur egestas sem a ipsum bibendum,
+                  sit amet fringilla orci efficitur. Nam bibendum lectus ut viverra tristique. Fusce eu pulvinar magna, quis
+                  viverra ex.
+                </p>
+                <button nbButton nbStepperPrevious>prev</button>
+                <button nbButton disabled nbStepperNext>next</button>
+              </nb-step>
+              <nb-step label="Pick default settings for your Organization">
+                <h3>Step content #4</h3>
+                <p class="lorem">
+                  Proin varius accumsan semper. Praesent consequat tincidunt sagittis. Curabitur egestas sem a ipsum bibendum,
+                  sit amet fringilla orci efficitur. Nam bibendum lectus ut viverra tristique. Fusce eu pulvinar magna, quis
+                  viverra ex.
+                </p>
+                <button nbButton nbStepperPrevious>prev</button>
+                <button nbButton disabled nbStepperNext>next</button>
+              </nb-step>
+              <nb-step label="Enter 1 or more activites">
+                <h3>Step content #4</h3>
+                <p class="lorem">
+                  Proin varius accumsan semper. Praesent consequat tincidunt sagittis. Curabitur egestas sem a ipsum bibendum,
+                  sit amet fringilla orci efficitur. Nam bibendum lectus ut viverra tristique. Fusce eu pulvinar magna, quis
+                  viverra ex.
+                </p>
+                <button nbButton nbStepperPrevious>prev</button>
+                <button nbButton disabled nbStepperNext>next</button>
+              </nb-step>
+            </nb-stepper> -->
+            <nb-stepper orientation="vertical">
+              <nb-step label="Create or Join an Organization">
+                <h4>Create or Join an Organization</h4>
+                    <label *ngIf='lblWiz1Show'>{{lblWiz1}}</label>
+                    <button nbButton status='primary' *ngIf='btnWiz1Show' (click)='onBtnWiz1Click()'>{{btnWiz1}}</button>
+                </nb-step>
+              <nb-step label="Authorize Open Waters to Submit Data">
+                <h4>Authorize Open Waters to Submit Data</h4>
+                <label *ngIf='lblWiz2Show'>{{lblWiz2}}</label>
+                <button nbButton status='primary' *ngIf='btnWiz2Show' (click)='onBtnWiz2Click()'>{{btnWiz2}}</button>
+              </nb-step>
+              <nb-step label="Enter 1 or more monitoring locations">
+                <h4>Enter 1 or more monitoring locations</h4>
+                <label *ngIf='lblWiz3Show'>{{lblWiz3}}</label>
+                <button nbButton status='primary' *ngIf='btnWiz3Show' (click)='onBtnWiz3Click()'>{{btnWiz3}}</button>
+                <button nbButton status='primary' *ngIf='btnWiz3bShow' (click)='onBtnWiz3bClick()'>Import</button>
+              </nb-step>
+              <nb-step label="Enter 1 or more projects">
+                <h4>Enter 1 or more projects</h4>
+                <label *ngIf='lblWiz4Show'>{{lblWiz4}}</label>
+                <button nbButton status='primary' *ngIf='btnWiz4Show' (click)='onBtnWiz4Click()'>{{btnWiz4}}</button>
+                <button nbButton status='primary' *ngIf='btnWiz4bShow' (click)='onBtnWiz4bClick()'>Import</button>
+              </nb-step>
+              <nb-step label="Pick default settings for your Organization">
+                <h4>Pick default settings for your Organization</h4>
+                <label *ngIf='lblWiz5Show'>{{lblWiz5}}</label>
+                <button nbButton status='primary' *ngIf='btnWiz5Show' (click)='onBtnWiz5Click()'>Get Started</button>
+              </nb-step>
+              <nb-step label="Enter 1 or more activites">
+                <h4>Enter 1 or more projects</h4>
+                <label *ngIf='lblWiz6Show'>{{lblWiz6}}</label>
+                <button nbButton status='primary' *ngIf='btnWiz6Show' (click)='onBtnWiz6Click()'>{{btnWiz6}}</button>
+                <button nbButton status='primary' *ngIf='btnWiz6bShow' (click)='onBtnWiz6bClick()'>Import</button>
+              </nb-step>
+            </nb-stepper>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+
+    <!-- <ngx-traffic-reveal-card></ngx-traffic-reveal-card> -->
+  </div>
+
+<!--   <div class="col-xxl-7">
+    <ngx-ecommerce-charts></ngx-ecommerce-charts>
+  </div> -->
+</div>
+
+<!-- <div class="row">
+  <div class="col-xxl-9">
+    <ngx-country-orders></ngx-country-orders>
+  </div>
+
+  <div class="col-xxl-3">
+    <ngx-progress-section></ngx-progress-section>
+  </div>
+</div> -->
+
+<!-- <div class="row">
+  <div class="col-xxl-9">
+    <ngx-ecommerce-visitors-analytics></ngx-ecommerce-visitors-analytics>
+  </div>
+
+  <div class="col-xxl-3">
+    <ngx-user-activity></ngx-user-activity>
+  </div>
+</div> -->

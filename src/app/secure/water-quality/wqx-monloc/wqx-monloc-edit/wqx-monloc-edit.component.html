@@ -1,0 +1,185 @@
+<form>
+  <nb-card status="success">
+    <nb-card-header>EDIT MONITORING LOCATION</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-4">Mon Loc ID:</div>
+        <div class="col-8">
+          <input type="text" name="txtMonLocID" [(ngModel)]="txtMonLocID">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Mon Loc Name:</div>
+        <div class="col-8">
+          <input type="text" name="txtMonLocName" [(ngModel)]="txtMonLocName">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Mon Loc Type:</div>
+        <div class="col-8">
+          <nb-select (selectedChange)="onMonLocTypeSelect($event)" 
+          name="ddlMonLocType" status="primary"
+          [(selected)]="monlocTypeSelected" fullWidth>
+            <nb-option *ngFor="let monlocType of monlocTypes" 
+            [value]="monlocType.value"> {{ monlocType.text }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Mon Loc Desc:</div>
+        <div class="col-8">
+          <textarea type="text" name="txtMonLocDesc" 
+          [(ngModel)]="txtMonLocDesc"
+                    rows="3" cols="30"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">8-Digit HUC:</div>
+        <div class="col-8">
+          <input type="text" name="txtHUC8"  [(ngModel)]="txtHUC8">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">12-Digit HUC:</div>
+        <div class="col-8">
+          <input type="text" name="txtHUC12" [(ngModel)]="txtHUC12">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">On Tribal Land?:</div>
+        <div class="col-8">
+          <nb-checkbox (checkedChange)="onChkLandInd($event)" status="danger"></nb-checkbox>
+          <input type="text" name="txtLandName" [(ngModel)]="txtLandName">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Latitude:</div>
+        <div class="col-8">
+          <input type="text" name="txtLatitude" [(ngModel)]="txtLatitude">
+          <label for="txtLongitude">Langitude:</label>
+          <input type="text" name="txtLongitude" [(ngModel)]="txtLongitude">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Source Map Scale:</div>
+        <div class="col-8">
+          <input type="text" name="txtSourceMapScale" [(ngModel)]="txtSourceMapScale">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Horiz. Collection Method</div>
+        <div class="col-8">
+          <nb-select (selectedChange)="onHorizMethodSelected($event)" 
+          name="ddlHorizMethod" status="primary" 
+          [(selected)]="horizMethodSelected" fullWidth>
+            <nb-option *ngFor="let horizMethod of horizMethods" [value]="horizMethod.value"> {{ horizMethod.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Horiz. Reference Datum</div>
+        <div class="col-8">
+          <nb-select (selectedChange)="onHorizDatumSelected($event)" 
+          name="ddlHorizDatum" status="primary" 
+          [(selected)]="horizDetumSelected" fullWidth>
+            <nb-option *ngFor="let horizDatum of horizDatums" [value]="horizDatum.value"> {{ horizDatum.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Vertical Measure:</div>
+        <div class="col-8">
+          <input type="text" name="txtVertMeasure" [(ngModel)]="txtVertMeasure">
+          <label for="">Unit:</label>
+          <nb-select (selectedChange)="onVertUnitSelected($event)" 
+          name="ddlVertUnit" status="primary" 
+          [(selected)]="vertUnitSelected" fullWidth>
+            <nb-option *ngFor="let vertUnit of vertUnits" [value]="vertUnit.value"> {{ vertUnit.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Vert. Collection Method</div>
+        <div class="col-8">
+          <nb-select (selectedChange)="onVertMethodSelected($event)" 
+          name="ddlHorizDatum" status="primary" 
+          [(selected)]="vertMethodSelected" fullWidth>
+            <nb-option *ngFor="let vertMethod of vertMethods" [value]="vertMethod.value"> {{ vertMethod.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Vert. Reference Datum</div>
+        <div class="col-8">
+          <nb-select (selectedChange)="onVertDatumSelected($event)" 
+          name="ddlVertDatum" status="primary" 
+          [(selected)]="vertDetumSelected" fullWidth>
+            <nb-option *ngFor="let vertDetum of vertDetums" [value]="vertDetum.value"> {{ vertDetum.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">State</div>
+        <div class="col-8">
+          <nb-select (selectedChange)="onStateSelected($event)" 
+          name="ddlState" status="primary" 
+          [(selected)]="stateSelected" fullWidth>
+            <nb-option *ngFor="let state of states" [value]="state.value"> {{ state.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">County</div>
+        <div class="col-8">
+          <nb-select (selectedChange)="onCountySelected($event)" 
+          name="ddlCounty" status="primary" 
+          [(selected)]="countySelected" fullWidth>
+            <nb-option *ngFor="let county of counties" [value]="county.countyCode"> {{ county.countyName }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Country</div>
+        <div class="col-8">
+          <nb-select (selectedChange)="onCountrySelected($event)" 
+          name="ddlCountry" status="primary" 
+          [(selected)]="countrySelected" fullWidth>
+            <nb-option *ngFor="let country of countries" [value]="country.value"> {{ country.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Well Type</div>
+        <div class="col-8">
+          <nb-select (selectedChange)="onWellTypeSelected($event)" 
+          name="ddlWellType" status="primary" 
+          [(selected)]="wellTypeSelected" fullWidth>
+            <nb-option *ngFor="let welltype of wellTypes" [value]="welltype.value"> {{ welltype.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Aquifer</div>
+        <div class="col-8">
+          <input type="text" name="txtAquifer" [(ngModel)]="txtAquifer">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Active?</div>
+        <div class="col-8">
+          <nb-checkbox (checkedChange)="onChkActInd($event)" status="danger"></nb-checkbox>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4">Send to EPA</div>
+        <div class="col-8">
+          <nb-checkbox (checkedChange)="onChkWQXInd($event)" status="danger"></nb-checkbox>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton (click)="onBtnSaveClicked()" name="btnSave">Save & Exit</button>
+      <button nbButton (click)="onBtnCancelClicked()" name="btnCancel">Cancel</button>
+    </nb-card-footer>
+  </nb-card>
+</form>

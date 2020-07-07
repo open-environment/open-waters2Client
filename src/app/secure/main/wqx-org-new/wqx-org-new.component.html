@@ -1,0 +1,17 @@
+<nb-card status="success">
+  <nb-card-header>
+    Join an Organization
+    <div class="greenBox">
+      <div>From the list below, select the Organization that you are affiliated with.
+      </div>
+      <div>
+        Do not request to join an Organization to which you do not belong. Doing so may result in termination of your Open Waters account.
+      </div>
+    </div>
+  </nb-card-header>
+
+  <nb-card-body>
+    <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (custom)="onCustom($event)">
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>

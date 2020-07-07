@@ -1,0 +1,169 @@
+
+<div class="row">
+  <form>
+  <div class="col-lg-12">
+    <nb-card status="success">
+      <nb-card-header>Edit Organization</nb-card-header>
+      <nb-card-body>
+        <div class="row mb-2 mt-2" *ngIf="lblMsgShow === true">
+          <nb-alert status="danger">{{ lblMsg }}</nb-alert>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-2">
+            <label for="txtOrgID" class="label col-form-label">Organization ID</label>
+          </div>
+          <div class="col-md-10">
+            <input name="txtOrgID" [(ngModel)]="txtOrgID" type="text" nbInput fullWidth ng-readonly="(txtOrgIDReadOnly)">
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-2">
+            <label for="txtOrgName" class="label col-form-label">Organization Name</label>
+          </div>
+          <div class="col-md-10">
+            <input name="txtOrgName" [(ngModel)]="txtOrgName" type="text" nbInput fullWidth>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-2">
+            <label for="txtOrgDesc" class="label col-form-label">Description</label>
+          </div>
+          <div class="col-md-10">
+            <textarea name="txtOrgDesc" [(ngModel)]="txtOrgDesc" rows="5" nbInput fullWidth shape="round" ></textarea>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-2">
+            <label for="ddlTribalCode" class="label col-form-label">Tribal Code</label>
+          </div>
+          <div class="col-md-10">
+            <nb-select name="ddlTribalCode" status="primary" fullWidth>
+              <nb-option *ngFor="let tc of tcs" [value]="tc.value"> {{ tc.text }}</nb-option>
+            </nb-select>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-2">
+            <label for="txtOrgEmail" class="label col-form-label">Email</label>
+          </div>
+          <div class="col-md-10">
+            <input name="txtOrgEmail" [(ngModel)]="txtOrgEmail" type="text" nbInput fullWidth>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-2">
+            <label for="txtOrgPhone" class="label col-form-label">Phone</label>
+          </div>
+          <div class="col-md-10">
+            <input name="txtOrgPhone" [(ngModel)]="txtOrgPhone" type="text" nbInput>
+            <label for="txtOrgPhoneExt" class="label col-form-label mr-3 ml-3">Ext</label>
+            <input name="txtOrgPhoneExt" [(ngModel)]="txtOrgPhoneExt" type="text" nbInput>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-2">
+            <label for="txtMailingAddress" class="label col-form-label">Mailing Address</label>
+          </div>
+          <div class="col-md-10">
+            <input name="txtMailingAddress" [(ngModel)]="txtMailingAddress" type="text" nbInput fullWidth>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-2">
+            <label for="txtMailCity" class="label col-form-label">City</label>
+          </div>
+          <div class="col-md-10">
+            <input name="txtMailCity" [(ngModel)]="txtMailCity" fieldSize="small" type="text" nbInput>
+            <label for="txtMailState" class="label col-form-label mr-3 ml-3">State</label>
+            <input name="txtMailState" [(ngModel)]="txtMailState" fieldSize="small" type="text" nbInput>
+            <label for="txtMailZIP" class="label col-form-label mr-3 ml-3">Zip</label>
+            <input name="txtMailZIP" [(ngModel)]="txtMailZIP" fieldSize="small" type="text" nbInput>
+          </div>
+        </div>
+        <!-- <input type="text" nbInput fullWidth placeholder="Project">
+        <textarea rows="5" nbInput fullWidth shape="round"  placeholder="Text Area"></textarea> -->
+        <nb-card class="m-3">
+
+          <nb-card-body class="p-3" style="background-color: lightgray;">
+            <h5>Credentials for Submitting to EPA</h5>
+            <label for="lblCDXSubmitInd" class="label col-form-label">{{lblCDXSubmitInd}}</label>
+            <br/>
+            <nb-radio-group name="rbCDX"
+            [(ngModel)]="epaSubmissionGroup"
+            (valueChange)="onrbCDXChange($event)">
+              <nb-radio [value]="'1'">
+                Submit to EPA using my own NAAS credentials
+              </nb-radio>
+              <nb-radio [value]="'2'">
+                Submit to EPA using Open Waters global NAAS credentials
+              </nb-radio>
+            </nb-radio-group>
+
+            <div *ngIf="divCDXme === true">
+            <br/>
+            <div class="row mt-2">
+              <div class="col-md-3">
+                <label for="txtCDX" class="label col-form-label">CDX Submitter</label>
+              </div>
+              <div class="col-md-9">
+                <input name="txtCDX" [(ngModel)]="txtCDX" type="text" nbInput fullWidth>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-md-3">
+                <label for="txtCDXPwd" class="label col-form-label">CDX Submitter Password</label>
+              </div>
+              <div class="col-md-9">
+                <input name="txtCDXPwd" [(ngModel)]="txtCDXPwd" type="password" nbInput fullWidth>
+              </div>
+            </div>
+            <br/>
+            <button nbButton status="basic" (click)="btnTestNAASLocalClick()">Test My Credentials</button>
+          </div>
+            <div *ngIf="divCDXglobal === true">
+              <br/>
+              <button nbButton status="basic" (click)="btnTestNAASGlobalClick()">Check if Open Waters is Authorized to Submit for Your Organization</button>
+            </div>
+          </nb-card-body>
+        </nb-card>
+        <nb-card class="p-3" style="background-color: lightgray;">
+          <nb-card-body>
+            <button class="mr-2" nbButton status="basic" (click)="onSaveAndExitClicked()">Save & Exit</button>
+            <button class="mr-2" nbButton status="basic" (click)="onCancelClicked()">Cancel</button>
+            <button class="mr-2" nbButton status="basic" (click)="onEditDefaultData()">Edit Default Data</button>
+          </nb-card-body>
+        </nb-card>
+        </nb-card-body>
+    </nb-card>
+    <nb-card status="success">
+      <nb-card-body>
+        <div class="row">
+          <div class="col-md-4">
+            <p>Available Users</p>
+            <nb-list name="nl">
+              <nb-list-item name="nbli" *ngFor="let orgUser of lbAllUsers" [ngClass]="{'listItemClass1' : listItemClass1}">
+                <label name="nbl" (click)="onOrgAllUserClicked(orgUser)">{{ orgUser.useR_ID((orgUser.rolE_CD) === 'A' ? 'Admin' : 'User') }}</label>
+              </nb-list-item>
+            </nb-list>
+          </div>
+          <div class="col-md-4">
+            <nb-checkbox name="nbc" [(ngModel)]="isChecked">Add as Admin</nb-checkbox>
+            <br />
+            <button class="mb-2" nbButton status="basic" (click)="onAddUserToOrg()">Add User to Org >></button>
+            <button class="mb-2" nbButton status="basic" (click)="onRemoveUserFromOrg()"><< Remove User from Org</button>
+          </div>
+          <div class="col-md-4">
+            <p>Users in Organization</p>
+            <nb-list>
+              <nb-list-item *ngFor="let orgUserN of lbUserInRole" [ngClass]="{'listItemClass2' : listItemClass2}">
+                <label (click)="onOrgAllUserNotInOrgClicked(orgUserN)">{{ (orgUserN.rolE_CD === 'A') ? orgUserN.useR_ID + '(Admin)' : orgUserN.useR_ID + '(User)' }}</label>
+              </nb-list-item>
+            </nb-list>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</form>
+  </div>
+
