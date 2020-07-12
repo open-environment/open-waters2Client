@@ -69,11 +69,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.user.UserIDX !== null){
-      this.organizationService.GetWQX_USER_ORGS_ByUserIDX(parseInt(this.user.UserIDX), true).subscribe(
+    if (this.user.UserIDX !== null) {
+      this.organizationService.GetWQX_USER_ORGS_ByUserIDX(+this.user.UserIDX, true).subscribe(
         (data) => {
+          console.log(data);
           data.forEach(element => {
-            let newOrg = {} as WqxOrganization;
+            const newOrg = {} as WqxOrganization;
             newOrg.orgId = element.orgId;
             newOrg.orgFormalName =  element.orgFormalName;
             this.orgs.push(newOrg);
@@ -87,13 +88,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       console.log('user not initialized!');
     }
 
-    //this.currentTheme = this.themeService.currentTheme;
+    // this.currentTheme = this.themeService.currentTheme;
 
     /* this.userService.getUsers()
       .pipe(takeUntil(this.destroy$))
       .subscribe((users: any) => this.user = users.nick); */
 
-    const { xl } = this.breakpointService.getBreakpointsMap();
+    // const { xl } = this.breakpointService.getBreakpointsMap();
     /* this.themeService.onMediaQueryChange()
       .pipe(
         map(([, currentBreakpoint]) => currentBreakpoint.width < xl),
@@ -112,11 +113,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }); */
   }
 
-   onItemSelection( title ) {
+   onItemSelection( title: string ) {
     if ( title === 'Log out' ) {
-      this._authService.logout('email').subscribe((result: NbAuthResult) => {
+      this._authService.logout('email').subscribe(
+        (result: NbAuthResult) => {
+        console.log(result);
         this._router.navigateByUrl('/auth/login');
-      });
+        },
+        (err) => { console.log(err); },
+      );
     } else if ( title === 'Profile' ) {
       // Do something on Profile
     }

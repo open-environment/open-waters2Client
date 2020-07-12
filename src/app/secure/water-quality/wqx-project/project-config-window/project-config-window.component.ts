@@ -24,6 +24,7 @@ export class ProjectConfigWindowComponent implements OnInit {
     console.log('onConfigSave clicked!');
     localStorage.setItem('projectConfig', JSON.stringify(this.config));
     this.pubSubService.setProjectData(this.config);
+    this.windowRef.close();
   }
   onConfigCancel(): void {
     console.log('onConfigCancel clicked!');

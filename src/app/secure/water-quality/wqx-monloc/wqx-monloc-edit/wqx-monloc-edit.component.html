@@ -1,22 +1,36 @@
-<form>
+<form name="form" 
+(ngSubmit)="f.form.valid && onSubmit()" 
+#f="ngForm" novalidate>
   <nb-card status="success">
     <nb-card-header>EDIT MONITORING LOCATION</nb-card-header>
     <nb-card-body>
-      <div class="row">
-        <div class="col-4">Mon Loc ID:</div>
-        <div class="col-8">
-          <input type="text" name="txtMonLocID" [(ngModel)]="txtMonLocID">
+      <div class="form-row">
+        <div class="form-group col-4">Mon Loc ID:</div>
+        <div class="form-group col-8">
+          <input type="text" 
+          name="txtMonLocID" 
+          class="form-control"
+          [(ngModel)]="txtMonLocID"
+          #vtxtMonLocID="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && vtxtMonLocID.invalid }"
+          required maxlength="35">
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Mon Loc Name:</div>
-        <div class="col-8">
-          <input type="text" name="txtMonLocName" [(ngModel)]="txtMonLocName">
+      <div class="form-row">
+        <div class="form-group col-4">Mon Loc Name:</div>
+        <div class="form-group col-8">
+          <input type="text" 
+          name="txtMonLocName" 
+          class="form-control"
+          [(ngModel)]="txtMonLocName"
+          #vtxtMonLocName="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && vtxtMonLocName.invalid }"
+          required maxlength="255">
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Mon Loc Type:</div>
-        <div class="col-8">
+      <div class="form-row">
+        <div class="form-group col-4">Mon Loc Type:</div>
+        <div class="form-group col-8">
           <nb-select (selectedChange)="onMonLocTypeSelect($event)" 
           name="ddlMonLocType" status="primary"
           [(selected)]="monlocTypeSelected" fullWidth>
@@ -25,50 +39,107 @@
           </nb-select>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Mon Loc Desc:</div>
-        <div class="col-8">
-          <textarea type="text" name="txtMonLocDesc" 
+      <div class="form-row">
+        <div class="form-group col-4">Mon Loc Desc:</div>
+        <div class="form-group col-8">
+          <textarea type="text" 
+          class="form-control"
+          name="txtMonLocDesc" 
           [(ngModel)]="txtMonLocDesc"
-                    rows="3" cols="30"></textarea>
+          #vtxtMonLocDesc="ngModel"
+          rows="3" cols="30"
+          [ngClass]="{ 'is-invalid': f.submitted && vtxtMonLocDesc.invalid }"></textarea>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">8-Digit HUC:</div>
-        <div class="col-8">
-          <input type="text" name="txtHUC8"  [(ngModel)]="txtHUC8">
+      <div class="form-row">
+        <div class="form-group col-4">8-Digit HUC:</div>
+        <div class="form-group col-8">
+          <input type="text" 
+          class="form-control"
+          name="txtHUC8"  
+          [(ngModel)]="txtHUC8"
+          #vtxtHUC8="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && vtxtHUC8.invalid }"
+          maxlength="8">
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">12-Digit HUC:</div>
-        <div class="col-8">
-          <input type="text" name="txtHUC12" [(ngModel)]="txtHUC12">
+      <div class="form-row">
+        <div class="form-group col-4">12-Digit HUC:</div>
+        <div class="form-group col-8">
+          <input type="text" 
+          class="form-control"
+          name="txtHUC12" 
+          [(ngModel)]="txtHUC12"
+          #vtxtHUC12="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && vtxtHUC12.invalid }"
+          maxlength="12">
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">On Tribal Land?:</div>
-        <div class="col-8">
-          <nb-checkbox (checkedChange)="onChkLandInd($event)" status="danger"></nb-checkbox>
-          <input type="text" name="txtLandName" [(ngModel)]="txtLandName">
+      <div class="form-row">
+        <div class="form-group col-4">On Tribal Land?:</div>
+        <div class="form-group col-8">
+          <div class="row">
+            <div class="col-2">
+              <nb-checkbox 
+              (checkedChange)="onChkLandInd($event)" 
+              status="danger"
+              [checked]="chkLandInd"></nb-checkbox>
+            </div>
+            <div class="col-10">
+              <input type="text" 
+              class="form-control"
+              name="txtLandName" 
+              [(ngModel)]="txtLandName"
+              #vtxtLandName="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && vtxtLandName.invalid }"
+              maxlength="200">
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Latitude:</div>
-        <div class="col-8">
-          <input type="text" name="txtLatitude" [(ngModel)]="txtLatitude">
-          <label for="txtLongitude">Langitude:</label>
-          <input type="text" name="txtLongitude" [(ngModel)]="txtLongitude">
+      <div class="form-row">
+        <div class="form-group col-4">Latitude:</div>
+        <div class="form-group col-8">
+          <div class="row">
+            <div class="col-5">
+              <input type="text" 
+              class="form-control"
+              name="txtLatitude" 
+              [(ngModel)]="txtLatitude"
+              #vtxtLatitude="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && vtxtLatitude.invalid }"
+              required maxlength="12">
+            </div>
+            <div class="col-2">
+              <label for="txtLongitude">Langitude:</label>
+            </div>
+            <div class="col-5">
+              <input type="text" 
+              class="form-control"
+              name="txtLongitude" 
+              [(ngModel)]="txtLongitude"
+              #vtxtLongitude="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && vtxtLongitude.invalid }"
+              required maxlength="14">
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Source Map Scale:</div>
-        <div class="col-8">
-          <input type="text" name="txtSourceMapScale" [(ngModel)]="txtSourceMapScale">
+      <div class="form-row">
+        <div class="form-group col-4">Source Map Scale:</div>
+        <div class="form-group col-8">
+          <input type="text" 
+          class="form-control"
+          name="txtSourceMapScale" 
+          [(ngModel)]="txtSourceMapScale"
+          #vtxtSourceMapScale="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && vtxtSourceMapScale.invalid }"
+          maxlength="12">
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Horiz. Collection Method</div>
-        <div class="col-8">
+      <div class="form-row">
+        <div class="form-group col-4">Horiz. Collection Method</div>
+        <div class="form-group col-8">
           <nb-select (selectedChange)="onHorizMethodSelected($event)" 
           name="ddlHorizMethod" status="primary" 
           [(selected)]="horizMethodSelected" fullWidth>
@@ -76,9 +147,9 @@
           </nb-select>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Horiz. Reference Datum</div>
-        <div class="col-8">
+      <div class="form-row">
+        <div class="form-group col-4">Horiz. Reference Datum</div>
+        <div class="form-group col-8">
           <nb-select (selectedChange)="onHorizDatumSelected($event)" 
           name="ddlHorizDatum" status="primary" 
           [(selected)]="horizDetumSelected" fullWidth>
@@ -86,21 +157,35 @@
           </nb-select>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Vertical Measure:</div>
-        <div class="col-8">
-          <input type="text" name="txtVertMeasure" [(ngModel)]="txtVertMeasure">
-          <label for="">Unit:</label>
-          <nb-select (selectedChange)="onVertUnitSelected($event)" 
-          name="ddlVertUnit" status="primary" 
-          [(selected)]="vertUnitSelected" fullWidth>
-            <nb-option *ngFor="let vertUnit of vertUnits" [value]="vertUnit.value"> {{ vertUnit.value }}</nb-option>
-          </nb-select>
+      <div class="form-row">
+        <div class="form-group col-4">Vertical Measure:</div>
+        <div class="form-group col-8">
+          <div class="row">
+            <div class="col-5">
+              <input type="text" 
+              class="form-control"
+              name="txtVertMeasure" 
+              [(ngModel)]="txtVertMeasure"
+              #vxtVertMeasure="ngModel"
+              [ngClass]="{ 'is-invalid': f.submitted && vxtVertMeasure.invalid }"
+              maxlength="12">
+            </div>
+            <div class="col-2">
+              <label for="">Unit:</label>
+            </div>
+            <div class="col-5">
+              <nb-select (selectedChange)="onVertUnitSelected($event)" 
+              name="ddlVertUnit" status="primary" 
+              [(selected)]="vertUnitSelected" fullWidth>
+                <nb-option *ngFor="let vertUnit of vertUnits" [value]="vertUnit.value"> {{ vertUnit.value }}</nb-option>
+              </nb-select>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Vert. Collection Method</div>
-        <div class="col-8">
+      <div class="form-row">
+        <div class="form-group col-4">Vert. Collection Method</div>
+        <div class="form-group col-8">
           <nb-select (selectedChange)="onVertMethodSelected($event)" 
           name="ddlHorizDatum" status="primary" 
           [(selected)]="vertMethodSelected" fullWidth>
@@ -108,9 +193,9 @@
           </nb-select>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Vert. Reference Datum</div>
-        <div class="col-8">
+      <div class="form-row">
+        <div class="form-group col-4">Vert. Reference Datum</div>
+        <div class="form-group col-8">
           <nb-select (selectedChange)="onVertDatumSelected($event)" 
           name="ddlVertDatum" status="primary" 
           [(selected)]="vertDetumSelected" fullWidth>
@@ -118,9 +203,9 @@
           </nb-select>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">State</div>
-        <div class="col-8">
+      <div class="form-row">
+        <div class="form-group col-4">State</div>
+        <div class="form-group col-8">
           <nb-select (selectedChange)="onStateSelected($event)" 
           name="ddlState" status="primary" 
           [(selected)]="stateSelected" fullWidth>
@@ -128,9 +213,9 @@
           </nb-select>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">County</div>
-        <div class="col-8">
+      <div class="form-row">
+        <div class="form-group col-4">County</div>
+        <div class="form-group col-8">
           <nb-select (selectedChange)="onCountySelected($event)" 
           name="ddlCounty" status="primary" 
           [(selected)]="countySelected" fullWidth>
@@ -138,9 +223,9 @@
           </nb-select>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Country</div>
-        <div class="col-8">
+      <div class="form-row">
+        <div class="form-group col-4">Country</div>
+        <div class="form-group col-8">
           <nb-select (selectedChange)="onCountrySelected($event)" 
           name="ddlCountry" status="primary" 
           [(selected)]="countrySelected" fullWidth>
@@ -148,9 +233,9 @@
           </nb-select>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Well Type</div>
-        <div class="col-8">
+      <div class="form-row">
+        <div class="form-group col-4">Well Type</div>
+        <div class="form-group col-8">
           <nb-select (selectedChange)="onWellTypeSelected($event)" 
           name="ddlWellType" status="primary" 
           [(selected)]="wellTypeSelected" fullWidth>
@@ -158,28 +243,48 @@
           </nb-select>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Aquifer</div>
-        <div class="col-8">
-          <input type="text" name="txtAquifer" [(ngModel)]="txtAquifer">
+      <div class="form-row">
+        <div class="form-group col-4">Aquifer</div>
+        <div class="form-group col-8">
+          <input type="text" 
+          class="form-control"
+          name="txtAquifer" 
+          [(ngModel)]="txtAquifer"
+          #vtxtAquifer="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && vtxtAquifer.invalid }"
+          maxlength="120">
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Active?</div>
-        <div class="col-8">
-          <nb-checkbox (checkedChange)="onChkActInd($event)" status="danger"></nb-checkbox>
+      <div class="form-row">
+        <div class="form-group col-4">Active?</div>
+        <div class="form-group col-8">
+          <nb-checkbox 
+          (checkedChange)="onChkActInd($event)" 
+          status="danger"
+          [checked]="chkActInd"></nb-checkbox>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4">Send to EPA</div>
-        <div class="col-8">
-          <nb-checkbox (checkedChange)="onChkWQXInd($event)" status="danger"></nb-checkbox>
+      <div class="form-row">
+        <div class="form-group col-4">Send to EPA</div>
+        <div class="form-group col-8">
+          <nb-checkbox 
+          (checkedChange)="onChkWQXInd($event)" 
+          status="danger"
+          [checked]="chkWQXInd"></nb-checkbox>
         </div>
       </div>
     </nb-card-body>
     <nb-card-footer>
-      <button nbButton (click)="onBtnSaveClicked()" name="btnSave">Save & Exit</button>
-      <button nbButton (click)="onBtnCancelClicked()" name="btnCancel">Cancel</button>
+      <button nbButton 
+      type="submit"
+      status="success"
+      name="btnSave"
+      class="mr-3">Save & Exit</button>
+      <button nbButton 
+      type="button"
+      status="danger"
+      (click)="onBtnCancelClicked()" 
+      name="btnCancel">Cancel</button>
     </nb-card-footer>
   </nb-card>
 </form>

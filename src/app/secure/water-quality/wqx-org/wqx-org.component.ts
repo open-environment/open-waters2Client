@@ -12,11 +12,12 @@ import { Router } from '@angular/router';
 export class WqxOrgComponent implements OnInit {
 
   settings = {
-    actions:{
-      custom:[
+    hideSubHeader: true,
+    actions: {
+      custom: [
         {
         name: 'select',
-        title: 'select',
+        title: '<i class="ion-edit" title="Edit"></i>',
         },
       ],
       add: false,

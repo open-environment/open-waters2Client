@@ -6,13 +6,13 @@ import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { WqxRefCounty } from '../../../../@core/wqx-data/wqx-refdata';
 import { NbToastrService } from '@nebular/theme';
 import { WqxMonlocService } from '../../../../@core/wqx-services/wqx-monloc.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WqxMonloc } from '../../../../@core/wqx-data/wqx-monloc';
 
 @Component({
   selector: 'ngx-wqx-monloc-edit',
   templateUrl: './wqx-monloc-edit.component.html',
-  styleUrls: ['./wqx-monloc-edit.component.scss']
+  styleUrls: ['./wqx-monloc-edit.component.scss'],
 })
 export class WqxMonlocEditComponent implements OnInit {
 
@@ -60,7 +60,8 @@ export class WqxMonlocEditComponent implements OnInit {
               private refDataService: WQXRefDataService,
               private toastrService: NbToastrService,
               private monlocService: WqxMonlocService,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private router: Router) {
                 this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
                   if (token.isValid()) {
                     this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
@@ -73,8 +74,12 @@ export class WqxMonlocEditComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
       this.monlocIdx = parseInt(params['monlocIdx'], 10);
-      if (this.monlocIdx > 0 && this.currentOrgId !== ''){
-        this.populateMonloc();
+      if (this.monlocIdx > 0 && this.currentOrgId !== '') {
+        // allow dropdowns to populate
+        // need to handle in a better way
+        setTimeout(() => {
+          this.populateMonloc();
+        }, 1000);
       }
     });
   }
@@ -91,7 +96,7 @@ export class WqxMonlocEditComponent implements OnInit {
         this.txtMonLocDesc = data.monlocDesc;
         this.txtHUC8 = data.hucEight;
         this.txtHUC12 = data.hucTwelve;
-        this.chkLandInd = (data.tribalLandInd === 'Y');
+        this.chkLandInd = (data.tribalLandInd === 'Y'); // this option is set to ''(null) during save as per original project.
         this.txtLandName = data.tribalLandName;
         this.txtLatitude = data.latitudeMsr;
         this.txtLongitude = data.longitudeMsr;
@@ -103,7 +108,8 @@ export class WqxMonlocEditComponent implements OnInit {
         this.vertMethodSelected = data.vertCollMethod;
         this.vertDetumSelected = data.vertRefDatum;
         this.stateSelected = data.stateCode;
-        this.countySelected = data.countyCode;
+        this.bindCounty(data.countyCode);
+        //this.countySelected = data.countyCode;
         this.countrySelected = data.countryCode;
         this.wellTypeSelected = data.wellType;
         this.txtAquifer = data.aquiferName;
@@ -114,6 +120,7 @@ export class WqxMonlocEditComponent implements OnInit {
     );
   }
   populateDropdowns(): void {
+    
     this.refDataService.GetT_WQX_REF_DATA('MonitoringLocationType', true, true).subscribe(
       (data) => {
         this.monlocTypes = data;
@@ -169,10 +176,17 @@ export class WqxMonlocEditComponent implements OnInit {
       (err) => { console.log(err); },
     );
   }
-  bindCounty(): void {
+  bindCounty(countyCode: string): void {
     if (this.stateSelected !== '') {
       this.refDataService.GetT_WQX_REF_COUNTY(this.stateSelected).subscribe(
-        (data) => { this.counties = data; },
+        (data) => {
+          this.counties = data;
+          if (countyCode !== '' || countyCode != null){
+            setTimeout(() => {
+              this.countySelected = countyCode;
+            }, 1000);
+          }
+         },
         (err) => { console.log(err); },
       );
     }
@@ -206,7 +220,7 @@ export class WqxMonlocEditComponent implements OnInit {
   }
   onStateSelected(selectedItem): void {
     this.stateSelected = selectedItem;
-    this.bindCounty();
+    this.bindCounty('');
   }
   onCountySelected(selectedItem): void {
 
@@ -217,7 +231,7 @@ export class WqxMonlocEditComponent implements OnInit {
   onWellTypeSelected(selectedItem): void {
     this.wellTypeSelected = selectedItem;
   }
-  onBtnSaveClicked(): void {
+  onSubmit() {
     if (this.txtMonLocID === '') {
       this.toastrService.danger('Monitoring Location ID is required.', 'Error!');
       return;
@@ -234,7 +248,8 @@ export class WqxMonlocEditComponent implements OnInit {
         );
     }
   }
-  onBtnCancelClicked(): void {
 
+  onBtnCancelClicked(): void {
+    this.router.navigate(['/secure/water-quality/wqx-monloc']);
   }
 }

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbCardModule, NbIconModule, NbInputModule, NbTreeGridModule, NbCheckboxModule, NbSelectModule, NbRadioModule, NbListModule, NbAlertModule, NbTabsetModule, NbToastrModule, NbWindowModule } from '@nebular/theme';
+import { NbCardModule, NbIconModule, NbInputModule, NbTreeGridModule, NbCheckboxModule, NbSelectModule, NbRadioModule, NbListModule, NbAlertModule, NbTabsetModule, NbToastrModule, NbWindowModule, NbButtonModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { ThemeModule } from '../../@theme/theme.module';
@@ -24,6 +24,7 @@ import { AddTranslationWindowComponent } from './wqx-org-data/add-translation-wi
 import { MonlocConfigWindowComponent } from './wqx-monloc/monloc-config-window/monloc-config-window.component';
 import { WqxMonlocEditComponent } from './wqx-monloc/wqx-monloc-edit/wqx-monloc-edit.component';
 import { ProjectConfigWindowComponent } from './wqx-project/project-config-window/project-config-window.component';
+import { WqxProjectEditComponent } from './wqx-project/wqx-project-edit/wqx-project-edit.component';
 
 
 
@@ -46,6 +47,7 @@ import { ProjectConfigWindowComponent } from './wqx-project/project-config-windo
     NbTabsetModule,
     NbToastrModule,
     NbWindowModule.forRoot(),
+    NbButtonModule,
   ],
   declarations: [
     ...wqxRoutedComponents,
@@ -63,6 +65,7 @@ import { ProjectConfigWindowComponent } from './wqx-project/project-config-windo
     MonlocConfigWindowComponent,
     WqxMonlocEditComponent,
     ProjectConfigWindowComponent,
+    WqxProjectEditComponent,
   ],
   providers: [
     WQXRefDataService,

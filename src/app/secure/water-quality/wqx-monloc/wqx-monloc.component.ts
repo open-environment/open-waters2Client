@@ -7,6 +7,7 @@ import { User } from '../../../@core/data/users';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { WqxMonlocService } from '../../../@core/wqx-services/wqx-monloc.service';
 import { Router } from '@angular/router';
+import { LocalDataSource } from 'ng2-smart-table';
 
 @Component({
   selector: 'ngx-wqx-monloc',
@@ -54,7 +55,9 @@ export class WqxMonlocComponent implements OnInit {
     columns: {},
   };
   configWinRef: NbWindowRef;
-  monlocSource: WqxMonloc[] = [];
+  // monlocSource: WqxMonloc[] = [];
+  monlocSource = new LocalDataSource([]);
+
   constructor(private windowService: NbWindowService,
     private pubSubService: WqxPubsubServiceService,
     private authService: NbAuthService,
@@ -87,7 +90,7 @@ export class WqxMonlocComponent implements OnInit {
           this.postPop();
         }
         this.monlocSetting = Object.assign({}, this._monlocSetting);
-        this.monlocSource = data;
+        this.monlocSource = new LocalDataSource(data);
       },
     );
   }

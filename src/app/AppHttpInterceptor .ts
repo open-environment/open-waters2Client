@@ -17,19 +17,19 @@ export class AppHttpInterceptor implements HttpInterceptor {
                 if (evt instanceof HttpResponse) {
                     if (evt.body && evt.body.success)
                         dummy = 1;
-                        //this.toasterService.success(evt.body.success.message, evt.body.success.title, { positionClass: 'toast-bottom-center' });
+                        // this.toasterService.success(evt.body.success.message, evt.body.success.title, { positionClass: 'toast-bottom-center' });
                 }
             }),
             catchError((err: any) => {
                 if (err instanceof HttpErrorResponse) {
                     try {
                       dummy = 2;
-                        //this.toasterService.error(err.error.message, err.error.title, { positionClass: 'toast-bottom-center' });
+                        // this.toasterService.error(err.error.message, err.error.title, { positionClass: 'toast-bottom-center' });
                     } catch (e) {
                       dummy = 3;
-                        //this.toasterService.error('An error occurred', '', { positionClass: 'toast-bottom-center' });
+                        // this.toasterService.error('An error occurred', '', { positionClass: 'toast-bottom-center' });
                     }
-                    //log error
+                    // log error
                 }
                 return of(err);
             }));

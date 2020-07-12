@@ -1,10 +1,19 @@
 import { Injectable } from '@angular/core';
 import { of as observableOf,  Observable, of } from 'rxjs';
 import { PeriodsService } from '../mock/periods.service';
-import { WqxOrganization, WqxOrganizationData, TOeUsers, EPAOrganization, UserOrgDisplay, WqxAllOrgs, WqxRefData, ConnectTestResult, WqxImportTranslate } from '../wqx-data/wqx-organization';
+import { WqxOrganization,
+  WqxOrganizationData,
+  TOeUsers,
+  EPAOrganization,
+  UserOrgDisplay,
+  WqxAllOrgs,
+  ConnectTestResult,
+  WqxImportTranslate, 
+  WqxRefData} from '../wqx-data/wqx-organization';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { WebApi } from '../utils/web-api';
+
 
 @Injectable()
 export class WQXOrganizationService extends WqxOrganizationData {

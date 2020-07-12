@@ -25,4 +25,15 @@ export class WQXProjectService extends WqxProjectData {
   GetWQX_PROJECT(actInd: boolean, orgId: string, wqxPending: boolean): Observable<WqxProject[]> {
     return this.http.get<WqxProject[]>(WebApi.TWQXProjectApi.getWqxProject(actInd, orgId, wqxPending));
   }
+  GetWQX_PROJECT_ByID(projectIdx: number): Observable<WqxProject> {
+    return this.http.get<WqxProject>(WebApi.TWQXProjectApi.getWQXProjectByID(projectIdx));
+  }
+  InsertOrUpdateWQX_PROJECT(projectIdx: number, orgId: string, projectId: string,
+    projectName: string, projectDesc: string, sampDesignTypeCd: string, qAppApprovalInd: boolean,
+    qAppApprovalAgency: string, wQxSubmitStatus: string, wQxSubmitDt: string, actInd: boolean, wqxInd: boolean, createUser: string){
+      const httpOptions = {};
+      return this.http.post<number>(WebApi.TWQXProjectApi.InsertOrUpdateWQXProject(projectIdx, orgId, projectId,
+        projectName, projectDesc, sampDesignTypeCd, qAppApprovalInd,
+        qAppApprovalAgency, wQxSubmitStatus, wQxSubmitDt, actInd, wqxInd, createUser), '', httpOptions);
+    }
 }

@@ -25,11 +25,6 @@ export class WqxMonlocService extends WqxMonlocData {
     formationType: string, wellholeDepthMsr: string, wellholeDepthMsrUnit: string, wqxSubmitStatus: string,
     wqxUpdateDate: string, actInd: boolean, wqxInd: boolean, createUser: string): Observable<number> {
       const httpOptions = {};
-      console.log(WebApi.TWQXRefDataApi.InsertOrUpdateWQXMonLoc(monlocIdx, orgId, monlocId, monlocName,
-        monlocType, monlocDesc, hucHeight, hucTwelve, tribalLandInd, tribalLandName, latitudeMsr, longitudeMsr, sourceMapScale,
-        horizAccuracy, horizAccuracyUnit, horizCollMethod, horizRefDatum, vertMeasure, vertMeasureUnit, vertCollMethod, vertRefDatum,
-        countryCode, stateCode, countyCode, wellType, aquiferName, formationType, wellholeDepthMsr, wellholeDepthMsrUnit, wqxSubmitStatus,
-        wqxUpdateDate, actInd, wqxInd, createUser));
       return this.http.post<number>(WebApi.TWQXRefDataApi.InsertOrUpdateWQXMonLoc(monlocIdx, orgId, monlocId, monlocName,
         monlocType, monlocDesc, hucHeight, hucTwelve, tribalLandInd, tribalLandName, latitudeMsr, longitudeMsr, sourceMapScale,
         horizAccuracy, horizAccuracyUnit, horizCollMethod, horizRefDatum, vertMeasure, vertMeasureUnit, vertCollMethod, vertRefDatum,

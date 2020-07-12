@@ -2,17 +2,13 @@
   <nb-card-header>
     Organization Info
   </nb-card-header>
-
   <nb-card-body>
     <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (custom)="onCustom($event)">
     </ng2-smart-table>
-    <br />
-    <div class="greenBox">
-      <form>
-      <div class="form-group row">
-        <button nbButton (click)="onAddNewClick()">Add New</button>
-      </div>
-    </form>
-    </div>
   </nb-card-body>
+  <nb-card-footer>
+      <button nbButton 
+      class="success"
+      (click)="onAddNewClick()">Add New</button>
+  </nb-card-footer>
 </nb-card>

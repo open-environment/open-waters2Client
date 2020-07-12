@@ -14,10 +14,14 @@
       </ng2-smart-table>
     </div>
     <div class="row mt-3">
-      <button nbButton (click)="onAddNew()">Add New</button>
+      <button nbButton (click)="onAddNew()"
+      status="success" 
+      class="mr-3">Add New</button>
       <span class="float-right">
-        <button nbButton (click)="onExcel()">Excel</button>
-        <button nbButton (click)="onConfig()">Config</button>
+        <button nbButton (click)="onExcel()" 
+        status="info"  class="mr-3">Excel</button>
+        <button nbButton (click)="onConfig()" 
+        status="info">Config</button>
       </span>
     </div>
   </nb-card-body>

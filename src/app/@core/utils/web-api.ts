@@ -58,7 +58,7 @@ export module WebApi {
     (monlocIdx: number) =>
     `${environment.api.owUrl}/api/monloc/GetWQXMonLocByID?MonLocIDX=${monlocIdx}`
   }
-  export class TWQXProjectApi{
+  export class TWQXProjectApi {
     public static readonly getAllProjects =
       () =>
         `${environment.api.owUrl}/api/project/getAllProjects`
@@ -71,8 +71,16 @@ export module WebApi {
       public static readonly getWqxProject =
       (actInd: boolean, orgId: string, wqxPending: boolean) =>
       `${environment.api.owUrl}/api/project/getWqxProject?ActInd=${actInd}&OrgID=${orgId}&WQXPending=${wqxPending}`
+      public static readonly getWQXProjectByID =
+      (projectIdx: number) =>
+      `${environment.api.owUrl}/api/project/getWQXProjectByID?ProjectIDX=${projectIdx}`
+      public static readonly InsertOrUpdateWQXProject =
+      (projectIdx: number, orgId: string, projectId: string,
+        projectName: string, projectDesc: string, sampDesignTypeCd: string, qAppApprovalInd: boolean,
+        qAppApprovalAgency: string, wQxSubmitStatus: string, wQxSubmitDt: string, actInd: boolean, wqxInd: boolean, createUser: string) =>
+      `${environment.api.owUrl}/api/project/InsertOrUpdateWQXProject?pROJECT_IDX=${projectIdx}&oRG_ID=${orgId}&pROJECT_ID=${projectId}&pROJECT_NAME=${projectName}&pROJECT_DESC=${projectDesc}&sAMP_DESIGN_TYPE_CD=${sampDesignTypeCd}&qAPP_APPROVAL_IND=${qAppApprovalInd}&qAPP_APPROVAL_AGENCY=${qAppApprovalAgency}&wQX_SUBMIT_STATUS=${wQxSubmitStatus}&wQX_SUBMIT_DT=${wQxSubmitDt}&aCT_IND=${actInd}&wQX_IND=${wqxInd}&cREATE_USER=${createUser}`
   }
-  export class TWQXActivityApi{
+  export class TWQXActivityApi {
     public static readonly getAllActivities =
       (ActInd: boolean, OrgID: string, MonLocIDX: number, startDt: string, endDt: string, ActType: string, WQXPending: boolean, ProjectIDX: number) =>
         `${environment.api.owUrl}/api/activity/getAllActivities?ActInd=${ActInd}&OrgID=${OrgID}&MonLocIDX=${MonLocIDX}&startDt=${startDt}&endDt=${endDt}&ActType=${ActType}&WQXPending=${WQXPending}&ProjectIDX=${ProjectIDX}`
@@ -135,6 +143,6 @@ export module WebApi {
         countryCode: string, stateCode: string, countyCode: string, wellType: string, aquiferName: string,
         formationType: string, wellholeDepthMsr: string, wellholeDepthMsrUnit: string, wqxSubmitStatus: string,
         wqxUpdateDate: string, actInd: boolean, wqxInd: boolean, createUser: string) =>
-      `${environment.api.owUrl}/api/monloc/InsertOrUpdateWQXMonLoc?mONLOC_IDX=${monlocIdx}&oRG_ID=${orgId}&mONLOC_ID=${monlocId}&mONLOC_NAME=${monlocName}&mONLOC_TYPE=${monlocType}&mONLOC_DESC=${monlocDesc}&hUC_EIGHT=${hucHeight}&HUC_TWELVE=${hucTwelve}&tRIBAL_LAND_IND=${tribalLandInd}&tRIBAL_LAND_NAME=${tribalLandName}&lATITUDE_MSR=${latitudeMsr}&lONGITUDE_MSR=${longitudeMsr}&sOURCE_MAP_SCALE=${sourceMapScale}&hORIZ_ACCURACY=${horizAccuracy}&hORIZ_ACCURACY_UNIT=${horizAccuracyUnit}&hORIZ_COLL_METHOD=${horizCollMethod}&hORIZ_REF_DATUM=${horizRefDatum}&vERT_MEASURE=${vertMeasure}&vERT_MEASURE_UNIT=${vertMeasureUnit}&vERT_COLL_METHOD=${vertCollMethod}&vERT_REF_DATUM=${vertRefDatum}&cOUNTRY_CODE=${countryCode}&sTATE_CODE=${stateCode}&cOUNTY_CODE=${countryCode}&wELL_TYPE=${wellType}&aQUIFER_NAME=${aquiferName}&fORMATION_TYPE=${formationType}&wELLHOLE_DEPTH_MSR=${wellholeDepthMsr}&wELLHOLE_DEPTH_MSR_UNIT=${wellholeDepthMsrUnit}&wQX_SUBMIT_STATUS=${wqxSubmitStatus}&wQXUpdateDate=${wqxUpdateDate}&aCT_IND=${actInd}&wQX_IND=${wqxInd}&cREATE_USER=${createUser}`
+      `${environment.api.owUrl}/api/monloc/InsertOrUpdateWQXMonLoc?mONLOC_IDX=${monlocIdx}&oRG_ID=${orgId}&mONLOC_ID=${monlocId}&mONLOC_NAME=${monlocName}&mONLOC_TYPE=${monlocType}&mONLOC_DESC=${monlocDesc}&hUC_EIGHT=${hucHeight}&HUC_TWELVE=${hucTwelve}&tRIBAL_LAND_IND=${tribalLandInd}&tRIBAL_LAND_NAME=${tribalLandName}&lATITUDE_MSR=${latitudeMsr}&lONGITUDE_MSR=${longitudeMsr}&sOURCE_MAP_SCALE=${sourceMapScale}&hORIZ_ACCURACY=${horizAccuracy}&hORIZ_ACCURACY_UNIT=${horizAccuracyUnit}&hORIZ_COLL_METHOD=${horizCollMethod}&hORIZ_REF_DATUM=${horizRefDatum}&vERT_MEASURE=${vertMeasure}&vERT_MEASURE_UNIT=${vertMeasureUnit}&vERT_COLL_METHOD=${vertCollMethod}&vERT_REF_DATUM=${vertRefDatum}&cOUNTRY_CODE=${countryCode}&sTATE_CODE=${stateCode}&cOUNTY_CODE=${countyCode}&wELL_TYPE=${wellType}&aQUIFER_NAME=${aquiferName}&fORMATION_TYPE=${formationType}&wELLHOLE_DEPTH_MSR=${wellholeDepthMsr}&wELLHOLE_DEPTH_MSR_UNIT=${wellholeDepthMsrUnit}&wQX_SUBMIT_STATUS=${wqxSubmitStatus}&wQXUpdateDate=${wqxUpdateDate}&aCT_IND=${actInd}&wQX_IND=${wqxInd}&cREATE_USER=${createUser}`
   }
 }
