@@ -5,7 +5,7 @@ import { WqxRefData, WqxImportTranslate } from '../../../@core/wqx-data/wqx-orga
 import { WQXRefDataService } from '../../../@core/wqx-services/wqx-refdata-service';
 import { User } from '../../../@core/data/users';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
-import { NbToastrService, NbWindowService } from '@nebular/theme';
+import { NbToastrService, NbWindowService, NbWindowState } from '@nebular/theme';
 import { Router } from '@angular/router';
 import { AddCharWindowComponent } from './add-char-window/add-char-window.component';
 import { AddTranslationWindowComponent } from './add-translation-window/add-translation-window.component';
@@ -15,17 +15,21 @@ import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organiza
 @Component({
   selector: 'ngx-wqx-org-data',
   templateUrl: './wqx-org-data.component.html',
-  styleUrls: ['./wqx-org-data.component.scss']
+  styleUrls: ['./wqx-org-data.component.scss'],
 })
 export class WqxOrgDataComponent implements OnInit {
   user: User;
   currentOrgId: string;
   settings = {
-    actions:{
-      custom:[
+    actions: {
+      custom: [
         {
-        name: 'select',
-        title: 'select',
+          name: 'edit',
+          title: '<i class="ion-edit" title="Edit"></i>',
+        },
+        {
+          name: 'delete',
+          title: '<i class="far fa-trash-alt" title="delete"></i>',
         },
       ],
       add: false,
@@ -50,66 +54,66 @@ export class WqxOrgDataComponent implements OnInit {
       charName: {
         title: 'Characteristic',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       defaultUnit: {
         title: 'Unit',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       defaultDetectLimit: {
         title: 'Detect Limit',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       defaultLowerQuantLimit: {
         title: 'Lower Quant Limit',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       defaultUpperQuantLimit: {
         title: 'Upper Quant Limit',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       analyticMethodId: {
         title: 'Analysis Method',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       defaultSampFraction: {
         title: 'Sample Fraction',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       defaultResultStatus: {
         title: 'Status',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       defaultResultValueType: {
         title: 'Value Type',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       createDt: {
         title: 'Create Date',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       createUserId: {
         title: 'Created By',
         type: 'string',
-        filter: true,
-      }
+        filter: false,
+      },
     },
   };
   settings2 = {
-    actions:{
-      custom:[
+    actions: {
+      custom: [
         {
-        name: 'select',
-        title: 'delete',
+          name: 'delete',
+          title: '<i class="far fa-trash-alt" title="delete"></i>',
         },
       ],
       add: false,
@@ -134,26 +138,26 @@ export class WqxOrgDataComponent implements OnInit {
       bioSubjectTaxonomy: {
         title: 'Taxa Name',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       createDt: {
         title: 'Added Date',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       createUserId: {
         title: 'Added By',
         type: 'string',
-        filter: true,
+        filter: false,
       },
     },
   };
   settings3 = {
-    actions:{
-      custom:[
+    actions: {
+      custom: [
         {
-        name: 'select',
-        title: 'select',
+          name: 'delete',
+          title: '<i class="far fa-trash-alt" title="delete"></i>',
         },
       ],
       add: false,
@@ -178,17 +182,17 @@ export class WqxOrgDataComponent implements OnInit {
       colName: {
         title: 'Field',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       dataFrom: {
         title: 'Data Reported As',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       dataTo: {
         title: 'Will Get Translated To',
         type: 'string',
-        filter: true,
+        filter: false,
       },
     },
   };
@@ -217,6 +221,9 @@ export class WqxOrgDataComponent implements OnInit {
           this.pubSubService.fieldData.subscribe((data: any) => {
             this.onFieldDataCalled(data);
           });
+          this.pubSubService.charData.subscribe((data: any) => {
+            this.onCharDataCalled(data);
+          });
 
           this.refDataService.GetT_WQX_REF_DEFAULT_TIME_ZONE().subscribe(
             (data) => {
@@ -236,15 +243,15 @@ export class WqxOrgDataComponent implements OnInit {
 
   onBtnSaveClick(): void {
     if (this.selectedTimeZome !== '' && this.currentOrgId !== null && this.currentOrgId !== '') {
-      this.refDataService.InsertOrUpdateT_WQX_ORGANIZATION(this.currentOrgId,'','','','','','','','','','','',this.selectedTimeZome,this.user.name,'','','','').subscribe(
+      this.refDataService.InsertOrUpdateT_WQX_ORGANIZATION(this.currentOrgId, '', '', '', '', '', '', '', '', '', '', '', this.selectedTimeZome, this.user.name, '', '', '', '').subscribe(
         (data) => {
-          if(data === 1) {
+          if (data === 1) {
             this.toasterSerice.success('Data Saved');
           }
          },
         (err) => {
           this.toasterSerice.danger('Error encountered');
-         }
+         },
       );
     }
   }
@@ -253,7 +260,7 @@ export class WqxOrgDataComponent implements OnInit {
   }
   onAddCharateristicClicked(): void {
     console.log('onAddCharateristicClicked clicked!');
-    this.windowService.open(AddCharWindowComponent, { title: `Add/Edit Characteristic Defaults` });
+    this.windowService.open(AddCharWindowComponent, { title: `Add/Edit Characteristic Defaults`, initialState: NbWindowState.MAXIMIZED });
   }
   onAddTaxaClciked(): void {
     console.log('onAddTaxaClciked clicked!');
@@ -264,8 +271,8 @@ export class WqxOrgDataComponent implements OnInit {
         (err) => { console.log(err); },
       );
     } else {
-      if(this.selectedTaxa !== ''){
-        this.refDataService.InsertOrUpdateT_WQX_REF_TAXA_ORG(this.selectedTaxa,this.currentOrgId,this.user.name).subscribe(
+      if (this.selectedTaxa !== '') {
+        this.refDataService.InsertOrUpdateT_WQX_REF_TAXA_ORG(this.selectedTaxa, this.currentOrgId, this.user.name).subscribe(
           (data) => {
             console.log(data);
             this.populateTaxaGrid(this.currentOrgId);
@@ -307,7 +314,7 @@ export class WqxOrgDataComponent implements OnInit {
       (err) => { console.log(err); },
     );
   }
-  onTaxaSelected(selectedItem): void{
+  onTaxaSelected(selectedItem): void {
     this.selectedTaxa = selectedItem;
   }
   onAddTranslationClicked(): void {
@@ -336,21 +343,46 @@ export class WqxOrgDataComponent implements OnInit {
     }
   }
   onCustom(event): void {
-     //const orgId = event.data.orgId;
-     //this.router.navigate(['/secure/water-quality/wqx-org-edit'], { queryParams: { orgEditId: orgId } });
+    if (event.action === 'edit') {
+      console.log(event.data);
+      // implementation pending
+    }
+     if (event.action === 'delete') {
+       this.refDataService.DeleteT_WQX_REF_CHAR_ORG(this.currentOrgId, event.data.charName).subscribe(
+         (result) => {
+           this.populateCharGrid(this.currentOrgId);
+         },
+         (err) => { console.log(err); },
+       );
+     }
   }
   onCustom2(event): void {
-    //const orgId = event.data.orgId;
-    //this.router.navigate(['/secure/water-quality/wqx-org-edit'], { queryParams: { orgEditId: orgId } });
+    if (event.action === 'delete') {
+      this.refDataService.DeleteT_WQX_REF_TAXA_ORG(this.currentOrgId, event.data.bioSubjectTaxonomy).subscribe(
+        (result) => {
+          this.populateTaxaGrid(this.currentOrgId);
+         },
+        (err) => { console.log(err); },
+      );
+    }
  }
   onCustom3(event): void {
-    //const orgId = event.data.orgId;
-    //this.router.navigate(['/secure/water-quality/wqx-org-edit'], { queryParams: { orgEditId: orgId } });
+    if (event.action === 'delete') {
+      this.refDataService.DeleteT_WQX_IMPORT_TRANSLATE(event.data.translateIdx).subscribe(
+        (result) => {
+          this.populateTranslationGrid(this.currentOrgId);
+        },
+        (err) => { console.log(err); },
+      );
+    }
   }
   onTimeZoneSelect(selectedItem): void {
     this.selectedTimeZome = selectedItem;
   }
   onFieldDataCalled(data): void {
+    this.PopulateTabsData();
+  }
+  onCharDataCalled(data): void {
     this.PopulateTabsData();
   }
 }

@@ -9,7 +9,7 @@ import { WqxPubsubServiceService } from '../../../../@core/wqx-services/wqx-pubs
 @Component({
   selector: 'ngx-add-translation-window',
   templateUrl: './add-translation-window.component.html',
-  styleUrls: ['./add-translation-window.component.scss']
+  styleUrls: ['./add-translation-window.component.scss'],
 })
 export class AddTranslationWindowComponent implements OnInit {
 
@@ -46,17 +46,19 @@ export class AddTranslationWindowComponent implements OnInit {
     this.selectedField = selectedItem;
     console.log(this.selectedField);
   }
-  onAddTranslate2Clicked(): void {
-    console.log('onAddTranslate2Clicked');
+  onSubmit(): void {
     this.refDataService.InsertOrUpdateWQX_IMPORT_TRANSLATE(null, this.currentOrgId, this.selectedField, this.txtFrom, this.txtTo, this.user.name).subscribe(
       (data) => {
         console.log(data);
         this.pubSubService.fieldChanged(true);
        },
       (err) => { console.log(err); },
+      () => {
+        this.windowRef.close();
+      },
     );
   }
   onCloseModel1Clicked(): void {
-    console.log('onCloseModel1Clicked');
+    this.windowRef.close();
   }
 }

@@ -1,32 +1,67 @@
-<div class="form">
-  <div class="row">
-    <div class="col-md-4">
-      <label for="ddlChar">Field:</label>
+<form name="myForm" 
+(ngSubmit)="f.form.valid && onSubmit()" 
+#f="ngForm" novalidate>
+<nb-card>
+  <nb-card-header></nb-card-header>
+  <nb-card-body>
+    <div class="form-row">
+      <div class="form-group col-4">
+        <label for="ddlChar">Field:</label>
+      </div>
+      <div class="form-group col-8">
+        <nb-select fullWidth
+        name="ddlField" 
+        [(ngModel)]="selectedField"
+        #vselectedField="ngModel"
+        [ngClass]="{ 'is-invalid': f.submitted && vselectedField.invalid }"
+        status="primary" >
+          <nb-option *ngFor="let field of fields" [value]="field"> {{ field }}</nb-option>
+        </nb-select>
+      </div>
     </div>
-    <div class="col-md-8">
-      <nb-select (selectedChange)="onFieldSelected($event)" name="ddlField" status="primary" fullWidth>
-        <nb-option *ngFor="let field of fields" [value]="field"> {{ field }}</nb-option>
-      </nb-select>
+    <div class="form-row">
+      <div class="form-group col-4">
+        <label for="txtFrom">Value From:</label>
+      </div>
+      <div class="form-group col-8">
+        <input type="text" nbInput 
+        name='txtFrom' 
+        class="form-control"
+        [(ngModel)]='txtFrom'
+        #vtxtFrom="ngModel"
+        [ngClass]="{ 'is-invalid': f.submitted && vtxtFrom.invalid }"
+        >
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
-      <label for="txtFrom">Value From:</label>
+    <div class="form-row">
+      <div class="form-group col-4">
+        <label for="txtTo">Translates To:</label>
+      </div>
+      <div class="form-group col-8">
+        <input type="text" nbInput 
+        name='txtTo' 
+        class="form-control" 
+        [(ngModel)]='txtTo'
+        #vtxtTo="ngModel"
+        [ngClass]="{ 'is-invalid': f.submitted && vtxtTo.invalid }"
+        >
+      </div>
     </div>
-    <div class="col-md-8">
-      <input nbInput name='txtFrom' type="text" [(ngModel)]='txtFrom'>
+  </nb-card-body>
+  <nb-card-footer>
+    <div class="form-row">
+      <button nbButton 
+      class="mr-2"
+      name='btnAddTranslate2' 
+      status='success'>Save</button>
+      <button nbButton 
+      (click)='onCloseModel1Clicked()' 
+      name='btnCloseModal1' 
+      status='danger'>Cancel</button>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
-      <label for="txtTo">Translates To:</label>
-    </div>
-    <div class="col-md-8">
-      <input nbInput name='txtTo' type="text" [(ngModel)]='txtTo'>
-    </div>
-  </div>
-  <div class="row">
-    <button nbButton (click)='onAddTranslate2Clicked()' class="mr-2" id='btnAddTranslate2' name='btnAddChar2' status='Basic'>Save</button>
-    <button nbButton (click)='onCloseModel1Clicked()' id='btnCloseModal1' name='btnCloseModal1' status='Basic'>Cancel</button>
-  </div>
-</div>
+  </nb-card-footer>
+</nb-card>
+
+  
+
+</form>

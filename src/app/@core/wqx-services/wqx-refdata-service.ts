@@ -66,4 +66,13 @@ export class WQXRefDataService extends WqxRefDataData {
   GetT_WQX_REF_COUNTY(stateCode: string): Observable<WqxRefCounty[]> {
     return this.http.get<WqxRefCounty[]>(WebApi.TWQXRefDataApi.GetTWqxRefCounty(stateCode));
   }
+  DeleteT_WQX_REF_TAXA_ORG(orgName: string, charName: string): Observable<number> {
+    return this.http.delete<number>(WebApi.TWQXRefDataApi.deleteTWqxRefTaxaOrg(orgName, charName));
+  }
+  DeleteT_WQX_IMPORT_TRANSLATE(translateId: number): Observable<number> {
+    return this.http.delete<number>(WebApi.TWQXRefDataApi.deleteTWqxImportTranslate(translateId));
+  }
+  DeleteT_WQX_REF_CHAR_ORG(orgName: string, charName: string): Observable<number> {
+    return this.http.delete<number>(WebApi.TWQXRefDataApi.deleteTWqxRefTaxaOrg(orgName, charName));
+  }
 }

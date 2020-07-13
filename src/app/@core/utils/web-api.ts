@@ -144,5 +144,14 @@ export module WebApi {
         formationType: string, wellholeDepthMsr: string, wellholeDepthMsrUnit: string, wqxSubmitStatus: string,
         wqxUpdateDate: string, actInd: boolean, wqxInd: boolean, createUser: string) =>
       `${environment.api.owUrl}/api/monloc/InsertOrUpdateWQXMonLoc?mONLOC_IDX=${monlocIdx}&oRG_ID=${orgId}&mONLOC_ID=${monlocId}&mONLOC_NAME=${monlocName}&mONLOC_TYPE=${monlocType}&mONLOC_DESC=${monlocDesc}&hUC_EIGHT=${hucHeight}&HUC_TWELVE=${hucTwelve}&tRIBAL_LAND_IND=${tribalLandInd}&tRIBAL_LAND_NAME=${tribalLandName}&lATITUDE_MSR=${latitudeMsr}&lONGITUDE_MSR=${longitudeMsr}&sOURCE_MAP_SCALE=${sourceMapScale}&hORIZ_ACCURACY=${horizAccuracy}&hORIZ_ACCURACY_UNIT=${horizAccuracyUnit}&hORIZ_COLL_METHOD=${horizCollMethod}&hORIZ_REF_DATUM=${horizRefDatum}&vERT_MEASURE=${vertMeasure}&vERT_MEASURE_UNIT=${vertMeasureUnit}&vERT_COLL_METHOD=${vertCollMethod}&vERT_REF_DATUM=${vertRefDatum}&cOUNTRY_CODE=${countryCode}&sTATE_CODE=${stateCode}&cOUNTY_CODE=${countyCode}&wELL_TYPE=${wellType}&aQUIFER_NAME=${aquiferName}&fORMATION_TYPE=${formationType}&wELLHOLE_DEPTH_MSR=${wellholeDepthMsr}&wELLHOLE_DEPTH_MSR_UNIT=${wellholeDepthMsrUnit}&wQX_SUBMIT_STATUS=${wqxSubmitStatus}&wQXUpdateDate=${wqxUpdateDate}&aCT_IND=${actInd}&wQX_IND=${wqxInd}&cREATE_USER=${createUser}`
+      public static readonly deleteTWqxRefTaxaOrg =
+      (orgName: string, charName: string) =>
+      `${environment.api.owUrl}/api/refdata/deleteTWqxRefTaxaOrg?orgName=${orgName}&charName=${charName}`
+      public static readonly deleteTWqxImportTranslate =
+      (translateId: number) =>
+      `${environment.api.owUrl}/api/refdata/deleteTWqxImportTranslate?TranslateID=${translateId}`
+      public static readonly deleteWqxRefCharOrg =
+      (orgName: string, charName: string) =>
+      `${environment.api.owUrl}/api/refdata/deleteWqxRefCharOrg?orgName=${orgName}&charName=${charName}`
   }
 }

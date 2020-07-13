@@ -8,76 +8,79 @@
         <label for="lblMsg" name="lblMsg" *ngIf="!lblMsgShow === false" class="failureNotification">{{ lblMsg }}</label>
       </div>
     </div>
-    <div class="col-12">
-      <nb-card size="small">
-        <nb-tabset fullWidth>
-          <nb-tab tabTitle="General Defaults">
-            <div class="divHelp">
-              Before entering activities, you must set the default timezone (used to set the correct timezone for activities).
-            </div>
-            <div class="row">
-              <div class="col-md-5">
-                <label for="ddlTimeZone">Default Time Zone:</label>
+    <div class="row">
+      <div class="col-12">
+        <nb-card>
+          <nb-tabset fullWidth>
+            <nb-tab tabTitle="General Defaults">
+              <div class="divHelp">
+                Before entering activities, you must set the default timezone (used to set the correct timezone for activities).
               </div>
-              <div class="col-md-5">
-                <nb-select (selectedChange)="onTimeZoneSelect($event)" name="ddlTimeZone" status="primary" fullWidth>
-                  <nb-option *ngFor="let timeZone of timeZones" [value]="timeZone.timeZoneName"> {{ timeZone.timeZoneName }}</nb-option>
+              <div class="row">
+                <div class="col-md-5">
+                  <label for="ddlTimeZone">Default Time Zone:</label>
+                </div>
+                <div class="col-md-5">
+                  <nb-select (selectedChange)="onTimeZoneSelect($event)" name="ddlTimeZone" status="primary" fullWidth>
+                    <nb-option *ngFor="let timeZone of timeZones" [value]="timeZone.timeZoneName"> {{ timeZone.timeZoneName }}</nb-option>
+                  </nb-select>
+                </div>
+              </div>
+              <div class="row btnRibbon">
+                <button nbButton class='mr-2' status='basic' id='btnSave' name='btnSave' (click)='onBtnSaveClick()'>Save</button>
+                <button nbButton status='basic' id='btnCancel' name='btnCancel' (click)='onBtnCancelClick()'>Exit</button>
+              </div>
+            </nb-tab>
+            <nb-tab tabTitle="Characteristic Defaults">
+              <div class="divHelp">
+                This tab serves two purposes: <br/>
+                (1) Characteristics listed here will be included in the characteristic dropdown when manually entering samples (as opposed to importing them) <br/>
+                (2) Define default values (such as Default Detection Limit, Unit of Measure, etc) that will be automatically populated when importing sampling data.
+                When importing samples, if data is not included in your import file, Open Waters will apply the default value here if it is available.
+              </div>
+              <div class="row">
+                <button nbButton id='btnAddChar' name='btnAddChar' (click)='onAddCharateristicClicked()'>Add Characteristic</button>
+              </div>
+              <div class="row">
+                <ng2-smart-table [settings]="settings" [source]="charSource" (deleteConfirm)="onDeleteConfirm($event)" (custom)="onCustom($event)">
+                </ng2-smart-table>
+              </div>
+            </nb-tab>
+            <nb-tab tabTitle="Taxa Defaults">
+              <div class="divHelp">
+                Taxa you list here will be included in the taxonomy drop down when manually entering biological samples
+              </div>
+              <div class="row">
+                <nb-select name="ddlTaxa" (selectedChange)="onTaxaSelected($event)" status="primary" fullWidth *ngIf='!ddlTaxaShow === false'>
+                  <nb-option *ngFor="let taxa of taxas" [value]="taxa.value"> {{ taxa.value }}</nb-option>
                 </nb-select>
               </div>
-            </div>
-            <div class="row btnRibbon">
-              <button nbButton class='mr-2' status='basic' id='btnSave' name='btnSave' (click)='onBtnSaveClick()'>Save</button>
-              <button nbButton status='basic' id='btnCancel' name='btnCancel' (click)='onBtnCancelClick()'>Exit</button>
-            </div>
-          </nb-tab>
-          <nb-tab tabTitle="Characteristic Defaults">
-            <div class="divHelp">
-              This tab serves two purposes: <br/>
-              (1) Characteristics listed here will be included in the characteristic dropdown when manually entering samples (as opposed to importing them) <br/>
-              (2) Define default values (such as Default Detection Limit, Unit of Measure, etc) that will be automatically populated when importing sampling data.
-              When importing samples, if data is not included in your import file, Open Waters will apply the default value here if it is available.
-            </div>
-            <div class="row">
-              <button nbButton id='btnAddChar' name='btnAddChar' (click)='onAddCharateristicClicked()'>Add Characteristic</button>
-            </div>
-            <div class="row">
-              <ng2-smart-table [settings]="settings" [source]="charSource" (deleteConfirm)="onDeleteConfirm($event)" (custom)="onCustom($event)">
-              </ng2-smart-table>
-            </div>
-          </nb-tab>
-          <nb-tab tabTitle="Taxa Defaults">
-            <div class="divHelp">
-              Taxa you list here will be included in the taxonomy drop down when manually entering biological samples
-            </div>
-            <div class="row">
-              <nb-select name="ddlTaxa" (selectedChange)="onTaxaSelected($event)" status="primary" fullWidth *ngIf='!ddlTaxaShow === false'>
-                <nb-option *ngFor="let taxa of taxas" [value]="taxa.value"> {{ taxa.value }}</nb-option>
-              </nb-select>
-            </div>
-            <div class="row">
-              <button nbButton status='basic' name='btnAddTaxa' (click)='onAddTaxaClciked()'>Add Taxa</button>
-            </div>
-            <div class="row">
-              <ng2-smart-table [settings]="settings2" [source]="taxaSource" (deleteConfirm)="onDeleteConfirm2($event)" (custom)="onCustom2($event)">
-              </ng2-smart-table>
-            </div>
-          </nb-tab>
-          <nb-tab tabTitle="Import Translation">
-            <div class="divHelp">
-              Define translations if you want Open Waters to automatically translate your reported data to another value when importing data.
-            </div>
-            <div class="row btnRibbon">
-              <button nbButton id='btnAddTranslate' name='btnAddTranslate'
-              (click)='onAddTranslationClicked()' status='basic'>Add Translation</button>
-            </div>
-            <div class="row">
-              <ng2-smart-table [settings]="settings3" [source]="transSource" (deleteConfirm)="onDeleteConfirm3($event)" (custom)="onCustom3($event)">
-              </ng2-smart-table>
-            </div>
-          </nb-tab>
-        </nb-tabset>
-      </nb-card>
+              <div class="row">
+                <button nbButton status='basic' name='btnAddTaxa' (click)='onAddTaxaClciked()'>Add Taxa</button>
+              </div>
+              <div class="row">
+                <ng2-smart-table [settings]="settings2" [source]="taxaSource" (deleteConfirm)="onDeleteConfirm2($event)" (custom)="onCustom2($event)">
+                </ng2-smart-table>
+              </div>
+            </nb-tab>
+            <nb-tab tabTitle="Import Translation">
+              <div class="divHelp">
+                Define translations if you want Open Waters to automatically translate your reported data to another value when importing data.
+              </div>
+              <div class="row btnRibbon">
+                <button nbButton id='btnAddTranslate' name='btnAddTranslate'
+                (click)='onAddTranslationClicked()' status='basic'>Add Translation</button>
+              </div>
+              <div class="row">
+                <ng2-smart-table [settings]="settings3" [source]="transSource" (deleteConfirm)="onDeleteConfirm3($event)" (custom)="onCustom3($event)">
+                </ng2-smart-table>
+              </div>
+            </nb-tab>
+          </nb-tabset>
+        </nb-card>
+      </div>
     </div>
+    
   </nb-card-body>
 </nb-card>
 

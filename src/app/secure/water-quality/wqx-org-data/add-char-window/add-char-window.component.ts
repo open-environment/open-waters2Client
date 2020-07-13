@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { NbWindowRef } from '@nebular/theme';
+import { NbWindowRef, NbToastrService } from '@nebular/theme';
 import { WqxRefCharacteristic, AnalMethodDisplay } from '../../../../@core/wqx-data/wqx-refdata';
 import { WqxRefData } from '../../../../@core/wqx-data/wqx-organization';
 import { WQXRefDataService } from '../../../../@core/wqx-services/wqx-refdata-service';
 import { User } from '../../../../@core/data/users';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
+import { WqxPubsubServiceService } from '../../../../@core/wqx-services/wqx-pubsub-service.service';
 
 @Component({
   selector: 'ngx-add-char-window',
   templateUrl: './add-char-window.component.html',
-  styleUrls: ['./add-char-window.component.scss']
+  styleUrls: ['./add-char-window.component.scss'],
 })
 export class AddCharWindowComponent implements OnInit {
 
@@ -35,7 +36,9 @@ export class AddCharWindowComponent implements OnInit {
 
   constructor(public windowRef: NbWindowRef,
     private refDataService: WQXRefDataService,
-    private authService: NbAuthService) {
+    private authService: NbAuthService,
+    private pubSubService: WqxPubsubServiceService,
+    private toasterServce: NbToastrService) {
       this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
@@ -101,14 +104,26 @@ export class AddCharWindowComponent implements OnInit {
     this.selectedResultValue = selectedItem;
     console.log(this.selectedResultValue);
   }
-  onAddChar2Clicked(): void {
+  onSubmit(): void {
     let analVal: number = 0;
     analVal = isNaN(parseInt(this.selectedAnal, 10)) === true ? 0 : parseInt(this.selectedAnal, 10);
     this.refDataService.InsertOrUpdateT_WQX_REF_CHAR_ORG(this.selectedChar, this.currentOrgId, this.user.name,
       this.txtDetectLimit, this.selectedUnit, analVal, this.selectedFrac,
       this.selectedResultValue, '', this.txtQuantLower, this.txtQuantUpper).subscribe(
-      (data) => { console.log(data); },
-      (err) => { console.log(err); },
+      (data) => {
+        if (data === 1) {
+          this.toasterServce.success('Record saved.');
+        } else {
+          this.toasterServce.danger('Record could not be saved.');
+        }
+        this.pubSubService.charChanged(true);
+       },
+      (err) => {
+        this.toasterServce.danger('Record could not be saved.');
+       },
+      () => {
+        this.windowRef.close();
+      },
     );
   }
   onCloseModel2Clicked(): void {

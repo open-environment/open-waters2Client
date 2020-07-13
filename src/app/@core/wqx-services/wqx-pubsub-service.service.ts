@@ -7,6 +7,7 @@ import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 export class WqxPubsubServiceService {
   loadData = new ReplaySubject<any>();
   fieldData = new ReplaySubject<any>();
+  charData = new ReplaySubject<any>();
   monlocChkData = new ReplaySubject<any>();
   projectChkData = new ReplaySubject<any>();
 
@@ -16,6 +17,9 @@ export class WqxPubsubServiceService {
     this.loadData.next(data);
   }
   fieldChanged(data: any) {
+    this.fieldData.next(data);
+  }
+  charChanged(data: any) {
     this.fieldData.next(data);
   }
   setMonLocData(data: any) {
