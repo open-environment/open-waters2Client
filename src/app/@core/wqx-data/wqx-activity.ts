@@ -87,6 +87,10 @@ export interface ActivityListDisplay {
   actInd: boolean;
 }
 
+export interface WqxActivityConfig {
+  name: string;
+  value: boolean;
+}
 export abstract class WqxActivityData {
   abstract GetWQX_Activities(ActInd: boolean, OrgID: string, MonLocIDX: number, startDt: string, endDt: string, ActType: string, WQXPending: boolean, ProjectIDX: number): Observable<WqxActivity[]>;
 }

@@ -1,0 +1,358 @@
+<div class="row">
+  <div class="col-12">
+    <form
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit()"
+      #f="ngForm"
+      novalidate
+    >
+      <nb-card>
+        <nb-card-header>ACTIVITY</nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div class="col-12">
+              <div class="row">
+                <div class="col">Activity ID:</div>
+                <div class="col">
+                  <input
+                    type="text"
+                    nbInput
+                    name="txtActivityID"
+                    [(ngModel)]="txtActivityID"
+                    #vtxtActivityID="ngModel"
+                    [ngClass]="{
+                      'is-invalid': f.submitted && vtxtActivityID.invalid
+                    }"
+                  />
+                </div>
+                <div class="col">Activity Date/Time</div>
+                <div class="col"><!-- datetime -->datetime</div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <nb-checkbox status="danger" [checked]="chkActInd">
+                    Active?
+                  </nb-checkbox>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">Monitoring Location:</div>
+                <div class="col">
+                  <nb-select
+                    status="primary"
+                    name="ddlMonLoc"
+                    [(selected)]="monlocSelected"
+                  >
+                    <nb-option
+                      *ngFor="let monloc of monlocs"
+                      [value]="monloc.monlocIdx"
+                    >
+                      {{ monloc.monlocId }}</nb-option
+                    >
+                  </nb-select>
+                </div>
+                <div class="col">Project</div>
+                <div class="col">
+                  <nb-select
+                    status="primary"
+                    name="ddlProject"
+                    [(selected)]="projectSelected"
+                  >
+                    <nb-option
+                      *ngFor="let project of projects"
+                      [value]="project.projectIdx"
+                    >
+                      {{ project.projectID }}</nb-option
+                    >
+                  </nb-select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <nb-checkbox
+                    status="danger"
+                    name="chkWQXInd"
+                    [checked]="chkWQXInd"
+                  >
+                    Send to EPA?
+                  </nb-checkbox>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <nb-tabset fullWidth>
+                <nb-tab tabTitle="General Info">
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="row">
+                        <div class="col">Activity Type:</div>
+                        <div class="col">
+                          <nb-select
+                            status="primary"
+                            name="ddlActivityType"
+                            [(selected)]="activityTypeSelected"
+                          >
+                            <nb-option
+                              *ngFor="let activityType of activityTypes"
+                              [value]="activityType.value"
+                            >
+                              {{ activityType.value }}</nb-option
+                            >
+                          </nb-select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">Activity Media:</div>
+                        <div class="col">
+                          <nb-select
+                            status="primary"
+                            name="ddlActivityMedia"
+                            [(selected)]="activityMediaSelected"
+                          >
+                            <nb-option
+                              *ngFor="let activityMedia of activityMedias"
+                              [value]="activityMedia.value"
+                            >
+                              {{ activityMedia.value }}</nb-option
+                            >
+                          </nb-select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">Activity Submedia:</div>
+                        <div class="col">
+                          <nb-select
+                            status="primary"
+                            name="ddlActivitySubMedia"
+                            [(selected)]="activitySubMediaSelected"
+                          >
+                            <nb-option
+                              *ngFor="let activitySubMedia of activitySubMedias"
+                              [value]="activitySubMedia.value"
+                            >
+                              {{ activitySubMedia.value }}</nb-option
+                            >
+                          </nb-select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">Collection Method:</div>
+                        <div class="col">
+                          <nb-select
+                            status="primary"
+                            name="ddlSampColl"
+                            [(selected)]="sampCollSelected"
+                          >
+                            <nb-option
+                              *ngFor="let sampCall of sampCalls"
+                              [value]="sampCall.sampCollMethodIdx"
+                            >
+                              {{ sampCall.sampCollMethodId }}</nb-option
+                            >
+                          </nb-select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="row">
+                        <div class="col">Activity End Date:</div>
+                        <div class="col"></div>
+                      </div>
+                      <div class="row">
+                        <div class="col">Activity Depth:</div>
+                        <div class="col">
+                          <div class="row">
+                            <div class="col-9">
+                              <input
+                                type="text"
+                                nbInput
+                                name="txtDepth"
+                                [(ngModel)]="txtDepth"
+                                #vtxtDepth="ngModel"
+                                [ngClass]="{
+                                  'is-invalid': f.submitted && vtxtDepth.invalid
+                                }"
+                              />
+                            </div>
+                            <div class="col-3">
+                              <nb-select
+                                status="primary"
+                                name="ddlDepthUnit"
+                                [(selected)]="depthUnitSelected"
+                              >
+                                <nb-option value=""></nb-option>
+                                <nb-option value="m">m</nb-option>
+                                <nb-option value="ft">ft</nb-option>
+                              </nb-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">Collection Equip:</div>
+                        <div class="col">
+                          <nb-select
+                            status="primary"
+                            name="ddlEquip"
+                            [(selected)]="equipSelected"
+                          >
+                            <nb-option
+                              *ngFor="let equip of equips"
+                              [value]="equip.value"
+                            >
+                              {{ equip.value }}</nb-option
+                            >
+                          </nb-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-3">Activity Comments:</div>
+                    <div class="col-9">
+                      <textarea
+                        nbInput
+                        name="txtActComments"
+                        rows="5"
+                        [(ngModel)]="txtActComments"
+                        #vtxtActComments="ngModel"
+                        [ngClass]="{
+                          'is-invalid': f.submitted && vtxtActComments.invalid
+                        }"
+                      >
+                      </textarea>
+                    </div>
+                  </div>
+                </nb-tab>
+                <nb-tab tabTitle="Biological Info">
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="row">
+                        <div class="col">Assemblage Sampled:</div>
+                        <div class="col">
+                          <nb-select
+                            status="primary"
+                            name="ddlAssemblage"
+                            [(selected)]="assemblageSelected"
+                          >
+                            <nb-option
+                              *ngFor="let assemblage of assemblages"
+                              [value]="assemblage.value"
+                            >
+                              {{ assemblage.value }}</nb-option
+                            >
+                          </nb-select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">Sampling Component:</div>
+                        <div class="col">
+                          <input
+                            type="text"
+                            nbInput
+                            name="txtSamplingComponent"
+                            [(ngModel)]="txtSamplingComponent"
+                            #vtxtSamplingComponent="ngModel"
+                            [ngClass]="{
+                              'is-invalid':
+                                f.submitted && vtxtSamplingComponent.invalid
+                            }"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="row">
+                        <div class="col">Collection Duration:</div>
+                        <div class="col">
+                          <input
+                            type="text"
+                            nbInput
+                            name="txtBioDuration"
+                            [(ngModel)]="txtBioDuration"
+                            #vtxtBioDuration="ngModel"
+                            [ngClass]="{
+                              'is-invalid':
+                                f.submitted && vtxtBioDuration.invalid
+                            }"
+                          />
+                          <nb-select
+                            status="primary"
+                            name="ddlBioDurUnit"
+                            [(selected)]="bioDurUnitSelected"
+                          >
+                            <nb-option value=""></nb-option>
+                            <nb-option value="seconds">seconds</nb-option>
+                            <nb-option value="minutes">minutes</nb-option>
+                            <nb-option value="hours">hours</nb-option>
+                          </nb-select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">Components Sequence #:</div>
+                        <div class="col">
+                          <input
+                            type="text"
+                            nbInput
+                            name="txtSampComponentSeq"
+                            [(ngModel)]="txtSampComponentSeq"
+                            #vtxtSampComponentSeq="ngModel"
+                            [ngClass]="{
+                              'is-invalid':
+                                f.submitted && vtxtSampComponentSeq.invalid
+                            }"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </nb-tab>
+              </nb-tabset>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <button nbButton status="success" class="mr-2">Save</button>
+              <button nbButton status="danger">Exit</button>
+            </div>
+            <div class="col">
+              Result Type:
+              <nb-select
+                status="primary"
+                name="ddlEntryType"
+                [(selected)]="entryTypeSelected"
+              >
+                <nb-option value="C">Chemical (default)</nb-option>
+                <nb-option value="H">Habitat Assessment</nb-option>
+                <nb-option value="T">Taxonomy Counts</nb-option>
+              </nb-select>
+            </div>
+            <div class="col">
+              Last Modified:
+              <label
+                name="lblModifyDate"
+                [(ngModel)]="lblModifyDate"
+                nbLabel
+              ></label>
+            </div>
+            <div class="col"></div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <nb-card>
+                <nb-card-header>RESULTS (click row to edit)</nb-card-header>
+                <nb-card-body> </nb-card-body>
+                <nb-card-footer>
+                  <button nbButton>Excel</button>
+                </nb-card-footer>
+              </nb-card>
+            </div>
+          </div>
+        </nb-card-body>
+        <nb-card-footer></nb-card-footer>
+      </nb-card>
+    </form>
+  </div>
+</div>

@@ -94,6 +94,9 @@ export module WebApi {
     public static readonly getWqxActivityDisplay =
       (actInd: boolean, orgId: string, monLocIdx: number, startDt: string, endDt: string, actType: string, wQXPending: boolean, projectIdx: number, wQXStatus: string) =>
         `${environment.api.owUrl}/api/activity/getWqxActivityDisplay?ActInd=${actInd}&OrgID=${orgId}&MonLocIDX=${monLocIdx}&startDt=${startDt}&endDt=${endDt}&ActType=${actType}&WQXPending=${wQXPending}&ProjectIDX=${projectIdx}&WQXStatus=${wQXStatus}`
+    public static readonly deleteTWqxActivity =
+      (activityIdx: number, userId: string) =>
+        `${environment.api.owUrl}/api/activity/deleteTWqxActivity?ActivityIDX=${activityIdx}&UserID=${userId}`
   }
   export class TWQXRefDataApi {
     public static readonly getTWqxRefDefaultTimeZone =

@@ -1,5 +1,5 @@
 import { Component, OnInit, NgModule } from '@angular/core';
-import { NbDatepickerModule, NbWindowService, NbWindowRef } from '@nebular/theme';
+import { NbDatepickerModule, NbWindowService, NbWindowRef, NbToastrService } from '@nebular/theme';
 import { WqxMonloc } from '../../../@core/wqx-data/wqx-monloc';
 import { WqxRefData } from '../../../@core/wqx-data/wqx-organization';
 import { WqxProject } from '../../../@core/wqx-data/wqx-project';
@@ -8,6 +8,9 @@ import { User } from '../../../@core/data/users';
 import { LocalDataSource } from 'ng2-smart-table/lib/data-source/local/local.data-source';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { WQXActivityService } from '../../../@core/wqx-services/wqx-activity-service';
+import { WqxActivityConfig } from '../../../@core/wqx-data/wqx-activity';
+import { ActivityConfigWindowComponent } from './activity-config-window/activity-config-window.component';
+import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
 
 @Component({
   selector: 'ngx-wqx-activity',
@@ -26,8 +29,8 @@ export class WqxActivityComponent implements OnInit {
   currentOrgId: string;
 
   i = 0;
-  monlocSetting;
-  _monlocSetting = {
+  activitySetting;
+  _activitySetting = {
     hideSubHeader: true,
     actions: {
       custom: [
@@ -44,24 +47,11 @@ export class WqxActivityComponent implements OnInit {
       edit: false,
       delete: false,
     },
-    add: {
-      addButtonContent: '<i class="nb-plus"></i>',
-      createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    edit: {
-      editButtonContent: 'Select >>',
-      saveButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
-      confirmDelete: true,
-    },
+
     columns: {},
   };
 
-  monlocSource = new LocalDataSource([]);
+  activitySource = new LocalDataSource([]);
 
   txtStartDate = new Date();
   txtEndDate = new Date();
@@ -89,15 +79,17 @@ export class WqxActivityComponent implements OnInit {
     private windowService: NbWindowService,
     private authService: NbAuthService,
     private activityService: WQXActivityService,
+    private pubSubService: WqxPubsubServiceService,
+    private toasterService: NbToastrService,
   ) {
     this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
         this.currentOrgId = this.user.OrgID;
 
-        /* this.pubSubService.monlocChkData.subscribe((data: WqxMonlocConfig[]) => {
+        this.pubSubService.activityChkData.subscribe((data: WqxActivityConfig[]) => {
           this.onConfigSaved(data);
-        }); */
+        });
 
         this.populateData(true);
       }
@@ -116,65 +108,116 @@ export class WqxActivityComponent implements OnInit {
         (data) => {
           console.log(data);
           if (isFirst === true) {
-            this._monlocSetting.columns = {};
+            this._activitySetting.columns = {};
             this.prePop();
             this.postPop();
           }
-          this.monlocSetting = Object.assign({}, this._monlocSetting);
-          this.monlocSource = new LocalDataSource(data);
+          this.activitySetting = Object.assign({}, this._activitySetting);
+          this.activitySource = new LocalDataSource(data);
         },
       );
   }
-
+  onConfigSaved(data: WqxActivityConfig[]) {
+    console.log('config saved!');
+    this._activitySetting.columns = {};
+    this.prePop();
+    this.i = 0;
+    data.forEach(element => {
+      this.addColumn(element);
+    });
+    this.postPop();
+    this.activitySetting = Object.assign({}, this._activitySetting);
+    this.configWinRef.close();
+    this.populateData(false);
+  }
   prePop() {
-    this._monlocSetting.columns['activitY_IDX'] = {
+    this._activitySetting.columns['activitY_ID'] = {
       title: 'Activity ID',
       type: 'string',
       filter: false,
     };
-    this._monlocSetting.columns['monloC_ID'] = {
+    this._activitySetting.columns['monloC_ID'] = {
       title: 'Monitoring Loc.',
       type: 'string',
       filter: false,
     };
-    this._monlocSetting.columns['projecT_ID'] = {
+    this._activitySetting.columns['projecT_ID'] = {
       title: 'Project',
       type: 'string',
       filter: false,
     };
-    this._monlocSetting.columns['acT_TYPE'] = {
+    this._activitySetting.columns['acT_TYPE'] = {
       title: 'Type',
       type: 'string',
       filter: false,
     };
-    this._monlocSetting.columns['acT_MEDIA'] = {
+    this._activitySetting.columns['acT_MEDIA'] = {
       title: 'Media',
       type: 'string',
       filter: false,
     };
-    this._monlocSetting.columns['acT_SUBMEDIA'] = {
+    this._activitySetting.columns['acT_SUBMEDIA'] = {
       title: 'SubMedia',
       type: 'string',
       filter: false,
     };
-    this._monlocSetting.columns['acT_START_DT'] = {
+    this._activitySetting.columns['acT_START_DT'] = {
       title: 'Sample Date',
       type: 'string',
       filter: false,
     };
   }
   postPop() {
-    this._monlocSetting.columns['acT_COMMENT'] = {
+    this._activitySetting.columns['acT_COMMENT'] = {
       title: 'Comment',
       type: 'string',
       filter: false,
     };
-    this._monlocSetting.columns['wqX_SUBMIT_STATUS'] = {
+    this._activitySetting.columns['wqX_SUBMIT_STATUS'] = {
       title: 'Send to EPA',
       type: 'string',
       filter: false,
     };
 
+  }
+  public addColumn(element: WqxActivityConfig) {
+    if (element.value === true) {
+      let elemName: string = '';
+      let title: string = '';
+      switch (element.name) {
+        case 'SAMP_ACT_END_DT': {
+          elemName = 'acT_END_DT';
+          title = 'End Date';
+          break;
+        }
+        case 'SAMP_COLL_METHOD': {
+          elemName = 'samP_COLL_METHOD';
+          title = 'Sample Collection Method';
+          break;
+        }
+        case 'SAMP_COLL_EQUIP': {
+          elemName = 'samP_COLL_EQUIP';
+          title = 'Collection Equipment';
+          break;
+        }
+        case 'SAMP_PREP': {
+          elemName = 'samP_PREP_METHOD';
+          title = 'Sample Prep Method';
+          break;
+        }
+        case 'SAMP_DEPTH': {
+          elemName = 'deptH_REF_POINT';
+          title = 'Depth';
+          break;
+        }
+      }
+      this._activitySetting.columns[elemName] = {
+        title: title,
+        type: 'string',
+        filter: false,
+      };
+      this.i++;
+    }
   }
   onSubmit() {
     console.log('submit called!');
@@ -183,15 +226,13 @@ export class WqxActivityComponent implements OnInit {
 
   onAddNew(): void {
     console.log('Add New Click!');
-    this.router.navigate(['/secure/water-quality/wqx-monloc-edit'], { queryParams: { monlocIdx: -1 } });
+    this.router.navigate(['/secure/water-quality/wqx-activity-edit'], { queryParams: { monlocIdx: -1 } });
   }
   onExcel(): void {
     console.log('onExcel Click!');
   }
   onConfig(): void {
-    console.log('onConfig Click!');
-    // this.configWinRef = this.windowService.open(MonlocConfigWindowComponent, { title: `` });
-
+    this.configWinRef = this.windowService.open(ActivityConfigWindowComponent, { title: `` });
   }
   onDeleteConfirm(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
@@ -202,8 +243,22 @@ export class WqxActivityComponent implements OnInit {
   }
   onCustom(event): void {
     if (event.action === 'edit') {
-      console.log(event.data.monlocIdx);
-      this.router.navigate(['/secure/water-quality/wqx-monloc-edit'], { queryParams: { monlocIdx: event.data.monlocIdx } });
+      this.router.navigate(['/secure/water-quality/wqx-activity-edit'], { queryParams: { activityIdx: event.data.activityIdx } });
+    } else if (event.action === 'delete') {
+      this.activityService.DeleteT_WQX_ACTIVITY(event.data.activitY_IDX, this.user.name).subscribe(
+        (result) => {
+          if (result === 1) {
+            this.toasterService.success('Record successfully deleted.');
+            this.populateData(false);
+          } else {
+            this.toasterService.success('Unable to delete activity.');
+          }
+        },
+        (err) => {
+          this.toasterService.success('Unable to delete activity.');
+          console.log(err);
+        },
+      );
     }
   }
 }

@@ -12,7 +12,7 @@ export class MonlocConfigWindowComponent implements OnInit {
 
   config: WqxMonlocConfig[] = [];
   constructor(private pubSubService: WqxPubsubServiceService,
-    protected windowRef: NbWindowRef) {
+    private windowRef: NbWindowRef) {
 
   }
 

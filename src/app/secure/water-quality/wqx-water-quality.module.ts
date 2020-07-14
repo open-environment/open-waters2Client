@@ -25,6 +25,8 @@ import { MonlocConfigWindowComponent } from './wqx-monloc/monloc-config-window/m
 import { WqxMonlocEditComponent } from './wqx-monloc/wqx-monloc-edit/wqx-monloc-edit.component';
 import { ProjectConfigWindowComponent } from './wqx-project/project-config-window/project-config-window.component';
 import { WqxProjectEditComponent } from './wqx-project/wqx-project-edit/wqx-project-edit.component';
+import { ActivityConfigWindowComponent } from './wqx-activity/activity-config-window/activity-config-window.component';
+import { WqxActivityEditComponent } from './wqx-activity/wqx-activity-edit/wqx-activity-edit.component';
 
 
 
@@ -67,16 +69,19 @@ import { WqxProjectEditComponent } from './wqx-project/wqx-project-edit/wqx-proj
     WqxMonlocEditComponent,
     ProjectConfigWindowComponent,
     WqxProjectEditComponent,
+    ActivityConfigWindowComponent,
+    WqxActivityEditComponent,
   ],
   providers: [
     WQXRefDataService,
-    { provide: HTTP_INTERCEPTORS, useClass: NgxAuthJWTInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: NgxAuthJWTInterceptor, multi: true },
   ],
   entryComponents: [
     MonlocConfigWindowComponent,
     AddCharWindowComponent,
     AddTranslationWindowComponent,
     ProjectConfigWindowComponent,
+    ActivityConfigWindowComponent,
   ],
 })
 export class WqxWaterQualityModule { }

@@ -10,6 +10,7 @@ export class WqxPubsubServiceService {
   charData = new ReplaySubject<any>();
   monlocChkData = new ReplaySubject<any>();
   projectChkData = new ReplaySubject<any>();
+  activityChkData = new ReplaySubject<any>();
 
   constructor() { }
 
@@ -27,5 +28,8 @@ export class WqxPubsubServiceService {
   }
   setProjectData(data: any) {
     this.projectChkData.next(data);
+  }
+  setActivityData(data: any) {
+    this.activityChkData.next(data);
   }
 }

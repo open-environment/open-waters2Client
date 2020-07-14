@@ -1,13 +1,13 @@
 import { Observable } from 'rxjs';
 
 export interface WqxRefDefaultTimeZone {
- timeZoneName: string;
- officialTimeZoneName: string;
- wqxCodeStandard: string;
- WqxCodeDaylight: string;
- actInd: boolean;
- updateDt: string;
- updateUserId: string;
+  timeZoneName: string;
+  officialTimeZoneName: string;
+  wqxCodeStandard: string;
+  WqxCodeDaylight: string;
+  actInd: boolean;
+  updateDt: string;
+  updateUserId: string;
 }
 export interface WqxRefData {
   refDataIdx: number;
@@ -28,7 +28,7 @@ export interface WqxRefCharacteristic {
   sampFracReq: string;
   pickList: string;
 }
-export interface AnalMethodDisplay{
+export interface AnalMethodDisplay {
   analytiC_METHOD_IDX: number;
   analMethodDisplayName: string;
 }
@@ -58,6 +58,15 @@ export interface WqxRefCounty {
   countyName: string;
   actInd: boolean;
   usedInd: boolean;
+  updateDt: string;
+}
+export interface WqxRefSampColMethod {
+  sampCollMethodIdx: number;
+  sampCollMethodId: string;
+  sampCollMethodCtx: string;
+  sampCollMethodName: string;
+  sampCollMethodDesc: string;
+  actInd: boolean;
   updateDt: string;
 
 }

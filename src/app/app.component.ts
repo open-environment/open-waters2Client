@@ -22,5 +22,6 @@ export class AppComponent implements OnInit {
     this.seoService.trackCanonicalChanges();
     localStorage.setItem('monlocConfig', JSON.stringify(globals.monlocConfig));
     localStorage.setItem('projectConfig', JSON.stringify(globals.projectConfig));
+    localStorage.setItem('activityConfig', JSON.stringify(globals.activityConfig));
   }
 }

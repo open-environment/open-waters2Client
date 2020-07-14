@@ -12,6 +12,7 @@ import { WqxImportFromEpaComponent } from './wqx-import-from-epa/wqx-import-from
 import { WqxMgmtComponent } from './wqx-mgmt/wqx-mgmt.component';
 import { WqxMonlocEditComponent } from './wqx-monloc/wqx-monloc-edit/wqx-monloc-edit.component';
 import { WqxProjectEditComponent } from './wqx-project/wqx-project-edit/wqx-project-edit.component';
+import { WqxActivityEditComponent } from './wqx-activity/wqx-activity-edit/wqx-activity-edit.component';
 
 const routes: Routes = [{
   path: '',
@@ -48,6 +49,10 @@ const routes: Routes = [{
     {
       path: 'wqx-activity',
       component: WqxActivityComponent,
+    },
+    {
+      path: 'wqx-activity-edit',
+      component: WqxActivityEditComponent,
     },
     {
       path: 'wqx-import',

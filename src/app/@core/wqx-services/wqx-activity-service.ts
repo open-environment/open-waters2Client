@@ -25,4 +25,7 @@ export class WQXActivityService extends WqxActivityData {
   getWqxActivityDisplay(actInd: boolean, orgId: string, monLocIdx: number, startDt: string, endDt: string, actType: string, wQXPending: boolean, projectIdx: number, wQXStatus: string): Observable<ActivityListDisplay[]> {
     return this.http.get<ActivityListDisplay[]>(WebApi.TWQXActivityApi.getWqxActivityDisplay(actInd, orgId, monLocIdx, startDt, endDt, actType, wQXPending, projectIdx, wQXStatus));
   }
+  DeleteT_WQX_ACTIVITY(activityIdx: number, userId: string): Observable<number> {
+    return this.http.delete<number>(WebApi.TWQXActivityApi.deleteTWqxActivity(activityIdx, userId));
+  }
 }
