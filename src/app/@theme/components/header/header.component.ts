@@ -5,7 +5,7 @@ import { UserData, User } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import {NbAuthJWTToken, NbAuthService, NbTokenService, NbAuthResult} from '@nebular/auth';
+import { NbAuthJWTToken, NbAuthService, NbTokenService, NbAuthResult } from '@nebular/auth';
 import { RouterModule, Routes, Route, Router } from '@angular/router';
 import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organization-service';
 import { WqxOrganization, WqxOrganizationData } from '../../../@core/wqx-data/wqx-organization';
@@ -44,39 +44,38 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   // currentTheme = 'default';
 
-  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
+  userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
   _authService: any;
   _router: any;
   constructor(private sidebarService: NbSidebarService,
-              private menuService: NbMenuService,
-              // private themeService: NbThemeService,
-              private userService: UserData,
-              private layoutService: LayoutService,
-              private breakpointService: NbMediaBreakpointsService,
-              private authService: NbAuthService,
-              private tokenService: NbTokenService,
-              private router: Router,
-              private organizationService: WQXOrganizationService,
-              private pubSubService: WqxPubsubServiceService) {
-                this._router = router;
-                this._authService = this.authService;
-                this._authService.onTokenChange()
-                .subscribe((token: NbAuthJWTToken) => {
-                  if (token.isValid()) {
-                    this.user = token.getPayload();
-                  }
-                });
+    private menuService: NbMenuService,
+    // private themeService: NbThemeService,
+    private userService: UserData,
+    private layoutService: LayoutService,
+    private breakpointService: NbMediaBreakpointsService,
+    private authService: NbAuthService,
+    private tokenService: NbTokenService,
+    private router: Router,
+    private organizationService: WQXOrganizationService,
+    private pubSubService: WqxPubsubServiceService) {
+    this._router = router;
+    this._authService = this.authService;
+    this._authService.onTokenChange()
+      .subscribe((token: NbAuthJWTToken) => {
+        if (token.isValid()) {
+          this.user = token.getPayload();
+        }
+      });
   }
 
   ngOnInit() {
     if (this.user.UserIDX !== null) {
       this.organizationService.GetWQX_USER_ORGS_ByUserIDX(+this.user.UserIDX, true).subscribe(
         (data) => {
-          console.log(data);
           data.forEach(element => {
             const newOrg = {} as WqxOrganization;
             newOrg.orgId = element.orgId;
-            newOrg.orgFormalName =  element.orgFormalName;
+            newOrg.orgFormalName = element.orgFormalName;
             this.orgs.push(newOrg);
           });
         },
@@ -113,16 +112,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }); */
   }
 
-   onItemSelection( title: string ) {
-    if ( title === 'Log out' ) {
+  onItemSelection(title: string) {
+    if (title === 'Log out') {
       this._authService.logout('email').subscribe(
         (result: NbAuthResult) => {
-        console.log(result);
-        this._router.navigateByUrl('/auth/login');
+          console.log(result);
+          this._router.navigateByUrl('/auth/login');
         },
         (err) => { console.log(err); },
       );
-    } else if ( title === 'Profile' ) {
+    } else if (title === 'Profile') {
       // Do something on Profile
     }
   }
@@ -132,9 +131,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-/*   changeTheme(themeName: string) {
-    this.themeService.changeTheme(themeName);
-  } */
+  /*   changeTheme(themeName: string) {
+      this.themeService.changeTheme(themeName);
+    } */
   changeOrg(orgName: string) {
     console.log(orgName);
     this.pubSubService.setData(orgName);

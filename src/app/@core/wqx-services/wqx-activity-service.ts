@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { of as observableOf,  Observable, of } from 'rxjs';
+import { of as observableOf, Observable, of } from 'rxjs';
 import { PeriodsService } from '../mock/periods.service';
-import { WqxActivity, WqxActivityData } from '../wqx-data/wqx-activity';
+import { WqxActivity, WqxActivityData, ActivityListDisplay } from '../wqx-data/wqx-activity';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { WebApi } from '../utils/web-api';
@@ -9,7 +9,7 @@ import { WebApi } from '../utils/web-api';
 @Injectable()
 export class WQXActivityService extends WqxActivityData {
 
-   constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) {
     super();
   }
 
@@ -21,5 +21,8 @@ export class WQXActivityService extends WqxActivityData {
   }
   getWQXActivityMyOrgCount(userIDX: number): Observable<number> {
     return this.http.get<number>(WebApi.TWQXActivityApi.getWQXActivityMyOrgCount(userIDX));
+  }
+  getWqxActivityDisplay(actInd: boolean, orgId: string, monLocIdx: number, startDt: string, endDt: string, actType: string, wQXPending: boolean, projectIdx: number, wQXStatus: string): Observable<ActivityListDisplay[]> {
+    return this.http.get<ActivityListDisplay[]>(WebApi.TWQXActivityApi.getWqxActivityDisplay(actInd, orgId, monLocIdx, startDt, endDt, actType, wQXPending, projectIdx, wQXStatus));
   }
 }

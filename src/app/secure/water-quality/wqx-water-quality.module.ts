@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbCardModule, NbIconModule, NbInputModule, NbTreeGridModule, NbCheckboxModule, NbSelectModule, NbRadioModule, NbListModule, NbAlertModule, NbTabsetModule, NbToastrModule, NbWindowModule, NbButtonModule } from '@nebular/theme';
+import { NbCardModule, NbIconModule, NbInputModule, NbTreeGridModule, NbCheckboxModule, NbSelectModule, NbRadioModule, NbListModule, NbAlertModule, NbTabsetModule, NbToastrModule, NbWindowModule, NbButtonModule, NbDatepickerModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { ThemeModule } from '../../@theme/theme.module';
@@ -48,6 +48,7 @@ import { WqxProjectEditComponent } from './wqx-project/wqx-project-edit/wqx-proj
     NbToastrModule,
     NbWindowModule.forRoot(),
     NbButtonModule,
+    NbDatepickerModule.forRoot(),
   ],
   declarations: [
     ...wqxRoutedComponents,

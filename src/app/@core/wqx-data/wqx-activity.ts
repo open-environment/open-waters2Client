@@ -61,6 +61,32 @@ export interface WqxActivity {
   entryType: string;
 }
 
+export interface ActivityListDisplay {
+  activityIdx: number;
+  orgId: string;
+  projectId: string;
+  monlocId: string;
+  activityId: string;
+  actType: string;
+  actMedia: string;
+  actSubMedia: string;
+  actStartDt: string;
+  actEndDt: string;
+  actDeptHeightMsr: string;
+  actDeptHeightMsrUnit: string;
+  topDeptHeightMsr: string;
+  botDeptHeightMsr: string;
+  depthRefPoint: string;
+  actComment: string;
+  sampCollMethod: string;
+  sampCollEquip: string;
+  sampCollEquipComment: string;
+  sampPrepMethod: string;
+  wqxInd: string;
+  wqxSubmitStatus: string;
+  actInd: boolean;
+}
+
 export abstract class WqxActivityData {
   abstract GetWQX_Activities(ActInd: boolean, OrgID: string, MonLocIDX: number, startDt: string, endDt: string, ActType: string, WQXPending: boolean, ProjectIDX: number): Observable<WqxActivity[]>;
 }
