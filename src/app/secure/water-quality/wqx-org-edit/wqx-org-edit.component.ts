@@ -1,12 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WqxOrganization, UserOrgDisplay, TOeUsers, ConnectTestResult, WqxRefData } from '../../../@core/wqx-data/wqx-organization';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organization-service';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
 import { User } from '../../../@core/data/users';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
-import { NgForm } from '@angular/forms';
-import { ToasterService } from 'angular2-toaster';
 import { NbToastrService } from '@nebular/theme';
 
 @Component({
@@ -57,16 +55,16 @@ export class WqxOrgEditComponent implements OnInit {
   lblMsg: string = '';
 
   constructor(private activatedRoute: ActivatedRoute,
-              private router: Router,
-              private organizationService: WQXOrganizationService,
-              private pubSubService: WqxPubsubServiceService,
-              private authService: NbAuthService,
-              private toasterService: NbToastrService) {
-                this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
-                  if (token.isValid()) {
-                    this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-                  }
-                });
+    private router: Router,
+    private organizationService: WQXOrganizationService,
+    private pubSubService: WqxPubsubServiceService,
+    private authService: NbAuthService,
+    private toasterService: NbToastrService) {
+    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+      if (token.isValid()) {
+        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
+      }
+    });
     if (this.orgEditId === null) {
       this.router.navigate(['/secure/water-quality/wqx-org']);
     }
@@ -86,15 +84,15 @@ export class WqxOrgEditComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       this.orgEditId = params['orgEditId'];
       if (this.orgEditId !== null) {
-         this.loadPageData(this.orgEditId);
+        this.loadPageData(this.orgEditId);
       }
     });
   }
 
   loadPageData(data: any): void {
-   if (data !== null && data !== '') {
+    if (data !== null && data !== '') {
       this.orgEditId = data;
-   }
+    }
     /* This needs to be implemented
         if (Request.QueryString["c"] == "1")
         pnlCDX.CssClass = "fldErr row";
@@ -146,11 +144,11 @@ export class WqxOrgEditComponent implements OnInit {
 
           // populate listbox with users already in organization
           this.organizationService.GetT_OE_USERSInOrganization(this.orgEditId).subscribe(
-              (uio: any) => {
-                this.lbUserInRole = uio;
-                console.log('lbUserInRole');
-                console.log(this.lbUserInRole);
-              },
+            (uio: any) => {
+              this.lbUserInRole = uio;
+              console.log('lbUserInRole');
+              console.log(this.lbUserInRole);
+            },
           );
 
           // populate listbox with users not in role
@@ -208,16 +206,16 @@ export class WqxOrgEditComponent implements OnInit {
         this.txtOrgPhoneExt, '', '', false, '', this.user.name,
         this.txtMailingAddress, this.txtMailCity, this.txtMailState,
         this.txtMailZIP).subscribe(
-      (result) => {
-        if (result === 1) {
-          this.toasterService.success('Data Saved!');
-          this.router.navigate(['../wqx-org'], { relativeTo: this.activatedRoute});
-        }
-       },
-      (err) => {
-        this.toasterService.danger('Error updating record.');
-       },
-    );
+          (result) => {
+            if (result === 1) {
+              this.toasterService.success('Data Saved!');
+              this.router.navigate(['../wqx-org'], { relativeTo: this.activatedRoute });
+            }
+          },
+          (err) => {
+            this.toasterService.danger('Error updating record.');
+          },
+        );
   }
   onCancelClicked(): void {
     this.router.navigate(['/secure/water-quality/wqx-org']);
@@ -262,7 +260,7 @@ export class WqxOrgEditComponent implements OnInit {
   }
   onRemoveUserFromOrg(): void {
     if (this.selectedUser2 !== null) {
-       this.organizationService.deleteTWqxUserOrgs(this.selectedUser2.orG_ID, this.selectedUser2.useR_IDX).subscribe(
+      this.organizationService.deleteTWqxUserOrgs(this.selectedUser2.orG_ID, this.selectedUser2.useR_IDX).subscribe(
         (result) => {
           console.log(result);
         },

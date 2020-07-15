@@ -1,5 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { WqxMonlocConfig } from '../../../../@core/wqx-data/wqx-monloc';
+import { Component, OnInit } from '@angular/core';
 import { WqxPubsubServiceService } from '../../../../@core/wqx-services/wqx-pubsub-service.service';
 import { NbWindowRef } from '@nebular/theme';
 import { WqxProjectConfig } from '../../../../@core/wqx-data/wqx-project';
@@ -14,7 +13,7 @@ export class ProjectConfigWindowComponent implements OnInit {
   config: WqxProjectConfig[] = [];
   constructor(private pubSubService: WqxPubsubServiceService,
     protected windowRef: NbWindowRef) {
-   }
+  }
 
   ngOnInit() {
     this.config = JSON.parse(localStorage.getItem('projectConfig'));

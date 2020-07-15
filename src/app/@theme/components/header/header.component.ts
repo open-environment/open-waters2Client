@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
+import { NbMenuService, NbSidebarService } from '@nebular/theme';
 
-import { UserData, User } from '../../../@core/data/users';
+import { User } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
-import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { NbAuthJWTToken, NbAuthService, NbTokenService, NbAuthResult } from '@nebular/auth';
-import { RouterModule, Routes, Route, Router } from '@angular/router';
+import { NbAuthJWTToken, NbAuthService, NbAuthResult } from '@nebular/auth';
+import { Router } from '@angular/router';
 import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organization-service';
-import { WqxOrganization, WqxOrganizationData } from '../../../@core/wqx-data/wqx-organization';
+import { WqxOrganization } from '../../../@core/wqx-data/wqx-organization';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
 
 @Component({
@@ -45,22 +44,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   // currentTheme = 'default';
 
   userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
-  _authService: any;
-  _router: any;
+
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     // private themeService: NbThemeService,
-    private userService: UserData,
     private layoutService: LayoutService,
-    private breakpointService: NbMediaBreakpointsService,
     private authService: NbAuthService,
-    private tokenService: NbTokenService,
     private router: Router,
     private organizationService: WQXOrganizationService,
     private pubSubService: WqxPubsubServiceService) {
-    this._router = router;
-    this._authService = this.authService;
-    this._authService.onTokenChange()
+
+    this.authService.onTokenChange()
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.user = token.getPayload();
@@ -117,10 +111,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onItemSelection(title: string) {
     if (title === 'Log out') {
-      this._authService.logout('email').subscribe(
+      this.authService.logout('email').subscribe(
         (result: NbAuthResult) => {
           console.log(result);
-          this._router.navigateByUrl('/auth/login');
+          this.router.navigateByUrl('/auth/login');
         },
         (err) => { console.log(err); },
       );

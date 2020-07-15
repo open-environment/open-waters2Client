@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WqxMonloc, WqxMonlocConfig } from '../../../@core/wqx-data/wqx-monloc';
+import { WqxMonlocConfig } from '../../../@core/wqx-data/wqx-monloc';
 import { NbWindowService, NbWindowRef } from '@nebular/theme';
 import { MonlocConfigWindowComponent } from './monloc-config-window/monloc-config-window.component';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';

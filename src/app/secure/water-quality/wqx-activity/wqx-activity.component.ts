@@ -15,7 +15,7 @@ import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-
 @Component({
   selector: 'ngx-wqx-activity',
   templateUrl: './wqx-activity.component.html',
-  styleUrls: ['./wqx-activity.component.scss']
+  styleUrls: ['./wqx-activity.component.scss'],
 })
 @NgModule({
   imports: [
@@ -221,7 +221,7 @@ export class WqxActivityComponent implements OnInit {
   }
   onSubmit() {
     console.log('submit called!');
-    //console.log(this.ngModelDate);
+    // console.log(this.ngModelDate);
   }
 
   onAddNew(): void {

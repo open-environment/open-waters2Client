@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'ngx-wqx-org',
   templateUrl: './wqx-org.component.html',
-  styleUrls: ['./wqx-org.component.scss']
+  styleUrls: ['./wqx-org.component.scss'],
 })
 export class WqxOrgComponent implements OnInit {
 
@@ -16,8 +16,8 @@ export class WqxOrgComponent implements OnInit {
     actions: {
       custom: [
         {
-        name: 'select',
-        title: '<i class="ion-edit" title="Edit"></i>',
+          name: 'select',
+          title: '<i class="ion-edit" title="Edit"></i>',
         },
       ],
       add: false,
@@ -48,31 +48,31 @@ export class WqxOrgComponent implements OnInit {
         title: 'Organization Name',
         type: 'string',
         filter: true,
-      }
+      },
     },
   };
 
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private service: WQXOrganizationService,
-              private pubSubService: WqxPubsubServiceService,
-              private router: Router) {
-                this.pubSubService.loadData.subscribe((data: any) => {
-                  console.log('subscribe called: ' + data);
-                });
-                this.loadData();
+    private pubSubService: WqxPubsubServiceService,
+    private router: Router) {
+    this.pubSubService.loadData.subscribe((data: any) => {
+      console.log('subscribe called: ' + data);
+    });
+    this.loadData();
   }
 
   ngOnInit() {
   }
 
   loadData(): void {
-    const data = this.service.getVWQXAllOrgs()
-    .subscribe(
-      (_data) => {
-        this.source.load(_data);
-      },
-    );
+    this.service.getVWQXAllOrgs()
+      .subscribe(
+        (_data) => {
+          this.source.load(_data);
+        },
+      );
   }
 
   onDeleteConfirm(event): void {
@@ -84,10 +84,10 @@ export class WqxOrgComponent implements OnInit {
   }
 
   onCustom(event): void {
-     const orgId = event.data.orgId;
-     this.router.navigate(['/secure/water-quality/wqx-org-edit'], { queryParams: { orgEditId: orgId } });
+    const orgId = event.data.orgId;
+    this.router.navigate(['/secure/water-quality/wqx-org-edit'], { queryParams: { orgEditId: orgId } });
   }
-  onAddNewClick(): void{
+  onAddNewClick(): void {
     console.log('Add new clicked!');
     this.router.navigate(['/secure/water-quality/wqx-org-edit'], { queryParams: { orgEditId: -1 } });
   }

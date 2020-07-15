@@ -11,8 +11,8 @@
 export const environment = {
   production: false,
   api: {
-    owUrl: 'https://localhost:44327'
-  }
+    owUrl: 'https://localhost:44327',
+  },
 };
 export const globals = {
   projectConfig: [

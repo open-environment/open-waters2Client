@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import { of as observableOf,  Observable, of } from 'rxjs';
-import { PeriodsService } from '../mock/periods.service';
+import { Observable } from 'rxjs';
 import { WqxProject, WqxProjectData } from '../wqx-data/wqx-project';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
 
 @Injectable()
 export class WQXProjectService extends WqxProjectData {
 
-   constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) {
     super();
   }
 
@@ -30,10 +28,10 @@ export class WQXProjectService extends WqxProjectData {
   }
   InsertOrUpdateWQX_PROJECT(projectIdx: number, orgId: string, projectId: string,
     projectName: string, projectDesc: string, sampDesignTypeCd: string, qAppApprovalInd: boolean,
-    qAppApprovalAgency: string, wQxSubmitStatus: string, wQxSubmitDt: string, actInd: boolean, wqxInd: boolean, createUser: string){
-      const httpOptions = {};
-      return this.http.post<number>(WebApi.TWQXProjectApi.InsertOrUpdateWQXProject(projectIdx, orgId, projectId,
-        projectName, projectDesc, sampDesignTypeCd, qAppApprovalInd,
-        qAppApprovalAgency, wQxSubmitStatus, wQxSubmitDt, actInd, wqxInd, createUser), '', httpOptions);
-    }
+    qAppApprovalAgency: string, wQxSubmitStatus: string, wQxSubmitDt: string, actInd: boolean, wqxInd: boolean, createUser: string) {
+    const httpOptions = {};
+    return this.http.post<number>(WebApi.TWQXProjectApi.InsertOrUpdateWQXProject(projectIdx, orgId, projectId,
+      projectName, projectDesc, sampDesignTypeCd, qAppApprovalInd,
+      qAppApprovalAgency, wQxSubmitStatus, wQxSubmitDt, actInd, wqxInd, createUser), '', httpOptions);
+  }
 }

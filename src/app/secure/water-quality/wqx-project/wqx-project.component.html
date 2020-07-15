@@ -1,23 +1,28 @@
 <form>
-<nb-card status="success">
-  <nb-card-header>PROJECTS</nb-card-header>
-  <nb-card-body>
-    <div class="row">
-      <ng2-smart-table [settings]="projectSetting" 
-      [source]="projectSource" (deleteConfirm)="onDeleteConfirm($event)" 
-      (custom)="onCustom($event)">
-      </ng2-smart-table>
-    </div>
+  <nb-card status="success">
+    <nb-card-header>PROJECTS</nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <ng2-smart-table
+          [settings]="projectSetting"
+          [source]="projectSource"
+          (deleteConfirm)="onDeleteConfirm($event)"
+          (custom)="onCustom($event)"
+        >
+        </ng2-smart-table>
+      </div>
       <div class="row mt-3">
-        <button nbButton (click)="onAddNew()" 
-        class="mr-3" status="success">Add New</button>
+        <button nbButton (click)="onAddNew()" class="mr-3" status="success">
+          Add New
+        </button>
         <span class="float-right">
-          <button nbButton (click)="onExcel()" 
-          class="mr-3" status="info">Excel</button>
+          <button nbButton (click)="onExcel()" class="mr-3" status="info">
+            Excel
+          </button>
           <button nbButton (click)="onConfig()" status="info">Config</button>
         </span>
       </div>
-  </nb-card-body>
-  <nb-card-footer></nb-card-footer>
-</nb-card>
+    </nb-card-body>
+    <nb-card-footer></nb-card-footer>
+  </nb-card>
 </form>

@@ -1,15 +1,11 @@
 import { Component } from '@angular/core';
-import { WqxOrganization, WqxOrganizationData } from '../../@core/wqx-data/wqx-organization';
-import { Observable } from 'rxjs';
+import { WqxOrganization } from '../../@core/wqx-data/wqx-organization';
 import { User } from '../../@core/data/users';
-import { NbAuthModule, NbAuthService, NbAuthJWTToken } from '@nebular/auth';
+import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { WQXOrganizationService } from '../../@core/wqx-services/wqx-organization-service';
 import { WQXProjectService } from '../../@core/wqx-services/wqx-project-service';
 import { WQXActivityService } from '../../@core/wqx-services/wqx-activity-service';
 import { LocalDataSource } from 'ng2-smart-table';
-
-import { SmartTableData } from '../../@core/data/smart-table';
-import { IfStmt } from '@angular/compiler';
 import { Router } from '@angular/router';
 
 @Component({
@@ -64,11 +60,11 @@ export class ECommerceComponent {
   monLocOk: boolean = false;
   projOk: boolean = false;
   settings = {
-    actions:{
-      custom:[
+    actions: {
+      custom: [
         {
-        name: 'Approve',
-        title: 'Approve',
+          name: 'Approve',
+          title: 'Approve',
         },
         {
           name: 'Reject',
@@ -103,7 +99,7 @@ export class ECommerceComponent {
         title: 'Organization',
         type: 'string',
         filter: true,
-      }
+      },
     },
     noDataMessage: 'No Admin tasks at this time.',
   };
@@ -113,13 +109,13 @@ export class ECommerceComponent {
     private projectService: WQXProjectService,
     private activityService: WQXActivityService,
     private authService: NbAuthService,
-    private router: Router){
+    private router: Router) {
 
-      // *******************************************************************************
-      // ************* Data Collection Metrics Panel ***********************************
-      // *******************************************************************************
+    // *******************************************************************************
+    // ************* Data Collection Metrics Panel ***********************************
+    // *******************************************************************************
 
-      this.authService.onTokenChange()
+    this.authService.onTokenChange()
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.currentUser = token.getPayload();
@@ -127,19 +123,19 @@ export class ECommerceComponent {
             this.pnlOrgSpecificShow = true;
 
             this.organizationService.GetWQX_ORGANIZATION_ByID(this.currentUser.OrgID)
-            .subscribe((x) => { this.lblOrgName = x.orgFormalName; });
-              this.projectService.GetWQX_PROJECTS()
+              .subscribe((x) => { this.lblOrgName = x.orgFormalName; });
+            this.projectService.GetWQX_PROJECTS()
               .subscribe((x) => this.lblProject2 = x.length.toString());
-              this.activityService.GetWQX_Activities(true, this.currentUser.OrgID, 0, '', '', '', false, 0)
-              .subscribe((x) => {this.lblSamp = x.length.toString(); });
-              this.activityService.GetWQX_Activities(true, this.currentUser.OrgID, 0, '', '', '', true, 0)
-              .subscribe((x) => {this.lblSampPend2 = x.length.toString(); });
-              const count: any = this.activityService.GetT_WQX_RESULTCount(this.currentUser.OrgID)
+            this.activityService.GetWQX_Activities(true, this.currentUser.OrgID, 0, '', '', '', false, 0)
+              .subscribe((x) => { this.lblSamp = x.length.toString(); });
+            this.activityService.GetWQX_Activities(true, this.currentUser.OrgID, 0, '', '', '', true, 0)
+              .subscribe((x) => { this.lblSampPend2 = x.length.toString(); });
+            /* const count: any = this.activityService.GetT_WQX_RESULTCount(this.currentUser.OrgID)
               .subscribe(
                 (x) => { this.lblResult = x.toString(); },
                 (er) => { console.log(er); },
-              );
-          }else {
+              ); */
+          } else {
             this.pnlOrgSpecificShow = false;
           }
 
@@ -149,7 +145,7 @@ export class ECommerceComponent {
           this.bindAdminTaskData();
 
           this.organizationService.getVWQXAllOrgs().subscribe(
-            (result) => { this.lblOrg = result.length.toString(); }
+            (result) => { this.lblOrg = result.length.toString(); },
           );
 
           // ****************************************************************************
@@ -160,17 +156,17 @@ export class ECommerceComponent {
           this.organizationService.GetWQX_USER_ORGS_ByUserIDX(this.currentUser.userIdx, false).subscribe((o1s) => {
             this.myOrgusers = o1s;
             if (o1s.length === 0) {
-                this.lblWiz1Show = true;
-                this.lblWiz1 = 'To use Open Waters, you must first be linked with an Organization. This is the water monitoring agency you represent. If you intend to submit your data to EPA, this organization must first be created by EPA in their WQX system. Otherwise, if you never intend to submit your data to EPA, you can create any Organization ID you wish.';
-                this.btnWiz1Show = true;
-                this.btnWiz2Show = false;
-                this.btnWiz3Show = false;
-                this.btnWiz3bShow = false;
-                this.btnWiz4Show = false;
-                this.btnWiz5Show = false;
-                this.btnWiz6Show = false;
-                this.btnWiz6bShow = false;
-            }else {
+              this.lblWiz1Show = true;
+              this.lblWiz1 = 'To use Open Waters, you must first be linked with an Organization. This is the water monitoring agency you represent. If you intend to submit your data to EPA, this organization must first be created by EPA in their WQX system. Otherwise, if you never intend to submit your data to EPA, you can create any Organization ID you wish.';
+              this.btnWiz1Show = true;
+              this.btnWiz2Show = false;
+              this.btnWiz3Show = false;
+              this.btnWiz3bShow = false;
+              this.btnWiz4Show = false;
+              this.btnWiz5Show = false;
+              this.btnWiz6Show = false;
+              this.btnWiz6bShow = false;
+            } else {
               this.organizationService.GetWQX_USER_ORGS_ByUserIDX(this.currentUser.userIdx, true).subscribe((oNotPends) => {
                 if (oNotPends.length === 0) {
                   // only organization user is associated with is pending
@@ -185,7 +181,7 @@ export class ECommerceComponent {
                   this.btnWiz6Show = false;
                   this.btnWiz6bShow = false;
 
-                }else{
+                } else {
                   // STEP 1 IS COMPLETE, now try out tests 2-6
                   this.btnWiz1 = 'View';
                   this.lblWiz1 = 'Congrats! You are associated with an Organization. Click to view its details.';
@@ -202,7 +198,7 @@ export class ECommerceComponent {
                   });
 
                   // STEP 3:Mon Loc******************************************
-                  this.projectService.GetWQXMonlocMyOrgCount(parseInt(this.currentUser.UserIDX)).subscribe(
+                  this.projectService.GetWQXMonlocMyOrgCount(+this.currentUser.UserIDX).subscribe(
                     (result) => {
                       if (result > 0) {
                         this.lblWiz3Show = true;
@@ -217,7 +213,7 @@ export class ECommerceComponent {
                   );
 
                   // STEP 4:Project ******************************************
-                  this.projectService.GetWQXProjectMyOrgCount(parseInt(this.currentUser.UserIDX)).subscribe(
+                  this.projectService.GetWQXProjectMyOrgCount(+this.currentUser.UserIDX).subscribe(
                     (result) => {
                       if (result > 0) {
                         this.lblWiz4 = 'One or more projects have been created. Click to view.';
@@ -231,18 +227,18 @@ export class ECommerceComponent {
 
                   // STEP 5: Organization Starter Data ******************************************
 
-                  if (oNotPends[0].defaultTimezone === null || oNotPends[0].defaultTimezone === ''){
+                  if (oNotPends[0].defaultTimezone === null || oNotPends[0].defaultTimezone === '') {
                     this.lblWiz5 = 'Click to enter default organization data (e.g. Default Timezone, characteristics) that will be helpful during activity data entry.';
                   } else {
                     this.lblWiz5 = 'Organization default data (e.g. Default Timezone) has been defined. Click to view.';
                   }
 
                   // STEP 6: Activity ******************************************
-                  if (this.projOk === true && this.monLocOk === true){
+                  if (this.projOk === true && this.monLocOk === true) {
                     this.lblWiz6 = 'You must enter a monitoring location and a project before you begin to create activities.';
                     this.btnWiz6Show = false;
                   } else {
-                    this.activityService.getWQXActivityMyOrgCount(parseInt(this.currentUser.UserIDX)).subscribe(
+                    this.activityService.getWQXActivityMyOrgCount(+this.currentUser.UserIDX).subscribe(
                       (result) => {
                         if (result > 0) {
                           this.lblWiz6 = 'One or more activities have been created. Click to view.';
@@ -250,7 +246,7 @@ export class ECommerceComponent {
                         } else {
                           this.lblWiz6 = 'Click to enter an activity record.';
                         }
-                      }
+                      },
                     );
                   }
 
@@ -263,17 +259,17 @@ export class ECommerceComponent {
 
 
   }
-  Step1GetStarted(){
+  Step1GetStarted() {
     console.log('route');
   }
 
   bindAdminTaskData() {
-    const data = this.organizationService.getAdminTaskData(this.currentUser.name, this.currentUser.OrgID)
-        .subscribe(
-          (_data) => {
-            this.source.load(_data);
-          },
-        );
+    this.organizationService.getAdminTaskData(this.currentUser.name, this.currentUser.OrgID)
+      .subscribe(
+        (_data) => {
+          this.source.load(_data);
+        },
+      );
   }
   onDeleteConfirm(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
@@ -287,13 +283,13 @@ export class ECommerceComponent {
     let ApproveRejectCode = '';
     if (event.action === 'Approve') {
       ApproveRejectCode = 'U';
-    }else if (event.action === 'Reject') {
+    } else if (event.action === 'Reject') {
       ApproveRejectCode = 'R';
-    }else {
+    } else {
       // do nothing
     }
     if (ApproveRejectCode !== '') {
-        this.organizationService.ApproveRejectTWqxUserOrgs(this.currentUser.OrgID, parseInt(this.currentUser.UserIDX), ApproveRejectCode)
+      this.organizationService.ApproveRejectTWqxUserOrgs(this.currentUser.OrgID, +this.currentUser.UserIDX, ApproveRejectCode)
         .subscribe(
           (_result) => { console.log(_result); },
           (_err) => { console.log(_err); },
@@ -304,7 +300,7 @@ export class ECommerceComponent {
   }
   onBtnWiz1Click() {
     console.log(this.btnWiz1);
-    if (this.btnWiz1 === 'View'){
+    if (this.btnWiz1 === 'View') {
       this.router.navigate(['/secure/water-quality/wqx-org']);
     } else {
       this.router.navigate(['/secure/main/wqx-org-new']);
@@ -312,28 +308,28 @@ export class ECommerceComponent {
 
     // this.router.navigate(['/secure/main/wqx-org-new'], { queryParams: { orgEditId: -1 } });
   }
-  onBtnWiz2Click(){
+  onBtnWiz2Click() {
     console.log('onBtnWiz2Click clicked!');
   }
-  onBtnWiz3Click(){
+  onBtnWiz3Click() {
     console.log('onBtnWiz3Click clicked!');
   }
-  onBtnWiz3bClick(){
+  onBtnWiz3bClick() {
     console.log('onBtnWiz3bClick clicked!');
   }
   onBtnWiz4Click() {
     console.log('onBtnWiz4Click clicked!');
   }
-  onBtnWiz4bClick(){
+  onBtnWiz4bClick() {
     console.log('onBtnWiz4bClick clicked!');
   }
-  onBtnWiz5Click(){
+  onBtnWiz5Click() {
     console.log('onBtnWiz5Click clicked!');
   }
-  onBtnWiz6Click(){
+  onBtnWiz6Click() {
     console.log('onBtnWiz6Click clicked!');
   }
-  onBtnWiz6bClick(){
+  onBtnWiz6bClick() {
     console.log('onBtnWiz6bClick clicked!');
   }
 }

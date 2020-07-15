@@ -11,12 +11,11 @@ import { WQXOrganizationService } from '../@core/wqx-services/wqx-organization-s
 import { NgxAuthJWTInterceptor } from '../NgxAuthJWTInterceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { WqxOrgComponent } from './water-quality/wqx-org/wqx-org.component';
 import { WqxAssesmentRptsComponent } from './data-analysis/wqx-assesment-rpts/wqx-assesment-rpts.component';
 import { WqxMapsComponent } from './data-analysis/wqx-maps/wqx-maps.component';
 import { WqxChartingComponent } from './data-analysis/wqx-charting/wqx-charting.component';
 import { WQXRefDataService } from '../@core/wqx-services/wqx-refdata-service';
-import { AddCharWindowComponent } from './water-quality/wqx-org-data/add-char-window/add-char-window.component';
+
 
 
 @NgModule({
@@ -39,10 +38,10 @@ import { AddCharWindowComponent } from './water-quality/wqx-org-data/add-char-wi
     // WqxOrgComponent,
     // WqxTablesComponent,
   ],
-  providers:[
+  providers: [
     WQXOrganizationService,
     WQXRefDataService,
-    { provide: HTTP_INTERCEPTORS, useClass: NgxAuthJWTInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: NgxAuthJWTInterceptor, multi: true },
   ],
 
 })

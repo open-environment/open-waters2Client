@@ -8,9 +8,9 @@ describe('WqxImportFromEpaComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WqxImportFromEpaComponent ]
+      declarations: [WqxImportFromEpaComponent],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

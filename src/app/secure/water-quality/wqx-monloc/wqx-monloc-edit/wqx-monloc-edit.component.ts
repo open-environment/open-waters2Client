@@ -57,19 +57,19 @@ export class WqxMonlocEditComponent implements OnInit {
   wellTypeSelected: string = '';
 
   constructor(private authService: NbAuthService,
-              private refDataService: WQXRefDataService,
-              private toastrService: NbToastrService,
-              private monlocService: WqxMonlocService,
-              private activatedRoute: ActivatedRoute,
-              private router: Router) {
-                this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
-                  if (token.isValid()) {
-                    this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-                    this.currentOrgId = this.user.OrgID;
-                    this.populateDropdowns();
-                  }
-                });
-               }
+    private refDataService: WQXRefDataService,
+    private toastrService: NbToastrService,
+    private monlocService: WqxMonlocService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router) {
+    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+      if (token.isValid()) {
+        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
+        this.currentOrgId = this.user.OrgID;
+        this.populateDropdowns();
+      }
+    });
+  }
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
@@ -109,7 +109,7 @@ export class WqxMonlocEditComponent implements OnInit {
         this.vertDetumSelected = data.vertRefDatum;
         this.stateSelected = data.stateCode;
         this.bindCounty(data.countyCode);
-        //this.countySelected = data.countyCode;
+        // this.countySelected = data.countyCode;
         this.countrySelected = data.countryCode;
         this.wellTypeSelected = data.wellType;
         this.txtAquifer = data.aquiferName;
@@ -120,7 +120,7 @@ export class WqxMonlocEditComponent implements OnInit {
     );
   }
   populateDropdowns(): void {
-    
+
     this.refDataService.GetT_WQX_REF_DATA('MonitoringLocationType', true, true).subscribe(
       (data) => {
         this.monlocTypes = data;
@@ -181,12 +181,12 @@ export class WqxMonlocEditComponent implements OnInit {
       this.refDataService.GetT_WQX_REF_COUNTY(this.stateSelected).subscribe(
         (data) => {
           this.counties = data;
-          if (countyCode !== '' || countyCode != null){
+          if (countyCode !== '' || countyCode != null) {
             setTimeout(() => {
               this.countySelected = countyCode;
             }, 1000);
           }
-         },
+        },
         (err) => { console.log(err); },
       );
     }
@@ -242,7 +242,7 @@ export class WqxMonlocEditComponent implements OnInit {
       this.monlocService.InsertOrUpdateWQX_MONLOC(this.monlocIdx, this.currentOrgId, this.txtMonLocID, this.txtMonLocName,
         this.monlocTypeSelected, this.txtMonLocDesc, this.txtHUC8, this.txtHUC12, '', this.txtLandName, this.txtLatitude, this.txtLongitude, sms, '', '', this.horizMethodSelected, this.horizDetumSelected, this.txtVertMeasure,
         this.vertUnitSelected, this.vertMethodSelected, this.vertDetumSelected, this.countrySelected, this.stateSelected,
-        this.countySelected, this.wellTypeSelected, this.txtAquifer, '', '', '', 'U', '',  this.chkActInd, this.chkWQXInd, this.user.name).subscribe(
+        this.countySelected, this.wellTypeSelected, this.txtAquifer, '', '', '', 'U', '', this.chkActInd, this.chkWQXInd, this.user.name).subscribe(
           (data) => { console.log(data); },
           (err) => { console.log(err); },
         );

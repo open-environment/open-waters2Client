@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { of as observableOf, Observable, of } from 'rxjs';
-import { PeriodsService } from '../mock/periods.service';
+import { Observable } from 'rxjs';
 import { WqxActivity, WqxActivityData, ActivityListDisplay } from '../wqx-data/wqx-activity';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
 
 @Injectable()

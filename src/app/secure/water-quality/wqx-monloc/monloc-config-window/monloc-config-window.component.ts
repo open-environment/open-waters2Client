@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WqxMonlocConfig } from '../../../../@core/wqx-data/wqx-monloc';
 import { WqxPubsubServiceService } from '../../../../@core/wqx-services/wqx-pubsub-service.service';
 import { NbWindowRef } from '@nebular/theme';

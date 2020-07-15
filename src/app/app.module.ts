@@ -6,12 +6,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { HttpClientModule, HTTP_INTERCEPTORS, HttpResponse  } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { NB_AUTH_OPTIONS, NbAuthSocialLink } from '@nebular/auth';
 
 import {
   NbChatModule,
@@ -21,18 +20,16 @@ import {
   NbSidebarModule,
   NbToastrModule,
   NbWindowModule,
-  NbStepperModule,
-  NbCheckboxModule,
 } from '@nebular/theme';
 import { AuthGuard } from './auth-guard.service';
-import { NbAuthModule, NbPasswordAuthStrategy, NbAuthJWTToken, NbAuthJWTInterceptor, NB_AUTH_TOKEN_INTERCEPTOR_FILTER, getDeepFromObject } from '@nebular/auth';
+import { NbAuthModule, NbPasswordAuthStrategy, NbAuthJWTToken, NB_AUTH_TOKEN_INTERCEPTOR_FILTER } from '@nebular/auth';
 import { ContentTypeInterceptor } from './ContentTypeInterceptor';
 import { NgxAuthJWTInterceptor } from './NgxAuthJWTInterceptor';
 import { WQXOrganizationService } from './@core/wqx-services/wqx-organization-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WQXProjectService } from './@core/wqx-services/wqx-project-service';
 import { WQXActivityService } from './@core/wqx-services/wqx-activity-service';
-import { AddCharWindowComponent } from './secure/water-quality/wqx-org-data/add-char-window/add-char-window.component';
+// import { AddCharWindowComponent } from './secure/water-quality/wqx-org-data/add-char-window/add-char-window.component';
 import { WqxMonlocService } from './@core/wqx-services/wqx-monloc.service';
 
 @NgModule({
@@ -88,7 +85,7 @@ import { WqxMonlocService } from './@core/wqx-services/wqx-monloc.service';
             redirect: {
               success: '/auth/login',
               failure: '/',
-              },
+            },
           },
           requestPass: {
             endpoint: '/auth/request-pass',
@@ -133,10 +130,10 @@ import { WqxMonlocService } from './@core/wqx-services/wqx-monloc.service';
   ],
   providers: [
     AuthGuard,
-    //{ provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true},
-    { provide: HTTP_INTERCEPTORS, useClass: NgxAuthJWTInterceptor, multi: true},
-    { provide: HTTP_INTERCEPTORS, useClass: ContentTypeInterceptor, multi: true},
-    { provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER, useValue: (req) => false},
+    // { provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true},
+    { provide: HTTP_INTERCEPTORS, useClass: NgxAuthJWTInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ContentTypeInterceptor, multi: true },
+    { provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER, useValue: (req) => false },
     WQXOrganizationService,
     WQXProjectService,
     WQXActivityService,

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { WqxRefDefaultTimeZone, WqxRefTaxaOrg, WqxRefCharOrg } from '../../../@core/wqx-data/wqx-refdata';
-import { LocalDataSource } from 'ng2-smart-table/lib/data-source/local/local.data-source';
 import { WqxRefData, WqxImportTranslate } from '../../../@core/wqx-data/wqx-organization';
 import { WQXRefDataService } from '../../../@core/wqx-services/wqx-refdata-service';
 import { User } from '../../../@core/data/users';
@@ -213,30 +212,30 @@ export class WqxOrgDataComponent implements OnInit {
     private windowService: NbWindowService,
     private pubSubService: WqxPubsubServiceService,
     private organizationService: WQXOrganizationService) {
-      this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
-        if (token.isValid()) {
-          this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-          this.currentOrgId = this.user.OrgID;
+    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+      if (token.isValid()) {
+        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
+        this.currentOrgId = this.user.OrgID;
 
-          this.pubSubService.fieldData.subscribe((data: any) => {
-            this.onFieldDataCalled(data);
-          });
-          this.pubSubService.charData.subscribe((data: any) => {
-            this.onCharDataCalled(data);
-          });
+        this.pubSubService.fieldData.subscribe((data: any) => {
+          this.onFieldDataCalled(data);
+        });
+        this.pubSubService.charData.subscribe((data: any) => {
+          this.onCharDataCalled(data);
+        });
 
-          this.refDataService.GetT_WQX_REF_DEFAULT_TIME_ZONE().subscribe(
-            (data) => {
-              this.timeZones = data;
-            },
-          );
+        this.refDataService.GetT_WQX_REF_DEFAULT_TIME_ZONE().subscribe(
+          (data) => {
+            this.timeZones = data;
+          },
+        );
 
-          this.PopulateTabsData();
-        }
-      });
+        this.PopulateTabsData();
+      }
+    });
 
 
-   }
+  }
 
   ngOnInit() {
   }
@@ -248,10 +247,10 @@ export class WqxOrgDataComponent implements OnInit {
           if (data === 1) {
             this.toasterSerice.success('Data Saved');
           }
-         },
+        },
         (err) => {
           this.toasterSerice.danger('Error encountered');
-         },
+        },
       );
     }
   }
@@ -276,7 +275,7 @@ export class WqxOrgDataComponent implements OnInit {
           (data) => {
             console.log(data);
             this.populateTaxaGrid(this.currentOrgId);
-           },
+          },
           (err) => { console.log(err); },
         );
       }
@@ -293,7 +292,7 @@ export class WqxOrgDataComponent implements OnInit {
     this.organizationService.GetWQX_IMPORT_TRANSLATE_byOrg(orgId).subscribe(
       (data) => {
         this.transSource = data;
-       },
+      },
       (err) => { console.log(err); },
     );
   }
@@ -347,25 +346,25 @@ export class WqxOrgDataComponent implements OnInit {
       console.log(event.data);
       // implementation pending
     }
-     if (event.action === 'delete') {
-       this.refDataService.DeleteT_WQX_REF_CHAR_ORG(this.currentOrgId, event.data.charName).subscribe(
-         (result) => {
-           this.populateCharGrid(this.currentOrgId);
-         },
-         (err) => { console.log(err); },
-       );
-     }
+    if (event.action === 'delete') {
+      this.refDataService.DeleteT_WQX_REF_CHAR_ORG(this.currentOrgId, event.data.charName).subscribe(
+        (result) => {
+          this.populateCharGrid(this.currentOrgId);
+        },
+        (err) => { console.log(err); },
+      );
+    }
   }
   onCustom2(event): void {
     if (event.action === 'delete') {
       this.refDataService.DeleteT_WQX_REF_TAXA_ORG(this.currentOrgId, event.data.bioSubjectTaxonomy).subscribe(
         (result) => {
           this.populateTaxaGrid(this.currentOrgId);
-         },
+        },
         (err) => { console.log(err); },
       );
     }
- }
+  }
   onCustom3(event): void {
     if (event.action === 'delete') {
       this.refDataService.DeleteT_WQX_IMPORT_TRANSLATE(event.data.translateIdx).subscribe(

@@ -3,20 +3,29 @@
   <nb-card-body>
     <div class="row">
       <div class="col-6">
-        <nb-checkbox (checkedChange)="onChkAMP_DESIGN_TYPE_CD($event)" [checked]="!config[0].value === false">AMP_DESIGN_TYPE_CD</nb-checkbox>
+        <nb-checkbox
+          (checkedChange)="onChkAMP_DESIGN_TYPE_CD($event)"
+          [checked]="!config[0].value === false"
+          >AMP_DESIGN_TYPE_CD</nb-checkbox
+        >
       </div>
       <div class="col-6">
-        <nb-checkbox (checkedChange)="onChkQAPP_APPROVAL($event)" [checked]="!config[1].value === false">QAPP_APPROVAL</nb-checkbox>
+        <nb-checkbox
+          (checkedChange)="onChkQAPP_APPROVAL($event)"
+          [checked]="!config[1].value === false"
+          >QAPP_APPROVAL</nb-checkbox
+        >
       </div>
     </div>
   </nb-card-body>
   <nb-card-footer>
     <div class="row">
-      <button nbButton (click)="onConfigSave()" 
-      status="success" class="mr-3">Save</button>
-      <button nbButton (click)="onConfigCancel()"
-      status="danger">Cancel</button>
+      <button nbButton (click)="onConfigSave()" status="success" class="mr-3">
+        Save
+      </button>
+      <button nbButton (click)="onConfigCancel()" status="danger">
+        Cancel
+      </button>
     </div>
   </nb-card-footer>
 </nb-card>
-

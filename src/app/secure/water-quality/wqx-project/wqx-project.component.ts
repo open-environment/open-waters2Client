@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WqxProject, WqxProjectConfig } from '../../../@core/wqx-data/wqx-project';
+import { WqxProjectConfig } from '../../../@core/wqx-data/wqx-project';
 import { User } from '../../../@core/data/users';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { WQXProjectService } from '../../../@core/wqx-services/wqx-project-service';
@@ -76,7 +76,7 @@ export class WqxProjectComponent implements OnInit {
     });
   }
 
-  ngOnInit() {  }
+  ngOnInit() { }
   onConfigSaved(data: WqxProjectConfig[]) {
     console.log('config saved!');
     this._projectSetting.columns = {};

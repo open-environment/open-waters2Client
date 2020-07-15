@@ -6,7 +6,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AnalyticsService } from './@core/utils/analytics.service';
 import { SeoService } from './@core/utils/seo.service';
-import { environment, globals } from '../environments/environment';
+import { globals } from '../environments/environment';
 
 @Component({
   selector: 'ngx-app',

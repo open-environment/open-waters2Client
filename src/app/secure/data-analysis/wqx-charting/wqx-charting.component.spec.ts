@@ -8,9 +8,9 @@ describe('WqxChartingComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WqxChartingComponent ]
+      declarations: [WqxChartingComponent],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -8,9 +8,9 @@ describe('WqxImportComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WqxImportComponent ]
+      declarations: [WqxImportComponent],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

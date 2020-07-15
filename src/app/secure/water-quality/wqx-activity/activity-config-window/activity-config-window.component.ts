@@ -6,7 +6,7 @@ import { NbWindowRef } from '@nebular/theme';
 @Component({
   selector: 'ngx-activity-config-window',
   templateUrl: './activity-config-window.component.html',
-  styleUrls: ['./activity-config-window.component.scss']
+  styleUrls: ['./activity-config-window.component.scss'],
 })
 export class ActivityConfigWindowComponent implements OnInit {
 

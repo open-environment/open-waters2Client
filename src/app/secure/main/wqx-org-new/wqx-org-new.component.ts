@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-
-import { SmartTableData } from '../../../@core/data/smart-table';
 import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organization-service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-wqx-org-new',
@@ -13,11 +11,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class WqxOrgNewComponent {
 
   settings = {
-    actions:{
-      custom:[
+    actions: {
+      custom: [
         {
-        name: 'select',
-        title: 'select',
+          name: 'select',
+          title: 'select',
         },
       ],
       add: false,
@@ -48,22 +46,21 @@ export class WqxOrgNewComponent {
         title: 'Organization Name',
         type: 'string',
         filter: true,
-      }
+      },
     },
   };
 
   source: LocalDataSource = new LocalDataSource();
 
   constructor(private service: WQXOrganizationService,
-    private activatedRoute: ActivatedRoute,
     private router: Router) {
-    const data = this.service.getVWQXAllOrgs()
-    .subscribe(
-      (_data) => {
-        this.source.load(_data);
-      },
-    );
-    //this.source.load(data);
+    this.service.getVWQXAllOrgs()
+      .subscribe(
+        (_data) => {
+          this.source.load(_data);
+        },
+      );
+    // this.source.load(data);
   }
 
   onDeleteConfirm(event): void {

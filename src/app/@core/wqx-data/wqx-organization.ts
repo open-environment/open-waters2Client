@@ -22,36 +22,36 @@ export interface ConnectTestResult {
   typ: string;
 }
 export interface WqxOrganization {
-        orgId: string;
-        orgFormalName: string;
-        orgDesc: string;
-        tribalCode: string;
-        electronicaddress: string;
-        electronicaddresstype: string;
-        telephoneNum: string;
-        telephoneNumType: string;
-        telephoneExt: string;
-        cdxSubmitterId: string;
-        cdxSubmitterPwdHash: string;
-        cdxSubmitterPwdSalt: string;
-        cdxSubmitInd: boolean;
-        defaultTimezone: string;
-        mailingAddress: string;
-        mailingAddress2: string;
-        mailingAddCity: string;
-        mailingAddState: string;
-        mailingAddZip: string;
-        createDt: string;
-        createUserid: string;
-        updateDt: string;
-        updateUserid: string;
+  orgId: string;
+  orgFormalName: string;
+  orgDesc: string;
+  tribalCode: string;
+  electronicaddress: string;
+  electronicaddresstype: string;
+  telephoneNum: string;
+  telephoneNumType: string;
+  telephoneExt: string;
+  cdxSubmitterId: string;
+  cdxSubmitterPwdHash: string;
+  cdxSubmitterPwdSalt: string;
+  cdxSubmitInd: boolean;
+  defaultTimezone: string;
+  mailingAddress: string;
+  mailingAddress2: string;
+  mailingAddCity: string;
+  mailingAddState: string;
+  mailingAddZip: string;
+  createDt: string;
+  createUserid: string;
+  updateDt: string;
+  updateUserid: string;
 }
 export interface EPAOrganization {
   orgID: string;
   orgFormalName: string;
   updateDate: string;
 }
-export interface UserOrgDisplay{
+export interface UserOrgDisplay {
   userIDX: number;
   userID: string;
   userName: string;
@@ -78,7 +78,7 @@ export interface TOeUsers {
   ModifyUserid: string;
   ModifyDt: string;
 }
-export interface WqxImportTranslate{
+export interface WqxImportTranslate {
   translateIdx: string;
   orgId: string;
   colName: string;

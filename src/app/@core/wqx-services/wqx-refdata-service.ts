@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { of as observableOf,  Observable, of } from 'rxjs';
-import { PeriodsService } from '../mock/periods.service';
-import { WqxActivity, WqxActivityData } from '../wqx-data/wqx-activity';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
 import { WqxRefDataData, WqxRefDefaultTimeZone, WqxRefCharacteristic, AnalMethodDisplay, WqxRefTaxaOrg, WqxRefCharOrg, WqxRefCounty } from '../wqx-data/wqx-refdata';
 import { WqxRefData } from '../wqx-data/wqx-organization';
@@ -11,7 +8,7 @@ import { WqxRefData } from '../wqx-data/wqx-organization';
 @Injectable()
 export class WQXRefDataService extends WqxRefDataData {
 
-   constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) {
     super();
   }
 
@@ -41,14 +38,14 @@ export class WQXRefDataService extends WqxRefDataData {
     defaultDetectLimit: string, defaultUnit: string, defaultAnalMethodIdx: number,
     defaultSampFraction: string, defaultResultStatus: string, defaultResultTypeValue: string,
     defaultLowerQuantLimit: string, defaultUpperQuantLimit: string): Observable<number> {
-      const httpOptions = {};
-      return this.http.post<number>(WebApi.TWQXRefDataApi.InsertOrUpdateTWqxRefCharOrg(charName, orgName, createUserId,
-        defaultDetectLimit, defaultUnit, defaultAnalMethodIdx, defaultSampFraction, defaultResultStatus, defaultResultTypeValue,
-        defaultLowerQuantLimit, defaultUpperQuantLimit), '', httpOptions);
+    const httpOptions = {};
+    return this.http.post<number>(WebApi.TWQXRefDataApi.InsertOrUpdateTWqxRefCharOrg(charName, orgName, createUserId,
+      defaultDetectLimit, defaultUnit, defaultAnalMethodIdx, defaultSampFraction, defaultResultStatus, defaultResultTypeValue,
+      defaultLowerQuantLimit, defaultUpperQuantLimit), '', httpOptions);
   }
   InsertOrUpdateT_WQX_REF_TAXA_ORG(bioSubjectTaxanomy: string, orgName: string, createUserId: string): Observable<number> {
     const httpOptions = {};
-      return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateTWqxRefTaxaOrg(bioSubjectTaxanomy, orgName, createUserId), '', httpOptions);
+    return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateTWqxRefTaxaOrg(bioSubjectTaxanomy, orgName, createUserId), '', httpOptions);
   }
   GetT_WQX_REF_TAXA_ORG(orgName: string): Observable<WqxRefTaxaOrg[]> {
     return this.http.get<WqxRefTaxaOrg[]>(WebApi.TWQXRefDataApi.GetTWqxRefTaxaOrg(orgName));
@@ -56,9 +53,9 @@ export class WQXRefDataService extends WqxRefDataData {
   GetAllColumnBasic(importType: string): Observable<string[]> {
     return this.http.get<string[]>(WebApi.TWQXRefDataApi.getAllColumnBasic(importType));
   }
-  InsertOrUpdateWQX_IMPORT_TRANSLATE(translateIdx: number, orgId: string, colName: string, dataFrom: string, dataTo:  string,  createUser: string): Observable<number> {
+  InsertOrUpdateWQX_IMPORT_TRANSLATE(translateIdx: number, orgId: string, colName: string, dataFrom: string, dataTo: string, createUser: string): Observable<number> {
     const httpOptions = {};
-    return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateWqxImportTranslate(translateIdx === null ? 0 : translateIdx, orgId, colName, dataFrom, dataTo,  createUser), '', httpOptions);
+    return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateWqxImportTranslate(translateIdx === null ? 0 : translateIdx, orgId, colName, dataFrom, dataTo, createUser), '', httpOptions);
   }
   GetT_WQX_REF_CHAR_ORG(orgName: string): Observable<WqxRefCharOrg[]> {
     return this.http.get<WqxRefCharOrg[]>(WebApi.TWQXRefDataApi.GetTWqxRefCharOrg(orgName));

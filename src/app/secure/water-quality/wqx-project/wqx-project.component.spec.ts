@@ -8,9 +8,9 @@ describe('WqxProjectComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WqxProjectComponent ]
+      declarations: [WqxProjectComponent],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

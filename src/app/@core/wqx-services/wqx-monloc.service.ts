@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { of as observableOf,  Observable, of } from 'rxjs';
-import { PeriodsService } from '../mock/periods.service';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
 import { WqxMonlocData, WqxMonloc } from '../wqx-data/wqx-monloc';
 
@@ -11,7 +9,7 @@ export class WqxMonlocService extends WqxMonlocData {
 
   constructor(private http: HttpClient) {
     super();
-   }
+  }
 
   GetWQX_MONLOC(ActInd: boolean, OrgID: string, WQXPending: boolean): Observable<WqxMonloc[]> {
     return this.http.get<WqxMonloc[]>(WebApi.TWQXMonlocApi.getWQXMonLoc(ActInd, OrgID, WQXPending));
@@ -24,14 +22,14 @@ export class WqxMonlocService extends WqxMonlocData {
     countryCode: string, stateCode: string, countyCode: string, wellType: string, aquiferName: string,
     formationType: string, wellholeDepthMsr: string, wellholeDepthMsrUnit: string, wqxSubmitStatus: string,
     wqxUpdateDate: string, actInd: boolean, wqxInd: boolean, createUser: string): Observable<number> {
-      const httpOptions = {};
-      return this.http.post<number>(WebApi.TWQXRefDataApi.InsertOrUpdateWQXMonLoc(monlocIdx, orgId, monlocId, monlocName,
-        monlocType, monlocDesc, hucHeight, hucTwelve, tribalLandInd, tribalLandName, latitudeMsr, longitudeMsr, sourceMapScale,
-        horizAccuracy, horizAccuracyUnit, horizCollMethod, horizRefDatum, vertMeasure, vertMeasureUnit, vertCollMethod, vertRefDatum,
-        countryCode, stateCode, countyCode, wellType, aquiferName, formationType, wellholeDepthMsr, wellholeDepthMsrUnit, wqxSubmitStatus,
-        wqxUpdateDate, actInd, wqxInd, createUser), '', httpOptions);
-    }
-    GetWQX_MONLOC_ByID(monlocIdx: number): Observable<WqxMonloc> {
-      return this.http.get<WqxMonloc>(WebApi.TWQXMonlocApi.GetWQXMonLocByID(monlocIdx));
-    }
+    const httpOptions = {};
+    return this.http.post<number>(WebApi.TWQXRefDataApi.InsertOrUpdateWQXMonLoc(monlocIdx, orgId, monlocId, monlocName,
+      monlocType, monlocDesc, hucHeight, hucTwelve, tribalLandInd, tribalLandName, latitudeMsr, longitudeMsr, sourceMapScale,
+      horizAccuracy, horizAccuracyUnit, horizCollMethod, horizRefDatum, vertMeasure, vertMeasureUnit, vertCollMethod, vertRefDatum,
+      countryCode, stateCode, countyCode, wellType, aquiferName, formationType, wellholeDepthMsr, wellholeDepthMsrUnit, wqxSubmitStatus,
+      wqxUpdateDate, actInd, wqxInd, createUser), '', httpOptions);
+  }
+  GetWQX_MONLOC_ByID(monlocIdx: number): Observable<WqxMonloc> {
+    return this.http.get<WqxMonloc>(WebApi.TWQXMonlocApi.GetWQXMonLocByID(monlocIdx));
+  }
 }

@@ -7,7 +7,7 @@ import { WqxRefSampColMethod } from '../../../../@core/wqx-data/wqx-refdata';
 @Component({
   selector: 'ngx-wqx-activity-edit',
   templateUrl: './wqx-activity-edit.component.html',
-  styleUrls: ['./wqx-activity-edit.component.scss']
+  styleUrls: ['./wqx-activity-edit.component.scss'],
 })
 export class WqxActivityEditComponent implements OnInit {
 
