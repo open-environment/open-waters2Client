@@ -87,6 +87,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       console.log('user not initialized!');
     }
 
+    this.menuService.onItemClick().subscribe((event) => {
+      this.onItemSelection(event.item.title);
+    });
     // this.currentTheme = this.themeService.currentTheme;
 
     /* this.userService.getUsers()
