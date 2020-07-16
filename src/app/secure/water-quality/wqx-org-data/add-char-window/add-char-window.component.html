@@ -1,167 +1,124 @@
-<form name="myForm" 
-(ngSubmit)="f.form.valid && onSubmit()" 
-#f="ngForm" novalidate>
-<nb-card status="success">
-  <nb-card-header></nb-card-header>
-  <nb-card-body>
-    <div class="row">
-      <div class="col-6">
-        <div class="form-row">
-          <div class="form-group col-4">
-            <label for="ddlChar">Characteristic Name:</label>
+<form name="myForm" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+  <nb-card status="success">
+    <nb-card-header></nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-6">
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label for="ddlChar">Characteristic Name:</label>
+            </div>
+            <div class="form-group col-8">
+              <nb-select fullWidth (selectedChange)="onCharSelected($event)" name="ddlChar" [(ngModel)]="selectedChar"
+                #vselectedChar="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vselectedChar.invalid }"
+                status="primary">
+                <nb-option *ngFor="let char of chars" [value]="char.charName"> {{ char.charName }}</nb-option>
+              </nb-select>
+            </div>
           </div>
-          <div class="form-group col-8">
-            <nb-select fullWidth
-            (selectedChange)="onCharSelected($event)" 
-            name="ddlChar" 
-            [(ngModel)]="selectedChar"
-            #vselectedChar="ngModel"
-            [ngClass]="{ 'is-invalid': f.submitted && vselectedChar.invalid }"
-            status="primary" >
-              <nb-option *ngFor="let char of chars" [value]="char.charName"> {{ char.charName }}</nb-option>
-            </nb-select>
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label for="ddlUnit">Default Unit:</label>
+            </div>
+            <div class="form-group col-8">
+              <nb-select fullWidth (selectedChange)="onUnitSelected($event)" name="ddlUnit" [(ngModel)]="selectedUnit"
+                #vselectedUnit="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vselectedUnit.invalid }"
+                status="primary">
+                <nb-option *ngFor="let unit of units" [value]="unit.value"> {{ unit.value }}</nb-option>
+              </nb-select>
+            </div>
           </div>
-        </div>
-         <div class="form-row">
-          <div class="form-group col-4">
-            <label for="ddlUnit">Default Unit:</label>
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label for="txtDetectLimit">Detection Limit:</label>
+            </div>
+            <div class="form-group col-8">
+              <input type="text" nbInput name='txtDetectLimit' class="form-control" [(ngModel)]='txtDetectLimit'
+                #vtxtDetectLimit="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtDetectLimit.invalid }"
+                maxlength="12">
+            </div>
           </div>
-          <div class="form-group col-8">
-            <nb-select fullWidth
-            (selectedChange)="onUnitSelected($event)" 
-            name="ddlUnit" 
-            [(ngModel)]="selectedUnit"
-            #vselectedUnit="ngModel"
-            [ngClass]="{ 'is-invalid': f.submitted && vselectedUnit.invalid }"
-            status="primary" >
-              <nb-option *ngFor="let unit of units" [value]="unit.value"> {{ unit.value }}</nb-option>
-            </nb-select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-4">
-            <label for="txtDetectLimit">Detection Limit:</label>
-          </div>
-          <div class="form-group col-8">
-            <input type="text" nbInput 
-            name='txtDetectLimit' 
-            class="form-control"
-            [(ngModel)]='txtDetectLimit'
-            #vtxtDetectLimit="ngModel"
-            [ngClass]="{ 'is-invalid': f.submitted && vtxtDetectLimit.invalid }"
-            maxlength="12">
-          </div>
-        </div>
-      
-        <div class="form-row">
-          <div class="form-group col-4">
-            <label class="text-label" for="txtQuantLower">Lower Quant Limit:</label>
-          </div>
-          <div class="form-group col-8">
-            <input type="text" nbInput 
-            name="txtQuantLower" 
-            class="form-control"
-            [(ngModel)]='txtQuantLower'
-            #vtxtQuantLower="ngModel"
-            [ngClass]="{ 'is-invalid': f.submitted && vtxtQuantLower.invalid }"
-            maxlength="12">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-4">
-            <label class="text-label" for="txtQuantUpper">Upper Quant Limit:</label>
-          </div>
-          <div class="form-group col-8">
-            <input type="text" nbInput 
-            name="txtQuantUpper" 
-            class="form-control"
-            [(ngModel)]='txtQuantUpper'
-            #vtxtQuantUpper="ngModel"
-            [ngClass]="{ 'is-invalid': f.submitted && vtxtQuantUpper.invalid }"
-            maxlength="12">
-          </div>
-        </div>
-      </div>
-      <div class="col-6">
-        <div class="form-row">
-          <div class="form-group col-4">
-            <label for="ddlAnalMethod">Analysis Method:</label>
-          </div>
-          <div class="form-group col-8">
-            <nb-select fullWidth
-            name="ddlAnalMethod" 
-            [(ngModel)]="selectedAnal"
-            #vselectedAnal="ngModel"
-            [ngClass]="{ 'is-invalid': f.submitted && vselectedAnal.invalid }"
-            status="primary">
-              <nb-option *ngFor="let anal of anals" [value]="anal.analytiC_METHOD_IDX"> {{ anal.analMethodDisplayName }}</nb-option>
-            </nb-select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-4">
-            <label for="ddlFraction">Sample Fraction:</label>
-          </div>
-          <div class="form-group col-8">
-            <nb-select fullWidth
-            name="ddlFraction" 
-            [(ngModel)]="selectedFrac"
-            #vselectedFrac="ngModel"
-            [ngClass]="{ 'is-invalid': f.submitted && vselectedFrac.invalid }"
-            status="primary" >
-              <nb-option *ngFor="let frac of fracs" [value]="frac.value"> {{ frac.value }}</nb-option>
-            </nb-select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-4">
-            <label for="ddlStatus">Result Status:</label>
-          </div>
-          <div class="form-group col-8">
-            <nb-select fullWidth
-            name="ddlStatus" 
-            [(ngModel)]="selectedStatus"
-            #vselectedStatus="ngModel"
-            [ngClass]="{ 'is-invalid': f.submitted && vselectedStatus.invalid }"
-            status="primary" >
-              <nb-option *ngFor="let stat of stats" [value]="stat.value"> {{ stat.value }}</nb-option>
-            </nb-select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-4">
-            <label for="ddlValueType">Result Value Type:</label>
-          </div>
-          <div class="form-group col-8">
-            <nb-select fullWidth
-            name="ddlValueType" 
-            [(ngModel)]="selectedResultValue"
-            #vselectedResultValue="ngModel"
-            [ngClass]="{ 'is-invalid': f.submitted && vselectedResultValue.invalid }"
-            status="primary" >
-              <nb-option *ngFor="let resultValue of resultValues" [value]="resultValue.value"> {{ resultValue.value }}</nb-option>
-            </nb-select>
-          </div>
-        </div>
-      </div>
-    </div>
 
-  </nb-card-body>
-  <nb-card-footer>
-    <div class="form-row">
-      <button nbButton 
-      type="submit"
-      class="mr-2" 
-      name='btnAddChar2' 
-      status='sucess'>Save</button>
-      <button nbButton 
-      type="button"
-      (click)='onCloseModel2Clicked()' 
-      name='btnCloseModal2' 
-      status='danger'>Cancel</button>
-    </div>
-  </nb-card-footer>
-</nb-card>
-  
-  
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label class="text-label" for="txtQuantLower">Lower Quant Limit:</label>
+            </div>
+            <div class="form-group col-8">
+              <input type="text" nbInput name="txtQuantLower" class="form-control" [(ngModel)]='txtQuantLower'
+                #vtxtQuantLower="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtQuantLower.invalid }"
+                maxlength="12">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label class="text-label" for="txtQuantUpper">Upper Quant Limit:</label>
+            </div>
+            <div class="form-group col-8">
+              <input type="text" nbInput name="txtQuantUpper" class="form-control" [(ngModel)]='txtQuantUpper'
+                #vtxtQuantUpper="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtQuantUpper.invalid }"
+                maxlength="12">
+            </div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label for="ddlAnalMethod">Analysis Method:</label>
+            </div>
+            <div class="form-group col-8">
+              <nb-select fullWidth name="ddlAnalMethod" [(ngModel)]="selectedAnal" #vselectedAnal="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && vselectedAnal.invalid }" status="primary">
+                <nb-option *ngFor="let anal of anals" [value]="anal.analytiC_METHOD_IDX">
+                  {{ anal.analMethodDisplayName }}</nb-option>
+              </nb-select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label for="ddlFraction">Sample Fraction:</label>
+            </div>
+            <div class="form-group col-8">
+              <nb-select fullWidth name="ddlFraction" [(ngModel)]="selectedFrac" #vselectedFrac="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && vselectedFrac.invalid }" status="primary">
+                <nb-option *ngFor="let frac of fracs" [value]="frac.value"> {{ frac.value }}</nb-option>
+              </nb-select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label for="ddlStatus">Result Status:</label>
+            </div>
+            <div class="form-group col-8">
+              <nb-select fullWidth name="ddlStatus" [(ngModel)]="selectedStatus" #vselectedStatus="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && vselectedStatus.invalid }" status="primary">
+                <nb-option *ngFor="let stat of stats" [value]="stat.value"> {{ stat.value }}</nb-option>
+              </nb-select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-4">
+              <label for="ddlValueType">Result Value Type:</label>
+            </div>
+            <div class="form-group col-8">
+              <nb-select fullWidth name="ddlValueType" [(ngModel)]="selectedResultValue" #vselectedResultValue="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && vselectedResultValue.invalid }" status="primary">
+                <nb-option *ngFor="let resultValue of resultValues" [value]="resultValue.value"> {{ resultValue.value }}
+                </nb-option>
+              </nb-select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="form-row">
+        <button nbButton type="submit" class="mr-2" name='btnAddChar2' status='sucess'>Save</button>
+        <button nbButton type="button" (click)='onCloseModel2Clicked()' name='btnCloseModal2'
+          status='danger'>Cancel</button>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+
+
 </form>

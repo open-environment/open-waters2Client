@@ -49,6 +49,9 @@ export module WebApi {
     public static readonly GetWqxImportTranslatebyOrg =
       (orgId: string) =>
         `${environment.api.owUrl}/api/org/GetWqxImportTranslatebyOrg?orgId=${orgId}`
+    public static readonly canUserEditOrg =
+      (userIdx: number, orgId: string) =>
+        `${environment.api.owUrl}/api/org/canUserEditOrg?UserIDX=${userIdx}&OrgID=${orgId}`
   }
   export class TWQXMonlocApi {
     public static readonly getWQXMonLoc =
@@ -159,5 +162,14 @@ export module WebApi {
     public static readonly deleteWqxRefCharOrg =
       (orgName: string, charName: string) =>
         `${environment.api.owUrl}/api/refdata/deleteWqxRefCharOrg?orgName=${orgName}&charName=${charName}`
+    public static readonly getTWqxRefDataCount =
+      () =>
+        `${environment.api.owUrl}/api/refdata/getTWqxRefDataCount`
+    public static readonly GetTWqxRefCharOrgCount =
+      (orgName: string) =>
+        `${environment.api.owUrl}/api/refdata/getTWqxRefDataCount?orgName=${orgName}`
+    public static readonly GetTWqxRefSampColMethodByContext =
+      (context: string) =>
+        `${environment.api.owUrl}/api/refdata/GetTWqxRefSampColMethodByContext?Context=${context}`
   }
 }

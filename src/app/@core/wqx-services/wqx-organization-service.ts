@@ -82,4 +82,7 @@ export class WQXOrganizationService extends WqxOrganizationData {
   GetWQX_IMPORT_TRANSLATE_byOrg(orgId: string): Observable<WqxImportTranslate[]> {
     return this.http.get<WqxImportTranslate[]>(WebApi.TWQXOrganizationApi.GetWqxImportTranslatebyOrg(orgId));
   }
+  CanUserEditOrg(userIdx: number, orgId: string): Observable<Boolean> {
+    return this.http.get<Boolean>(WebApi.TWQXOrganizationApi.canUserEditOrg(userIdx, orgId));
+  }
 }

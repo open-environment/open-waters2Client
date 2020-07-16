@@ -3,78 +3,36 @@
   <nb-card-body>
     <div class="row">
       <div class="col-6">
-        <nb-checkbox
-          (checkedChange)="onChkHUC_EIGHT($event)"
-          [checked]="!config[0].value === false"
-          >HUC_EIGHT</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onChkHUC_TWELVE($event)"
-          [checked]="!config[1].value === false"
-          >HUC_TWELVE</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onChkTRIBAL_LAND($event)"
-          [checked]="!config[2].value === false"
-          >TRIBAL_LAND</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onChkSOURCE_MAP_SCALE($event)"
-          [checked]="!config[3].value === false"
-          >SOURCE_MAP_SCALE</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onChkHORIZ_COLL_METHOD($event)"
-          [checked]="!config[4].value === false"
-          >HORIZ_COLL_METHOD</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onChkHORIZ_REF_DATUM($event)"
-          [checked]="!config[5].value === false"
-          >HORIZ_REF_DATUM</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onChkERT_MEASURE($event)"
-          [checked]="!config[6].value === false"
-          >ERT_MEASURE</nb-checkbox
-        >
+        <nb-checkbox (checkedChange)="onChkHUC_EIGHT($event)" [checked]="!config[0].value === false">HUC_EIGHT
+        </nb-checkbox>
+        <nb-checkbox (checkedChange)="onChkHUC_TWELVE($event)" [checked]="!config[1].value === false">HUC_TWELVE
+        </nb-checkbox>
+        <nb-checkbox (checkedChange)="onChkTRIBAL_LAND($event)" [checked]="!config[2].value === false">TRIBAL_LAND
+        </nb-checkbox>
+        <nb-checkbox (checkedChange)="onChkSOURCE_MAP_SCALE($event)" [checked]="!config[3].value === false">
+          SOURCE_MAP_SCALE</nb-checkbox>
+        <nb-checkbox (checkedChange)="onChkHORIZ_COLL_METHOD($event)" [checked]="!config[4].value === false">
+          HORIZ_COLL_METHOD</nb-checkbox>
+        <nb-checkbox (checkedChange)="onChkHORIZ_REF_DATUM($event)" [checked]="!config[5].value === false">
+          HORIZ_REF_DATUM</nb-checkbox>
+        <nb-checkbox (checkedChange)="onChkERT_MEASURE($event)" [checked]="!config[6].value === false">ERT_MEASURE
+        </nb-checkbox>
       </div>
       <div class="col-6">
-        <nb-checkbox
-          (checkedChange)="onChkCOUNTRY_CODE($event)"
-          [checked]="!config[7].value === false"
-          >COUNTRY_CODE</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onChkSTATE_CODE($event)"
-          [checked]="!config[8].value === false"
-          >STATE_CODE</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onChkCOUNTY_CODE($event)"
-          [checked]="!config[9].value === false"
-          >COUNTY_CODE</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onChkWELL_TYPE($event)"
-          [checked]="!config[10].value === false"
-          >WELL_TYPE</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onChkAQUIFER_NAME($event)"
-          [checked]="!config[11].value === false"
-          >AQUIFER_NAME</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onChkFORMATION_TYPE($event)"
-          [checked]="!config[12].value === false"
-          >FORMATION_TYPE</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onChkWELLHOLE_DEPTH($event)"
-          [checked]="!config[13].value === false"
-          >WELLHOLE_DEPTH</nb-checkbox
-        >
+        <nb-checkbox (checkedChange)="onChkCOUNTRY_CODE($event)" [checked]="!config[7].value === false">COUNTRY_CODE
+        </nb-checkbox>
+        <nb-checkbox (checkedChange)="onChkSTATE_CODE($event)" [checked]="!config[8].value === false">STATE_CODE
+        </nb-checkbox>
+        <nb-checkbox (checkedChange)="onChkCOUNTY_CODE($event)" [checked]="!config[9].value === false">COUNTY_CODE
+        </nb-checkbox>
+        <nb-checkbox (checkedChange)="onChkWELL_TYPE($event)" [checked]="!config[10].value === false">WELL_TYPE
+        </nb-checkbox>
+        <nb-checkbox (checkedChange)="onChkAQUIFER_NAME($event)" [checked]="!config[11].value === false">AQUIFER_NAME
+        </nb-checkbox>
+        <nb-checkbox (checkedChange)="onChkFORMATION_TYPE($event)" [checked]="!config[12].value === false">
+          FORMATION_TYPE</nb-checkbox>
+        <nb-checkbox (checkedChange)="onChkWELLHOLE_DEPTH($event)" [checked]="!config[13].value === false">
+          WELLHOLE_DEPTH</nb-checkbox>
       </div>
     </div>
   </nb-card-body>

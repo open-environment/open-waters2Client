@@ -3,12 +3,8 @@
     <nb-card-header>PROJECTS</nb-card-header>
     <nb-card-body>
       <div class="row">
-        <ng2-smart-table
-          [settings]="projectSetting"
-          [source]="projectSource"
-          (deleteConfirm)="onDeleteConfirm($event)"
-          (custom)="onCustom($event)"
-        >
+        <ng2-smart-table [settings]="projectSetting" [source]="projectSource" (deleteConfirm)="onDeleteConfirm($event)"
+          (custom)="onCustom($event)">
         </ng2-smart-table>
       </div>
       <div class="row mt-3">

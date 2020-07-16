@@ -6,103 +6,55 @@
     <nb-card-body>
       <div class="row">
         <div class="col-12">
-          <form
-            name="myForm"
-            (ngSubmit)="f.form.valid && onSubmit()"
-            #f="ngForm"
-            novalidate
-          >
+          <form name="myForm" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
             <nb-card status="basic">
               <nb-card-header>Data Filters</nb-card-header>
               <nb-card-body>
                 <div class="form-row">
                   <div class="col-2">Monitoring Location:</div>
                   <div class="col-2">
-                    <nb-select
-                      status="primary"
-                      name="ddlMonLoc"
-                      [(selected)]="monlocSelected"
-                    >
-                      <nb-option
-                        *ngFor="let monloc of monlocs"
-                        [value]="monloc.monlocIdx"
-                      >
-                        {{ monloc.monlocId }}</nb-option
-                      >
+                    <nb-select status="primary" name="ddlMonLoc" [(selected)]="monlocSelected">
+                      <nb-option *ngFor="let monloc of monlocs" [value]="monloc.monlocIdx">
+                        {{ monloc.monlocId }}</nb-option>
                     </nb-select>
                   </div>
                   <div class="col-2">Activity Type:</div>
                   <div class="col-2">
-                    <nb-select
-                      status="primary"
-                      name="ddlActType"
-                      [(selected)]="actTypeSelected"
-                    >
-                      <nb-option
-                        *ngFor="let actType of actTypes"
-                        [value]="actType.value"
-                        >{{ actType.value }}</nb-option
-                      >
+                    <nb-select status="primary" name="ddlActType" [(selected)]="actTypeSelected">
+                      <nb-option *ngFor="let actType of actTypes" [value]="actType.value">{{ actType.value }}
+                      </nb-option>
                     </nb-select>
                   </div>
                   <div class="col-2">
-                    <nb-checkbox
-                      name="chkDeletedInd"
-                      [(checked)]="chkDeletedInd"
-                      status="danger"
-                      >Display Deleted Activities</nb-checkbox
-                    >
+                    <nb-checkbox name="chkDeletedInd" [(checked)]="chkDeletedInd" status="danger">Display Deleted
+                      Activities</nb-checkbox>
                   </div>
                 </div>
                 <div class="form-row">
                   <div class="col-2">Date Range:</div>
                   <div class="col-1">
-                    <input
-                      nbInput
-                      type="text"
-                      name="txtStartDate"
-                      [nbDatepicker]="txtStartDateModel"
-                      [(ngModel)]="txtStartDate"
-                    />
+                    <input nbInput type="text" name="txtStartDate" [nbDatepicker]="txtStartDateModel"
+                      [(ngModel)]="txtStartDate" />
                     <nb-datepicker #txtStartDateModel></nb-datepicker>
                   </div>
                   <div class="col-1">To:</div>
                   <div class="col-1">
-                    <input
-                      nbInput
-                      type="text"
-                      name="txtEndDate"
-                      [nbDatepicker]="txtEndDateModel"
-                      [(ngModel)]="txtEndDate"
-                    />
+                    <input nbInput type="text" name="txtEndDate" [nbDatepicker]="txtEndDateModel"
+                      [(ngModel)]="txtEndDate" />
                     <nb-datepicker #txtEndDateModel></nb-datepicker>
                   </div>
                   <div class="col-1">Project:</div>
                   <div class="col-3">
-                    <nb-select
-                      status="primary"
-                      name="ddlProject"
-                      [(selected)]="projectSelected"
-                    >
-                      <nb-option
-                        *ngFor="let project of projects"
-                        [value]="project.projectIdx"
-                        >{{ project.projectID }}</nb-option
-                      >
+                    <nb-select status="primary" name="ddlProject" [(selected)]="projectSelected">
+                      <nb-option *ngFor="let project of projects" [value]="project.projectIdx">{{ project.projectId }}
+                      </nb-option>
                     </nb-select>
                   </div>
                   <div class="col-1">WQX Status:</div>
                   <div class="col-2">
-                    <nb-select
-                      status="primary"
-                      name="ddlWQXStatus"
-                      [(selected)]="wqxStatusSelected"
-                    >
-                      <nb-option
-                        *ngFor="let wqxStatus of wqxStatuses"
-                        [value]="wqxStatus.value"
-                        >{{ wqxStatus.text }}</nb-option
-                      >
+                    <nb-select status="primary" name="ddlWQXStatus" [(selected)]="wqxStatusSelected">
+                      <nb-option *ngFor="let wqxStatus of wqxStatuses" [value]="wqxStatus.value">{{ wqxStatus.text }}
+                      </nb-option>
                     </nb-select>
                   </div>
                 </div>
@@ -118,25 +70,16 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <ng2-smart-table
-            [settings]="activitySetting"
-            [source]="activitySource"
-            (deleteConfirm)="onDeleteConfirm($event)"
-            (custom)="onCustom($event)"
-          >
+          <ng2-smart-table [settings]="activitySetting" [source]="activitySource"
+            (deleteConfirm)="onDeleteConfirm($event)" (custom)="onCustom($event)">
           </ng2-smart-table>
         </div>
       </div>
       <div class="row">
         <div class="col-12">
           <div class="row mt-3">
-            <button
-              nbButton
-              [routerLink]="['/secure/water-quality/wqx-activity-edit']"
-              [queryParams]="{ activityIdx: -1 }"
-              status="success"
-              class="mr-3"
-            >
+            <button nbButton [routerLink]="['/secure/water-quality/wqx-activity-edit']"
+              [queryParams]="{ activityIdx: -1 }" status="success" class="mr-3">
               Add New
             </button>
             <span class="float-right">

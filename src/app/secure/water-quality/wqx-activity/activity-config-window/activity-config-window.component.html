@@ -3,33 +3,18 @@
   <nb-card-body>
     <div class="row">
       <div class="col-6">
-        <nb-checkbox
-          (checkedChange)="onSAMP_ACT_END_DT($event)"
-          [checked]="!config[0].value === false"
-          >SAMP_ACT_END_DT</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onSAMP_COLL_METHOD($event)"
-          [checked]="!config[1].value === false"
-          >SAMP_COLL_METHOD</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onSAMP_COLL_EQUIP($event)"
-          [checked]="!config[2].value === false"
-          >SAMP_COLL_EQUIP</nb-checkbox
-        >
+        <nb-checkbox (checkedChange)="onSAMP_ACT_END_DT($event)" [checked]="!config[0].value === false">SAMP_ACT_END_DT
+        </nb-checkbox>
+        <nb-checkbox (checkedChange)="onSAMP_COLL_METHOD($event)" [checked]="!config[1].value === false">
+          SAMP_COLL_METHOD</nb-checkbox>
+        <nb-checkbox (checkedChange)="onSAMP_COLL_EQUIP($event)" [checked]="!config[2].value === false">SAMP_COLL_EQUIP
+        </nb-checkbox>
       </div>
       <div class="col-6">
-        <nb-checkbox
-          (checkedChange)="onSAMP_PREP($event)"
-          [checked]="!config[3].value === false"
-          >SAMP_PREP</nb-checkbox
-        >
-        <nb-checkbox
-          (checkedChange)="onSAMP_DEPTH($event)"
-          [checked]="!config[4].value === false"
-          >SAMP_DEPTH</nb-checkbox
-        >
+        <nb-checkbox (checkedChange)="onSAMP_PREP($event)" [checked]="!config[3].value === false">SAMP_PREP
+        </nb-checkbox>
+        <nb-checkbox (checkedChange)="onSAMP_DEPTH($event)" [checked]="!config[4].value === false">SAMP_DEPTH
+        </nb-checkbox>
       </div>
     </div>
   </nb-card-body>

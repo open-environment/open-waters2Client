@@ -3,12 +3,11 @@
     Organization Info
   </nb-card-header>
   <nb-card-body>
-    <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)" (custom)="onCustom($event)">
+    <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)"
+      (custom)="onCustom($event)">
     </ng2-smart-table>
   </nb-card-body>
   <nb-card-footer>
-      <button nbButton 
-      class="success"
-      (click)="onAddNewClick()">Add New</button>
+    <button nbButton class="success" (click)="onAddNewClick()">Add New</button>
   </nb-card-footer>
 </nb-card>

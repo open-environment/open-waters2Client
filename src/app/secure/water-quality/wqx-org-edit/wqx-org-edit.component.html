@@ -1,285 +1,219 @@
-<form name="myForm" 
-(ngSubmit)="f.form.valid && onSubmit()" 
-#f="ngForm" novalidate>
-<nb-card status="success">
-  <nb-card-header>Edit Organization</nb-card-header>
-  <nb-card-body status="success">
-    <div class="form-row mb-2 mt-2" *ngIf="lblMsgShow === true">
-      <nb-alert status="danger">{{ lblMsg }}</nb-alert>
-    </div>
+<form name="myForm" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+  <nb-card status="success">
+    <nb-card-header>Edit Organization</nb-card-header>
+    <nb-card-body status="success">
+      <div class="form-row mb-2 mt-2" *ngIf="lblMsgShow === true">
+        <nb-alert status="danger">{{ lblMsg }}</nb-alert>
+      </div>
 
-    <div class="form-row mt-2">
-      <div class="form-group col-2">
-        <label for="txtOrgID" class="label col-form-label">Organization ID</label>
-      </div>
-      <div class="form-group col-10">
-        <input nbInput fullWidth
-        name="txtOrgID" 
-        class="form-control"
-        [(ngModel)]="txtOrgID" 
-        #vtxtOrgID="ngModel"
-        [ngClass]="{ 'is-invalid': f.submitted && vtxtOrgID.invalid }"
-        type="text" 
-        ng-readonly="(txtOrgIDReadOnly)"
-        maxlength="30">
-      </div>
-    </div>
-
-    <div class="form-row mt-2">
-      <div class="form-group col-md-2">
-        <label for="txtOrgName" class="label col-form-label">Organization Name</label>
-      </div>
-      <div class="form-group col-md-10">
-        <input type="text" nbInput fullWidth
-        name="txtOrgName" 
-        class="form-control"
-        [(ngModel)]="txtOrgName" 
-        #vtxtOrgName="ngModel"
-        [ngClass]="{ 'is-invalid': f.submitted && vtxtOrgName.invalid }"
-        maxlength="120">
-      </div>
-    </div>
-
-     <div class="form-row mt-2">
-      <div class="form-group col-md-2">
-        <label for="txtOrgDesc" class="label col-form-label">Description</label>
-      </div>
-      <div class="form-group col-md-10">
-        <textarea nbInput fullWidth
-        name="txtOrgDesc" 
-        class="form-control"
-        [(ngModel)]="txtOrgDesc" 
-        #vtxtOrgDesc="ngModel"
-        [ngClass]="{ 'is-invalid': f.submitted && vtxtOrgDesc.invalid }"
-        rows="5" shape="round" 
-        maxlength="500"></textarea>
-      </div>
-    </div>
-
-    <div class="form-row mt-2">
-      <div class="form-group col-md-2">
-        <label for="ddlTribalCode" class="label col-form-label">Tribal Code</label>
-      </div>
-      <div class="form-group col-md-10">
-        <nb-select fullWidth
-        name="ddlTribalCode" 
-        [(ngModel)]="tribalCodeSelected"
-        #vtribalCodeSelected = "ngModel"
-        [ngClass]="{ 'is-invalid': f.submitted && vtribalCodeSelected.invalid }"
-        status="primary">
-          <nb-option *ngFor="let tc of tcs" [value]="tc.value"> {{ tc.text }}</nb-option>
-        </nb-select>
-      </div>
-    </div>
-
-    <div class="form-row mt-2">
-      <div class="form-group col-md-2">
-        <label for="txtOrgEmail" class="label col-form-label">Email</label>
-      </div>
-      <div class="form-group col-md-10">
-        <input type="email" nbInput fullWidth
-        name="txtOrgEmail" 
-        class="form-control"
-        [(ngModel)]="txtOrgEmail" 
-        #vtxtOrgEmail="ngModel"
-        [ngClass]="{ 'is-invalid': f.submitted && vtxtOrgEmail.invalid }"
-        email maxlength="120">
-        <div *ngIf="f.submitted && vtxtOrgEmail.invalid" class="invalid-feedback">
-          Please enter valid email address.
+      <div class="form-row mt-2">
+        <div class="form-group col-2">
+          <label for="txtOrgID" class="label col-form-label">Organization ID</label>
         </div>
-      </div>
-    </div>
-
-    <div class="form-row mt-2">
-      <div class="form-group col-md-2">
-        <label for="txtOrgPhone" class="label col-form-label">Phone</label>
-      </div>
-      <div class="form-group col-md-10">
-        <div class="row">
-          <div class="col-5">
-            <input type="text" nbInput
-            name="txtOrgPhone" 
-            class="form-control"
-            [(ngModel)]="txtOrgPhone"
-            #vtxtOrgPhone="ngModel"
-            [ngClass]=" { 'is-invalid': f.submitted && vtxtOrgPhone.invalid }"
-            maxlength="15">
-          </div>
-          <div class="col-2">
-            <label for="txtOrgPhoneExt" class="label col-form-label mr-3 ml-3">Ext</label>
-          </div>
-          <div class="col-5">
-            <input type="text"  nbInput
-            name="txtOrgPhoneExt" 
-            class="form-control"
-            [(ngModel)]="txtOrgPhoneExt" 
-            #vtxtOrgPhoneExt="ngModel"
-            [ngClass]="{ 'is-invalid': f.submitted && vtxtOrgPhoneExt.invalid }"
-            maxlength="6">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="form-row mt-2">
-      <div class="form-group col-md-2">
-        <label for="txtMailingAddress" class="label col-form-label">Mailing Address</label>
-      </div>
-      <div class="form-group col-md-10">
-        <input type="text" nbInput fullWidth
-        name="txtMailingAddress" 
-        [(ngModel)]="txtMailingAddress" 
-        #vtxtMailingAddress="ngModel"
-        [ngClass]="{ 'is-valid': f.submitted && vtxtMailingAddress.invalid }"
-        maxlength="30">
-      </div>
-    </div> 
-
-     <div class="form-row mt-2">
-      <div class="form-group col-md-2">
-        <label for="txtMailCity" 
-        class="label col-form-label">City</label>
-      </div>
-      <div class="form-group col-md-10">
-        <div class="row">
-          <div class="col-md-3">
-            <input type="text" nbInput fieldSize="small"
-            name="txtMailCity" 
-            class="form-contorl"
-            [(ngModel)]="txtMailCity" 
-            #vtxtMailCity="ngModel"
-            [ngClass]="{ 'is-invalid': f.submitted && vtxtMailCity }"
+        <div class="form-group col-10">
+          <input nbInput fullWidth name="txtOrgID" class="form-control" [(ngModel)]="txtOrgID" #vtxtOrgID="ngModel"
+            [ngClass]="{ 'is-invalid': f.submitted && vtxtOrgID.invalid }" type="text" ng-readonly="(txtOrgIDReadOnly)"
             maxlength="30">
-          </div>
-          <div class="col-2">
-            <label for="txtMailState" 
-            class="label col-form-label mr-3 ml-3">State</label>
-          </div>
-          <div class="col-md-3">
-            <input type="text" nbInput fieldSize="small" 
-            name="txtMailState" 
-            [(ngModel)]="txtMailState" 
-            #vtxtMailState="ngModel"
-            [ngClass]="{ 'is-invlalid': f.submitted && vtxtMailState.invalid }"
-            maxlength="2">
-          </div>
-          <div class="col-1">
-            <label for="txtMailZIP" 
-            class="label col-form-label mr-3 ml-3">Zip</label>
-          </div>
-          <div class="col-md-3">
-            <input type="text" nbInput fieldSize="small"
-            name="txtMailZIP" 
-            [(ngModel)]="txtMailZIP" 
-            #vtxtMailZIP="ngModel"
-            [ngClass]="{ 'is-invlaid': f.submitted && vtxtMailZIP.invalid }"
-            maxlength="14">
+        </div>
+      </div>
+
+      <div class="form-row mt-2">
+        <div class="form-group col-md-2">
+          <label for="txtOrgName" class="label col-form-label">Organization Name</label>
+        </div>
+        <div class="form-group col-md-10">
+          <input type="text" nbInput fullWidth name="txtOrgName" class="form-control" [(ngModel)]="txtOrgName"
+            #vtxtOrgName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtOrgName.invalid }" maxlength="120">
+        </div>
+      </div>
+
+      <div class="form-row mt-2">
+        <div class="form-group col-md-2">
+          <label for="txtOrgDesc" class="label col-form-label">Description</label>
+        </div>
+        <div class="form-group col-md-10">
+          <textarea nbInput fullWidth name="txtOrgDesc" class="form-control" [(ngModel)]="txtOrgDesc"
+            #vtxtOrgDesc="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtOrgDesc.invalid }" rows="5"
+            shape="round" maxlength="500"></textarea>
+        </div>
+      </div>
+
+      <div class="form-row mt-2">
+        <div class="form-group col-md-2">
+          <label for="ddlTribalCode" class="label col-form-label">Tribal Code</label>
+        </div>
+        <div class="form-group col-md-10">
+          <nb-select fullWidth name="ddlTribalCode" [(ngModel)]="tribalCodeSelected" #vtribalCodeSelected="ngModel"
+            [ngClass]="{ 'is-invalid': f.submitted && vtribalCodeSelected.invalid }" status="primary">
+            <nb-option *ngFor="let tc of tcs" [value]="tc.value"> {{ tc.text }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+
+      <div class="form-row mt-2">
+        <div class="form-group col-md-2">
+          <label for="txtOrgEmail" class="label col-form-label">Email</label>
+        </div>
+        <div class="form-group col-md-10">
+          <input type="email" nbInput fullWidth name="txtOrgEmail" class="form-control" [(ngModel)]="txtOrgEmail"
+            #vtxtOrgEmail="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtOrgEmail.invalid }" email
+            maxlength="120">
+          <div *ngIf="f.submitted && vtxtOrgEmail.invalid" class="invalid-feedback">
+            Please enter valid email address.
           </div>
         </div>
       </div>
-    </div> 
-    <div class="for-row mt-2">
-      <nb-card class="m-3">
-        <nb-card-header>Credentials for Submitting to EPA</nb-card-header>
-        <nb-card-body class="p-3">
-          <label for="lblCDXSubmitInd" class="label col-form-label">{{lblCDXSubmitInd}}</label>
-          <br/>
-          <nb-radio-group 
-          name="rbCDX"
-          [(ngModel)]="epaSubmissionGroup"
-          (valueChange)="onrbCDXChange($event)">
-            <nb-radio [value]="'1'">
-              Submit to EPA using my own NAAS credentials
-            </nb-radio>
-            <nb-radio [value]="'2'">
-              Submit to EPA using Open Waters global NAAS credentials
-            </nb-radio>
-          </nb-radio-group>
-  
-          <div *ngIf="divCDXme === true">
-          <br/>
-          <div class="form-row mt-2">
-            <div class="form-group col-md-3">
-              <label for="txtCDX" class="label col-form-label">CDX Submitter</label>
-            </div>
-            <div class="form-group col-md-9">
-              <input type="text" nbInput fullWidth
-              name="txtCDX" 
-              class="form-control"
-              [(ngModel)]="txtCDX" 
-              #vtxtCDX="ngModel"
-              [ngClass]="{ 'is-invalid': f.submitted && vtxtCDX.invalid }"
-              maxlength="100">
-            </div>
-          </div>
-          <div class="form-row mt-2">
-            <div class="form-group col-md-3">
-              <label for="txtCDXPwd" class="label col-form-label">CDX Submitter Password</label>
-            </div>
-            <div class="form-group col-md-9">
-              <input type="password" nbInput fullWidth
-              name="txtCDXPwd" 
-              class="form-control"
-              [(ngModel)]="txtCDXPwd" 
-              #vtxtCDXPwd="ngModel"
-              [ngClass]=" { 'is-invalid': f.submitted && vtxtCDXPwd.invalid }"
-              maxlength="100">
-            </div>
-          </div>
-          <br/>
-          <button nbButton type="button"
-          status="info" 
-          (click)="btnTestNAASLocalClick()">Test My Credentials</button>
+
+      <div class="form-row mt-2">
+        <div class="form-group col-md-2">
+          <label for="txtOrgPhone" class="label col-form-label">Phone</label>
         </div>
-          <div *ngIf="divCDXglobal === true">
-            <br/>
-            <button nbButton 
-            status="info" (click)="btnTestNAASGlobalClick()">Check if Open Waters is Authorized to Submit for Your Organization</button>
+        <div class="form-group col-md-10">
+          <div class="row">
+            <div class="col-5">
+              <input type="text" nbInput name="txtOrgPhone" class="form-control" [(ngModel)]="txtOrgPhone"
+                #vtxtOrgPhone="ngModel" [ngClass]=" { 'is-invalid': f.submitted && vtxtOrgPhone.invalid }"
+                maxlength="15">
+            </div>
+            <div class="col-2">
+              <label for="txtOrgPhoneExt" class="label col-form-label mr-3 ml-3">Ext</label>
+            </div>
+            <div class="col-5">
+              <input type="text" nbInput name="txtOrgPhoneExt" class="form-control" [(ngModel)]="txtOrgPhoneExt"
+                #vtxtOrgPhoneExt="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtOrgPhoneExt.invalid }"
+                maxlength="6">
+            </div>
           </div>
-        </nb-card-body>
-      </nb-card>
-    </div>
-    
+        </div>
+      </div>
+
+      <div class="form-row mt-2">
+        <div class="form-group col-md-2">
+          <label for="txtMailingAddress" class="label col-form-label">Mailing Address</label>
+        </div>
+        <div class="form-group col-md-10">
+          <input type="text" nbInput fullWidth name="txtMailingAddress" [(ngModel)]="txtMailingAddress"
+            #vtxtMailingAddress="ngModel" [ngClass]="{ 'is-valid': f.submitted && vtxtMailingAddress.invalid }"
+            maxlength="30">
+        </div>
+      </div>
+
+      <div class="form-row mt-2">
+        <div class="form-group col-md-2">
+          <label for="txtMailCity" class="label col-form-label">City</label>
+        </div>
+        <div class="form-group col-md-10">
+          <div class="row">
+            <div class="col-md-3">
+              <input type="text" nbInput fieldSize="small" name="txtMailCity" class="form-contorl"
+                [(ngModel)]="txtMailCity" #vtxtMailCity="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && vtxtMailCity }" maxlength="30">
+            </div>
+            <div class="col-2">
+              <label for="txtMailState" class="label col-form-label mr-3 ml-3">State</label>
+            </div>
+            <div class="col-md-3">
+              <input type="text" nbInput fieldSize="small" name="txtMailState" [(ngModel)]="txtMailState"
+                #vtxtMailState="ngModel" [ngClass]="{ 'is-invlalid': f.submitted && vtxtMailState.invalid }"
+                maxlength="2">
+            </div>
+            <div class="col-1">
+              <label for="txtMailZIP" class="label col-form-label mr-3 ml-3">Zip</label>
+            </div>
+            <div class="col-md-3">
+              <input type="text" nbInput fieldSize="small" name="txtMailZIP" [(ngModel)]="txtMailZIP"
+                #vtxtMailZIP="ngModel" [ngClass]="{ 'is-invlaid': f.submitted && vtxtMailZIP.invalid }" maxlength="14">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="for-row mt-2">
+        <nb-card class="m-3">
+          <nb-card-header>Credentials for Submitting to EPA</nb-card-header>
+          <nb-card-body class="p-3">
+            <label for="lblCDXSubmitInd" class="label col-form-label">{{lblCDXSubmitInd}}</label>
+            <br />
+            <nb-radio-group name="rbCDX" [(ngModel)]="epaSubmissionGroup" (valueChange)="onrbCDXChange($event)">
+              <nb-radio [value]="'1'">
+                Submit to EPA using my own NAAS credentials
+              </nb-radio>
+              <nb-radio [value]="'2'">
+                Submit to EPA using Open Waters global NAAS credentials
+              </nb-radio>
+            </nb-radio-group>
+
+            <div *ngIf="divCDXme === true">
+              <br />
+              <div class="form-row mt-2">
+                <div class="form-group col-md-3">
+                  <label for="txtCDX" class="label col-form-label">CDX Submitter</label>
+                </div>
+                <div class="form-group col-md-9">
+                  <input type="text" nbInput fullWidth name="txtCDX" class="form-control" [(ngModel)]="txtCDX"
+                    #vtxtCDX="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtCDX.invalid }" maxlength="100">
+                </div>
+              </div>
+              <div class="form-row mt-2">
+                <div class="form-group col-md-3">
+                  <label for="txtCDXPwd" class="label col-form-label">CDX Submitter Password</label>
+                </div>
+                <div class="form-group col-md-9">
+                  <input type="password" nbInput fullWidth name="txtCDXPwd" class="form-control" [(ngModel)]="txtCDXPwd"
+                    #vtxtCDXPwd="ngModel" [ngClass]=" { 'is-invalid': f.submitted && vtxtCDXPwd.invalid }"
+                    maxlength="100">
+                </div>
+              </div>
+              <br />
+              <button nbButton type="button" status="info" (click)="btnTestNAASLocalClick()">Test My
+                Credentials</button>
+            </div>
+            <div *ngIf="divCDXglobal === true">
+              <br />
+              <button nbButton status="info" (click)="btnTestNAASGlobalClick()">Check if Open Waters is Authorized to
+                Submit for Your Organization</button>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+
     </nb-card-body>
     <nb-card-footer>
-      <button 
-      class="mr-2" nbButton 
-      status="success" type="submit" >Save & Exit</button>
-      <button class="mr-2" nbButton 
-       type="button" status="danger" 
-      (click)="onCancelClicked()">Cancel</button>
-      <button class="mr-2" nbButton 
-      type="button" status="info" 
-      (click)="onEditDefaultData()">Edit Default Data</button>
+      <button class="mr-2" nbButton status="success" type="submit">Save & Exit</button>
+      <button class="mr-2" nbButton type="button" status="danger" (click)="onCancelClicked()">Cancel</button>
+      <button class="mr-2" nbButton type="button" status="info" (click)="onEditDefaultData()">Edit Default Data</button>
     </nb-card-footer>
-</nb-card>
+  </nb-card>
 
-<nb-card status="success">
-  <nb-card-body>
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <p>Available Users</p>
-        <nb-list name="nl">
-          <nb-list-item name="nbli" *ngFor="let orgUser of lbAllUsers" [ngClass]="{'listItemClass1' : listItemClass1}">
-            <label name="nbl" (click)="onOrgAllUserClicked(orgUser)">{{ orgUser.useR_ID((orgUser.rolE_CD) === 'A' ? 'Admin' : 'User') }}</label>
-          </nb-list-item>
-        </nb-list>
+  <nb-card status="success">
+    <nb-card-body>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <p>Available Users</p>
+          <nb-list name="nl">
+            <nb-list-item name="nbli" *ngFor="let orgUser of lbAllUsers"
+              [ngClass]="{'listItemClass1' : listItemClass1}">
+              <label name="nbl"
+                (click)="onOrgAllUserClicked(orgUser)">{{ orgUser.useR_ID((orgUser.rolE_CD) === 'A' ? 'Admin' : 'User') }}</label>
+            </nb-list-item>
+          </nb-list>
+        </div>
+        <div class="form-group col-md-4">
+          <nb-checkbox name="nbc" [(ngModel)]="isChecked">Add as Admin</nb-checkbox>
+          <br />
+          <button class="mb-2" nbButton status="basic" (click)="onAddUserToOrg()">Add User to Org >></button>
+          <button class="mb-2" nbButton status="basic" (click)="onRemoveUserFromOrg()">
+            << Remove User from Org</button>
+        </div>
+        <div class="form-group col-md-4">
+          <p>Users in Organization</p>
+          <nb-list>
+            <nb-list-item *ngFor="let orgUserN of lbUserInRole" [ngClass]="{'listItemClass2' : listItemClass2}">
+              <label
+                (click)="onOrgAllUserNotInOrgClicked(orgUserN)">{{ (orgUserN.rolE_CD === 'A') ? orgUserN.useR_ID + '(Admin)' : orgUserN.useR_ID + '(User)' }}</label>
+            </nb-list-item>
+          </nb-list>
+        </div>
       </div>
-      <div class="form-group col-md-4">
-        <nb-checkbox name="nbc" [(ngModel)]="isChecked">Add as Admin</nb-checkbox>
-        <br />
-        <button class="mb-2" nbButton status="basic" (click)="onAddUserToOrg()">Add User to Org >></button>
-        <button class="mb-2" nbButton status="basic" (click)="onRemoveUserFromOrg()"><< Remove User from Org</button>
-      </div>
-      <div class="form-group col-md-4">
-        <p>Users in Organization</p>
-        <nb-list>
-          <nb-list-item *ngFor="let orgUserN of lbUserInRole" [ngClass]="{'listItemClass2' : listItemClass2}">
-            <label (click)="onOrgAllUserNotInOrgClicked(orgUserN)">{{ (orgUserN.rolE_CD === 'A') ? orgUserN.useR_ID + '(Admin)' : orgUserN.useR_ID + '(User)' }}</label>
-          </nb-list-item>
-        </nb-list>
-      </div>
-    </div>
-  </nb-card-body>
-</nb-card>
+    </nb-card-body>
+  </nb-card>
 </form>

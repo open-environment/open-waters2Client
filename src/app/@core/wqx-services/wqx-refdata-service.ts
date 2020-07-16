@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
-import { WqxRefDataData, WqxRefDefaultTimeZone, WqxRefCharacteristic, AnalMethodDisplay, WqxRefTaxaOrg, WqxRefCharOrg, WqxRefCounty } from '../wqx-data/wqx-refdata';
+import { WqxRefDataData, WqxRefDefaultTimeZone, WqxRefCharacteristic, AnalMethodDisplay, WqxRefTaxaOrg, WqxRefCharOrg, WqxRefCounty, WqxRefSampColMethod } from '../wqx-data/wqx-refdata';
 import { WqxRefData } from '../wqx-data/wqx-organization';
 
 @Injectable()
@@ -71,5 +71,14 @@ export class WQXRefDataService extends WqxRefDataData {
   }
   DeleteT_WQX_REF_CHAR_ORG(orgName: string, charName: string): Observable<number> {
     return this.http.delete<number>(WebApi.TWQXRefDataApi.deleteTWqxRefTaxaOrg(orgName, charName));
+  }
+  GetT_WQX_REF_DATA_Count(): Observable<number> {
+    return this.http.get<number>(WebApi.TWQXRefDataApi.getTWqxRefDataCount());
+  }
+  GetT_WQX_REF_CHAR_ORG_Count(orgName: string): Observable<number> {
+    return this.http.get<number>(WebApi.TWQXRefDataApi.GetTWqxRefCharOrgCount(orgName));
+  }
+  GetT_WQX_REF_SAMP_COL_METHOD_ByContext(context: string): Observable<WqxRefSampColMethod[]> {
+    return this.http.get<WqxRefSampColMethod[]>(WebApi.TWQXRefDataApi.GetTWqxRefSampColMethodByContext(context));
   }
 }

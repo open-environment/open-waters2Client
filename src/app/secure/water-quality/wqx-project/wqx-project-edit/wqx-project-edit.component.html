@@ -1,19 +1,13 @@
-<form name="form" 
-(ngSubmit)="f.form.valid && onSubmit()" 
-#f="ngForm" novalidate>
+<form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
   <nb-card status="success">
     <nb-card-header>EDIT PROJECT</nb-card-header>
     <nb-card-body>
       <div class="form-row">
         <div class="form-group col-4">Project ID:</div>
         <div class="form-group col-8">
-          <input type="text" nbInput fullWidth
-          name="txtProjID" 
-         class="form-control"
-          [(ngModel)]="txtProjID"
-          #vtxtProjID="ngModel"
-          [ngClass]="{ 'is-invalid': f.submitted && vtxtProjID.invalid }"
-          required maxlength="35">
+          <input type="text" nbInput fullWidth name="txtProjID" class="form-control" [(ngModel)]="txtProjID"
+            #vtxtProjID="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtProjID.invalid }" required
+            maxlength="35">
           <div *ngIf="f.submitted && vtxtProjID.invalid" class="invalid-feedback">
             <div *ngIf="vtxtProjID.errors.required">Project ID is required</div>
           </div>
@@ -22,35 +16,25 @@
       <div class="form-row">
         <div class="form-group col-4">Project Name:</div>
         <div class="form-group col-8">
-          <input type="text" nbInput fullWidth
-          name="txtProjName" 
-          class="form-control"
-          [(ngModel)]="txtProjName"
-          #vtxtProjName="ngModel"
-          [ngClass]="{ 'is-invalid': f.submitted && vtxtProjName.invalid }"
-          maxlength="120">
+          <input type="text" nbInput fullWidth name="txtProjName" class="form-control" [(ngModel)]="txtProjName"
+            #vtxtProjName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtProjName.invalid }" maxlength="120">
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col-4">Project Description:</div>
         <div class="form-group col-8">
-          <textarea nbInput fullWidth
-          name="txtProjDesc" 
-          class="form-control"
-          [(ngModel)]="txtProjDesc"
-          #vtxtProjDesc="ngModel"
-          [ngClass]="{ 'is-invalid': f.submitted && vtxtProjDesc.invalid }"
-          maxlength="4000"></textarea>
+          <textarea nbInput fullWidth name="txtProjDesc" class="form-control" [(ngModel)]="txtProjDesc"
+            #vtxtProjDesc="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtProjDesc.invalid }"
+            maxlength="4000"></textarea>
         </div>
       </div>
       <div class="row">
         <div class="col-4">Sampling Design Type:</div>
         <div class="col-8">
-          <nb-select (selectedChange)="onSampDesignTypeCodeSelect($event)" 
-          name="ddlSampDesignTypeCode" status="primary"
-          [(selected)]="sampDesignTypeCodeSelected" fullWidth>
-            <nb-option *ngFor="let sampDesignTypeCode of sampDesignTypeCodes" 
-            [value]="sampDesignTypeCode.value"> {{ sampDesignTypeCode.text }}</nb-option>
+          <nb-select (selectedChange)="onSampDesignTypeCodeSelect($event)" name="ddlSampDesignTypeCode" status="primary"
+            [(selected)]="sampDesignTypeCodeSelected" fullWidth>
+            <nb-option *ngFor="let sampDesignTypeCode of sampDesignTypeCodes" [value]="sampDesignTypeCode.value">
+              {{ sampDesignTypeCode.text }}</nb-option>
           </nb-select>
         </div>
       </div>
@@ -58,16 +42,14 @@
         <div class="form-group col-4">SQAPP Approved?:</div>
         <div class="form-group col-8">
           <div class="row">
-            <div class="col-1"><nb-checkbox name="chkQAPPInd" [checked]="chkQAPPInd"></nb-checkbox></div>
+            <div class="col-1">
+              <nb-checkbox name="chkQAPPInd" [checked]="chkQAPPInd"></nb-checkbox>
+            </div>
             <div class="col-4"><label for="txtQAPPAgency" class="mr-3">Approval Agency: </label></div>
             <div class="col-7">
-              <input type="text" nbInput
-              class="form-control"
-              name="txtQAPPAgency" 
-              [(ngModel)]="txtQAPPAgency"
-              #vtxtQAPPAgency="ngModel"
-              [ngClass]="{ 'is-invalid': f.submitted && vtxtQAPPAgency.invalid }"
-              maxlength="200">
+              <input type="text" nbInput class="form-control" name="txtQAPPAgency" [(ngModel)]="txtQAPPAgency"
+                #vtxtQAPPAgency="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtQAPPAgency.invalid }"
+                maxlength="200">
             </div>
           </div>
         </div>
@@ -84,18 +66,12 @@
           <nb-checkbox name="chkWQXInd" [checked]="chkWQXInd"></nb-checkbox>
         </div>
       </div>
-      
+
     </nb-card-body>
     <nb-card-footer>
       <div class="row">
-        <button nbButton 
-        type="submit"
-        status="success"
-        class="mr-3">Save & Exit</button>
-        <button nbButton 
-        type="button"
-        (click)="onCancelClicked()" 
-        status="danger">Cancel</button>
+        <button nbButton type="submit" status="success" class="mr-3">Save & Exit</button>
+        <button nbButton type="button" (click)="onCancelClicked()" status="danger">Cancel</button>
       </div>
     </nb-card-footer>
   </nb-card>

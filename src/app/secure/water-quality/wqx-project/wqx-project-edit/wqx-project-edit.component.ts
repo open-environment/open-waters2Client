@@ -29,10 +29,10 @@ export class WqxProjectEditComponent implements OnInit {
   sampDesignTypeCodeSelected: string = '';
   projectIdx: number = 0;
   constructor(private authService: NbAuthService,
-              private refDataService: WQXRefDataService,
-              private projectService: WQXProjectService,
-              private activatedRoute: ActivatedRoute,
-              private router: Router) {
+    private refDataService: WQXRefDataService,
+    private projectService: WQXProjectService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router) {
     this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
@@ -50,7 +50,7 @@ export class WqxProjectEditComponent implements OnInit {
       if (this.projectIdx > 0 && this.currentOrgId !== '') {
 
         // ******************* Populate project information on form
-         this.populateProject();
+        this.populateProject();
       } else {
         this.chkActInd = true;
         this.chkWQXInd = true;
@@ -62,7 +62,7 @@ export class WqxProjectEditComponent implements OnInit {
 
     this.projectService.GetWQX_PROJECT_ByID(this.projectIdx).subscribe(
       (data: WqxProject) => {
-        this.txtProjID = data.projectID;
+        this.txtProjID = data.projectId;
         this.txtProjName = data.projectName;
         this.txtProjDesc = data.projectDesc;
         this.sampDesignTypeCodeSelected = data.sampDesignTypeCd;
@@ -95,8 +95,8 @@ export class WqxProjectEditComponent implements OnInit {
     this.projectService.InsertOrUpdateWQX_PROJECT(this.projectIdx, this.currentOrgId, this.txtProjID,
       this.txtProjName, this.txtProjDesc, this.sampDesignTypeCodeSelected, this.chkQAPPInd,
       this.txtQAPPAgency, 'U', '', this.chkActInd, this.chkWQXInd, this.user.name).subscribe(
-      (data) => { console.log(data); },
-      (err) => { console.log(err); },
-    );
+        (data) => { console.log(data); },
+        (err) => { console.log(err); },
+      );
   }
 }

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 export interface WqxProject {
   projectIdx: number;
   OrgId: string;
-  projectID: string;
+  projectId: string;
   projectName: string;
   projectDesc: string;
   sampDesignTypeCd: string;
