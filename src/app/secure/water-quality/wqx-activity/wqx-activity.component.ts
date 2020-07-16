@@ -11,6 +11,8 @@ import { WQXActivityService } from '../../../@core/wqx-services/wqx-activity-ser
 import { WqxActivityConfig } from '../../../@core/wqx-data/wqx-activity';
 import { ActivityConfigWindowComponent } from './activity-config-window/activity-config-window.component';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
+import { WqxMonlocService } from '../../../@core/wqx-services/wqx-monloc.service';
+import { WQXProjectService } from '../../../@core/wqx-services/wqx-project-service';
 
 @Component({
   selector: 'ngx-wqx-activity',
@@ -53,14 +55,14 @@ export class WqxActivityComponent implements OnInit {
 
   activitySource = new LocalDataSource([]);
 
-  txtStartDate = new Date();
-  txtEndDate = new Date();
+  txtStartDate: Date;
+  txtEndDate: Date;
   monlocs: WqxMonloc[] = [];
   monlocSelected: string;
 
   actTypes: WqxRefData[] = [];
   actTypeSelected: string;
-  chkDeletedInd: boolean = false;
+  chkDeletedInd: boolean = true;
 
   projects: WqxProject[] = [];
   projectSelected: string;
@@ -81,6 +83,8 @@ export class WqxActivityComponent implements OnInit {
     private activityService: WQXActivityService,
     private pubSubService: WqxPubsubServiceService,
     private toasterService: NbToastrService,
+    private monlocService: WqxMonlocService,
+    private projectService: WQXProjectService,
   ) {
     this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
@@ -97,13 +101,32 @@ export class WqxActivityComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    // populate drop-downs
+    this.populateDropdowns();
   }
 
+  populateDropdowns() {
+    this.monlocService.GetWQX_MONLOC_ByOrgID(this.currentOrgId).subscribe(
+      (data) => {
+        this.monlocs = data;
+      },
+    );
+    this.activityService.GetT_WQX_REF_DATA_ActivityTypeUsed(this.currentOrgId).subscribe(
+      (data) => {
+        this.actTypes = data;
+      },
+    );
+    this.projectService.GetWQX_PROJECT(true, this.currentOrgId, false).subscribe(
+      (data) => {
+        this.projects = data;
+      },
+    );
+  }
   populateData(isFirst: boolean) {
     this.activityService.getWqxActivityDisplay(this.chkDeletedInd,
-      this.currentOrgId, isNaN(+this.monlocSelected) === true ? 0 : +this.monlocSelected, this.txtStartDate.toUTCString(),
-      this.txtEndDate.toUTCString(), this.actTypeSelected, false, isNaN(+this.projectSelected) === true ? 0 : +this.projectSelected,
+      this.currentOrgId, isNaN(+this.monlocSelected) === true ? 0 : +this.monlocSelected,
+      (this.txtStartDate === undefined) ? '' : this.txtStartDate.toUTCString(),
+      (this.txtEndDate === undefined) ? '' : this.txtEndDate.toUTCString(), (this.actTypeSelected === undefined) ? '' : this.actTypeSelected, false, isNaN(+this.projectSelected) === true ? 0 : +this.projectSelected,
       ((this.wqxStatusSelected === undefined) ? '' : this.wqxStatusSelected)).subscribe(
         (data) => {
           console.log(data);
@@ -226,7 +249,7 @@ export class WqxActivityComponent implements OnInit {
 
   onAddNew(): void {
     console.log('Add New Click!');
-    this.router.navigate(['/secure/water-quality/wqx-activity-edit'], { queryParams: { monlocIdx: -1 } });
+    this.router.navigate(['/secure/water-quality/wqx-activity-edit'], { queryParams: { activityIdx: -1 } });
   }
   onExcel(): void {
     console.log('onExcel Click!');
@@ -242,8 +265,9 @@ export class WqxActivityComponent implements OnInit {
     }
   }
   onCustom(event): void {
+    console.log(event.data);
     if (event.action === 'edit') {
-      this.router.navigate(['/secure/water-quality/wqx-activity-edit'], { queryParams: { activityIdx: event.data.activityIdx } });
+      this.router.navigate(['/secure/water-quality/wqx-activity-edit'], { queryParams: { activityIdx: event.data.activitY_IDX } });
     } else if (event.action === 'delete') {
       this.activityService.DeleteT_WQX_ACTIVITY(event.data.activitY_IDX, this.user.name).subscribe(
         (result) => {

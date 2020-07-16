@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { WqxActivity, WqxActivityData, ActivityListDisplay } from '../wqx-data/wqx-activity';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
+import { WqxRefData } from '../wqx-data/wqx-organization';
 
 @Injectable()
 export class WQXActivityService extends WqxActivityData {
@@ -25,5 +26,37 @@ export class WQXActivityService extends WqxActivityData {
   }
   DeleteT_WQX_ACTIVITY(activityIdx: number, userId: string): Observable<number> {
     return this.http.delete<number>(WebApi.TWQXActivityApi.deleteTWqxActivity(activityIdx, userId));
+  }
+  InsertOrUpdateWQX_ACTIVITY(activityIdx: number, orgId: string, projectIdx: number, monlocIdx: number, activityId: string,
+    actType: string, actMedia: string, actSubMedia: string, actStartDate: string, actEndDt: string,
+    actTimeZone: string, relativeDepthName: string, actDepthHeightMsr: string, actDepthHeightMsrUnit: string,
+    topDepthHeightMsr: string, topDepthHeightMsrUnit: string, botDepthHeightMsr: string, botDepthHeightMsrUnit: string,
+    depthRefPoint: string, actComment: string, bioAssemblageSampled: string, bioDurationMsr: string,
+    bioDurationMsrUnit: string, bioSampComponent: string, bioSampComponentSeq: number, bioReachLenMsr: string,
+    bioReachLenMsrUnit, bioReachWidMsr: string, bioReachWidMsrUnit: string, bioPassCount: number,
+    bioNetType: string, bioNetAreaMsr: string, bioNetAreaMsrUnit: string, bioNetMeshsizeMsr: string,
+    bioMeshsizeMsrUnit, bioBoatSpeedMsr: string, bioBoatSpeedMsrUnit: string, bioCurrSpeedMsr: string,
+    bioCurrSpeedMsrUnit, bioToxicityTestType: string, sampCollMethodIdx: number, sampCollEquip: string, sampCollEquipComment: string,
+    sampPrepIdx: number, sampPrepCountType: string, sampPrepContColor: string, sampPrepChemPeserv: string, sampPrepThermPreserv: string,
+    sampPrepStorageDesc, wqxSubmitStatus: string, actInd: boolean, wqxInd: boolean, creatUser: string, entryType: string) {
+    const httpOptions = {};
+    return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateWqxActivity(activityIdx, orgId, projectIdx, monlocIdx, activityId,
+      actType, actMedia, actSubMedia, actStartDate, actEndDt,
+      actTimeZone, relativeDepthName, actDepthHeightMsr, actDepthHeightMsrUnit,
+      topDepthHeightMsr, topDepthHeightMsrUnit, botDepthHeightMsr, botDepthHeightMsrUnit,
+      depthRefPoint, actComment, bioAssemblageSampled, bioDurationMsr,
+      bioDurationMsrUnit, bioSampComponent, bioSampComponentSeq, bioReachLenMsr,
+      bioReachLenMsrUnit, bioReachWidMsr, bioReachWidMsrUnit, bioPassCount,
+      bioNetType, bioNetAreaMsr, bioNetAreaMsrUnit, bioNetMeshsizeMsr,
+      bioMeshsizeMsrUnit, bioBoatSpeedMsr, bioBoatSpeedMsrUnit, bioCurrSpeedMsr,
+      bioCurrSpeedMsrUnit, bioToxicityTestType, sampCollMethodIdx, sampCollEquip, sampCollEquipComment,
+      sampPrepIdx, sampPrepCountType, sampPrepContColor, sampPrepChemPeserv, sampPrepThermPreserv,
+      sampPrepStorageDesc, wqxSubmitStatus, actInd, wqxInd, creatUser, entryType), '', httpOptions);
+  }
+  GetT_WQX_REF_DATA_ActivityTypeUsed(orgId: string): Observable<WqxRefData[]> {
+    return this.http.get<WqxRefData[]>(WebApi.TWQXActivityApi.getTWqxRefDataActivityTypeUsed(orgId));
+  }
+  GetWQX_ACTIVITY_ByID(activityIdx: number): Observable<WqxActivity> {
+    return this.http.get<WqxActivity>(WebApi.TWQXActivityApi.getWqxActivityById(activityIdx));
   }
 }

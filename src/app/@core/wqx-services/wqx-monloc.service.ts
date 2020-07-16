@@ -32,4 +32,7 @@ export class WqxMonlocService extends WqxMonlocData {
   GetWQX_MONLOC_ByID(monlocIdx: number): Observable<WqxMonloc> {
     return this.http.get<WqxMonloc>(WebApi.TWQXMonlocApi.GetWQXMonLocByID(monlocIdx));
   }
+  GetWQX_MONLOC_ByOrgID(orgId: string): Observable<WqxMonloc[]> {
+    return this.http.get<WqxMonloc[]>(WebApi.TWQXMonlocApi.getWqxMonlocByOrgId(orgId));
+  }
 }

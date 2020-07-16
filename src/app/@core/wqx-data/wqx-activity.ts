@@ -1,11 +1,11 @@
 import { Observable } from 'rxjs';
 
 export interface WqxActivity {
-  activityIDX: number;
-  orgID: string;
-  projectIDX: number;
-  monlocIDX: number;
-  activityID: string;
+  activityIdx: number;
+  orgId: string;
+  projectIdx: number;
+  monlocIdx: number;
+  activityId: string;
   actType: string;
   actMedia: string;
   actSubMedia: string;
@@ -47,9 +47,9 @@ export interface WqxActivity {
   sampPrepChemPreserv: string;
   sampPrepThermPreserv: string;
   sampPrepStorageDesc: string;
-  wQXInd: boolean;
-  wQXSubmitStatus: string;
-  wQXUpdateDt: string;
+  wqxInd: boolean;
+  wqxSubmitStatus: string;
+  wqxUpdateDt: string;
   actInd: boolean;
   createDt: string;
   createUserId: string;

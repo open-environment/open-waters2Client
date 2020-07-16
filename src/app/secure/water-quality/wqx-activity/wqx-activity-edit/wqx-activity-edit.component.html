@@ -230,14 +230,21 @@
           </div>
           <div class="row">
             <div class="col">
-              <button nbButton status="success" class="mr-2" [disabled]="!f.valid && !canUserEdit">
+              form valid: {{f.form.valid}} <br />
+              canUserEdit: {{ canUserEdit }}
+              <hr>
+              <button nbButton status="success" class="mr-2" [disabled]="!f.form.valid && !canUserEdit">
                 Save
               </button>
-              <button nbButton status="danger">Exit</button>
+              <button nbButton type="button" status="danger" (click)="onExitClicked()">Exit</button>
             </div>
             <div class="col">
               Result Type:
-              <nb-select fullWidth status="primary" name="ddlEntryType" [(selected)]="entryTypeSelected">
+              <nb-select fullWidth status="primary" name="ddlEntryType" [(ngModel)]="entryTypeSelected"
+                #vddlEntryType="ngModel" [ngClass]="{
+                'is-invalid':
+                  f.submitted && vddlEntryType.invalid
+              }" required>
                 <nb-option value="C">Chemical (default)</nb-option>
                 <nb-option value="H">Habitat Assessment</nb-option>
                 <nb-option value="T">Taxonomy Counts</nb-option>
@@ -249,7 +256,7 @@
             </div>
             <div class="col"></div>
           </div>
-          <div class="row">
+          <div class="row" *ngIf="showResults === true">
             <div class="col-12">
               <nb-card>
                 <nb-card-header>RESULTS (click row to edit)</nb-card-header>

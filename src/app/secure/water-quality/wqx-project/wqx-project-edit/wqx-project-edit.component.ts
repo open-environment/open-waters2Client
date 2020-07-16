@@ -6,6 +6,7 @@ import { WQXRefDataService } from '../../../../@core/wqx-services/wqx-refdata-se
 import { WQXProjectService } from '../../../../@core/wqx-services/wqx-project-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WqxProject } from '../../../../@core/wqx-data/wqx-project';
+import { NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-wqx-project-edit',
@@ -32,7 +33,8 @@ export class WqxProjectEditComponent implements OnInit {
     private refDataService: WQXRefDataService,
     private projectService: WQXProjectService,
     private activatedRoute: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private toasterSerivice: NbToastrService) {
     this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
@@ -95,8 +97,16 @@ export class WqxProjectEditComponent implements OnInit {
     this.projectService.InsertOrUpdateWQX_PROJECT(this.projectIdx, this.currentOrgId, this.txtProjID,
       this.txtProjName, this.txtProjDesc, this.sampDesignTypeCodeSelected, this.chkQAPPInd,
       this.txtQAPPAgency, 'U', '', this.chkActInd, this.chkWQXInd, this.user.name).subscribe(
-        (data) => { console.log(data); },
-        (err) => { console.log(err); },
+        (result) => {
+          if (result > 0) {
+            this.router.navigate(['/secure/water-quality/wqx-project']);
+          } else {
+            this.toasterSerivice.danger('Error updating record.');
+          }
+        },
+        (err) => {
+          this.toasterSerivice.danger('Error updating record.');
+        },
       );
   }
 }
