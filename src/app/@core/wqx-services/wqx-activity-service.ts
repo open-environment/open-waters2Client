@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { WqxActivity, WqxActivityData, ActivityListDisplay } from '../wqx-data/wqx-activity';
+import { WqxActivity, WqxActivityData, ActivityListDisplay, WqxResult } from '../wqx-data/wqx-activity';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
 import { WqxRefData } from '../wqx-data/wqx-organization';
@@ -58,5 +58,8 @@ export class WQXActivityService extends WqxActivityData {
   }
   GetWQX_ACTIVITY_ByID(activityIdx: number): Observable<WqxActivity> {
     return this.http.get<WqxActivity>(WebApi.TWQXActivityApi.getWqxActivityById(activityIdx));
+  }
+  GetT_WQX_RESULT(activityIdx: number): Observable<WqxResult[]> {
+    return this.http.get<WqxResult[]>(WebApi.TWQXActivityApi.getTWqxResult(activityIdx));
   }
 }

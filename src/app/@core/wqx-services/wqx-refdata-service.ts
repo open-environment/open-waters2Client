@@ -81,4 +81,24 @@ export class WQXRefDataService extends WqxRefDataData {
   GetT_WQX_REF_SAMP_COL_METHOD_ByContext(context: string): Observable<WqxRefSampColMethod[]> {
     return this.http.get<WqxRefSampColMethod[]>(WebApi.TWQXRefDataApi.GetTWqxRefSampColMethodByContext(context));
   }
+  GetT_WQX_REF_CHARACTERISTIC_ByOrg(orgId: string, rbpInd: boolean): Observable<WqxRefCharacteristic[]> {
+    return this.http.get<WqxRefCharacteristic[]>(WebApi.TWQXRefDataApi.getTWqxRefCharacteristicByOrg(orgId, rbpInd));
+  }
+  InsertOrUpdateT_WQX_RESULT(resultIdx: number, activityIdx: number, resultDetectCondition: string,
+    charName: string, resultSampFraction: string, resultMsr: string, resultMsrUnit: string,
+    resultStatus: string, resultValueType: string, resultComment: string,
+    bioIntentName: string, bioIndividualId: string, bioTaxonomy: string, bioSampleTissueAnatomy: string,
+    analyticMethodIdx: number, labIdx: number, labanalysisStartDt: string, detectionLimit: string, pql: string,
+    lowerQuantLimit: string, upperQuantLimit: string, labSampPrepIdx: number, labSampPrepStartDt: string, dilutionFactor: string,
+    freqClassCode: string, freqClassUnit: string, createUser: string) {
+    const httpOptions = {};
+    return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateTWqxResult(resultIdx, activityIdx, resultDetectCondition,
+      charName, resultSampFraction, resultMsr, resultMsrUnit, resultStatus, resultValueType, resultComment,
+      bioIntentName, bioIndividualId, bioTaxonomy, bioSampleTissueAnatomy, analyticMethodIdx, labIdx, labanalysisStartDt, detectionLimit, pql,
+      lowerQuantLimit, upperQuantLimit, labSampPrepIdx, labSampPrepStartDt, dilutionFactor,
+      freqClassCode, freqClassUnit, createUser), '', httpOptions);
+  }
+  GetT_WQX_REF_TAXA_ByOrg(orgId: string): Observable<WqxRefData[]> {
+    return this.http.get<WqxRefData[]>(WebApi.TWQXRefDataApi.getTWqxRefTaxaByOrg(orgId));
+  }
 }

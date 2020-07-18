@@ -108,6 +108,9 @@ export module WebApi {
     public static readonly getWqxActivityById =
       (activityIdx: number) =>
         `${environment.api.owUrl}/api/activity/getWqxActivityById?ActivityIDX=${activityIdx}`
+    public static readonly getTWqxResult =
+      (activityIdx: number) =>
+        `${environment.api.owUrl}/api/activity/getTWqxResult?ActivityIDX=${activityIdx}`
   }
   export class TWQXRefDataApi {
     public static readonly getTWqxRefDefaultTimeZone =
@@ -194,5 +197,20 @@ export module WebApi {
         sampPrepIdx: number, sampPrepCountType: string, sampPrepContColor: string, sampPrepChemPeserv: string, sampPrepThermPreserv: string,
         sampPrepStorageDesc, wqxSubmitStatus: string, actInd: boolean, wqxInd: boolean, creatUser: string, entryType: string) =>
         `${environment.api.owUrl}/api/activity/insertOrUpdateWqxActivity?aCTIVITY_IDX=${activityIdx}&oRG_ID=${orgId}&pROJECT_IDX=${projectIdx}&mONLOC_IDX=${monlocIdx}&aCTIVITY_ID=${activityId}&aCT_TYPE=${actType}&aCT_MEDIA=${actMedia}&aCT_SUBMEDIA=${actSubMedia}&aCT_START_DT=${actStartDate}&aCT_END_DT=${actEndDt}&aCT_TIME_ZONE=${actTimeZone}&rELATIVE_DEPTH_NAME=${relativeDepthName}&aCT_DEPTHHEIGHT_MSR=${actDepthHeightMsr}&aCT_DEPTHHEIGHT_MSR_UNIT=${actDepthHeightMsrUnit}&tOP_DEPTHHEIGHT_MSR${topDepthHeightMsr}&tOP_DEPTHHEIGHT_MSR_UNIT=${topDepthHeightMsrUnit}&bOT_DEPTHHEIGHT_MSR=${botDepthHeightMsr}&bOT_DEPTHHEIGHT_MSR_UNIT=${botDepthHeightMsrUnit}&dEPTH_REF_POINT=${depthRefPoint}&aCT_COMMENT=${actComment}&bIO_ASSEMBLAGE_SAMPLED=${bioAssemblageSampled}&bIO_DURATION_MSR=${bioDurationMsr}&bIO_DURATION_MSR_UNIT=${bioDurationMsrUnit}&bIO_SAMP_COMPONENT=${bioSampComponent}&bIO_SAMP_COMPONENT_SEQ=${bioSampComponentSeq}&bIO_REACH_LEN_MSR=${bioReachLenMsr}&bIO_REACH_LEN_MSR_UNIT=${bioReachLenMsrUnit}&bIO_REACH_WID_MSR=${bioReachWidMsr}&bIO_REACH_WID_MSR_UNIT=${bioReachWidMsrUnit}&bIO_PASS_COUNT=${bioPassCount}&bIO_NET_TYPE=${bioNetType}&bIO_NET_AREA_MSR=${bioNetAreaMsr}&bIO_NET_AREA_MSR_UNIT=${bioNetAreaMsrUnit}&bIO_NET_MESHSIZE_MSR=${bioNetMeshsizeMsr}&bIO_MESHSIZE_MSR_UNIT=${bioMeshsizeMsrUnit}&bIO_BOAT_SPEED_MSR=${bioBoatSpeedMsr}&bIO_BOAT_SPEED_MSR_UNIT=${bioBoatSpeedMsrUnit}&bIO_CURR_SPEED_MSR=${bioCurrSpeedMsr}&bIO_CURR_SPEED_MSR_UNIT=${bioCurrSpeedMsrUnit}&bIO_TOXICITY_TEST_TYPE=${bioToxicityTestType}&sAMP_COLL_METHOD_IDX=${sampCollMethodIdx}&sAMP_COLL_EQUIP=${sampCollEquip}&sAMP_COLL_EQUIP_COMMENT=${sampCollEquipComment}&sAMP_PREP_IDX=${sampPrepIdx}&sAMP_PREP_CONT_TYPE=${sampPrepCountType}&sAMP_PREP_CONT_COLOR=${sampPrepContColor}&sAMP_PREP_CHEM_PRESERV=${sampPrepChemPeserv}&sAMP_PREP_THERM_PRESERV=${sampPrepThermPreserv}&sAMP_PREP_STORAGE_DESC=${sampPrepStorageDesc}&wQX_SUBMIT_STATUS=${wqxSubmitStatus}&aCT_IND=${actInd}&wQX_IND=${wqxInd}&cREATE_USER=${creatUser}&eNTRY_TYPE=${entryType}`
+    public static readonly getTWqxRefCharacteristicByOrg =
+      (orgId: string, rbpInd: boolean) =>
+        `${environment.api.owUrl}/api/refdata/getTWqxRefCharacteristicByOrg?OrgID=${orgId}&RBPInd=${rbpInd}`
+    public static readonly insertOrUpdateTWqxResult =
+      (resultIdx: number, activityIdx: number, resultDetectCondition: string,
+        charName: string, resultSampFraction: string, resultMsr: string, resultMsrUnit: string,
+        resultStatus: string, resultValueType: string, resultComment: string,
+        bioIntentName: string, bioIndividualId: string, bioTaxonomy: string, bioSampleTissueAnatomy: string,
+        analyticMethodIdx: number, labIdx: number, labanalysisStartDt: string, detectionLimit: string, pql: string,
+        lowerQuantLimit: string, upperQuantLimit: string, labSampPrepIdx: number, labSampPrepStartDt: string, dilutionFactor: string,
+        freqClassCode: string, freqClassUnit: string, createUser: string) =>
+        `${environment.api.owUrl}/api/refdata/insertOrUpdateTWqxResult?rESULT_IDX=${resultIdx}&aCTIVITY_IDX=${activityIdx}&rESULT_DETECT_CONDITION=${resultDetectCondition}&cHAR_NAME=${charName}&rESULT_SAMP_FRACTION=${resultSampFraction}&rESULT_MSR=${resultMsr}&rESULT_MSR_UNIT=${resultMsrUnit}&rESULT_STATUS=${resultStatus}&rESULT_VALUE_TYPE=${resultValueType}&rESULT_COMMENT=${resultComment}&bIO_INTENT_NAME=${bioIntentName}&bIO_INDIVIDUAL_ID=${bioIndividualId}&bIO_TAXONOMY=${bioTaxonomy}&bIO_SAMPLE_TISSUE_ANATOMY=${bioSampleTissueAnatomy}&aNALYTIC_METHOD_IDX=${analyticMethodIdx}&lAB_IDX=${labIdx}&lAB_ANALYSIS_START_DT=${labanalysisStartDt}&dETECTION_LIMIT=${detectionLimit}&pQL=${pql}&lOWER_QUANT_LIMIT=${lowerQuantLimit}&uPPER_QUANT_LIMIT=${upperQuantLimit}&lAB_SAMP_PREP_IDX=${labSampPrepIdx}&lAB_SAMP_PREP_START_DT=${labSampPrepStartDt}&dILUTION_FACTOR=${dilutionFactor}&fREQ_CLASS_CODE=${freqClassCode}&fREQ_CLASS_UNIT=${freqClassUnit}&cREATE_USER=${createUser}`
+    public static readonly getTWqxRefTaxaByOrg =
+      (orgId: string) =>
+        `${environment.api.owUrl}/api/refdata/getTWqxRefTaxaByOrg?OrgID=${orgId}`
   }
 }

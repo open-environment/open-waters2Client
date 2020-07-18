@@ -230,9 +230,6 @@
           </div>
           <div class="row">
             <div class="col">
-              form valid: {{f.form.valid}} <br />
-              canUserEdit: {{ canUserEdit }}
-              <hr>
               <button nbButton status="success" class="mr-2" [disabled]="!f.form.valid && !canUserEdit">
                 Save
               </button>
@@ -252,7 +249,8 @@
             </div>
             <div class="col">
               Last Modified:
-              <label ngDefaultControl name="lblModifyDate" [(ngModel)]="lblModifyDate" nbLabel></label>
+              <label ngDefaultControl name="lblModifyDate" [(ngModel)]="lblModifyDate"
+                nbLabel>{{ lblModifyDate }}</label>
             </div>
             <div class="col"></div>
           </div>
@@ -260,7 +258,12 @@
             <div class="col-12">
               <nb-card>
                 <nb-card-header>RESULTS (click row to edit)</nb-card-header>
-                <nb-card-body> </nb-card-body>
+                <nb-card-body>
+                  <ng2-smart-table [settings]="activitySetting" [source]="results"
+                    (deleteConfirm)="onDeleteConfirm($event)" (custom)="onCustom($event)"
+                    (editConfirm)="onSaveConfirm($event)">
+                  </ng2-smart-table>
+                </nb-card-body>
                 <nb-card-footer>
                   <button nbButton>Excel</button>
                 </nb-card-footer>

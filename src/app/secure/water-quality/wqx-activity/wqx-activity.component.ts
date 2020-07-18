@@ -244,7 +244,7 @@ export class WqxActivityComponent implements OnInit {
   }
   onSubmit() {
     console.log('submit called!');
-    // console.log(this.ngModelDate);
+    this.populateData(false);
   }
 
   onAddNew(): void {
