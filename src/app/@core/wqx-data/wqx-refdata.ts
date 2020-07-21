@@ -70,6 +70,18 @@ export interface WqxRefSampColMethod {
   updateDt: string;
 
 }
+export interface WqxRefCharLimits {
+  charName: string;
+  unitName: string;
+  lowerBound: number;
+  upperBound: number;
+  actInd: boolean;
+  createDt: string;
+  createUserId: string;
+  updateDt: string;
+  updateUserId: string;
+
+}
 export abstract class WqxRefDataData {
   abstract GetT_WQX_REF_DEFAULT_TIME_ZONE(): Observable<WqxRefDefaultTimeZone[]>;
 }

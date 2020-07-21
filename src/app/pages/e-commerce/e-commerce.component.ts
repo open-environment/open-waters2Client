@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'ngx-ecommerce',
   templateUrl: './e-commerce.component.html',
+  styleUrls: ['./e-commerce.component.scss'],
 })
 export class ECommerceComponent {
   currentUser: User;
@@ -93,12 +94,12 @@ export class ECommerceComponent {
       useR_ID: {
         title: 'User ID',
         type: 'string',
-        filter: true,
+        filter: false,
       },
       orG_ID: {
         title: 'Organization',
         type: 'string',
-        filter: true,
+        filter: false,
       },
     },
     noDataMessage: 'No Admin tasks at this time.',

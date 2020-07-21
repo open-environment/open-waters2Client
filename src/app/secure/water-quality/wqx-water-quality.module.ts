@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { NbCardModule, NbIconModule, NbInputModule, NbTreeGridModule, NbCheckboxModule, NbSelectModule, NbRadioModule, NbListModule, NbAlertModule, NbTabsetModule, NbToastrModule, NbWindowModule, NbButtonModule, NbDatepickerModule } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
@@ -27,8 +27,9 @@ import { ProjectConfigWindowComponent } from './wqx-project/project-config-windo
 import { WqxProjectEditComponent } from './wqx-project/wqx-project-edit/wqx-project-edit.component';
 import { ActivityConfigWindowComponent } from './wqx-activity/activity-config-window/activity-config-window.component';
 import { WqxActivityEditComponent } from './wqx-activity/wqx-activity-edit/wqx-activity-edit.component';
-
-
+import { TableModule } from 'primeng/table';
+import { DropdownModule, Calendar, CalendarModule } from 'primeng/primeng';
+import { AddRowDirective } from '../add-row.directive';
 
 @NgModule({
   imports: [
@@ -51,6 +52,9 @@ import { WqxActivityEditComponent } from './wqx-activity/wqx-activity-edit/wqx-a
     NbWindowModule.forRoot(),
     NbButtonModule,
     NbDatepickerModule.forRoot(),
+    TableModule,
+    DropdownModule,
+    CalendarModule,
   ],
   declarations: [
     ...wqxRoutedComponents,
@@ -71,6 +75,7 @@ import { WqxActivityEditComponent } from './wqx-activity/wqx-activity-edit/wqx-a
     WqxProjectEditComponent,
     ActivityConfigWindowComponent,
     WqxActivityEditComponent,
+    AddRowDirective,
   ],
   providers: [
     WQXRefDataService,
@@ -83,5 +88,6 @@ import { WqxActivityEditComponent } from './wqx-activity/wqx-activity-edit/wqx-a
     ProjectConfigWindowComponent,
     ActivityConfigWindowComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class WqxWaterQualityModule { }

@@ -59,4 +59,32 @@ export const WQX_MENU_ITEMS: NbMenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Ref-Data',
+    icon: 'shopping-cart-outline',
+    link: '/secure/ref-data',
+    home: true,
+  },
+  {
+    title: 'Administration',
+    icon: 'grid-outline',
+    children: [
+      {
+        title: 'User Management',
+        link: '/secure/admin/users',
+      },
+      {
+        title: 'Role Management',
+        link: '/secure/admin/roles',
+      },
+      {
+        title: 'App Settings',
+        link: '/secure/admin/app-settings',
+      },
+      {
+        title: 'Data Synch',
+        link: '/secure/admin/data-synch',
+      },
+    ],
+  },
 ];

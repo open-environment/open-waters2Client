@@ -229,44 +229,330 @@
             </div>
           </div>
           <div class="row">
-            <div class="col">
-              <button nbButton status="success" class="mr-2" [disabled]="!f.form.valid && !canUserEdit">
-                Save
-              </button>
-              <button nbButton type="button" status="danger" (click)="onExitClicked()">Exit</button>
+            <div class="col-3">
+              <div class="row">
+                <div class="col-6">
+                  <button nbButton status="success" class="mr-2" [disabled]="!f.form.valid && !canUserEdit">
+                    <nb-icon icon="save-outline"></nb-icon>Save
+                  </button>
+                </div>
+                <div class="col-6">
+                  <button nbButton type="button" status="danger" (click)="onExitClicked()">
+                    <nb-icon icon="close-square-outline"></nb-icon>Exit
+                  </button>
+                </div>
+              </div>
             </div>
-            <div class="col">
-              Result Type:
-              <nb-select fullWidth status="primary" name="ddlEntryType" [(ngModel)]="entryTypeSelected"
-                #vddlEntryType="ngModel" [ngClass]="{
+            <div class="col-4">
+              <div class="row">
+                <div class="col-4">Result Type:</div>
+                <div class="col-8">
+                  <nb-select fullWidth status="primary" name="ddlEntryType" [(ngModel)]="entryTypeSelected"
+                    #vddlEntryType="ngModel" [ngClass]="{
                 'is-invalid':
                   f.submitted && vddlEntryType.invalid
               }" required>
-                <nb-option value="C">Chemical (default)</nb-option>
-                <nb-option value="H">Habitat Assessment</nb-option>
-                <nb-option value="T">Taxonomy Counts</nb-option>
-              </nb-select>
+                    <nb-option value="C">Chemical (default)</nb-option>
+                    <nb-option value="H">Habitat Assessment</nb-option>
+                    <nb-option value="T">Taxonomy Counts</nb-option>
+                  </nb-select>
+                </div>
+              </div>
             </div>
-            <div class="col">
-              Last Modified:
-              <label ngDefaultControl name="lblModifyDate" [(ngModel)]="lblModifyDate"
-                nbLabel>{{ lblModifyDate }}</label>
+            <div class="col-5">
+              <div class="row">
+                <div class="col-4">
+                  <label nbLabel>Last Modified:</label>
+                </div>
+                <div class="col-8">
+                  <label ngDefaultControl name="lblModifyDate" [(ngModel)]="lblModifyDate"
+                    nbLabel>{{ lblModifyDate | date:'medium' }}</label></div>
+              </div>
             </div>
-            <div class="col"></div>
           </div>
           <div class="row" *ngIf="showResults === true">
             <div class="col-12">
               <nb-card>
                 <nb-card-header>RESULTS (click row to edit)</nb-card-header>
                 <nb-card-body>
-                  <ng2-smart-table [settings]="activitySetting" [source]="results"
+                  <!-- <ng2-smart-table [settings]="activitySetting" [source]="results"
                     (deleteConfirm)="onDeleteConfirm($event)" (custom)="onCustom($event)"
                     (editConfirm)="onSaveConfirm($event)">
-                  </ng2-smart-table>
+                  </ng2-smart-table> -->
+                  <p-table #resultDt [value]="results" dataKey="resultIdx" editMode="row" [autoLayout]="true">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th style="width:8em"></th>
+                        <th>Characteristic</th>
+                        <th *ngIf="checkColShow('Taxonomy') === true">Taxonomy</th>
+                        <th>Result</th>
+                        <th>Unit</th>
+                        <th>Detection Limit</th>
+                        <th>Analytical Method</th>
+                        <th>Samp Fraction</th>
+                        <th>Value Type</th>
+                        <th>Status</th>
+                        <th>Lab Analysis Date</th>
+                        <th>PQL</th>
+                        <th>Lower Quant Limit</th>
+                        <th>Upper Quant Limit</th>
+                        <th>Biological Intent</th>
+                        <th>Frequency Class</th>
+                        <th>Comment</th>
+
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+                      <tr [pEditableRow]="rowData">
+                        <td style="text-align:center">
+
+                          <button nbButton ghost status="basic" *ngIf="!editing" (click)="onRowEditInit(rowData)"
+                            pInitEditableRow>
+                            <nb-icon icon="edit-outline"></nb-icon>
+                          </button>
+                          <button nbButton ghost status="basic" *ngIf="!editing" (click)="onRowDelete(rowData)"
+                            pInitEditableRow>
+                            <nb-icon icon="trash-2-outline"></nb-icon>
+                          </button>
+                          <button nbButton ghost status="success" *ngIf="editing" (click)="onRowEditSave(rowData)"
+                            pSaveEditableRow style="margin-right: .5em">
+                            <nb-icon icon="checkmark"></nb-icon>
+                          </button>
+                          <button nbButton ghost status="danger" *ngIf="editing" (click)="onRowEditCancel(rowData, ri)"
+                            pCancelEditableRow>
+                            <nb-icon icon="close-outline"></nb-icon>
+                          </button>
+                          <!--  <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil"
+                            class="ui-button-info" (click)="onRowEditInit(rowData)"></button> 
+                          <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check"
+                            class="ui-button-success" style="margin-right: .5em"
+                            (click)="onRowEditSave(rowData)"></button>
+                          <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times"
+                            class="ui-button-danger" (click)="onRowEditCancel(rowData, ri)"></button> -->
+                        </td>
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <p-dropdown [options]="charNameList" [(ngModel)]="rowData.charName" name="charName"
+                                appendTo="body">
+                              </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{rowData.charName}}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <td *ngIf="checkColShow('Taxonomy') === true">
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <p-dropdown [options]="bioSubjectTaxonomyList" [(ngModel)]="rowData.bioSubjectTaxonomy"
+                                name="bioSubjectTaxonomy" appendTo="body">
+                              </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{rowData.bioSubjectTaxonomy}}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.resultMsr" name="result" maxlength="12"
+                                required>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{rowData.resultMsr}}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Unit-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <p-dropdown [options]="unitList" [(ngModel)]="rowData.resultMsrUnit" name=" resultMsrUnit"
+                                appendTo="body">
+                              </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{rowData.resultMsrUnit}}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Detection Limit-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.resultDetectCondition"
+                                name="resultDetectCondition" maxlength="12" required>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{rowData.resultDetectCondition}} {{rowData.resultMsr}}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Analytical Method-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <p-dropdown [options]="analMethodList" [(ngModel)]="rowData.analyticMethodIdx"
+                                name="analyticMethodIdx" appendTo="body">
+                              </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              <!-- {{ rowData.analyticMethodIdxNavigation.analyticMethodCtx  }}
+                              {{ rowData.analyticMethodIdxNavigation.analyticMethodId  }} -->
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Samp Fraction-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <p-dropdown [options]="sampFractionList" [(ngModel)]="rowData.resultSampFraction"
+                                name="resultSampFraction" appendTo="body">
+                              </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.resultSampFraction }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Value Type-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <p-dropdown [options]="valueTypeList" [(ngModel)]="rowData.resultValueType"
+                                name="resultValueType" appendTo="body">
+                              </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.resultValueType }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Status-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <p-dropdown [options]="statusList" [(ngModel)]="rowData.resultStatus" name="resultStatus"
+                                appendTo="body">
+                              </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.resultStatus }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Lab Analysis Date-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <!-- <input pInputText type="text" [(ngModel)]="rowData.labAnalysisStartDt"
+                                name="labAnalysisStartDt"> -->
+                              <p-calendar dataType="string" [(ngModel)]="rowData.labAnalysisStartDt"
+                                name="labAnalysisStartDt" appendTo="body"></p-calendar>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.labAnalysisStartDt | date:'shortDate' }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--PQL-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.pql" name="pql" maxlength="12">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.pql }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Lower Quant Limit-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.lowerQuantLimit" name="lowerQuantLimit"
+                                maxlength="12">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.lowerQuantLimit }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Upper Quant Limit-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.upperQuantLimit" name="upperQuantLimit"
+                                maxlength="12">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.upperQuantLimit }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Biological Intent-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <p-dropdown [options]="bioIntentList" [(ngModel)]="rowData.bioIntentName"
+                                name="bioIntentName" appendTo="body">
+                              </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.bioIntentName }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Frequency Class-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <p-dropdown [options]="freqClassList" [(ngModel)]="rowData.freqClassCode"
+                                name="freqClassCode" appendTo="body">
+                              </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.freqClassCode }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Comment-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.resultComment" name="resultComment">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.resultComment }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                  <!-- <button pButton type="button" icon="pi pi-plus" class="ui-button-info" pAddRow [table]="resultDt"
+                    [newRow]="newRow()">Add</button> -->
+                  <button nbButton status="info" size="tiny" type="button" pAddRow [table]="resultDt"
+                    [newRow]="newRow()">
+                    <nb-icon icon="plus-square-outline"></nb-icon>Add
+                  </button>
                 </nb-card-body>
                 <nb-card-footer>
-                  <button nbButton>Excel</button>
+                  <button nbButton size="tiny">
+                    <nb-icon icon="download-outline"></nb-icon>Excel
+                  </button>
                 </nb-card-footer>
+              </nb-card>
+            </div>
+          </div>
+          <div class="row" *ngIf="showMatrics === true">
+            <div class="col-12">
+              <nb-card>
+                <nb-card-header>Activity Metrics</nb-card-header>
+                <nb-card-body></nb-card-body>
+                <nb-card-footer></nb-card-footer>
               </nb-card>
             </div>
           </div>

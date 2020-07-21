@@ -32,9 +32,12 @@ import { WQXActivityService } from './@core/wqx-services/wqx-activity-service';
 // import { AddCharWindowComponent } from './secure/water-quality/wqx-org-data/add-char-window/add-char-window.component';
 import { WqxMonlocService } from './@core/wqx-services/wqx-monloc.service';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
+
   ],
   imports: [
     BrowserModule,

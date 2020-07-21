@@ -143,7 +143,7 @@ export interface WqxResult {
   freqClassLower: string;
   analyticMethodIdx: number;
   labIdx: number;
-  labAnalysisStartDt: string;
+  labAnalysisStartDt: Date;
   labAnalysisEndDt: string;
   labAnalysisTimezone: string;
   resultLabCommentCode: string;
@@ -160,7 +160,6 @@ export interface WqxResult {
   labSampPrepStartDt: string;
   labSampPrepEndDt: string;
   dilutionFactor: string;
-
 }
 export abstract class WqxActivityData {
   abstract GetWQX_Activities(ActInd: boolean, OrgID: string, MonLocIDX: number, startDt: string, endDt: string, ActType: string, WQXPending: boolean, ProjectIDX: number): Observable<WqxActivity[]>;

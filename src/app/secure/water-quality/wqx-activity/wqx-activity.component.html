@@ -61,7 +61,7 @@
               </nb-card-body>
               <nb-card-footer>
                 <button nbButton status="success" name="applyBtn" type="submit">
-                  Apply
+                  <nb-icon icon="checkmark-circle-outline"></nb-icon>Apply
                 </button>
               </nb-card-footer>
             </nb-card>
@@ -80,14 +80,14 @@
           <div class="row mt-3">
             <button nbButton [routerLink]="['/secure/water-quality/wqx-activity-edit']"
               [queryParams]="{ activityIdx: -1 }" status="success" class="mr-3">
-              Add New
+              <nb-icon icon="plus-square-outline"></nb-icon>Add New
             </button>
             <span class="float-right">
               <button nbButton (click)="onExcel()" status="info" class="mr-3">
-                Excel
+                <nb-icon icon="download-outline"></nb-icon>Excel
               </button>
               <button nbButton (click)="onConfig()" status="info">
-                Config
+                <nb-icon icon="settings-outline"></nb-icon>Config
               </button>
             </span>
           </div>

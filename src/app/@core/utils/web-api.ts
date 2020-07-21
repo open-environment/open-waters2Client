@@ -212,5 +212,14 @@ export module WebApi {
     public static readonly getTWqxRefTaxaByOrg =
       (orgId: string) =>
         `${environment.api.owUrl}/api/refdata/getTWqxRefTaxaByOrg?OrgID=${orgId}`
+    public static readonly getTWqxRefCharLimitsByNameUnit =
+      (charName: string, unitName: string) =>
+        `${environment.api.owUrl}/api/refdata/getTWqxRefCharLimitsByNameUnit?CharName=${charName}&UnitName=${unitName}`
+    public static readonly updateWqxActivityWqxStatus =
+      (activityIdx: number, wqxSubmitStatus, actInd: boolean, wqxInd: boolean, createUser: string) =>
+        `${environment.api.owUrl}/api/activity/updateWqxActivityWqxStatus?aCTIVITY_IDX=${activityIdx}&wQX_SUBMIT_STATUS=${wqxSubmitStatus}&aCT_IND=${actInd}&wQX_IND=${wqxInd}&cREATE_USER=${createUser}`
+    public static readonly deleteTWqxResult =
+      (resultIdx: number) =>
+        `${environment.api.owUrl}/api/refdata/deleteTWqxResult?ResultIdx=${resultIdx}`
   }
 }

@@ -63,7 +63,7 @@
 /******/
 /******/ 	// script path function
 /******/ 	function jsonpScriptSrc(chunkId) {
-/******/ 		return __webpack_require__.p + "" + ({"default~app-pages-pages-module~secure-wqx-pages-module":"default~app-pages-pages-module~secure-wqx-pages-module","app-pages-pages-module":"app-pages-pages-module","secure-wqx-pages-module":"secure-wqx-pages-module","water-quality-wqx-water-quality-module":"water-quality-wqx-water-quality-module"}[chunkId]||chunkId) + "-es5.js"
+/******/ 		return __webpack_require__.p + "" + ({"default~app-pages-pages-module~secure-wqx-pages-module":"default~app-pages-pages-module~secure-wqx-pages-module","secure-wqx-pages-module":"secure-wqx-pages-module","default~app-pages-pages-module~water-quality-wqx-water-quality-module":"default~app-pages-pages-module~water-quality-wqx-water-quality-module","app-pages-pages-module":"app-pages-pages-module","water-quality-wqx-water-quality-module":"water-quality-wqx-water-quality-module"}[chunkId]||chunkId) + "-es5.js"
 /******/ 	}
 /******/
 /******/ 	// The require function

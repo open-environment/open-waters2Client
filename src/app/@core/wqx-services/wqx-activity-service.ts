@@ -62,4 +62,8 @@ export class WQXActivityService extends WqxActivityData {
   GetT_WQX_RESULT(activityIdx: number): Observable<WqxResult[]> {
     return this.http.get<WqxResult[]>(WebApi.TWQXActivityApi.getTWqxResult(activityIdx));
   }
+  UpdateWQX_ACTIVITY_WQXStatus(activityIdx: number, wqxSubmitStatus, actInd: boolean, wqxInd: boolean, createUser: string): Observable<number> {
+    const httpOptions = {};
+    return this.http.put<number>(WebApi.TWQXRefDataApi.updateWqxActivityWqxStatus(activityIdx, wqxSubmitStatus, actInd, wqxInd, createUser), '', httpOptions);
+  }
 }

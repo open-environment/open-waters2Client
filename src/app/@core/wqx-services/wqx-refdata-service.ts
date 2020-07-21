@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
-import { WqxRefDataData, WqxRefDefaultTimeZone, WqxRefCharacteristic, AnalMethodDisplay, WqxRefTaxaOrg, WqxRefCharOrg, WqxRefCounty, WqxRefSampColMethod } from '../wqx-data/wqx-refdata';
+import { WqxRefDataData, WqxRefDefaultTimeZone, WqxRefCharacteristic, AnalMethodDisplay, WqxRefTaxaOrg, WqxRefCharOrg, WqxRefCounty, WqxRefSampColMethod, WqxRefCharLimits } from '../wqx-data/wqx-refdata';
 import { WqxRefData } from '../wqx-data/wqx-organization';
 
 @Injectable()
@@ -91,6 +91,11 @@ export class WQXRefDataService extends WqxRefDataData {
     analyticMethodIdx: number, labIdx: number, labanalysisStartDt: string, detectionLimit: string, pql: string,
     lowerQuantLimit: string, upperQuantLimit: string, labSampPrepIdx: number, labSampPrepStartDt: string, dilutionFactor: string,
     freqClassCode: string, freqClassUnit: string, createUser: string) {
+    console.log(WebApi.TWQXRefDataApi.insertOrUpdateTWqxResult(resultIdx, activityIdx, resultDetectCondition,
+      charName, resultSampFraction, resultMsr, resultMsrUnit, resultStatus, resultValueType, resultComment,
+      bioIntentName, bioIndividualId, bioTaxonomy, bioSampleTissueAnatomy, analyticMethodIdx, labIdx, labanalysisStartDt, detectionLimit, pql,
+      lowerQuantLimit, upperQuantLimit, labSampPrepIdx, labSampPrepStartDt, dilutionFactor,
+      freqClassCode, freqClassUnit, createUser));
     const httpOptions = {};
     return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateTWqxResult(resultIdx, activityIdx, resultDetectCondition,
       charName, resultSampFraction, resultMsr, resultMsrUnit, resultStatus, resultValueType, resultComment,
@@ -100,5 +105,11 @@ export class WQXRefDataService extends WqxRefDataData {
   }
   GetT_WQX_REF_TAXA_ByOrg(orgId: string): Observable<WqxRefData[]> {
     return this.http.get<WqxRefData[]>(WebApi.TWQXRefDataApi.getTWqxRefTaxaByOrg(orgId));
+  }
+  GetT_WQX_REF_CHAR_LIMITS_ByNameUnit(charName: string, unitName: string): Observable<WqxRefCharLimits> {
+    return this.http.get<WqxRefCharLimits>(WebApi.TWQXRefDataApi.getTWqxRefCharLimitsByNameUnit(charName, unitName));
+  }
+  DeleteT_WQX_RESULT(resultIdx: number): Observable<number> {
+    return this.http.delete<number>(WebApi.TWQXRefDataApi.deleteTWqxResult(resultIdx));
   }
 }

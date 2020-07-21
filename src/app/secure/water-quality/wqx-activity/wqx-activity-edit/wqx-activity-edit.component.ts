@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { WqxMonloc } from '../../../../@core/wqx-data/wqx-monloc';
 import { WqxProject } from '../../../../@core/wqx-data/wqx-project';
 import { WqxRefData } from '../../../../@core/wqx-data/wqx-organization';
-import { WqxRefSampColMethod, WqxRefCharacteristic } from '../../../../@core/wqx-data/wqx-refdata';
+import { WqxRefSampColMethod, WqxRefCharacteristic, AnalMethodDisplay, WqxRefCharLimits } from '../../../../@core/wqx-data/wqx-refdata';
 import { User } from '../../../../@core/data/users';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { WqxPubsubServiceService } from '../../../../@core/wqx-services/wqx-pubsub-service.service';
@@ -12,10 +12,12 @@ import { WqxMonlocService } from '../../../../@core/wqx-services/wqx-monloc.serv
 import { WQXProjectService } from '../../../../@core/wqx-services/wqx-project-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WQXActivityService } from '../../../../@core/wqx-services/wqx-activity-service';
-import { NbToastrService } from '@nebular/theme';
+import { NbToastrService, NbListItemComponent } from '@nebular/theme';
 import { finalize } from 'rxjs/operators';
 import { WqxActivity, WqxResult } from '../../../../@core/wqx-data/wqx-activity';
 import { LocalDataSource } from 'ng2-smart-table';
+import { NgModel } from '@angular/forms';
+import { SelectItem } from 'primeng/primeng';
 
 @Component({
   selector: 'ngx-wqx-activity-edit',
@@ -30,8 +32,17 @@ export class WqxActivityEditComponent implements OnInit {
   user: User;
   currentOrgId: string;
 
-  charNameList: { value: string, title: string }[] = [];
-  bioSubjectTaxonomyList: { value: string, title: string }[] = [];
+  // charNameList: { value: string, title: string }[] = [];
+  charNameList: SelectItem[] = [];
+  // bioSubjectTaxonomyList: { value: string, title: string }[] = [];
+  bioSubjectTaxonomyList: SelectItem[] = [];
+  unitList: SelectItem[] = [];
+  analMethodList: SelectItem[] = [];
+  sampFractionList: SelectItem[] = [];
+  valueTypeList: SelectItem[] = [];
+  statusList: SelectItem[] = [];
+  bioIntentList: SelectItem[] = [];
+  freqClassList: SelectItem[] = [];
 
   activitySetting = {
     hideSubHeader: true,
@@ -92,8 +103,10 @@ export class WqxActivityEditComponent implements OnInit {
       },
     },
   };
-  // results: WqxResult[] = [];
-  results: LocalDataSource = new LocalDataSource();
+  results: WqxResult[] = [];
+  // results: LocalDataSource = new LocalDataSource();
+  resultCols: { col: string, show: boolean }[] = [];
+  rowData: WqxResult;
 
   lblMsg: string = '';
   lblMsgShow: boolean = false;
@@ -130,6 +143,7 @@ export class WqxActivityEditComponent implements OnInit {
   canUserEdit: Boolean = false;
   activityIdx: number;
   showResults: boolean = true;
+  showMatrics: boolean = true;
 
   constructor(private authService: NbAuthService,
     private pubSubService: WqxPubsubServiceService,
@@ -171,6 +185,24 @@ export class WqxActivityEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.resultCols = [
+      { 'col': 'Characteristic', show: true },
+      { 'col': 'Taxonomy', show: true },
+      { 'col': 'Result', show: true },
+      { 'col': 'Unit', show: true },
+      { 'col': 'Detection Limit', show: true },
+      { 'col': 'Analytical Method', show: true },
+      { 'col': 'Samp Fraction', show: true },
+      { 'col': 'Value Type', show: true },
+      { 'col': 'Status', show: true },
+      { 'col': 'Lab Analysis Date', show: true },
+      { 'col': 'PQL', show: true },
+      { 'col': 'Lower Quant Limit', show: true },
+      { 'col': 'Upper Quant Limit', show: true },
+      { 'col': 'Biological Intent', show: true },
+      { 'col': 'Frequency Class', show: true },
+      { 'col': 'Comment', show: true },
+    ];
     this.activatedRoute.queryParams.subscribe(params => {
       this.activityIdx = parseInt(params['activityIdx'], 10);
 
@@ -394,6 +426,7 @@ export class WqxActivityEditComponent implements OnInit {
       '', 0, '', '', '', '', '', 'U', this.chkActInd, this.chkWQXInd, this.user.name, this.entryTypeSelected).subscribe(
         (result) => {
           if (result > 0) {
+            this.toasterService.success('Record updated succesfully.');
             this.showResults = true;
           } else {
             this.toasterService.danger('Error updating record.');
@@ -411,8 +444,9 @@ export class WqxActivityEditComponent implements OnInit {
     this.refDataService.GetT_WQX_REF_CHARACTERISTIC_ByOrg(this.currentOrgId, false).subscribe(
       (data: WqxRefCharacteristic[]) => {
         if (data !== null && data !== undefined) {
+          this.charNameList.push({ label: '', value: null });
           data.forEach(obj => {
-            this.charNameList.push({ value: obj.charName, title: obj.charName });
+            this.charNameList.push({ label: obj.charName, value: obj.charName });
           });
           const newSettings = this.activitySetting;
           newSettings.columns.charName.editor.config.list = this.charNameList;
@@ -429,12 +463,13 @@ export class WqxActivityEditComponent implements OnInit {
     this.refDataService.GetT_WQX_REF_TAXA_ByOrg(this.currentOrgId).subscribe(
       (data: WqxRefData[]) => {
         if (data !== null && data !== undefined) {
+          this.bioSubjectTaxonomyList.push({ label: '', value: null });
           data.forEach(obj => {
-            this.bioSubjectTaxonomyList.push({ value: obj.value, title: obj.text });
+            this.bioSubjectTaxonomyList.push({ label: obj.text, value: obj.value });
           });
-          const newSettings = this.activitySetting;
+          /* const newSettings = this.activitySetting;
           newSettings.columns.bioSubjectTaxonomy.editor.config.list = this.bioSubjectTaxonomyList;
-          this.activitySetting = Object.assign({}, newSettings);
+          this.activitySetting = Object.assign({}, newSettings); */
 
           // localStorage.setItem('charNameListLS', JSON.stringify(this.charNameList));
         }
@@ -443,10 +478,98 @@ export class WqxActivityEditComponent implements OnInit {
         console.log(err);
       },
     );
-
+    this.refDataService.GetT_WQX_REF_DATA('MeasureUnit', true, true).subscribe(
+      (data: WqxRefData[]) => {
+        if (data !== null && data !== undefined) {
+          this.unitList.push({ label: '', value: null });
+          data.forEach(obj => {
+            this.unitList.push({ label: obj.text, value: obj.value });
+          });
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+    );
+    this.refDataService.GetT_WQX_REF_ANAL_METHOD(true).subscribe(
+      (data: AnalMethodDisplay[]) => {
+        if (data !== null && data !== undefined) {
+          this.analMethodList.push({ label: '', value: null });
+          data.forEach(obj => {
+            this.analMethodList.push({ label: obj.analMethodDisplayName, value: obj.analytiC_METHOD_IDX });
+          });
+        }
+      },
+    );
+    this.refDataService.GetT_WQX_REF_DATA('ResultSampleFraction', true, true).subscribe(
+      (data: WqxRefData[]) => {
+        if (data !== null && data !== undefined) {
+          this.sampFractionList.push({ label: '', value: null });
+          data.forEach(obj => {
+            this.sampFractionList.push({ label: obj.value, value: obj.text });
+          });
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+    );
+    this.refDataService.GetT_WQX_REF_DATA('ResultValueType', true, true).subscribe(
+      (data: WqxRefData[]) => {
+        if (data !== null && data !== undefined) {
+          this.valueTypeList.push({ label: '', value: null });
+          data.forEach(obj => {
+            this.valueTypeList.push({ label: obj.value, value: obj.value });
+          });
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+    );
+    this.refDataService.GetT_WQX_REF_DATA('ResultStatus', true, true).subscribe(
+      (data: WqxRefData[]) => {
+        if (data !== null && data !== undefined) {
+          this.statusList.push({ label: '', value: null });
+          data.forEach(obj => {
+            this.statusList.push({ label: obj.value, value: obj.value });
+          });
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+    );
+    this.refDataService.GetT_WQX_REF_DATA('BiologicalIntent', true, true).subscribe(
+      (data: WqxRefData[]) => {
+        if (data !== null && data !== undefined) {
+          this.bioIntentList.push({ label: '', value: null });
+          data.forEach(obj => {
+            this.bioIntentList.push({ label: obj.value, value: obj.value });
+          });
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+    );
+    this.refDataService.GetT_WQX_REF_DATA('FrequencyClassDescriptor', true, true).subscribe(
+      (data: WqxRefData[]) => {
+        if (data !== null && data !== undefined) {
+          this.freqClassList.push({ label: '', value: null });
+          data.forEach(obj => {
+            this.freqClassList.push({ label: obj.value, value: obj.value });
+          });
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+    );
     this.activityService.GetT_WQX_RESULT(this.activityIdx).subscribe(
       (data) => {
-        this.results = new LocalDataSource(data);
+        // this.results = new LocalDataSource(data);
+        this.results = data;
       },
     );
 
@@ -471,5 +594,192 @@ export class WqxActivityEditComponent implements OnInit {
   }
   onCustom(event): void {
     console.log(event.data);
+  }
+
+  onRowEditInit(result: WqxResult) {
+    // this.clonedCars[car.vin] = { ...car };
+  }
+  onRowDelete(result: WqxResult) {
+    this.refDataService.DeleteT_WQX_RESULT(result.resultIdx).subscribe(
+      (result2) => {
+        if (result2 > 0) {
+          this.populateResultsGrid();
+        } else {
+          this.toasterService.danger('Record could not be deleted!');
+        }
+      },
+      (err2) => {
+        console.log(err2);
+        this.toasterService.danger('Record could not be deleted!');
+      }
+    );
+  }
+  onRowEditSave(result: WqxResult) {
+    console.log('onRowEditSave');
+    console.log(result);
+    // ***VALIDATION***
+    let isValid: boolean = true;
+    if (isNaN(+result.resultMsr) === true ||
+      result.resultMsr === 'ND' ||
+      result.resultMsr === 'NR' ||
+      result.resultMsr === 'PAQL' ||
+      result.resultMsr === 'PBQL' ||
+      result.resultMsr === 'DNQ') {
+      isValid = false;
+      this.toasterService.danger('Result must be numeric, or one of the following values: ND, NR, PAQL, PBQL, DNQ');
+    } else {
+      // if numeric, then check if result is within valid range (if available for the char/unit pairing)
+      if (isNaN(+result.resultMsr) === false) {
+        this.refDataService.GetT_WQX_REF_CHAR_LIMITS_ByNameUnit(result.charName, result.resultMsrUnit).subscribe(
+          (data: WqxRefCharLimits) => {
+            if (data !== null && data !== undefined) {
+              if ((+result.resultMsr < data.lowerBound) || (+result.resultMsr > data.upperBound)) {
+                isValid = false;
+                this.toasterService.danger('Result value is outside acceptable range. " + cl.LOWER_BOUND + " - " + cl.UPPER_BOUND + " Please provide another value and save again.');
+              }
+            }
+          },
+        );
+      }
+    }
+    if (isValid) {
+      const r = result;
+      this.refDataService.InsertOrUpdateT_WQX_RESULT(
+        r.resultIdx, r.activityIdx,
+        (r.resultDetectCondition === null) ? '' : r.resultDetectCondition,
+        r.charName,
+        (r.resultSampFraction === null) ? '' : r.resultSampFraction,
+        (r.resultMsr === null) ? '' : r.resultMsr,
+        (r.resultMsrUnit === null) ? '' : r.resultMsrUnit,
+        (r.resultStatus === null) ? '' : r.resultStatus,
+        (r.resultValueType === null) ? '' : r.resultValueType,
+        (r.resultComment === null) ? '' : r.resultComment,
+        (r.bioIntentName === null) ? '' : r.bioIntentName,
+        (r.bioIndividualId === null) ? '' : r.bioIndividualId,
+        (r.bioSubjectTaxonomy === null) ? '' : r.bioSubjectTaxonomy,
+        (r.bioSampleTissueAnatomy === null) ? '' : r.bioSampleTissueAnatomy,
+        (r.analyticMethodIdx === null) ? 0 : r.analyticMethodIdx,
+        (r.labIdx === null) ? 0 : r.labIdx,
+        (r.labAnalysisStartDt === null) ? '' : r.labAnalysisStartDt.toUTCString(),
+        (r.detectionLimit === null) ? '' : r.detectionLimit,
+        (r.pql === null) ? '' : r.pql,
+        (r.lowerQuantLimit === null) ? '' : r.lowerQuantLimit,
+        (r.upperQuantLimit === null) ? '' : r.upperQuantLimit,
+        (r.labSampPrepIdx === null) ? 0 : r.labSampPrepIdx,
+        (r.labSampPrepStartDt === null) ? '' : r.labSampPrepStartDt,
+        (r.dilutionFactor === null) ? '' : r.dilutionFactor,
+        (r.freqClassCode === null) ? '' : r.freqClassCode,
+        (r.freqClassUnit === null) ? '' : r.freqClassUnit,
+        this.user.name).subscribe(
+          (result2) => {
+            if (result2 > 0) {
+              // also update activity to set to "U" so it will be flagged for submission to EPA
+              this.activityService.UpdateWQX_ACTIVITY_WQXStatus(this.activityIdx, 'U', true, true, this.user.name).subscribe(
+                (result3) => {
+                  this.populateResultsGrid();
+                },
+                (err3) => {
+                  console.log(err3);
+                  this.toasterService.danger('Error saving update.');
+                },
+              );
+            } else {
+              this.toasterService.danger('Error saving update.');
+            }
+          },
+          (err2) => {
+            console.log(err2);
+            this.toasterService.danger('Error saving update.');
+          },
+        );
+    }
+    // ***VALIDATION***
+    /* if (car.year > 0) {
+       delete this.clonedCars[car.vin];
+       this.toasterService.success('Car is updated');
+    } else {
+      this.toasterService.danger('Year is required');
+    } */
+  }
+
+  onRowEditCancel(result: WqxResult, index: number) {
+    // this.cars2[index] = this.clonedCars[car.vin];
+    // delete this.clonedCars[car.vin];
+  }
+
+  checkColShow(col: string): boolean {
+    return (this.resultCols.find(e => e.col === col) === undefined) ? false : (this.resultCols.find(e => e.col === col).show);
+  }
+  newRow() {
+    const nr: WqxResult = {
+      resultIdx: 0,
+      activityIdx: this.activityIdx,
+      dataLoggerLine: '',
+      resultDetectCondition: '',
+      charName: '',
+      methodSpeciationName: '',
+      resultSampFraction: '',
+      resultMsr: '',
+      resultMsrUnit: '',
+      resultMsrQual: '',
+      resultStatus: '',
+      statisticBaseCode: '',
+      resultValueType: '',
+      weightBasis: '',
+      timeBasis: '',
+      tempBasis: '',
+      particlesizeBasis: '',
+      precisionValue: '',
+      biasValue: '',
+      confidenceIntervalValue: '',
+      upperConfidenceLimit: '',
+      lowerConfidenceLimit: '',
+      resultComment: '',
+      depthHeightMsr: '',
+      depthHeightMsrUnit: '',
+      depthaltituderefpoint: '',
+      resultSampPoint: '',
+      bioIntentName: '',
+      bioIndividualId: '',
+      bioSubjectTaxonomy: '',
+      bioUnidentifiedSpeciesId: '',
+      bioSampleTissueAnatomy: '',
+      grpSummCountWeightMsr: '',
+      grpSummCountWeightMsrUnit: '',
+      taxDtlCellForm: '',
+      taxDtlCellShape: '',
+      taxDtlHabit: '',
+      taxDtlVoltinism: '',
+      taxDtlPollTolerance: '',
+      taxDtlPollToleranceScale: '',
+      taxDtlTrophicLevel: '',
+      tTaxDtlFuncFeedingGroup1: '',
+      taxDtlFuncFeedingGroup2: '',
+      taxDtlFuncFeedingGroup3: '',
+      freqClassCode: '',
+      freqClassUnit: '',
+      freqClassUpper: '',
+      freqClassLower: '',
+      analyticMethodIdx: 0,
+      labIdx: 0,
+      labAnalysisStartDt: null,
+      labAnalysisEndDt: '',
+      labAnalysisTimezone: '',
+      resultLabCommentCode: '',
+      detectionLimitType: '',
+      detectionLimit: '',
+      labTaxonAccredInd: '',
+      labTaxonAccredAuthority: '',
+      labReportingLevel: '',
+      pql: '',
+      lowerQuantLimit: '',
+      upperQuantLimit: '',
+      detectionLimitUnit: '',
+      labSampPrepIdx: 0,
+      labSampPrepStartDt: '',
+      labSampPrepEndDt: '',
+      dilutionFactor: '',
+    };
+    return nr;
   }
 }

@@ -19,12 +19,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Reference Data',
     icon: 'shopping-cart-outline',
-    link: '/pages/dashboard',
+    link: '/secure/ref-data',
   },
   {
     title: 'Administration',
     icon: 'shopping-cart-outline',
-    link: '/pages/dashboard',
+    link: '/secure/admin/users',
   },
   {
     title: 'My Account',
