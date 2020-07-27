@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { WqxWaterQualityComponent } from './WqxWaterQuality.component';
+import { WqxWaterQualityComponent } from './wqx-water-quality.component';
 import { WqxOrgComponent } from './wqx-org/wqx-org.component';
 import { WqxOrgEditComponent } from './wqx-org-edit/wqx-org-edit.component';
 import { WqxOrgDataComponent } from './wqx-org-data/wqx-org-data.component';
@@ -75,7 +75,7 @@ const routes: Routes = [{
 })
 export class WqxTablesRoutingModule { }
 
-export const wqxRoutedComponents = [
+export const wqxWQRoutedComponents = [
   WqxWaterQualityComponent,
   WqxOrgComponent,
 ];

@@ -131,11 +131,11 @@ export class ECommerceComponent {
               .subscribe((x) => { this.lblSamp = x.length.toString(); });
             this.activityService.GetWQX_Activities(true, this.currentUser.OrgID, 0, '', '', '', true, 0)
               .subscribe((x) => { this.lblSampPend2 = x.length.toString(); });
-            /* const count: any = this.activityService.GetT_WQX_RESULTCount(this.currentUser.OrgID)
+            this.activityService.GetT_WQX_RESULTCount(this.currentUser.OrgID)
               .subscribe(
                 (x) => { this.lblResult = x.toString(); },
                 (er) => { console.log(er); },
-              ); */
+              );
           } else {
             this.pnlOrgSpecificShow = false;
           }
@@ -300,7 +300,6 @@ export class ECommerceComponent {
     // this.router.navigate(['/wqx-pages/main/wqx-org-new-cs', {orgId: orgId}]);
   }
   onBtnWiz1Click() {
-    console.log(this.btnWiz1);
     if (this.btnWiz1 === 'View') {
       this.router.navigate(['/secure/water-quality/wqx-org']);
     } else {
@@ -313,24 +312,24 @@ export class ECommerceComponent {
     console.log('onBtnWiz2Click clicked!');
   }
   onBtnWiz3Click() {
-    console.log('onBtnWiz3Click clicked!');
+    this.router.navigate(['/secure/water-quality/wqx-monloc']);
   }
   onBtnWiz3bClick() {
-    console.log('onBtnWiz3bClick clicked!');
+    this.router.navigate(['/secure/water-quality/wqx-import']);
   }
   onBtnWiz4Click() {
-    console.log('onBtnWiz4Click clicked!');
+    this.router.navigate(['/secure/water-quality/wqx-project']);
   }
   onBtnWiz4bClick() {
-    console.log('onBtnWiz4bClick clicked!');
+    this.router.navigate(['/secure/water-quality/wqx-import']);
   }
   onBtnWiz5Click() {
-    console.log('onBtnWiz5Click clicked!');
+    this.router.navigate(['/secure/water-quality/wqx-org-data']);
   }
   onBtnWiz6Click() {
-    console.log('onBtnWiz6Click clicked!');
+    this.router.navigate(['/secure/water-quality/wqx-activity']);
   }
   onBtnWiz6bClick() {
-    console.log('onBtnWiz6bClick clicked!');
+    this.router.navigate(['/secure/water-quality/wqx-import']);
   }
 }

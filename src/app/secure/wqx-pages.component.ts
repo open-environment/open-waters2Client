@@ -13,6 +13,5 @@ import { WQX_MENU_ITEMS } from './wqx-pages-menu';
   `,
 })
 export class WqxPagesComponent {
-
   menu = WQX_MENU_ITEMS;
 }

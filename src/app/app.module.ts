@@ -3,9 +3,9 @@
  * Copyright Akveo. All Rights Reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
@@ -29,26 +29,20 @@ import { WQXOrganizationService } from './@core/wqx-services/wqx-organization-se
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WQXProjectService } from './@core/wqx-services/wqx-project-service';
 import { WQXActivityService } from './@core/wqx-services/wqx-activity-service';
-// import { AddCharWindowComponent } from './secure/water-quality/wqx-org-data/add-char-window/add-char-window.component';
 import { WqxMonlocService } from './@core/wqx-services/wqx-monloc.service';
-
-
 
 @NgModule({
   declarations: [
     AppComponent,
-
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AppRoutingModule,
-
     ThemeModule.forRoot(),
-
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     NbDatepickerModule.forRoot(),

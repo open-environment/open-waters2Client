@@ -129,7 +129,6 @@ export class WqxActivityComponent implements OnInit {
       (this.txtEndDate === undefined) ? '' : this.txtEndDate.toUTCString(), (this.actTypeSelected === undefined) ? '' : this.actTypeSelected, false, isNaN(+this.projectSelected) === true ? 0 : +this.projectSelected,
       ((this.wqxStatusSelected === undefined) ? '' : this.wqxStatusSelected)).subscribe(
         (data) => {
-          console.log(data);
           if (isFirst === true) {
             this._activitySetting.columns = {};
             this.prePop();
@@ -248,7 +247,6 @@ export class WqxActivityComponent implements OnInit {
   }
 
   onAddNew(): void {
-    console.log('Add New Click!');
     this.router.navigate(['/secure/water-quality/wqx-activity-edit'], { queryParams: { activityIdx: -1 } });
   }
   onExcel(): void {

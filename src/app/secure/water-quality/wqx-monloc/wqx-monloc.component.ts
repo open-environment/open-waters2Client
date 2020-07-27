@@ -83,7 +83,6 @@ export class WqxMonlocComponent implements OnInit {
   populateData(isFirst: boolean) {
     this.monlocService.GetWQX_MONLOC(this.chkDeletedInd, this.currentOrgId, false).subscribe(
       (data) => {
-        console.log(data);
         if (isFirst === true) {
           this._monlocSetting.columns = {};
           this.prePop();

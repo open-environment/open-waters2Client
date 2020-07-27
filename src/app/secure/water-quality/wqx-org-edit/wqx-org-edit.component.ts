@@ -146,8 +146,6 @@ export class WqxOrgEditComponent implements OnInit {
           this.organizationService.GetT_OE_USERSInOrganization(this.orgEditId).subscribe(
             (uio: any) => {
               this.lbUserInRole = uio;
-              console.log('lbUserInRole');
-              console.log(this.lbUserInRole);
             },
           );
 
@@ -155,8 +153,6 @@ export class WqxOrgEditComponent implements OnInit {
           this.organizationService.GetT_OE_USERSNotInOrganization(this.orgEditId).subscribe(
             (unio: any) => {
               this.lbAllUsers = unio;
-              console.log('lbAllUsers');
-              console.log(this.lbAllUsers);
             },
           );
         }

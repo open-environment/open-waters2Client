@@ -85,7 +85,7 @@
   <div class="col-md-8">
     <nb-card size="medium">
       <nb-card-body>
-        <nb-stepper orientation="vertical">
+        <nb-stepper orientation="vertical" [linear]="true">
           <nb-step label="Create or Join an Organization">
             <h4>Create or Join an Organization</h4>
             <label *ngIf='lblWiz1Show'>{{lblWiz1}}</label>

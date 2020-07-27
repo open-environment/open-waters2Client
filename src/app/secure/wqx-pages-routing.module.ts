@@ -3,22 +3,22 @@ import { NgModule, Component } from '@angular/core';
 
 import { WqxPagesComponent } from './wqx-pages.component';
 import { NotFoundComponent } from '../pages/miscellaneous/not-found/not-found.component';
-import { RefDataComponent } from './ref-data/ref-data.component';
+/* import { RefDataComponent } from './ref-data/ref-data.component';
 import { UserListComponent } from './administration/user-list/user-list.component';
 import { RSA_PKCS1_OAEP_PADDING } from 'constants';
 import { RoleListComponent } from './administration/role-list/role-list.component';
 import { AppSettingsComponent } from './administration/app-settings/app-settings.component';
-import { AdmDataSynchComponent } from './administration/adm-data-synch/adm-data-synch.component';
+import { AdmDataSynchComponent } from './administration/adm-data-synch/adm-data-synch.component'; */
 
 const routes: Routes = [{
   path: '',
   component: WqxPagesComponent,
   children: [
-    {
+    /* {
       path: 'main',
-      loadChildren: () => import('./main/wqx-tables.module')
-        .then(m => m.WqxTablesModule),
-    },
+      loadChildren: () => import('./main/wqx-main.module')
+        .then(m => m.WqxMainModule),
+    }, */
     {
       path: 'water-quality',
       loadChildren: () => import('./water-quality/wqx-water-quality.module')
@@ -26,33 +26,18 @@ const routes: Routes = [{
     },
     {
       path: 'ref-data',
-      component: RefDataComponent,
+      loadChildren: () => import('./ref-data/ref-data.module')
+        .then(m => m.WqxRefDataModule),
+    },
+    {
+      path: 'data-analysis',
+      loadChildren: () => import('./data-analysis/data-analysis.module')
+        .then(m => m.DataAnalysisModule),
     },
     {
       path: 'admin',
-      children: [
-        {
-          path: 'users',
-          component: UserListComponent,
-        },
-        {
-          path: 'roles',
-          component: RoleListComponent,
-        },
-        {
-          path: 'app-settings',
-          component: AppSettingsComponent,
-        },
-        {
-          path: 'data-synch',
-          component: AdmDataSynchComponent,
-        }
-      ],
-    },
-    {
-      path: '',
-      redirectTo: 'dashboard',
-      pathMatch: 'full',
+      loadChildren: () => import('./administration/admin.module')
+        .then(m => m.AdminModule),
     },
     {
       path: '**',

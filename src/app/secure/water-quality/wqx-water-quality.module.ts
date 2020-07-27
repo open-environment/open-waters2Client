@@ -1,13 +1,12 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { NbCardModule, NbIconModule, NbInputModule, NbTreeGridModule, NbCheckboxModule, NbSelectModule, NbRadioModule, NbListModule, NbAlertModule, NbTabsetModule, NbToastrModule, NbWindowModule, NbButtonModule, NbDatepickerModule } from '@nebular/theme';
-import { Ng2SmartTableModule } from 'ng2-smart-table';
-
+import { NbCardModule, NbTreeGridModule, NbIconModule, NbInputModule, NbSelectModule, NbRadioModule, NbCheckboxModule, NbListModule, NbAlertModule, NbTabsetModule, NbToastrModule, NbWindowModule, NbButtonModule, NbDatepickerModule } from '@nebular/theme';
 import { ThemeModule } from '../../@theme/theme.module';
-import { WqxTablesRoutingModule } from './wqx-water-quality-routing.module';
-import { wqxRoutedComponents } from './wqx-water-quality-routing.module';
-
-import { WqxOrgComponent } from './wqx-org/wqx-org.component';
+// import { WqxMainRoutingModule, wqxRoutedComponents } from '../main/wqx-main-routing.module';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TableModule } from 'primeng/table';
+import { DropdownModule, CalendarModule } from 'primeng/primeng';
+import { WqxOrgComponent } from './wqx-org/wqx-org.component';
 import { WqxOrgEditComponent } from './wqx-org-edit/wqx-org-edit.component';
 import { WqxOrgDataComponent } from './wqx-org-data/wqx-org-data.component';
 import { WqxMonlocComponent } from './wqx-monloc/wqx-monloc.component';
@@ -16,9 +15,6 @@ import { WqxActivityComponent } from './wqx-activity/wqx-activity.component';
 import { WqxImportComponent } from './wqx-import/wqx-import.component';
 import { WqxImportFromEpaComponent } from './wqx-import-from-epa/wqx-import-from-epa.component';
 import { WqxMgmtComponent } from './wqx-mgmt/wqx-mgmt.component';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgxAuthJWTInterceptor } from '../../NgxAuthJWTInterceptor';
-import { WQXRefDataService } from '../../@core/wqx-services/wqx-refdata-service';
 import { AddCharWindowComponent } from './wqx-org-data/add-char-window/add-char-window.component';
 import { AddTranslationWindowComponent } from './wqx-org-data/add-translation-window/add-translation-window.component';
 import { MonlocConfigWindowComponent } from './wqx-monloc/monloc-config-window/monloc-config-window.component';
@@ -27,9 +23,11 @@ import { ProjectConfigWindowComponent } from './wqx-project/project-config-windo
 import { WqxProjectEditComponent } from './wqx-project/wqx-project-edit/wqx-project-edit.component';
 import { ActivityConfigWindowComponent } from './wqx-activity/activity-config-window/activity-config-window.component';
 import { WqxActivityEditComponent } from './wqx-activity/wqx-activity-edit/wqx-activity-edit.component';
-import { TableModule } from 'primeng/table';
-import { DropdownModule, Calendar, CalendarModule } from 'primeng/primeng';
 import { AddRowDirective } from '../add-row.directive';
+import { WQXRefDataService } from '../../@core/wqx-services/wqx-refdata-service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgxAuthJWTInterceptor } from '../../NgxAuthJWTInterceptor';
+import { wqxWQRoutedComponents, WqxTablesRoutingModule } from './wqx-water-quality-routing.module';
 
 @NgModule({
   imports: [
@@ -38,6 +36,7 @@ import { AddRowDirective } from '../add-row.directive';
     NbIconModule,
     NbInputModule,
     ThemeModule,
+    // WqxMainRoutingModule,
     WqxTablesRoutingModule,
     Ng2SmartTableModule,
     FormsModule,
@@ -57,7 +56,7 @@ import { AddRowDirective } from '../add-row.directive';
     CalendarModule,
   ],
   declarations: [
-    ...wqxRoutedComponents,
+    ...wqxWQRoutedComponents,
     WqxOrgComponent,
     WqxOrgEditComponent,
     WqxOrgDataComponent,
