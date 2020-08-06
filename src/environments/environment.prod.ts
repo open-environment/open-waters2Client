@@ -7,6 +7,7 @@ export const environment = {
   production: true,
   api: {
     owUrl: 'https://localhost:44327',
+    //owUrl: 'http://208.109.10.214:89',
   },
 };
 export const globals = {
@@ -29,5 +30,12 @@ export const globals = {
     { name: 'AQUIFER_NAME', value: false },
     { name: 'FORMATION_TYPE', value: false },
     { name: 'WELLHOLE_DEPTH', value: false },
+  ],
+  activityConfig: [
+    { name: 'SAMP_ACT_END_DT', value: false },
+    { name: 'SAMP_COLL_METHOD', value: false },
+    { name: 'SAMP_COLL_EQUIP', value: false },
+    { name: 'SAMP_PREP', value: false },
+    { name: 'SAMP_DEPTH', value: false },
   ],
 };

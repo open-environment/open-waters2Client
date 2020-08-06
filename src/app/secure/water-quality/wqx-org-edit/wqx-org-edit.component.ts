@@ -112,7 +112,6 @@ export class WqxOrgEditComponent implements OnInit {
     this.organizationService.getWQXOrganizationById(this.orgEditId).subscribe(
       (o: WqxOrganization) => {
         if (o !== null) {
-          console.log(o);
           this.txtOrgID = o.orgId;
           this.txtOrgIDReadOnly = false;
           this.txtOrgName = o.orgFormalName;

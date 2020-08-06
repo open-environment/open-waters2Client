@@ -12,6 +12,7 @@ export const environment = {
   production: false,
   api: {
     owUrl: 'https://localhost:44327',
+    //owUrl: 'http://208.109.10.214:89',
   },
 };
 export const globals = {

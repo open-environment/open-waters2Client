@@ -61,6 +61,7 @@ import { WqxMonlocService } from './@core/wqx-services/wqx-monloc.service';
             class: NbAuthJWTToken,
           },
           baseEndpoint: 'https://localhost:44327',
+          //baseEndpoint: 'http://208.109.10.214:89',
           login: {
             endpoint: '/auth/login',
             method: 'post',

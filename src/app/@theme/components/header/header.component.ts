@@ -58,29 +58,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.user = token.getPayload();
+          console.log(+this.user.userIdx);
+          this.organizationService.GetWQX_USER_ORGS_ByUserIDX(+this.user.userIdx, true).subscribe(
+            (data) => {
+              data.forEach(element => {
+                const newOrg = {} as WqxOrganization;
+                newOrg.orgId = element.orgId;
+                newOrg.orgFormalName = element.orgFormalName;
+                this.orgs.push(newOrg);
+              });
+            },
+            (err) => {
+              console.log(err);
+            },
+          );
         }
       });
   }
 
   ngOnInit() {
-    if (this.user.UserIDX !== null) {
-      this.organizationService.GetWQX_USER_ORGS_ByUserIDX(+this.user.UserIDX, true).subscribe(
-        (data) => {
-          data.forEach(element => {
-            const newOrg = {} as WqxOrganization;
-            newOrg.orgId = element.orgId;
-            newOrg.orgFormalName = element.orgFormalName;
-            this.orgs.push(newOrg);
-          });
-        },
-        (err) => {
-          console.log(err);
-        },
-      );
-    } else {
-      console.log('user not initialized!');
-    }
-
     this.menuService.onItemClick().subscribe((event) => {
       this.onItemSelection(event.item.title);
     });
@@ -113,7 +109,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (title === 'Log out') {
       this.authService.logout('email').subscribe(
         (result: NbAuthResult) => {
-          console.log(result);
           this.router.navigateByUrl('/auth/login');
         },
         (err) => { console.log(err); },
@@ -138,7 +133,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   toggleSidebar(): boolean {
     this.sidebarService.toggle(true, 'menu-sidebar');
     this.layoutService.changeLayoutSize();
-
     return false;
   }
 

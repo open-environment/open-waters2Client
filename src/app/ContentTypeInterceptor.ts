@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class ContentTypeInterceptor implements HttpInterceptor {
 
-  public constructor() {}
+  public constructor() { }
 
   intercept(
     req: HttpRequest<any>,
@@ -15,11 +15,11 @@ export class ContentTypeInterceptor implements HttpInterceptor {
     if (ct != null) {
       return next.handle(req.clone({
         setHeaders: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(req.body),
-    }));
-    }else {
+      }));
+    } else {
       return next.handle(req);
     }
   }
