@@ -1,4 +1,4 @@
-@import "../../../@theme/styles/themes";
+@import '../../../@theme/styles/themes';
 
 @include nb-install-component() {
   nb-card {
@@ -24,6 +24,6 @@
 }
 :host ::ng-deep .greenBox {
   background-color: #689667;
-  border: 1pt solid black;
+  border: 1px solid black;
 }
 //:host ::ng-deep ng2-st-tbody-custom { color: blue; }

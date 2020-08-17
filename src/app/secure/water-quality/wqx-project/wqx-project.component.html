@@ -9,13 +9,15 @@
       </div>
       <div class="row mt-3">
         <button nbButton (click)="onAddNew()" class="mr-3" status="success">
-          Add New
+          <nb-icon icon="plus-square-outline"></nb-icon> Add New
         </button>
         <span class="float-right">
           <button nbButton (click)="onExcel()" class="mr-3" status="info">
-            Excel
+            <nb-icon icon="download-outline"></nb-icon> Excel
           </button>
-          <button nbButton (click)="onConfig()" status="info">Config</button>
+          <button nbButton (click)="onConfig()" status="info">
+            <nb-icon icon="settings-outline"></nb-icon> Config
+          </button>
         </span>
       </div>
     </nb-card-body>

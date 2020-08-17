@@ -3,7 +3,7 @@
  * Copyright Akveo. All Rights Reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -30,6 +30,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WQXProjectService } from './@core/wqx-services/wqx-project-service';
 import { WQXActivityService } from './@core/wqx-services/wqx-activity-service';
 import { WqxMonlocService } from './@core/wqx-services/wqx-monloc.service';
+import { MyAppErrorHandler } from './pages/miscellaneous/myAppErrorHandler';
+
 
 @NgModule({
   declarations: [
@@ -136,6 +138,7 @@ import { WqxMonlocService } from './@core/wqx-services/wqx-monloc.service';
     WQXProjectService,
     WQXActivityService,
     WqxMonlocService,
+    // { provide: ErrorHandler, useClass: MyAppErrorHandler },
   ],
   bootstrap: [AppComponent],
 })

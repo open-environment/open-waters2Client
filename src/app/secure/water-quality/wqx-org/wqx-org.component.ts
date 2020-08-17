@@ -3,6 +3,8 @@ import { LocalDataSource } from 'ng2-smart-table/lib/data-source/local/local.dat
 import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organization-service';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
 import { Router } from '@angular/router';
+import { Column } from 'primeng/primeng';
+import { WqxAllOrgs, WqxOrganization } from '../../../@core/wqx-data/wqx-organization';
 
 @Component({
   selector: 'ngx-wqx-org',
@@ -11,48 +13,7 @@ import { Router } from '@angular/router';
 })
 export class WqxOrgComponent implements OnInit {
 
-  settings = {
-    hideSubHeader: true,
-    actions: {
-      custom: [
-        {
-          name: 'select',
-          title: '<i class="ion-edit" title="Edit"></i>',
-        },
-      ],
-      add: false,
-      edit: false,
-      delete: false,
-    },
-    add: {
-      addButtonContent: '<i class="nb-plus"></i>',
-      createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    edit: {
-      editButtonContent: 'Select >>',
-      saveButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
-      confirmDelete: true,
-    },
-    columns: {
-      orgId: {
-        title: 'Organization ID',
-        type: 'string',
-        filter: true,
-      },
-      orgFormalName: {
-        title: 'Organization Name',
-        type: 'string',
-        filter: true,
-      },
-    },
-  };
-
-  source: LocalDataSource = new LocalDataSource();
+  orgs: WqxOrganization[] = [];
 
   constructor(private service: WQXOrganizationService,
     private pubSubService: WqxPubsubServiceService,
@@ -67,24 +28,16 @@ export class WqxOrgComponent implements OnInit {
   }
 
   loadData(): void {
-    this.service.getVWQXAllOrgs()
+    this.service.GetWQX_ORGANIZATION()
       .subscribe(
-        (_data) => {
-          this.source.load(_data);
+        (data) => {
+          this.orgs = data;
         },
       );
   }
 
-  onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
-    }
-  }
-
-  onCustom(event): void {
-    const orgId = event.data.orgId;
+  onEditClicked(org: WqxOrganization): void {
+    const orgId = org.orgId;
     this.router.navigate(['/secure/water-quality/wqx-org-edit'], { queryParams: { orgEditId: orgId } });
   }
   onAddNewClick(): void {

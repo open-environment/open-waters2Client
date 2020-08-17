@@ -209,8 +209,12 @@
       </div>
     </nb-card-body>
     <nb-card-footer>
-      <button nbButton type="submit" status="success" name="btnSave" class="mr-3">Save & Exit</button>
-      <button nbButton type="button" status="danger" (click)="onBtnCancelClicked()" name="btnCancel">Cancel</button>
+      <button nbButton type="submit" status="success" name="btnSave" class="mr-3">
+        <nb-icon icon="save-outline"></nb-icon> Save & Exit
+      </button>
+      <button nbButton type="button" status="danger" (click)="onBtnCancelClicked()" name="btnCancel">
+        <nb-icon icon="close-square-outline"></nb-icon> Cancel
+      </button>
     </nb-card-footer>
   </nb-card>
 </form>

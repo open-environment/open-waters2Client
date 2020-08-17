@@ -123,14 +123,13 @@ export class ECommerceComponent {
           console.log(this.currentUser);
           if (this.currentUser.OrgID !== null || this.currentUser.OrgID !== '') {
             if (this.currentUser.OrgID === '-1') {
-              this.authService.logout('email').subscribe(
+              /* this.authService.logout('email').subscribe(
                 (result: NbAuthResult) => {
-                  console.log(result);
                   const navigationExtras: NavigationExtras = { state: { data: 'You need authorization to access your current organization.' } };
                   this.router.navigate(['/pages/miscellaneous/unauthorized'], navigationExtras);
                 },
                 (err) => { console.log(err); },
-              );
+              ); */
             } else {
               this.pnlOrgSpecificShow = true;
               this.PopulateOrgSpecific();
@@ -140,6 +139,10 @@ export class ECommerceComponent {
             this.pnlOrgSpecificShow = false;
           }
 
+          this.organizationService.getVWQXAllOrgs().subscribe(
+            (result) => { this.lblOrg = result.length.toString(); },
+          );
+
           if ((this.currentUser.OrgID !== null ||
             this.currentUser.OrgID !== '') &&
             this.currentUser.OrgID !== '-1') {
@@ -147,118 +150,114 @@ export class ECommerceComponent {
             // **************Admin Tasks Panel ***************************************
             // ****************************************************************************
             this.bindAdminTaskData();
-
-            this.organizationService.getVWQXAllOrgs().subscribe(
-              (result) => { this.lblOrg = result.length.toString(); },
-            );
-
-            // ****************************************************************************
-            // **************Getting started wizard ***************************************
-            // ****************************************************************************
-
-            // STEP 1 ***********************************
-            this.organizationService.GetWQX_USER_ORGS_ByUserIDX(this.currentUser.userIdx, false).subscribe((o1s) => {
-              this.myOrgusers = o1s;
-              if (o1s.length === 0) {
-                this.lblWiz1Show = true;
-                this.lblWiz1 = 'To use Open Waters, you must first be linked with an Organization. This is the water monitoring agency you represent. If you intend to submit your data to EPA, this organization must first be created by EPA in their WQX system. Otherwise, if you never intend to submit your data to EPA, you can create any Organization ID you wish.';
-                this.btnWiz1Show = true;
-                this.btnWiz2Show = false;
-                this.btnWiz3Show = false;
-                this.btnWiz3bShow = false;
-                this.btnWiz4Show = false;
-                this.btnWiz5Show = false;
-                this.btnWiz6Show = false;
-                this.btnWiz6bShow = false;
-              } else {
-                this.organizationService.GetWQX_USER_ORGS_ByUserIDX(this.currentUser.userIdx, true).subscribe((oNotPends) => {
-                  if (oNotPends.length === 0) {
-                    // only organization user is associated with is pending
-                    this.btnWiz1Show = false;
-                    this.lblWiz1 = 'Your request to view/submit data for an organization is pending. You must wait for an administrator to approve your request.';
-                    this.btnWiz2Show = false;
-                    this.btnWiz3Show = false;
-                    this.btnWiz3bShow = false;
-                    this.btnWiz4Show = false;
-                    this.btnWiz4bShow = false;
-                    this.btnWiz5Show = false;
-                    this.btnWiz6Show = false;
-                    this.btnWiz6bShow = false;
-
-                  } else {
-                    // STEP 1 IS COMPLETE, now try out tests 2-6
-                    this.btnWiz1 = 'View';
-                    this.lblWiz1 = 'Congrats! You are associated with an Organization. Click to view its details.';
-
-                    // STEP 2: submit authorization ******************************************
-                    oNotPends.forEach(element => {
-                      if (element.cdxSubmitInd === true) {
-                        this.lblWiz2 = 'Congrats! Your organization is authorized to submit to EPA-WQX.';
-                        this.btnWiz2 = 'Change Credentials';
-                      } else {
-                        this.lblWiz2 = 'In order to submit data to EPA using Open Waters, you must contact EPA and request that they authorize Open Waters to submit data.';
-                        this.btnWiz2 = 'Get Started';
-                      }
-                    });
-
-                    // STEP 3:Mon Loc******************************************
-                    this.projectService.GetWQXMonlocMyOrgCount(+this.currentUser.userIdx).subscribe(
-                      (result) => {
-                        if (result > 0) {
-                          this.lblWiz3Show = true;
-                          this.btnWiz3Show = true;
-                          this.lblWiz3 = 'One or more monitoring locations have been created. Click to view.';
-                          this.btnWiz3 = 'View';
-                          this.monLocOk = true;
-                        } else {
-                          this.lblWiz3 = 'Click to enter a monitoring location record.';
-                        }
-                      },
-                    );
-
-                    // STEP 4:Project ******************************************
-                    this.projectService.GetWQXProjectMyOrgCount(+this.currentUser.userIdx).subscribe(
-                      (result) => {
-                        if (result > 0) {
-                          this.lblWiz4 = 'One or more projects have been created. Click to view.';
-                          this.btnWiz4 = 'View';
-                          this.projOk = true;
-                        } else {
-                          this.lblWiz4 = 'Click to manually enter a project record or import records from a spreadsheet or EPA.';
-                        }
-                      },
-                    );
-
-                    // STEP 5: Organization Starter Data ******************************************
-
-                    if (oNotPends[0].defaultTimezone === null || oNotPends[0].defaultTimezone === '') {
-                      this.lblWiz5 = 'Click to enter default organization data (e.g. Default Timezone, characteristics) that will be helpful during activity data entry.';
-                    } else {
-                      this.lblWiz5 = 'Organization default data (e.g. Default Timezone) has been defined. Click to view.';
-                    }
-
-                    // STEP 6: Activity ******************************************
-                    if (this.projOk === true && this.monLocOk === true) {
-                      this.lblWiz6 = 'You must enter a monitoring location and a project before you begin to create activities.';
-                      this.btnWiz6Show = false;
-                    } else {
-                      this.activityService.getWQXActivityMyOrgCount(+this.currentUser.userIdx).subscribe(
-                        (result) => {
-                          if (result > 0) {
-                            this.lblWiz6 = 'One or more activities have been created. Click to view.';
-                            this.btnWiz6 = 'View';
-                          } else {
-                            this.lblWiz6 = 'Click to enter an activity record.';
-                          }
-                        },
-                      );
-                    }
-
-                  }
-                });
-              }
-            });
           }
+          // ****************************************************************************
+          // **************Getting started wizard ***************************************
+          // ****************************************************************************
+
+          // STEP 1 ***********************************
+          this.organizationService.GetWQX_USER_ORGS_ByUserIDX(this.currentUser.userIdx, false).subscribe((o1s) => {
+            this.myOrgusers = o1s;
+            if (o1s.length === 0) {
+              this.lblWiz1Show = true;
+              this.lblWiz1 = 'To use Open Waters, you must first be linked with an Organization. This is the water monitoring agency you represent. If you intend to submit your data to EPA, this organization must first be created by EPA in their WQX system. Otherwise, if you never intend to submit your data to EPA, you can create any Organization ID you wish.';
+              this.btnWiz1Show = true;
+              this.btnWiz2Show = false;
+              this.btnWiz3Show = false;
+              this.btnWiz3bShow = false;
+              this.btnWiz4Show = false;
+              this.btnWiz5Show = false;
+              this.btnWiz6Show = false;
+              this.btnWiz6bShow = false;
+            } else {
+              this.organizationService.GetWQX_USER_ORGS_ByUserIDX(this.currentUser.userIdx, true).subscribe((oNotPends) => {
+                if (oNotPends.length === 0) {
+                  // only organization user is associated with is pending
+                  this.btnWiz1Show = false;
+                  this.lblWiz1 = 'Your request to view/submit data for an organization is pending. You must wait for an administrator to approve your request.';
+                  this.btnWiz2Show = false;
+                  this.btnWiz3Show = false;
+                  this.btnWiz3bShow = false;
+                  this.btnWiz4Show = false;
+                  this.btnWiz4bShow = false;
+                  this.btnWiz5Show = false;
+                  this.btnWiz6Show = false;
+                  this.btnWiz6bShow = false;
+
+                } else {
+                  // STEP 1 IS COMPLETE, now try out tests 2-6
+                  this.btnWiz1 = 'View';
+                  this.lblWiz1 = 'Congrats! You are associated with an Organization. Click to view its details.';
+
+                  // STEP 2: submit authorization ******************************************
+                  oNotPends.forEach(element => {
+                    if (element.cdxSubmitInd === true) {
+                      this.lblWiz2 = 'Congrats! Your organization is authorized to submit to EPA-WQX.';
+                      this.btnWiz2 = 'Change Credentials';
+                    } else {
+                      this.lblWiz2 = 'In order to submit data to EPA using Open Waters, you must contact EPA and request that they authorize Open Waters to submit data.';
+                      this.btnWiz2 = 'Get Started';
+                    }
+                  });
+
+                  // STEP 3:Mon Loc******************************************
+                  this.projectService.GetWQXMonlocMyOrgCount(+this.currentUser.userIdx).subscribe(
+                    (result) => {
+                      if (result > 0) {
+                        this.lblWiz3Show = true;
+                        this.btnWiz3Show = true;
+                        this.lblWiz3 = 'One or more monitoring locations have been created. Click to view.';
+                        this.btnWiz3 = 'View';
+                        this.monLocOk = true;
+                      } else {
+                        this.lblWiz3 = 'Click to enter a monitoring location record.';
+                      }
+                    },
+                  );
+
+                  // STEP 4:Project ******************************************
+                  this.projectService.GetWQXProjectMyOrgCount(+this.currentUser.userIdx).subscribe(
+                    (result) => {
+                      if (result > 0) {
+                        this.lblWiz4 = 'One or more projects have been created. Click to view.';
+                        this.btnWiz4 = 'View';
+                        this.projOk = true;
+                      } else {
+                        this.lblWiz4 = 'Click to manually enter a project record or import records from a spreadsheet or EPA.';
+                      }
+                    },
+                  );
+
+                  // STEP 5: Organization Starter Data ******************************************
+
+                  if (oNotPends[0].defaultTimezone === null || oNotPends[0].defaultTimezone === '') {
+                    this.lblWiz5 = 'Click to enter default organization data (e.g. Default Timezone, characteristics) that will be helpful during activity data entry.';
+                  } else {
+                    this.lblWiz5 = 'Organization default data (e.g. Default Timezone) has been defined. Click to view.';
+                  }
+
+                  // STEP 6: Activity ******************************************
+                  if (this.projOk === true && this.monLocOk === true) {
+                    this.lblWiz6 = 'You must enter a monitoring location and a project before you begin to create activities.';
+                    this.btnWiz6Show = false;
+                  } else {
+                    this.activityService.getWQXActivityMyOrgCount(+this.currentUser.userIdx).subscribe(
+                      (result) => {
+                        if (result > 0) {
+                          this.lblWiz6 = 'One or more activities have been created. Click to view.';
+                          this.btnWiz6 = 'View';
+                        } else {
+                          this.lblWiz6 = 'Click to enter an activity record.';
+                        }
+                      },
+                    );
+                  }
+
+                }
+              });
+            }
+          });
+
         }
       });
 
@@ -287,6 +286,7 @@ export class ECommerceComponent {
     this.organizationService.getAdminTaskData(this.currentUser.name, this.currentUser.OrgID)
       .subscribe(
         (_data) => {
+          console.log(_data);
           this.source.load(_data);
         },
       );
@@ -319,9 +319,12 @@ export class ECommerceComponent {
     // this.router.navigate(['/wqx-pages/main/wqx-org-new-cs', {orgId: orgId}]);
   }
   onBtnWiz1Click() {
+    console.log('onBtnWiz1Click clicked');
     if (this.btnWiz1 === 'View') {
+      console.log('View');
       this.router.navigate(['/secure/water-quality/wqx-org']);
     } else {
+      console.log('not View');
       this.router.navigate(['/secure/main/wqx-org-new']);
     }
 

@@ -164,8 +164,9 @@
                 </div>
               </div>
               <br />
-              <button nbButton type="button" status="info" (click)="btnTestNAASLocalClick()">Test My
-                Credentials</button>
+              <button nbButton type="button" status="info" (click)="btnTestNAASLocalClick()">
+                <nb-icon icon="checkmark-circle-outline"></nb-icon> Test My Credentials
+              </button>
             </div>
             <div *ngIf="divCDXglobal === true">
               <br />
@@ -178,9 +179,18 @@
 
     </nb-card-body>
     <nb-card-footer>
-      <button class="mr-2" nbButton status="success" type="submit">Save & Exit</button>
-      <button class="mr-2" nbButton type="button" status="danger" (click)="onCancelClicked()">Cancel</button>
-      <button class="mr-2" nbButton type="button" status="info" (click)="onEditDefaultData()">Edit Default Data</button>
+      <button class="mr-2" nbButton status="success" type="submit">
+        <nb-icon icon="save-outline"></nb-icon>
+        Save & Exit
+      </button>
+      <button class="mr-2" nbButton type="button" status="danger" (click)="onCancelClicked()">
+        <nb-icon icon="close-square-outline"></nb-icon>
+        Cancel
+      </button>
+      <button class="mr-2" nbButton type="button" status="info" (click)="onEditDefaultData()">
+        <nb-icon icon="settings-outline"></nb-icon>
+        Edit Default Data
+      </button>
     </nb-card-footer>
   </nb-card>
 
@@ -193,15 +203,19 @@
             <nb-list-item name="nbli" *ngFor="let orgUser of lbAllUsers"
               [ngClass]="{'listItemClass1' : listItemClass1}">
               <label name="nbl"
-                (click)="onOrgAllUserClicked(orgUser)">{{ orgUser.useR_ID((orgUser.rolE_CD) === 'A' ? 'Admin' : 'User') }}</label>
+                (click)="onOrgAllUserClicked(orgUser)">{{ orgUser.useR_ID + (orgUser.rolE_CD === 'A' ? 'Admin' : 'User') }}</label>
             </nb-list-item>
           </nb-list>
         </div>
         <div class="form-group col-md-4">
           <nb-checkbox name="nbc" [(ngModel)]="isChecked">Add as Admin</nb-checkbox>
           <br />
-          <button class="mb-2" nbButton status="basic" (click)="onAddUserToOrg()">Add User to Org >></button>
+          <button class="mb-2" nbButton status="basic" (click)="onAddUserToOrg()">
+            <nb-icon icon="plus-square-outline"></nb-icon>
+            Add User to Org >>
+          </button>
           <button class="mb-2" nbButton status="basic" (click)="onRemoveUserFromOrg()">
+            <nb-icon icon="minus-square-outline"></nb-icon>
             << Remove User from Org</button>
         </div>
         <div class="form-group col-md-4">

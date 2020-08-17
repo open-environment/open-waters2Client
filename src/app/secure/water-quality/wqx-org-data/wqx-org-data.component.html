@@ -29,10 +29,12 @@
                 </div>
               </div>
               <div class="row btnRibbon">
-                <button nbButton class='mr-2' status='basic' id='btnSave' name='btnSave'
-                  (click)='onBtnSaveClick()'>Save</button>
-                <button nbButton status='basic' id='btnCancel' name='btnCancel'
-                  (click)='onBtnCancelClick()'>Exit</button>
+                <button nbButton class='mr-2' status='success' id='btnSave' name='btnSave' (click)='onBtnSaveClick()'>
+                  <nb-icon icon="save-outline"></nb-icon> Save
+                </button>
+                <button nbButton status='danger' id='btnCancel' name='btnCancel' (click)='onBtnCancelClick()'>
+                  <nb-icon icon="close-square-outline"></nb-icon> Exit
+                </button>
               </div>
             </nb-tab>
             <nb-tab tabTitle="Characteristic Defaults">
@@ -46,8 +48,12 @@
                 value here if it is available.
               </div>
               <div class="row">
-                <button nbButton id='btnAddChar' name='btnAddChar' (click)='onAddCharateristicClicked()'>Add
-                  Characteristic</button>
+                <button nbButton status="success" id='btnAddChar' name='btnAddChar'
+                  (click)='onAddCharateristicClicked()'>
+                  <nb-icon icon="plus-square-outline"></nb-icon>
+                  Add
+                  Characteristic
+                </button>
               </div>
               <div class="row">
                 <ng2-smart-table [settings]="settings" [source]="charSource" (deleteConfirm)="onDeleteConfirm($event)"
@@ -66,7 +72,9 @@
                 </nb-select>
               </div>
               <div class="row">
-                <button nbButton status='basic' name='btnAddTaxa' (click)='onAddTaxaClciked()'>Add Taxa</button>
+                <button nbButton status='success' name='btnAddTaxa' (click)='onAddTaxaClciked()'>
+                  <nb-icon icon="plus-square-outline"></nb-icon> Add Taxa
+                </button>
               </div>
               <div class="row">
                 <ng2-smart-table [settings]="settings2" [source]="taxaSource" (deleteConfirm)="onDeleteConfirm2($event)"
@@ -81,7 +89,9 @@
               </div>
               <div class="row btnRibbon">
                 <button nbButton id='btnAddTranslate' name='btnAddTranslate' (click)='onAddTranslationClicked()'
-                  status='basic'>Add Translation</button>
+                  status='success'>
+                  <nb-icon icon="plus-square-outline"></nb-icon> Add Translation
+                </button>
               </div>
               <div class="row">
                 <ng2-smart-table [settings]="settings3" [source]="transSource"

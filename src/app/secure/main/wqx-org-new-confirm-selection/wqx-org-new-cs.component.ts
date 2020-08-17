@@ -23,6 +23,7 @@ export class WqxOrgNewCSComponent implements OnInit {
   constructor(private service: WQXOrganizationService,
     private activatedRoute: ActivatedRoute,
     private authService: NbAuthService) {
+    console.log('wqx-org-new-cs comp called...');
     this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable

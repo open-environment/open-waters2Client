@@ -10,49 +10,53 @@
             <nb-card status="basic">
               <nb-card-header>Data Filters</nb-card-header>
               <nb-card-body>
-                <div class="form-row">
-                  <div class="col-2">Monitoring Location:</div>
+                <div class="form-row row">
+                  <div class="col-2">Monitoring Location2:</div>
                   <div class="col-2">
-                    <nb-select status="primary" name="ddlMonLoc" [(selected)]="monlocSelected">
+                    <nb-select fullWidth status="primary" name="ddlMonLoc" [(selected)]="monlocSelected">
                       <nb-option *ngFor="let monloc of monlocs" [value]="monloc.monlocIdx">
                         {{ monloc.monlocId }}</nb-option>
                     </nb-select>
                   </div>
                   <div class="col-2">Activity Type:</div>
                   <div class="col-2">
-                    <nb-select status="primary" name="ddlActType" [(selected)]="actTypeSelected">
+                    <nb-select fullWidth status="primary" name="ddlActType" [(selected)]="actTypeSelected">
                       <nb-option *ngFor="let actType of actTypes" [value]="actType.value">{{ actType.value }}
                       </nb-option>
                     </nb-select>
                   </div>
-                  <div class="col-2">
+                  <div class="col-4">
                     <nb-checkbox name="chkDeletedInd" [(checked)]="chkDeletedInd" status="danger">Display Deleted
                       Activities</nb-checkbox>
                   </div>
                 </div>
-                <div class="form-row">
+
+                <div class="form-row row mt-3">
                   <div class="col-2">Date Range:</div>
-                  <div class="col-1">
+                  <div class="col-4">
                     <input nbInput type="text" name="txtStartDate" [nbDatepicker]="txtStartDateModel"
                       [(ngModel)]="txtStartDate" />
                     <nb-datepicker #txtStartDateModel></nb-datepicker>
                   </div>
-                  <div class="col-1">To:</div>
-                  <div class="col-1">
+                  <div class="col-2">To:</div>
+                  <div class="col-4">
                     <input nbInput type="text" name="txtEndDate" [nbDatepicker]="txtEndDateModel"
                       [(ngModel)]="txtEndDate" />
                     <nb-datepicker #txtEndDateModel></nb-datepicker>
                   </div>
-                  <div class="col-1">Project:</div>
-                  <div class="col-3">
-                    <nb-select status="primary" name="ddlProject" [(selected)]="projectSelected">
+
+                </div>
+                <div class="form-row row mt-3">
+                  <div class="col-2">Project:</div>
+                  <div class="col-4">
+                    <nb-select fullWidth status="primary" name="ddlProject" [(selected)]="projectSelected">
                       <nb-option *ngFor="let project of projects" [value]="project.projectIdx">{{ project.projectId }}
                       </nb-option>
                     </nb-select>
                   </div>
-                  <div class="col-1">WQX Status:</div>
-                  <div class="col-2">
-                    <nb-select status="primary" name="ddlWQXStatus" [(selected)]="wqxStatusSelected">
+                  <div class="col-2">WQX Status:</div>
+                  <div class="col-4">
+                    <nb-select fullWidth status="primary" name="ddlWQXStatus" [(selected)]="wqxStatusSelected">
                       <nb-option *ngFor="let wqxStatus of wqxStatuses" [value]="wqxStatus.value">{{ wqxStatus.text }}
                       </nb-option>
                     </nb-select>

@@ -40,6 +40,9 @@ export class WQXOrganizationService extends WqxOrganizationData {
   getVWQXAllOrgs(): Observable<WqxAllOrgs[]> {
     return this.http.get<WqxAllOrgs[]>(WebApi.TWQXOrganizationApi.getVWQXAllOrgs());
   }
+  GetWQX_ORGANIZATION(): Observable<WqxOrganization[]> {
+    return this.http.get<WqxOrganization[]>(WebApi.TWQXOrganizationApi.getWQXOrganization());
+  }
   getAdminTaskData(userName: string, OrgID: string): Observable<UserOrgDisplay[]> {
     return this.http.get<UserOrgDisplay[]>(WebApi.TWQXOrganizationApi.getAdminTaskData(userName, OrgID));
   }

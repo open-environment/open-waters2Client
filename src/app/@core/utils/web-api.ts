@@ -1,6 +1,14 @@
 import { environment } from '../../../environments/environment';
 
 export module WebApi {
+  export class UtilityApi {
+    public static readonly checkUserAuthentication =
+      (payload: string) =>
+        `${environment.api.owUrl}/api/auth/CheckUserAuthentication?payload=${payload}`
+    public static readonly createAndGetNewUserData =
+      (userid: string) =>
+        `${environment.api.owUrl}/api/auth/CreateAndGetNewUserData?userid=${userid}`
+  }
   export class TWQXOrganizationApi {
     public static readonly connectTest =
       (orgId: string, typ: string) =>
@@ -22,6 +30,8 @@ export module WebApi {
         `${environment.api.owUrl}/api/org/getUserOrgsByUserIDX?userIDX=${userIDX}&excludePendingInd=${excludePendingInd}`
     public static readonly getVWQXAllOrgs =
       () => `${environment.api.owUrl}/api/org/getVWQXAllOrgs`
+    public static readonly getWQXOrganization =
+      () => `${environment.api.owUrl}/api/org/getWQXOrganization`
     public static readonly GetWQXOrganizationById =
       (orgID: string) =>
         `${environment.api.owUrl}/api/org/GetWQXOrganizationById?OrgID=${orgID}`

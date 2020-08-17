@@ -14,11 +14,11 @@ const routes: Routes = [{
   path: '',
   component: WqxPagesComponent,
   children: [
-    /* {
+    {
       path: 'main',
       loadChildren: () => import('./main/wqx-main.module')
         .then(m => m.WqxMainModule),
-    }, */
+    },
     {
       path: 'water-quality',
       loadChildren: () => import('./water-quality/wqx-water-quality.module')

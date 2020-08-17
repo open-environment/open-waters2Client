@@ -54,10 +54,15 @@ export class WqxOrgNewComponent {
 
   constructor(private service: WQXOrganizationService,
     private router: Router) {
+    console.log('wqx-org-new comp called...');
     this.service.getVWQXAllOrgs()
       .subscribe(
-        (_data) => {
-          this.source.load(_data);
+        (data) => {
+          console.log(data);
+          this.source.load(data);
+        },
+        (err) => {
+          console.log(err);
         },
       );
     // this.source.load(data);

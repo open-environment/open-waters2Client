@@ -70,8 +70,12 @@
     </nb-card-body>
     <nb-card-footer>
       <div class="row">
-        <button nbButton type="submit" status="success" class="mr-3">Save & Exit</button>
-        <button nbButton type="button" (click)="onCancelClicked()" status="danger">Cancel</button>
+        <button nbButton type="submit" status="success" class="mr-3">
+          <nb-icon icon="save-outline"></nb-icon> Save & Exit
+        </button>
+        <button nbButton type="button" (click)="onCancelClicked()" status="danger">
+          <nb-icon icon="close-square-outline"></nb-icon> Cancel
+        </button>
       </div>
     </nb-card-footer>
   </nb-card>

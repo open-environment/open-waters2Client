@@ -63,6 +63,7 @@ export class WqxOrgEditComponent implements OnInit {
     this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
+        console.log(this.user);
       }
     });
     if (this.orgEditId === null) {
@@ -83,8 +84,12 @@ export class WqxOrgEditComponent implements OnInit {
 
     this.activatedRoute.queryParams.subscribe(params => {
       this.orgEditId = params['orgEditId'];
-      if (this.orgEditId !== null) {
+      if (this.orgEditId !== null && this.orgEditId !== undefined) {
         this.loadPageData(this.orgEditId);
+      } else {
+        if (this.user.OrgID !== null) {
+          this.loadPageData(this.user.OrgID);
+        }
       }
     });
   }
