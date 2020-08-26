@@ -65,6 +65,7 @@ export class WqxMonlocEditComponent implements OnInit {
     this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
+        console.log(this.user);
         this.currentOrgId = this.user.OrgID;
         this.populateDropdowns();
       }
@@ -239,6 +240,7 @@ export class WqxMonlocEditComponent implements OnInit {
       let sms: number = 0;
       sms = parseInt(this.txtSourceMapScale, 10);
       if (isNaN(sms)) sms = 0;
+      console.log(this.currentOrgId);
       this.monlocService.InsertOrUpdateWQX_MONLOC(this.monlocIdx, this.currentOrgId, this.txtMonLocID, this.txtMonLocName,
         this.monlocTypeSelected, this.txtMonLocDesc, this.txtHUC8, this.txtHUC12, '', this.txtLandName, this.txtLatitude, this.txtLongitude, sms, '', '', this.horizMethodSelected, this.horizDetumSelected, this.txtVertMeasure,
         this.vertUnitSelected, this.vertMethodSelected, this.vertDetumSelected, this.countrySelected, this.stateSelected,

@@ -7,6 +7,7 @@ import { WQXProjectService } from '../../@core/wqx-services/wqx-project-service'
 import { WQXActivityService } from '../../@core/wqx-services/wqx-activity-service';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Router, NavigationExtras } from '@angular/router';
+import { WqxPubsubServiceService } from '../../@core/wqx-services/wqx-pubsub-service.service';
 
 @Component({
   selector: 'ngx-ecommerce',
@@ -28,6 +29,7 @@ export class ECommerceComponent {
   lblWiz1: string;
   btnWiz1: string = 'Get Started';
   pnlOrgSpecificShow: boolean;
+  isAdminTaskShow: string = '';
   lblWiz1Show: boolean = true;
   btnWiz1Show: boolean = true;
 
@@ -110,7 +112,9 @@ export class ECommerceComponent {
     private projectService: WQXProjectService,
     private activityService: WQXActivityService,
     private authService: NbAuthService,
-    private router: Router) {
+    private router: Router,
+    private pubSubService: WqxPubsubServiceService) {
+    console.log('dashboard: constructor called...');
 
     // *******************************************************************************
     // ************* Data Collection Metrics Panel ***********************************
@@ -120,7 +124,11 @@ export class ECommerceComponent {
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.currentUser = token.getPayload();
+          console.log('user:');
           console.log(this.currentUser);
+          if (this.currentUser.isAdmin.toString() === 'true') {
+            this.isAdminTaskShow = 'view';
+          }
           if (this.currentUser.OrgID !== null || this.currentUser.OrgID !== '') {
             if (this.currentUser.OrgID === '-1') {
               /* this.authService.logout('email').subscribe(
@@ -131,6 +139,8 @@ export class ECommerceComponent {
                 (err) => { console.log(err); },
               ); */
             } else {
+              console.log('setting default orgid to' + this.currentUser.OrgID);
+              this.pubSubService.setOrgId(this.currentUser.OrgID);
               this.pnlOrgSpecificShow = true;
               this.PopulateOrgSpecific();
             }
@@ -194,6 +204,7 @@ export class ECommerceComponent {
                     if (element.cdxSubmitInd === true) {
                       this.lblWiz2 = 'Congrats! Your organization is authorized to submit to EPA-WQX.';
                       this.btnWiz2 = 'Change Credentials';
+                      console.log(element.orgId);
                     } else {
                       this.lblWiz2 = 'In order to submit data to EPA using Open Waters, you must contact EPA and request that they authorize Open Waters to submit data.';
                       this.btnWiz2 = 'Get Started';

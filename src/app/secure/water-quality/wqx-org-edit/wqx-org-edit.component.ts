@@ -191,9 +191,11 @@ export class WqxOrgEditComponent implements OnInit {
     );
   }
   onSubmit() {
+    console.log('onSubmit called');
     this.savePageData();
   }
   savePageData() {
+    console.log('savePageData called');
     if (this.epaSubmissionGroup === '2') {
       // this.txtCDX = '';
       this.txtCDXPwd = '';
@@ -201,21 +203,37 @@ export class WqxOrgEditComponent implements OnInit {
 
     // save updates to Organization
     this.organizationService.
-      InsertOrUpdateTWQXOrganization(this.txtOrgID, this.txtOrgName,
-        this.txtOrgDesc, this.tribalCodeSelected, '', '', this.txtOrgPhone, '',
-        this.txtOrgPhoneExt, '', '', false, '', this.user.name,
-        this.txtMailingAddress, this.txtMailCity, this.txtMailState,
-        this.txtMailZIP).subscribe(
-          (result) => {
-            if (result === 1) {
-              this.toasterService.success('Data Saved!');
-              this.router.navigate(['../wqx-org'], { relativeTo: this.activatedRoute });
-            }
-          },
-          (err) => {
+      InsertOrUpdateTWQXOrganization(
+        this.txtOrgID === undefined || this.txtOrgID === null ? '' : this.txtOrgID,
+        this.txtOrgName === undefined || this.txtOrgName === null ? '' : this.txtOrgName,
+        this.txtOrgDesc === undefined || this.txtOrgDesc === null ? '' : this.txtOrgDesc,
+        this.tribalCodeSelected === undefined || this.tribalCodeSelected === null ? '' : this.tribalCodeSelected,
+        this.txtOrgEmail === undefined || this.txtOrgEmail === null ? '' : this.txtOrgEmail,
+        '',
+        this.txtOrgPhone === undefined || this.txtOrgPhone === null ? '' : this.txtOrgPhone,
+        '',
+        this.txtOrgPhoneExt === undefined || this.txtOrgPhoneExt === null ? '' : this.txtOrgPhoneExt,
+        '', '', false, '',
+        this.user.name,
+        this.txtMailingAddress === undefined || this.txtMailingAddress === null ? '' : this.txtMailingAddress,
+        this.txtMailCity === undefined || this.txtMailCity === null ? '' : this.txtMailCity,
+        this.txtMailState === undefined || this.txtMailState === null ? '' : this.txtMailState,
+        this.txtMailZIP === undefined || this.txtMailZIP === null ? '' : this.txtMailZIP,
+      ).subscribe(
+        (result) => {
+          console.log('InsertOrUpdateTWQXOrganization: valid:' + result);
+          if (result === 1) {
+            this.toasterService.success('Data Saved!');
+            this.router.navigate(['../wqx-org'], { relativeTo: this.activatedRoute });
+          } else {
             this.toasterService.danger('Error updating record.');
-          },
-        );
+          }
+        },
+        (err) => {
+          console.log('InsertOrUpdateTWQXOrganization: err: ' + err);
+          this.toasterService.danger('Error updating record.');
+        },
+      );
   }
   onCancelClicked(): void {
     this.router.navigate(['/secure/water-quality/wqx-org']);

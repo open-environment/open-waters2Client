@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WqxUtilityService } from '../../@core/wqx-services/wqx-utility.service';
 import { ExtLoginUser, JwtLoginModel } from '../../@core/wqx-data/wqx-utility';
 import { NbAuthService } from '@nebular/auth';
@@ -17,7 +17,8 @@ export class ExtloginComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
     private utilityService: WqxUtilityService,
     private authService: NbAuthService,
-    private menuService: NbMenuService) { }
+    private menuService: NbMenuService,
+    private router: Router) { }
 
   ngOnInit() {
     console.log('External login called...');
@@ -85,7 +86,7 @@ export class ExtloginComponent implements OnInit {
           (refreshResult) => {
             console.log('refreshToken: valid...navigate home');
             // console.log('refreshResult');
-            this.menuService.navigateHome();
+            this.router.navigateByUrl('/login');
           },
           (refreshErr) => {
             console.log('refreshToken: error');

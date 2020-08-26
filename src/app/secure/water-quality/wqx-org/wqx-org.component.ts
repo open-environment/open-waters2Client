@@ -5,6 +5,8 @@ import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-
 import { Router } from '@angular/router';
 import { Column } from 'primeng/primeng';
 import { WqxAllOrgs, WqxOrganization } from '../../../@core/wqx-data/wqx-organization';
+import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
+import { User } from '../../../@core/data/users';
 
 @Component({
   selector: 'ngx-wqx-org',
@@ -12,28 +14,55 @@ import { WqxAllOrgs, WqxOrganization } from '../../../@core/wqx-data/wqx-organiz
   styleUrls: ['./wqx-org.component.scss'],
 })
 export class WqxOrgComponent implements OnInit {
-
+  user: User;
   orgs: WqxOrganization[] = [];
 
   constructor(private service: WQXOrganizationService,
     private pubSubService: WqxPubsubServiceService,
-    private router: Router) {
-    this.pubSubService.loadData.subscribe((data: any) => {
-      console.log('subscribe called: ' + data);
+    private router: Router,
+    private authService: NbAuthService) {
+    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+      if (token.isValid()) {
+        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
+        console.log(this.user);
+        this.loadData();
+      }
     });
-    this.loadData();
+    this.pubSubService.loadData.subscribe((data: any) => {
+      console.log('pubSubService called: ' + data);
+    });
+
   }
 
   ngOnInit() {
   }
 
   loadData(): void {
-    this.service.GetWQX_ORGANIZATION()
-      .subscribe(
+    console.log('loadData called..');
+    if (this.user.isAdmin.toString() === 'true') {
+      console.log('User is admin..');
+      this.service.GetWQX_ORGANIZATION()
+        .subscribe(
+          (data) => {
+            console.log('GetWQX_ORGANIZATION: valid');
+            this.orgs = data;
+          },
+          (err) => {
+            console.log('GetWQX_ORGANIZATION: error: ' + err);
+          },
+        );
+    } else {
+      console.log('User is not admin..');
+      this.service.GetWQX_USER_ORGS_ByUserIDX(this.user.userIdx, true).subscribe(
         (data) => {
+          console.log('GetWQX_USER_ORGS_ByUserIDX: valid');
           this.orgs = data;
         },
+        (err) => {
+          console.log('GetWQX_USER_ORGS_ByUserIDX: error: ' + err);
+        },
       );
+    }
   }
 
   onEditClicked(org: WqxOrganization): void {

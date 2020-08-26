@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NbMenuService, NbSidebarService } from '@nebular/theme';
+import { NbMenuService, NbSidebarService, NbSelectComponent } from '@nebular/theme';
 
 import { User } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
@@ -40,7 +40,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     },
   ]; */
   orgs: WqxOrganization[] = [];
-
+  selectedOrgId: string;
   // currentTheme = 'default';
 
   userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
@@ -79,6 +79,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.menuService.onItemClick().subscribe((event) => {
       this.onItemSelection(event.item.title);
+    });
+    this.pubSubService.loadOrgId.subscribe((data: string) => {
+      console.log('pubsub seervice called for orgid with data:' + data);
+      if (data !== null && data !== undefined && data !== '') {
+        console.log('selected option set...');
+        this.selectedOrgId = data;
+      }
     });
     // this.currentTheme = this.themeService.currentTheme;
 
@@ -126,9 +133,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   /*   changeTheme(themeName: string) {
       this.themeService.changeTheme(themeName);
     } */
-  changeOrg(orgName: string) {
-    console.log(orgName);
-    this.pubSubService.setData(orgName);
+  changeOrg(orgId: string) {
+    console.log(orgId);
+    this.pubSubService.setData(orgId);
   }
   toggleSidebar(): boolean {
     this.sidebarService.toggle(true, 'menu-sidebar');

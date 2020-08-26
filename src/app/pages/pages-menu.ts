@@ -7,33 +7,33 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Home',
-    icon: 'shopping-cart-outline',
+    icon: 'home-outline',
     link: '/pages/dashboard',
     home: true,
   },
   {
     title: 'Water Quality',
-    icon: 'shopping-cart-outline',
+    icon: 'checkmark-square-outline',
     link: '/secure/water-quality/wqx-org',
   },
   {
     title: 'Reference Data',
-    icon: 'shopping-cart-outline',
+    icon: 'link-2-outline',
     link: '/secure/ref-data',
   },
   {
     title: 'Administration',
-    icon: 'shopping-cart-outline',
+    icon: 'settings-outline',
     link: '/secure/admin/users',
   },
   {
     title: 'My Account',
-    icon: 'shopping-cart-outline',
+    icon: 'person-outline',
     link: '/pages/dashboard',
   },
   {
     title: 'Help',
-    icon: 'shopping-cart-outline',
+    icon: 'question-mark-circle-outline',
     link: '/pages/dashboard',
   },
 ];

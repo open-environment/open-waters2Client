@@ -1,5 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { NbCardModule, NbTreeGridModule, NbIconModule, NbInputModule, NbSelectModule, NbRadioModule, NbCheckboxModule, NbListModule, NbAlertModule, NbTabsetModule, NbToastrModule, NbWindowModule, NbButtonModule, NbDatepickerModule } from '@nebular/theme';
+import { NbCardModule, NbTreeGridModule, NbIconModule, NbInputModule, NbSelectModule, NbRadioModule, NbCheckboxModule, NbListModule, NbAlertModule, NbTabsetModule, NbToastrModule, NbWindowModule, NbButtonModule, NbDatepickerModule, NbStepperModule, NbStepperComponent } from '@nebular/theme';
 import { ThemeModule } from '../../@theme/theme.module';
 // import { WqxMainRoutingModule, wqxRoutedComponents } from '../main/wqx-main-routing.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -28,6 +28,8 @@ import { WQXRefDataService } from '../../@core/wqx-services/wqx-refdata-service'
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgxAuthJWTInterceptor } from '../../NgxAuthJWTInterceptor';
 import { wqxWQRoutedComponents, WqxTablesRoutingModule } from './wqx-water-quality-routing.module';
+import { WqxImportMonlocComponent } from './wqx-import-monloc/wqx-import-monloc.component';
+import { WqxImportSampleComponent } from './wqx-import-sample/wqx-import-sample.component';
 
 @NgModule({
   imports: [
@@ -54,6 +56,7 @@ import { wqxWQRoutedComponents, WqxTablesRoutingModule } from './wqx-water-quali
     TableModule,
     DropdownModule,
     CalendarModule,
+    NbStepperModule,
   ],
   declarations: [
     ...wqxWQRoutedComponents,
@@ -75,9 +78,12 @@ import { wqxWQRoutedComponents, WqxTablesRoutingModule } from './wqx-water-quali
     ActivityConfigWindowComponent,
     WqxActivityEditComponent,
     AddRowDirective,
+    WqxImportMonlocComponent,
+    WqxImportSampleComponent,
   ],
   providers: [
     WQXRefDataService,
+    NbStepperComponent,
     { provide: HTTP_INTERCEPTORS, useClass: NgxAuthJWTInterceptor, multi: true },
   ],
   entryComponents: [

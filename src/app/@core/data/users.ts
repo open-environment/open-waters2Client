@@ -6,7 +6,8 @@ export interface User {
   picture: string;
   UserIDX: string;
   OrgID: string;
-  MLOC_HUC_EIGHT: boolean;
+  isAdmin: boolean;
+  /* MLOC_HUC_EIGHT: boolean;
   MLOC_HUC_TWELVE: boolean;
   MLOC_TRIBAL_LAND: boolean;
   MLOC_SOURCE_MAP_SCALE: boolean;
@@ -27,7 +28,7 @@ export interface User {
   SAMP_COLL_METHOD: boolean;
   SAMP_COLL_EQUIP: boolean;
   SAMP_PREP: boolean;
-  SAMP_DEPTH: boolean;
+  SAMP_DEPTH: boolean; */
 }
 
 export interface Contacts {

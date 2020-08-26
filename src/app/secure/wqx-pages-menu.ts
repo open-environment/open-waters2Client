@@ -3,41 +3,48 @@ import { NbMenuItem } from '@nebular/theme';
 export const WQX_MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Home',
-    icon: 'shopping-cart-outline',
+    icon: 'home-outline',
     link: '/pages/dashboard',
     home: true,
   },
   {
     title: 'Water Quality',
-    icon: 'grid-outline',
+    icon: 'checkmark-square-outline',
     children: [
       {
         title: 'Organizations',
         link: '/secure/water-quality/wqx-org',
+        icon: 'checkmark-outline',
       },
       {
         title: 'Monitoring Locs',
         link: '/secure/water-quality/wqx-monloc',
+        icon: 'checkmark-outline',
       },
       {
         title: 'Projects',
         link: '/secure/water-quality/wqx-project',
+        icon: 'checkmark-outline',
       },
       {
         title: 'Activity/Result',
         link: '/secure/water-quality/wqx-activity',
+        icon: 'checkmark-outline',
       },
       {
         title: 'Import Data',
         link: '/secure/water-quality/wqx-import',
+        icon: 'checkmark-outline',
       },
       {
         title: 'Retrieve From EPA',
         link: '/secure/water-quality/wqx-import-from-epa',
+        icon: 'checkmark-outline',
       },
       {
         title: 'WQX History',
         link: '/secure/water-quality/wqx-mgmt',
+        icon: 'checkmark-outline',
       },
     ],
   },
@@ -61,13 +68,13 @@ export const WQX_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Ref-Data',
-    icon: 'shopping-cart-outline',
+    icon: 'link-2-outline',
     link: '/secure/ref-data',
     home: true,
   },
   {
     title: 'Administration',
-    icon: 'grid-outline',
+    icon: 'settings-outline',
     children: [
       {
         title: 'User Management',

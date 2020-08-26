@@ -1,3 +1,94 @@
-<p>
-  wqx-import works!
-</p>
+<form>
+  <nb-card status="success">
+    <nb-card-header>BULK IMPORT DATA</nb-card-header>
+    <nb-card-body>
+      <nb-stepper orientation="vertical" [linear]="true" disableStepNavigation="true" #stepper
+        (stepChanged)="handleChange($event)">
+        <nb-step label="Step 1:">
+          <div class="row">
+            <div class="col-12">
+              <h4>Select Data to Import</h4>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">Data to Import:</div>
+            <div class="col-4">
+              <nb-select [(selected)]="selectedImportType" (selectedChange)="onDataToImportChanged($event)">
+                <nb-option value="">-- select option --</nb-option>
+                <nb-option value="M">Monitoring Locations</nb-option>
+                <nb-option value="S">Activities</nb-option>
+                <nb-option value="I">Bio Metrics/Indices</nb-option>
+              </nb-select>
+            </div>
+            <div class="col-4">link</div>
+          </div>
+        </nb-step>
+        <nb-step label="Step 2:">
+          <h4>Define Data Import Rules</h4>
+          <div class="row">
+            <div class="col">Set Global Import Rules:</div>
+            <div class="col">
+              <button nbButton type="button" status="success" name="btnGlobalRules" class="mr-3"
+                (click)="onGlobalRulesClicked()">
+                <nb-icon icon="save-outline"></nb-icon> Global Import Rules (optional)
+              </button>
+            </div>
+          </div>
+          <div *ngIf="isCustomImportTemplateShow === 'show'">
+            <div class="row">
+              <div class="col-6">Use Custom Import Template:</div>
+              <div class="col-6">
+                <nb-radio-group [(ngModel)]="selectedCustomImportTemplate" layout="row" name="CustomImportTemplate">
+                  <nb-radio value="1">No</nb-radio>
+                  <nb-radio value="2">Yes</nb-radio>
+                </nb-radio-group>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="isProjectShow === 'show'">
+            <div class="row">
+              <div class="col-6">
+                Import to Project:
+              </div>
+              <div class="col-6">
+                <nb-select fullWidth status="primary" name="ddlProject" [(selected)]="projectSelected">
+                  <nb-option *ngFor="let project of projects" [value]="project.projectIdx">{{ project.projectId }}
+                  </nb-option>
+                </nb-select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <button nbButton nbStepperNext (click)="onNextClicked()">Next Step</button>
+            </div>
+          </div>
+        </nb-step>
+        <nb-step label="Step 3:">
+          <h4>Paste Data</h4>
+          <div class="row">
+            <div class="col-12">
+              Copy and paste your data from a spreadsheet into the text area below:
+              <textarea fullWidth nbInput status="success" name="txtImportData" rows="5" [(ngModel)]="txtImportData">
+              </textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <button nbButton type="button" status="success" name="btnContinue" class="mr-3"
+                (click)="onBtnContinueClick()">
+                <nb-icon icon="save-outline"></nb-icon> Continue
+              </button>
+            </div>
+          </div>
+        </nb-step>
+      </nb-stepper>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton type="button" status="danger" name="btnCancelImport" class="mr-3"
+        (click)="onBtnCancelImportClicked()">
+        <nb-icon icon="save-outline"></nb-icon> Cancel Import
+      </button>
+    </nb-card-footer>
+  </nb-card>
+</form>

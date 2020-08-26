@@ -8,7 +8,7 @@
   <!-- <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
     <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
   </nb-select> -->
-  <nb-select (selectedChange)="changeOrg($event)" status="primary">
+  <nb-select (selectedChange)="changeOrg($event)" status="primary" [(selected)]="selectedOrgId">
     <nb-option *ngFor="let org of orgs" [value]="org.orgId"> {{ org.orgFormalName }}</nb-option>
   </nb-select>
 </div>

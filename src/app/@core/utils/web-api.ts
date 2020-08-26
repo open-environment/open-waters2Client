@@ -1,6 +1,28 @@
 import { environment } from '../../../environments/environment';
 
 export module WebApi {
+  export class ImportApi {
+    public static readonly processWqxImportData =
+      () => `${environment.api.owUrl}/api/import/processWqxImportData`
+    public static readonly getWqxImportTempMonloc =
+      (userIdx: number) =>
+        `${environment.api.owUrl}/api/import/getWqxImportTempMonlocByUserIdx?userIdx=${userIdx}`
+    public static readonly getWqxImportTempSample =
+      (userIdx: number) =>
+        `${environment.api.owUrl}/api/import/getWqxImportTempSampleByUserIdx?userIdx=${userIdx}`
+    public static readonly processImportTempMonloc =
+      () =>
+        `${environment.api.owUrl}/api/import/processImportTempMonloc`
+    public static readonly processImportTempSample =
+      () =>
+        `${environment.api.owUrl}/api/import/processImportTempSample`
+    public static readonly cancelProcessImportTempMonloc =
+      () =>
+        `${environment.api.owUrl}/api/import/cancelProcessImportTempMonloc`
+    public static readonly cancelProcessImportTempSample =
+      () =>
+        `${environment.api.owUrl}/api/import/cancelProcessImportTempSample`
+  }
   export class UtilityApi {
     public static readonly checkUserAuthentication =
       (payload: string) =>

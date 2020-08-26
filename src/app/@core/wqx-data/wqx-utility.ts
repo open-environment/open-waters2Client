@@ -30,6 +30,7 @@ export interface JwtLoginModel {
     roles: string[];
     isLockedOut: boolean;
     openWaterUserIdx: number;
+    isAdmin: boolean;
     orgUsers: OrgUserDisplayType[];
 }
 export abstract class WqxUtilityData {

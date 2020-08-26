@@ -154,14 +154,17 @@
 </div>
 <div class="row">
   <div class="col">
-    <nb-card status="success" size="midum">
-      <nb-card-header>Admin Tasks</nb-card-header>
-      <nb-card-body>
-        <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)"
-          (custom)="onCustom($event)">
-        </ng2-smart-table>
-      </nb-card-body>
-      <nb-card-footer></nb-card-footer>
-    </nb-card>
+
+    <div *ngIf="isAdminTaskShow === 'view'">
+      <nb-card status="success" size="midum">
+        <nb-card-header>Admin Tasks</nb-card-header>
+        <nb-card-body>
+          <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)"
+            (custom)="onCustom($event)">
+          </ng2-smart-table>
+        </nb-card-body>
+        <nb-card-footer></nb-card-footer>
+      </nb-card>
+    </div>
   </div>
 </div>

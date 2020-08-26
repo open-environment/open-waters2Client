@@ -6,6 +6,7 @@ import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 })
 export class WqxPubsubServiceService {
   loadData = new ReplaySubject<any>();
+  loadOrgId = new ReplaySubject<any>();
   fieldData = new ReplaySubject<any>();
   charData = new ReplaySubject<any>();
   monlocChkData = new ReplaySubject<any>();
@@ -15,7 +16,12 @@ export class WqxPubsubServiceService {
   constructor() { }
 
   setData(data: any) {
+
     this.loadData.next(data);
+  }
+  setOrgId(data: string) {
+    console.log('setOrgId called in pubsubservice... ');
+    this.loadOrgId.next(data);
   }
   fieldChanged(data: any) {
     this.fieldData.next(data);
