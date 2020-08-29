@@ -35,4 +35,7 @@ export class WqxMonlocService extends WqxMonlocData {
   GetWQX_MONLOC_ByOrgID(orgId: string): Observable<WqxMonloc[]> {
     return this.http.get<WqxMonloc[]>(WebApi.TWQXMonlocApi.getWqxMonlocByOrgId(orgId));
   }
+  DeleteT_WQX_MONLOC(monlocIdx: number, userIdx: number): Observable<number> {
+    return this.http.delete<number>(WebApi.TWQXMonlocApi.deleteWQXMonLoc(monlocIdx, userIdx));
+  }
 }

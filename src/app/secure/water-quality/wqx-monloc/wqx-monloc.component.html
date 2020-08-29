@@ -7,22 +7,92 @@
   </nb-card-header>
   <nb-card-body>
     <div class="row">
-      <ng2-smart-table [settings]="monlocSetting" [source]="monlocSource" (deleteConfirm)="onDeleteConfirm($event)"
-        (custom)="onCustom($event)">
-      </ng2-smart-table>
+      <p-table [columns]="cols" [value]="wqxMonlocSource" [responsive]="true">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th style="width:11em">Edit</th>
+            <th *ngFor="let col of columns">
+              {{col.header}}
+            </th>
+            <th style="width:11em">Send to EPA</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr>
+            <td style="text-align:center">
+              <div class="row">
+                <div class="col">
+                  <button nbButton size="tiny" status="success" (click)="onEditClicked(rowData)" class="mr-2">
+                    <nb-icon icon="edit-outline"></nb-icon>
+                  </button>
+                </div>
+                <div class="col">
+                  <button nbButton size="tiny" status="danger" (click)="onDeleteClicked(rowData)">
+                    <nb-icon icon="close-square-outline"></nb-icon>
+                  </button>
+                </div>
+              </div>
+            </td>
+            <td *ngFor="let col of columns">
+              <span class="ui-column-title ui-column-title-button">
+                <button nbButton size="tiny" status="warning">{{col.header}}</button>
+              </span>
+              {{rowData[col.field]}}
+            </td>
+            <td>
+              <span class="ui-column-title ui-column-title-button">
+                <button nbButton size="tiny" status="warning">Send to EPA</button>
+              </span>
+              <div class="row">
+                <div class="col">
+                  <nb-checkbox [checked]="rowData['wqxInd']" disabled></nb-checkbox>
+                </div>
+                <div class="col">
+                  <div *ngIf="rowData['wqxInd'] === true">
+                    <container-element [ngSwitch]="rowData['wqxSubmitStatus']">
+                      <!-- the same view can be shown in more than one case -->
+                      <some-element *ngSwitchCase="'U'">
+                        <img src="../../../../assets/images/progress.gif" alt="1" style="cursor: pointer;"
+                          title="Click to view WQX History" (click)="onSendToEPA(rowData['monlocIdx'])">
+                      </some-element>
+                      <some-element *ngSwitchCase="'N'">
+                        <img src="../../../../assets/images/ico_alert.png" alt="image2" style="cursor: pointer;"
+                          title="Click to view WQX History" (click)="onSendToEPA(rowData['monlocIdx'])">
+                      </some-element>
+                      <some-other-element *ngSwitchCase="'Y'">
+                        <img src="../../../../assets/images/ico_pass.png" alt="image3" style="cursor: pointer;"
+                          title="Click to view WQX History" (click)="onSendToEPA(rowData['monlocIdx'])">
+                      </some-other-element>
+                      <!--default case when there are no matches -->
+                      <some-element *ngSwitchDefault>
+                        <img src="../../../../assets/images/0.png" alt="image4" style="cursor: pointer;"
+                          title="Click to view WQX History" (click)="onSendToEPA(rowData['monlocIdx'])">
+                      </some-element>
+                    </container-element>
+                  </div>
+                </div>
+              </div>
+
+
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
     <div class="row mt-3">
-      <button nbButton (click)="onAddNew()" status="success" class="mr-3">
-        <nb-icon icon="plus-square-outline"></nb-icon>Add New
-      </button>
-      <span class="float-right">
-        <button nbButton (click)="onExcel()" status="info" class="mr-3">
-          <nb-icon icon="download-outline"></nb-icon> Excel
+      <div class="col">
+        <button nbButton (click)="onAddNew()" size="small" status="success" class="mr-3">
+          <nb-icon icon="plus-square-outline"></nb-icon>Add New
         </button>
-        <button nbButton (click)="onConfig()" status="info">
-          <nb-icon icon="settings-outline"></nb-icon> Config
-        </button>
-      </span>
+        <span class="float-right">
+          <button nbButton (click)="onExcel()" size="tiny" status="info" class="mr-3">
+            <nb-icon icon="download-outline"></nb-icon> Excel
+          </button>
+          <button nbButton (click)="onConfig()" size="tiny" status="info">
+            <nb-icon icon="settings-outline"></nb-icon> Config
+          </button>
+        </span>
+      </div>
     </div>
   </nb-card-body>
   <nb-card-footer></nb-card-footer>

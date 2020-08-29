@@ -95,6 +95,9 @@ export module WebApi {
     public static readonly getWqxMonlocByOrgId =
       (orgId: string) =>
         `${environment.api.owUrl}/api/monloc/getWqxMonlocByOrgId?OrgID=${orgId}`
+    public static readonly deleteWQXMonLoc =
+      (monlocIdx: number, userIdx: number) =>
+        `${environment.api.owUrl}/api/monloc/deleteWQXMonLoc?monLocIDX=${monlocIdx}&userIdx=${userIdx}`
   }
   export class TWQXProjectApi {
     public static readonly getAllProjects =

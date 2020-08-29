@@ -86,7 +86,7 @@ export class WqxImportComponent implements OnInit {
           (result) => {
             console.log('ProcessWqxImportData: valid');
             console.log(result);
-            if (result === 'Process Monloc') {
+            if (result === 'Process MonLoc') {
               this.router.navigate(['/secure/water-quality/wqx-import-monloc']);
             } else if (result === 'Process Sample') {
               this.router.navigate(['/secure/water-quality/wqx-import-sample']);

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { WqxMonlocConfig } from '../../../@core/wqx-data/wqx-monloc';
-import { NbWindowService, NbWindowRef } from '@nebular/theme';
+import { WqxMonlocConfig, WqxMonloc } from '../../../@core/wqx-data/wqx-monloc';
+import { NbWindowService, NbWindowRef, NbToastrService } from '@nebular/theme';
 import { MonlocConfigWindowComponent } from './monloc-config-window/monloc-config-window.component';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
 import { User } from '../../../@core/data/users';
@@ -20,49 +20,18 @@ export class WqxMonlocComponent implements OnInit {
   currentOrgId: string;
   chkDeletedInd: boolean = false;
   i = 0;
-  monlocSetting;
-  _monlocSetting = {
-    hideSubHeader: true,
-    actions: {
-      custom: [
-        {
-          name: 'edit',
-          title: '<i class="ion-edit" title="Edit"></i>',
-        },
-        {
-          name: 'delete',
-          title: '<i class="far fa-trash-alt" title="delete"></i>',
-        },
-      ],
-      add: false,
-      edit: false,
-      delete: false,
-    },
-    add: {
-      addButtonContent: '<i class="nb-plus"></i>',
-      createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    edit: {
-      editButtonContent: 'Select >>',
-      saveButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
-      confirmDelete: true,
-    },
-    columns: {},
-  };
+
   configWinRef: NbWindowRef;
-  // monlocSource: WqxMonloc[] = [];
-  monlocSource = new LocalDataSource([]);
+  wqxMonlocSource: WqxMonloc[] = [];
+  cols: any[];
+  defaultCols: any[];
 
   constructor(private windowService: NbWindowService,
     private pubSubService: WqxPubsubServiceService,
     private authService: NbAuthService,
     private monlocService: WqxMonlocService,
-    private router: Router) {
+    private router: Router,
+    private toasterService: NbToastrService) {
     this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
@@ -72,153 +41,53 @@ export class WqxMonlocComponent implements OnInit {
           this.onConfigSaved(data);
         });
 
-        this.populateData(true);
+        this.populateData();
       }
     });
   }
 
   ngOnInit() {
+    this.populateCols();
+    this.cols = this.defaultCols;
   }
-
-  populateData(isFirst: boolean) {
-    this.monlocService.GetWQX_MONLOC(this.chkDeletedInd, this.currentOrgId, false).subscribe(
-      (data) => {
-        if (isFirst === true) {
-          this._monlocSetting.columns = {};
-          this.prePop();
-          this.postPop();
-        }
-        this.monlocSetting = Object.assign({}, this._monlocSetting);
-        this.monlocSource = new LocalDataSource(data);
+  populateCols() {
+    console.log('populateCols called!');
+    this.defaultCols = [
+      { field: 'monlocId', header: 'ID' },
+      { field: 'monlocName', header: 'Name' },
+      { field: 'monlocType', header: 'Type' },
+      { field: 'monlocDesc', header: 'Description' },
+      { field: 'latitudeMsr', header: 'Latitude' },
+      { field: 'longitudeMsr', header: 'Longitude' },
+      { field: 'wellholeDepthMsrUnit', header: 'Depth Unit' },
+    ];
+  }
+  populateData() {
+    console.log('populateData called!');
+    this.populateCols();
+    this.cols = this.defaultCols;
+    console.log(JSON.stringify(this.cols));
+    this.monlocService.GetWQX_MONLOC(!this.chkDeletedInd, this.currentOrgId, false).subscribe(
+      (data: WqxMonloc[]) => {
+        this.wqxMonlocSource = data;
       },
     );
   }
   onConfigSaved(data: WqxMonlocConfig[]) {
     console.log('config saved!');
-    this._monlocSetting.columns = {};
-    this.prePop();
-    this.i = 0;
+    console.log('setting default cols...');
+    this.cols = JSON.parse(JSON.stringify(this.defaultCols));
     data.forEach(element => {
-      this.addColumn(element);
-    });
-    this.postPop();
-    this.monlocSetting = Object.assign({}, this._monlocSetting);
-    this.configWinRef.close();
-    this.populateData(false);
-  }
-  prePop() {
-    this._monlocSetting.columns['monlocId'] = {
-      title: 'ID',
-      type: 'string',
-      filter: false,
-    };
-    this._monlocSetting.columns['monlocName'] = {
-      title: 'Name',
-      type: 'string',
-      filter: false,
-    };
-    this._monlocSetting.columns['monlocType'] = {
-      title: 'Type',
-      type: 'string',
-      filter: false,
-    };
-    this._monlocSetting.columns['monlocDesc'] = {
-      title: 'Description',
-      type: 'string',
-      filter: false,
-    };
-  }
-  postPop() {
-    this._monlocSetting.columns['latitudeMsr'] = {
-      title: 'Latitude',
-      type: 'string',
-      filter: false,
-    };
-    this._monlocSetting.columns['longitudeMsr'] = {
-      title: 'Longitude',
-      type: 'string',
-      filter: false,
-    };
-    this._monlocSetting.columns['horizAccuracyUnit'] = {
-      title: 'Depth Unit',
-      type: 'string',
-      filter: false,
-    };
-  }
-  public addColumn(element: WqxMonlocConfig) {
-    if (element.value === true) {
-      let elemName: string = '';
-      switch (element.name) {
-        case 'HUC_EIGHT': {
-          elemName = '8-Digit HUC';
-          break;
-        }
-        case 'HUC_TWELVE': {
-          elemName = '12-Digit HUC';
-          break;
-        }
-        case 'TRIBAL_LAND': {
-          elemName = 'Tribal Land';
-          break;
-        }
-        case 'SOURCE_MAP_SCALE': {
-          elemName = 'Source Map Scale';
-          break;
-        }
-        case 'HORIZ_COLL_METHOD': {
-          elemName = 'Horiz. Collection Method';
-          break;
-        }
-        case 'HORIZ_REF_DATUM': {
-          elemName = 'Horiz. Datum';
-          break;
-        }
-        case 'ERT_MEASURE': {
-          elemName = 'Vertical Measure';
-          break;
-        }
-        case 'COUNTRY_CODE': {
-          elemName = 'Country';
-          break;
-        }
-        case 'STATE_CODE': {
-          elemName = 'State';
-          break;
-        }
-        case 'COUNTY_CODE': {
-          elemName = 'County';
-          break;
-        }
-        case 'WELL_TYPE': {
-          elemName = 'Well Type';
-          break;
-        }
-        case 'AQUIFER_NAME': {
-          elemName = 'Aquifer';
-          break;
-        }
-        case 'FORMATION_TYPE': {
-          elemName = 'Formation';
-          break;
-        }
-        case 'WELLHOLE_DEPTH': {
-          elemName = 'Wellhole Depth';
-          break;
-        }
+      if (element.value === true) {
+        this.cols.push({ field: element.field, header: element.header });
       }
-      this._monlocSetting.columns[elemName] = {
-        title: elemName,
-        type: 'string',
-        filter: false,
-      };
-      this.i++;
-    }
+    });
   }
-
 
   onChkDeletedInd(checked: boolean) {
     this.chkDeletedInd = checked;
     console.log(this.chkDeletedInd);
+    this.populateData();
   }
   onAddNew(): void {
     console.log('Add New Click!');
@@ -230,20 +99,37 @@ export class WqxMonlocComponent implements OnInit {
   onConfig(): void {
     console.log('onConfig Click!');
     this.configWinRef = this.windowService.open(MonlocConfigWindowComponent, { title: `` });
-
   }
 
-  onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
-    }
+  onEditClicked(monloc: WqxMonloc) {
+    console.log(monloc);
+    this.router.navigate(['/secure/water-quality/wqx-monloc-edit'], { queryParams: { monlocIdx: monloc.monlocIdx } });
   }
-  onCustom(event): void {
-    if (event.action === 'edit') {
-      console.log(event.data.monlocIdx);
-      this.router.navigate(['/secure/water-quality/wqx-monloc-edit'], { queryParams: { monlocIdx: event.data.monlocIdx } });
-    }
+  onDeleteClicked(monloc: WqxMonloc) {
+    console.log('delete action clicked!');
+    console.log(monloc.monlocIdx);
+    this.monlocService.DeleteT_WQX_MONLOC(monloc.monlocIdx, this.user.userIdx).subscribe(
+      (result) => {
+        console.log('DeleteT_WQX_MONLOC: valid');
+        if (result === 1) {
+          this.toasterService.success('Record successfully deleted.', '', { destroyByClick: true, duration: 5000 });
+        } else if (result === -1) {
+          this.toasterService.danger('Activities found for this monitoring location - location cannot be deleted.', '', { destroyByClick: true, duration: 5000 });
+        } else if (result === 0) {
+          this.toasterService.danger('Unable to delete monitoring location.', '', { destroyByClick: true, duration: 5000 });
+        } else {
+
+        }
+        this.populateData();
+      },
+      (err) => {
+        console.log('DeleteT_WQX_MONLOC: failed');
+      },
+    );
+  }
+  onSendToEPA(monlocIdx: number) {
+    console.log('onSendToEPA clicked!');
+    console.log(monlocIdx);
+    this.router.navigate(['/secure/water-quality/wqx-hist'], { queryParams: { monlocIdx: monlocIdx } });
   }
 }

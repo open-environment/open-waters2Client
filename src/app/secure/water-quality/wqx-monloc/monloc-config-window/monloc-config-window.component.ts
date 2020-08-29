@@ -55,7 +55,7 @@ export class MonlocConfigWindowComponent implements OnInit {
     this.config[this.config.indexOf(horizRefDatum)].value = checked;
   }
   onChkERT_MEASURE(checked: boolean): void {
-    const ertMeasure: WqxMonlocConfig = this.config.find(x => x.name === 'ERT_MEASURE');
+    const ertMeasure: WqxMonlocConfig = this.config.find(x => x.name === 'VERT_MEASURE');
     this.config[this.config.indexOf(ertMeasure)].value = checked;
   }
   onChkCOUNTRY_CODE(checked: boolean): void {

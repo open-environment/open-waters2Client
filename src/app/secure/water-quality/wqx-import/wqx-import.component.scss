@@ -1,0 +1,5 @@
+@import '../../../@theme/styles/themes';
+
+:host ::ng-deep .step-content {
+  width: 100% !important;
+}

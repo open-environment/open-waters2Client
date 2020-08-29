@@ -43,6 +43,8 @@ export interface WqxMonloc {
 export interface WqxMonlocConfig {
   name: string;
   value: boolean;
+  field: string;
+  header: string;
 }
 
 export abstract class WqxMonlocData {

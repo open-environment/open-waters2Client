@@ -245,7 +245,10 @@ export class WqxMonlocEditComponent implements OnInit {
         this.monlocTypeSelected, this.txtMonLocDesc, this.txtHUC8, this.txtHUC12, '', this.txtLandName, this.txtLatitude, this.txtLongitude, sms, '', '', this.horizMethodSelected, this.horizDetumSelected, this.txtVertMeasure,
         this.vertUnitSelected, this.vertMethodSelected, this.vertDetumSelected, this.countrySelected, this.stateSelected,
         this.countySelected, this.wellTypeSelected, this.txtAquifer, '', '', '', 'U', '', this.chkActInd, this.chkWQXInd, this.user.name).subscribe(
-          (data) => { console.log(data); },
+          (data) => {
+            console.log(data);
+            this.router.navigate(['/secure/water-quality/wqx-monloc']);
+          },
           (err) => { console.log(err); },
         );
     }

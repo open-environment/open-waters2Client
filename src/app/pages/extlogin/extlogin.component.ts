@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { WqxUtilityService } from '../../@core/wqx-services/wqx-utility.service';
 import { ExtLoginUser, JwtLoginModel } from '../../@core/wqx-data/wqx-utility';
 import { NbAuthService } from '@nebular/auth';
-import { NbMenuService } from '@nebular/theme';
+import { NbMenuService, NbSidebarService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-extlogin',
@@ -17,11 +17,12 @@ export class ExtloginComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
     private utilityService: WqxUtilityService,
     private authService: NbAuthService,
-    private menuService: NbMenuService,
+    private sideBarService: NbSidebarService,
     private router: Router) { }
 
   ngOnInit() {
     console.log('External login called...');
+    this.sideBarService.collapse();
     this.activatedRoute.queryParams.subscribe(params => {
       this.payload = params['pl'];
       // console.log('payload:' + this.payload);
@@ -76,22 +77,37 @@ export class ExtloginComponent implements OnInit {
     this.authService.authenticate('email', { email: result.username, password: result.password }).subscribe(
       (authresult) => {
         console.log('authenticate: valid');
-        console.log('authresult');
-        const _token = authresult.getToken();
-        const _tokenStr = _token.getValue();
-        // console.log(_token);
-        // console.log(_tokenStr);
-        console.log('refreshToken: calling...');
-        this.authService.refreshToken('email', { token: _tokenStr }).subscribe(
-          (refreshResult) => {
-            console.log('refreshToken: valid...navigate home');
-            // console.log('refreshResult');
-            this.router.navigateByUrl('/login');
-          },
-          (refreshErr) => {
-            console.log('refreshToken: error');
-            console.log('refreshErr');
-          });
+        if (authresult !== null || authresult !== undefined) {
+          console.log(authresult);
+          const _token = authresult.getToken();
+          if (_token !== null || _token !== undefined) {
+            console.log(_token);
+            const _tokenStr = _token.getValue();
+            if (_tokenStr !== null || _tokenStr !== undefined) {
+              console.log(_tokenStr);
+              // console.log(_tokenStr);
+              console.log('refreshToken: calling...');
+              this.authService.refreshToken('email', { token: _tokenStr }).subscribe(
+                (refreshResult) => {
+                  console.log('refreshToken: valid...navigate home');
+                  // console.log('refreshResult');
+                  this.sideBarService.expand();
+                  this.router.navigateByUrl('/login');
+                },
+                (refreshErr) => {
+                  console.log('refreshToken: error');
+                  console.log('refreshErr');
+                },
+              );
+            } else {
+              console.log('_tokenStr is null');
+            }
+          } else {
+            console.log('_token is null');
+          }
+        } else {
+          console.log('authresult: null');
+        }
       },
       (autherr) => {
         console.log('authenticate: error');
