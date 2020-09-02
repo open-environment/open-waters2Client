@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { WqxOrganization } from '../../@core/wqx-data/wqx-organization';
+import { Component, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { WqxOrganization, UserOrgDisplay } from '../../@core/wqx-data/wqx-organization';
 import { User } from '../../@core/data/users';
 import { NbAuthService, NbAuthJWTToken, NbAuthResult } from '@nebular/auth';
 import { WQXOrganizationService } from '../../@core/wqx-services/wqx-organization-service';
@@ -8,7 +8,11 @@ import { WQXActivityService } from '../../@core/wqx-services/wqx-activity-servic
 import { LocalDataSource } from 'ng2-smart-table';
 import { Router, NavigationExtras } from '@angular/router';
 import { WqxPubsubServiceService } from '../../@core/wqx-services/wqx-pubsub-service.service';
+import { NbToastrService } from '@nebular/theme';
 
+@NgModule({
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+})
 @Component({
   selector: 'ngx-ecommerce',
   templateUrl: './e-commerce.component.html',
@@ -62,59 +66,23 @@ export class ECommerceComponent {
 
   monLocOk: boolean = false;
   projOk: boolean = false;
-  settings = {
-    actions: {
-      custom: [
-        {
-          name: 'Approve',
-          title: 'Approve',
-        },
-        {
-          name: 'Reject',
-          title: 'Reject',
-        },
-      ],
-      add: false,
-      edit: false,
-      delete: false,
-    },
-    add: {
-      addButtonContent: '<i class="nb-plus"></i>',
-      createButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    edit: {
-      editButtonContent: 'Select >>',
-      saveButtonContent: '<i class="nb-checkmark"></i>',
-      cancelButtonContent: '<i class="nb-close"></i>',
-    },
-    delete: {
-      deleteButtonContent: '<i class="nb-trash"></i>',
-      confirmDelete: true,
-    },
-    columns: {
-      useR_ID: {
-        title: 'User ID',
-        type: 'string',
-        filter: false,
-      },
-      orG_ID: {
-        title: 'Organization',
-        type: 'string',
-        filter: false,
-      },
-    },
-    noDataMessage: 'No Admin tasks at this time.',
-  };
 
-  source: LocalDataSource = new LocalDataSource();
+  _userOrgDisplay: UserOrgDisplay[];
+  cols: any[];
+
   constructor(private organizationService: WQXOrganizationService,
     private projectService: WQXProjectService,
     private activityService: WQXActivityService,
     private authService: NbAuthService,
     private router: Router,
-    private pubSubService: WqxPubsubServiceService) {
+    private pubSubService: WqxPubsubServiceService,
+    private toasterService: NbToastrService) {
     console.log('dashboard: constructor called...');
+
+    this.cols = [
+      { field: 'useR_ID', header: 'User ID' },
+      { field: 'orG_ID', header: 'Organization' },
+    ];
 
     // *******************************************************************************
     // ************* Data Collection Metrics Panel ***********************************
@@ -294,40 +262,12 @@ export class ECommerceComponent {
   }
 
   bindAdminTaskData() {
-    this.organizationService.getAdminTaskData(this.currentUser.name, this.currentUser.OrgID)
+    this.organizationService.getAdminTaskData(this.currentUser.userIdx, this.currentUser.OrgID)
       .subscribe(
-        (_data) => {
-          console.log(_data);
-          this.source.load(_data);
+        (data: UserOrgDisplay[]) => {
+          this._userOrgDisplay = data;
         },
       );
-  }
-  onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
-    }
-  }
-
-  onCustom(event): void {
-    let ApproveRejectCode = '';
-    if (event.action === 'Approve') {
-      ApproveRejectCode = 'U';
-    } else if (event.action === 'Reject') {
-      ApproveRejectCode = 'R';
-    } else {
-      // do nothing
-    }
-    if (ApproveRejectCode !== '') {
-      this.organizationService.ApproveRejectTWqxUserOrgs(this.currentUser.OrgID, +this.currentUser.UserIDX, ApproveRejectCode)
-        .subscribe(
-          (_result) => { console.log(_result); },
-          (_err) => { console.log(_err); },
-        );
-    }
-    // const orgId = event.data.orgId;
-    // this.router.navigate(['/wqx-pages/main/wqx-org-new-cs', {orgId: orgId}]);
   }
   onBtnWiz1Click() {
     console.log('onBtnWiz1Click clicked');
@@ -364,5 +304,51 @@ export class ECommerceComponent {
   }
   onBtnWiz6bClick() {
     this.router.navigate(['/secure/water-quality/wqx-import']);
+  }
+  onApprove(uod: any) {
+    console.log('onApprove');
+    console.log(uod);
+    const ApproveRejectCode = 'U';
+    this.organizationService.ApproveRejectTWqxUserOrgs(uod.orG_ID, uod.useR_IDX, ApproveRejectCode)
+      .subscribe(
+        (result) => {
+          console.log(result);
+          if (result === -1) {
+            this.toasterService.danger('User\'s request has been declined.');
+          } else if (result === 1) {
+            this.toasterService.success('User\'s request has been accepted.');
+          } else {
+            this.toasterService.danger('Unable to complete this action.');
+          }
+          this.bindAdminTaskData();
+        },
+        (_err) => {
+          console.log(_err);
+          this.toasterService.danger('Unable to complete this action.');
+        },
+      );
+  }
+  onReject(uod: any) {
+    console.log('onApprove');
+    console.log(uod);
+    const ApproveRejectCode = 'R';
+    this.organizationService.ApproveRejectTWqxUserOrgs(uod.orG_ID, uod.useR_IDX, ApproveRejectCode)
+      .subscribe(
+        (result) => {
+          console.log(result);
+          if (result === -1) {
+            this.toasterService.danger('User\'s request has been declined.');
+          } else if (result === 1) {
+            this.toasterService.success('User\'s request has been accepted.');
+          } else {
+            this.toasterService.danger('Unable to complete this action.');
+          }
+          this.bindAdminTaskData();
+        },
+        (_err) => {
+          console.log(_err);
+          this.toasterService.danger('Unable to complete this action.');
+        },
+      );
   }
 }

@@ -12,8 +12,8 @@ export const environment = {
 };
 export const globals = {
   projectConfig: [
-    { name: 'SAMP_DESIGN_TYPE_CD', value: false },
-    { name: 'QAPP_APPROVAL', value: false },
+    { name: 'SAMP_DESIGN_TYPE_CD', value: false, field: 'sampDesignTypeCd', header: 'Sampling Design Type' },
+    { name: 'QAPP_APPROVAL', value: false, field: 'qappApproval', header: 'QAPP Approval' },
   ],
   monlocConfig: [
     { name: 'HUC_EIGHT', value: false, field: 'hucEight', header: '8-Digit HUC' },
@@ -32,10 +32,10 @@ export const globals = {
     { name: 'WELLHOLE_DEPTH', value: false, field: 'wellholeDepthMsr', header: 'Wellhole Depth' },
   ],
   activityConfig: [
-    { name: 'SAMP_ACT_END_DT', value: false },
-    { name: 'SAMP_COLL_METHOD', value: false },
-    { name: 'SAMP_COLL_EQUIP', value: false },
-    { name: 'SAMP_PREP', value: false },
-    { name: 'SAMP_DEPTH', value: false },
+    { name: 'SAMP_ACT_END_DT', value: false, field: 'acT_END_DT', header: 'End Date' },
+    { name: 'SAMP_COLL_METHOD', value: false, field: 'samP_COLL_METHOD', header: 'Sample Collection Method' },
+    { name: 'SAMP_COLL_EQUIP', value: false, field: 'samP_COLL_EQUIP', header: 'Collection Equipment' },
+    { name: 'SAMP_PREP', value: false, field: 'samP_PREP_METHOD', header: 'Sample Prep Method' },
+    { name: 'SAMP_DEPTH', value: false, field: 'acT_DEPTHHEIGHT_MSR', header: 'Depth' },
   ],
 };

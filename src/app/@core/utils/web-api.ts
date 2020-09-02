@@ -76,8 +76,8 @@ export module WebApi {
       (orgID: string, userIDX: number) =>
         `${environment.api.owUrl}/api/org/deleteTWqxUserOrgs?orgId=${orgID}&userIdx=${userIDX}`
     public static readonly getAdminTaskData =
-      (userName: string, OrgID: string) =>
-        `${environment.api.owUrl}/api/org/GetAdminTaskData?userName=${userName}&OrgID=${OrgID}`
+      (userIdx: number, OrgID: string) =>
+        `${environment.api.owUrl}/api/org/GetAdminTaskData?userIdx=${userIdx}&OrgID=${OrgID}`
     public static readonly GetWqxImportTranslatebyOrg =
       (orgId: string) =>
         `${environment.api.owUrl}/api/org/GetWqxImportTranslatebyOrg?orgId=${orgId}`
@@ -135,8 +135,8 @@ export module WebApi {
       (actInd: boolean, orgId: string, monLocIdx: number, startDt: string, endDt: string, actType: string, wQXPending: boolean, projectIdx: number, wQXStatus: string) =>
         `${environment.api.owUrl}/api/activity/getWqxActivityDisplay?ActInd=${actInd}&OrgID=${orgId}&MonLocIDX=${monLocIdx}&startDt=${startDt}&endDt=${endDt}&ActType=${actType}&WQXPending=${wQXPending}&ProjectIDX=${projectIdx}&WQXStatus=${wQXStatus}`
     public static readonly deleteTWqxActivity =
-      (activityIdx: number, userId: string) =>
-        `${environment.api.owUrl}/api/activity/deleteTWqxActivity?ActivityIDX=${activityIdx}&UserID=${userId}`
+      (activityIdx: number, userIdx: number) =>
+        `${environment.api.owUrl}/api/activity/deleteTWqxActivity?ActivityIDX=${activityIdx}&userIdx=${userIdx}`
     public static readonly getTWqxRefDataActivityTypeUsed =
       (orgId: string) =>
         `${environment.api.owUrl}/api/activity/getTWqxRefDataActivityTypeUsed?OrgID=${orgId}`

@@ -21,6 +21,7 @@ export class ActivityConfigWindowComponent implements OnInit {
   onConfigSave(): void {
     localStorage.setItem('activityConfig', JSON.stringify(this.config));
     this.pubSubService.setActivityData(this.config);
+    this.windowRef.close();
   }
   onConfigCancel(): void {
     console.log('onConfigCancel clicked!');

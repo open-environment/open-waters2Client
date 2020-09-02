@@ -11,24 +11,24 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-4">Data to Import:</div>
-            <div class="col-4">
-              <nb-select [(selected)]="selectedImportType" (selectedChange)="onDataToImportChanged($event)">
+            <div class="col-sm-3" style="padding-top:8px">Data to Import:</div>
+            <div class="col-sm-5">
+              <nb-select fullWidth [(selected)]="selectedImportType" (selectedChange)="onDataToImportChanged($event)">
                 <nb-option value="">-- select option --</nb-option>
                 <nb-option value="M">Monitoring Locations</nb-option>
                 <nb-option value="S">Activities</nb-option>
                 <nb-option value="I">Bio Metrics/Indices</nb-option>
               </nb-select>
             </div>
-            <div class="col-4">link</div>
+            <div class="col-sm-4" style="padding-top:8px">Download Link</div>
           </div>
         </nb-step>
         <nb-step label="Step 2:">
           <h4>Define Data Import Rules</h4>
           <div class="row">
-            <div class="col">Set Global Import Rules:</div>
-            <div class="col">
-              <button nbButton type="button" status="success" name="btnGlobalRules" class="mr-3"
+            <div class="col-sm-4">Set Global Import Rules:</div>
+            <div class="col-sm-8">
+              <button nbButton type="button" size="tiny" status="success" name="btnGlobalRules" class="mr-3"
                 (click)="onGlobalRulesClicked()">
                 <nb-icon icon="save-outline"></nb-icon> Global Import Rules (optional)
               </button>
@@ -60,7 +60,7 @@
           </div>
           <div class="row">
             <div class="col-12">
-              <button nbButton nbStepperNext (click)="onNextClicked()">Next Step</button>
+              <button nbButton size="tiny" nbStepperNext (click)="onNextClicked()">Next Step</button>
             </div>
           </div>
         </nb-step>
@@ -75,7 +75,7 @@
           </div>
           <div class="row">
             <div class="col-12">
-              <button nbButton type="button" status="success" name="btnContinue" class="mr-3"
+              <button nbButton type="button" size="tiny" status="success" name="btnContinue" class="mr-3"
                 (click)="onBtnContinueClick()">
                 <nb-icon icon="save-outline"></nb-icon> Continue
               </button>
@@ -85,7 +85,7 @@
       </nb-stepper>
     </nb-card-body>
     <nb-card-footer>
-      <button nbButton type="button" status="danger" name="btnCancelImport" class="mr-3"
+      <button nbButton type="button" size="tiny" status="danger" name="btnCancelImport" class="mr-3"
         (click)="onBtnCancelImportClicked()">
         <nb-icon icon="save-outline"></nb-icon> Cancel Import
       </button>

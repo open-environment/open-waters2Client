@@ -72,7 +72,7 @@ import { MyAppErrorHandler } from './pages/miscellaneous/myAppErrorHandler';
               success: '/',
               failure: 'null',
             },
-            defaultErrors: ['Login/Email combination is not correct, please try again.'],
+            defaultErrors: ['Your login attempt was not successful. Please try again.'],
             defaultMessages: ['You have been successfully logged in.'],
           },
           register: {

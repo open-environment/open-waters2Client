@@ -90,6 +90,8 @@ export interface ActivityListDisplay {
 export interface WqxActivityConfig {
   name: string;
   value: boolean;
+  field: string;
+  header: string;
 }
 
 export interface WqxResult {

@@ -164,13 +164,14 @@
                 </div>
               </div>
               <br />
-              <button nbButton type="button" status="info" (click)="btnTestNAASLocalClick()">
+              <button nbButton type="button" size="tiny" status="info" (click)="btnTestNAASLocalClick()">
                 <nb-icon icon="checkmark-circle-outline"></nb-icon> Test My Credentials
               </button>
             </div>
             <div *ngIf="divCDXglobal === true">
               <br />
-              <button nbButton status="info" (click)="btnTestNAASGlobalClick()">Check if Open Waters is Authorized to
+              <button nbButton size="tiny" status="info" (click)="btnTestNAASGlobalClick()">Check if Open Waters is
+                Authorized to
                 Submit for Your Organization</button>
             </div>
           </nb-card-body>
@@ -179,15 +180,15 @@
 
     </nb-card-body>
     <nb-card-footer>
-      <button class="mr-2" nbButton status="success" type="submit">
+      <button class="mr-2" nbButton size="tiny" status="success" type="submit">
         <nb-icon icon="save-outline"></nb-icon>
         Save & Exit
       </button>
-      <button class="mr-2" nbButton type="button" status="danger" (click)="onCancelClicked()">
+      <button class="mr-2" nbButton size="tiny" type="button" status="danger" (click)="onCancelClicked()">
         <nb-icon icon="close-square-outline"></nb-icon>
         Cancel
       </button>
-      <button class="mr-2" nbButton type="button" status="info" (click)="onEditDefaultData()">
+      <button class="mr-2" nbButton size="tiny" type="button" status="info" (click)="onEditDefaultData()">
         <nb-icon icon="settings-outline"></nb-icon>
         Edit Default Data
       </button>
@@ -210,11 +211,11 @@
         <div class="form-group col-md-4">
           <nb-checkbox name="nbc" [(ngModel)]="isChecked">Add as Admin</nb-checkbox>
           <br />
-          <button class="mb-2" nbButton status="basic" (click)="onAddUserToOrg()">
+          <button class="mb-2" nbButton size="tiny" status="basic" (click)="onAddUserToOrg()">
             <nb-icon icon="plus-square-outline"></nb-icon>
             Add User to Org >>
           </button>
-          <button class="mb-2" nbButton status="basic" (click)="onRemoveUserFromOrg()">
+          <button class="mb-2" nbButton size="tiny" status="basic" (click)="onRemoveUserFromOrg()">
             <nb-icon icon="minus-square-outline"></nb-icon>
             << Remove User from Org</button>
         </div>

@@ -76,7 +76,9 @@ export class WqxMonlocComponent implements OnInit {
   onConfigSaved(data: WqxMonlocConfig[]) {
     console.log('config saved!');
     console.log('setting default cols...');
+    // Avoid copy by reference
     this.cols = JSON.parse(JSON.stringify(this.defaultCols));
+
     data.forEach(element => {
       if (element.value === true) {
         this.cols.push({ field: element.field, header: element.header });

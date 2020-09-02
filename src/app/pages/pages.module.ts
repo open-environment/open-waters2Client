@@ -8,6 +8,7 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { ExtloginComponent } from './extlogin/extlogin.component';
 
+
 @NgModule({
   imports: [
     PagesRoutingModule,
@@ -20,6 +21,7 @@ import { ExtloginComponent } from './extlogin/extlogin.component';
     PagesComponent,
     ExtloginComponent,
   ],
+
 })
 export class PagesModule {
 }

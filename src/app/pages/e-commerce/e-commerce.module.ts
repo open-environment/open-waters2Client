@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import {
   NbButtonModule,
   NbCardModule,
@@ -21,6 +21,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { WQXOrganizationService } from '../../@core/wqx-services/wqx-organization-service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgxAuthJWTInterceptor } from '../../NgxAuthJWTInterceptor';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { NgxAuthJWTInterceptor } from '../../NgxAuthJWTInterceptor';
     LeafletModule,
     NbStepperModule,
     Ng2SmartTableModule,
+    TableModule,
   ],
   declarations: [
     ECommerceComponent,
@@ -47,5 +49,6 @@ import { NgxAuthJWTInterceptor } from '../../NgxAuthJWTInterceptor';
     WQXOrganizationService,
     { provide: HTTP_INTERCEPTORS, useClass: NgxAuthJWTInterceptor, multi: true },
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ECommerceModule { }

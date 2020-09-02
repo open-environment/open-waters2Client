@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WqxProjectConfig } from '../../../@core/wqx-data/wqx-project';
+import { WqxProjectConfig, WqxProject } from '../../../@core/wqx-data/wqx-project';
 import { User } from '../../../@core/data/users';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { WQXProjectService } from '../../../@core/wqx-services/wqx-project-service';
@@ -56,6 +56,9 @@ export class WqxProjectComponent implements OnInit {
   };
   configWinRef: NbWindowRef;
   projectSource = new LocalDataSource([]);
+  WqxProjects: WqxProject[];
+  cols: any[];
+  defaultCols: any[];
 
   constructor(private authService: NbAuthService,
     private projectService: WQXProjectService,
@@ -79,98 +82,38 @@ export class WqxProjectComponent implements OnInit {
   ngOnInit() { }
   onConfigSaved(data: WqxProjectConfig[]) {
     console.log('config saved!');
-    this._projectSetting.columns = {};
-    this.prePop();
-    this.i = 0;
+    console.log('setting default cols...');
+
+    // Avoid copy by reference
+    this.cols = JSON.parse(JSON.stringify(this.defaultCols));
+
     data.forEach(element => {
-      this.addColumn(element);
-    });
-    this.postPop();
-    this.projectSetting = Object.assign({}, this._projectSetting);
-    this.configWinRef.close();
-    this.populateData(false);
-  }
-  public addColumn(element: WqxProjectConfig) {
-    if (element.value === true) {
-      let elemName: string = '';
-      let title: string = '';
-      switch (element.name) {
-        case 'SAMP_DESIGN_TYPE_CD': {
-          elemName = 'sampDesignTypeCd';
-          title = 'Sampling Design Type';
-          break;
-        }
-        case 'QAPP_APPROVAL': {
-          elemName = 'qappApprovalInd';
-          title = 'QAPP Approved';
-          // Add additional column
-          this._projectSetting.columns['qappApprovalAgency'] = {
-            title: 'QAPP Approval Agency',
-            type: 'string',
-            filter: false,
-          };
-          break;
-        }
+      if (element.value === true) {
+        this.cols.push({ field: element.field, header: element.header });
       }
-      this._projectSetting.columns[elemName] = {
-        title: title,
-        type: 'string',
-        filter: false,
-      };
-      this.i++;
-    }
+    });
+  }
+  populateCols() {
+    console.log('populateCols called!');
+    this.defaultCols = [
+      { field: 'projectId', header: 'ID' },
+      { field: 'projectName', header: 'Name' },
+      { field: 'projectDesc', header: 'Description' },
+      { field: 'projectType', header: 'Type' }
+    ];
   }
   populateData(isFirst: boolean) {
+    console.log('populateData called!');
+    this.populateCols();
+    this.cols = this.defaultCols;
     this.projectService.GetWQX_PROJECT(false, this.currentOrgId, false).subscribe(
-      (data) => {
+      (data: WqxProject[]) => {
         console.log(data);
-        if (isFirst === true) {
-          this._projectSetting.columns = {};
-          this.prePop();
-          this.postPop();
-        }
-        this.projectSetting = Object.assign({}, this._projectSetting);
-        this.projectSource.load(data);
+        this.WqxProjects = data;
       },
     );
   }
-  prePop() {
-    this._projectSetting.columns['projectId'] = {
-      title: 'ID',
-      type: 'string',
-      filter: false,
-    };
-    this._projectSetting.columns['projectName'] = {
-      title: 'Name',
-      type: 'string',
-      filter: false,
-    };
-    this._projectSetting.columns['projectDesc'] = {
-      title: 'Description',
-      type: 'string',
-      filter: false,
-    };
-    this._projectSetting.columns['actInd'] = {
-      title: 'ACT_IND',
-      type: 'string',
-      filter: false,
-    };
-  }
-  postPop() { }
 
-  onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
-    }
-  }
-  onCustom(event): void {
-    if (event.action === 'edit') {
-      // console.log(event.data.monlocIdx);
-      this.router.navigate(['/secure/water-quality/wqx-project-edit'], { queryParams: { projectIdx: event.data.projectIdx } });
-    }
-  }
   onAddNew(): void {
     console.log('Add New Click!');
     this.router.navigate(['/secure/water-quality/wqx-project-edit'], { queryParams: { projectIdx: -1 } });
@@ -181,5 +124,37 @@ export class WqxProjectComponent implements OnInit {
   onConfig(): void {
     console.log('onConfig Click!');
     this.configWinRef = this.windowService.open(ProjectConfigWindowComponent, { title: `` });
+  }
+
+  onEditClicked(project: WqxProject) {
+    console.log(project);
+    this.router.navigate(['/secure/water-quality/wqx-project-edit'], { queryParams: { projectIdx: project.projectIdx } });
+  }
+  onDeleteClicked(project: WqxProject) {
+    console.log('delete action clicked!');
+    console.log(project.projectIdx);
+    /* this.projectService.DeleteT_WQX_MONLOC(project.projectIdx, this.user.userIdx).subscribe(
+      (result) => {
+        console.log('DeleteT_WQX_MONLOC: valid');
+        if (result === 1) {
+          this.toasterService.success('Record successfully deleted.', '', { destroyByClick: true, duration: 5000 });
+        } else if (result === -1) {
+          this.toasterService.danger('Activities found for this monitoring location - location cannot be deleted.', '', { destroyByClick: true, duration: 5000 });
+        } else if (result === 0) {
+          this.toasterService.danger('Unable to delete monitoring location.', '', { destroyByClick: true, duration: 5000 });
+        } else {
+
+        }
+        this.populateData();
+      },
+      (err) => {
+        console.log('DeleteT_WQX_MONLOC: failed');
+      },
+    ); */
+  }
+  onSendToEPA(projectIdx: number) {
+    console.log('onSendToEPA clicked!');
+    console.log(projectIdx);
+    this.router.navigate(['/secure/water-quality/wqx-hist'], { queryParams: { proejctIdx: projectIdx } });
   }
 }

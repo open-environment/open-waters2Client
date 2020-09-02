@@ -1,31 +1,8 @@
-@import '../../../@theme/styles/themes';
+th {
+  font-size: 10px;
+  font-weight: bold;
+}
 
-@include nb-install-component() {
-  nb-card {
-    transform: translate3d(0, 0, 0);
-  }
-}
-:host ::ng-deep ng2-st-tbody-edit-delete {
-  display: flex !important;
-  height: 0 !important;
-}
-:host
-  ::ng-deep
-  ng2-st-tbody-custom
-  a.ng2-smart-action.ng2-smart-action-custom-custom {
-  //text-align: center !important;
-  //font-size: 1.0em !important;
-  display: inline-block;
-  width: 30px;
-  text-align: center !important;
-  font-size: 1em !important;
-  margin-right: 3px;
-  vertical-align: middle;
-  padding-top: 15px;
-}
-:host
-  ::ng-deep
-  ng2-st-tbody-custom
-  a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
-  color: #5dcfe3;
+td {
+  font-size: 10px;
 }

@@ -21,6 +21,8 @@ export interface WqxProject {
 export interface WqxProjectConfig {
   name: string;
   value: boolean;
+  field: string;
+  header: string;
 }
 export abstract class WqxProjectData {
   abstract GetWQX_PROJECTS(): Observable<WqxProject[]>;

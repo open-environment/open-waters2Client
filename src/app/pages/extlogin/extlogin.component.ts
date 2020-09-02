@@ -74,16 +74,18 @@ export class ExtloginComponent implements OnInit {
     console.log('tryLogin called...');
     console.log(result);
     console.log('authenticate: calling...');
+    console.log('email:' + result.username);
+    console.log('password:' + result.password);
     this.authService.authenticate('email', { email: result.username, password: result.password }).subscribe(
       (authresult) => {
         console.log('authenticate: valid');
-        if (authresult !== null || authresult !== undefined) {
+        if (authresult !== null && authresult !== undefined) {
           console.log(authresult);
           const _token = authresult.getToken();
-          if (_token !== null || _token !== undefined) {
+          if (_token !== null && _token !== undefined) {
             console.log(_token);
             const _tokenStr = _token.getValue();
-            if (_tokenStr !== null || _tokenStr !== undefined) {
+            if (_tokenStr !== null && _tokenStr !== undefined) {
               console.log(_tokenStr);
               // console.log(_tokenStr);
               console.log('refreshToken: calling...');

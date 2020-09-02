@@ -22,7 +22,8 @@
       <ng-template pTemplate="body" let-rowData let-ri="rowIndex">
         <tr>
           <td style="text-align:center">
-            <button type="button" pButton pRipple icon="pi pi-pencil" (click)="onEditClicked(rowData)">
+            <button nbButton size="tiny" status="success" (click)="onEditClicked(rowData)">
+              <nb-icon icon="edit-outline"></nb-icon>
             </button>
           </td>
           <td>
@@ -102,7 +103,7 @@
     </p-table>
   </nb-card-body>
   <nb-card-footer>
-    <button nbButton class="success" (click)="onAddNewClick()">
+    <button nbButton class="success" size="tiny" (click)="onAddNewClick()">
       <nb-icon icon="plus-square-outline"></nb-icon>Add New
     </button>
   </nb-card-footer>
