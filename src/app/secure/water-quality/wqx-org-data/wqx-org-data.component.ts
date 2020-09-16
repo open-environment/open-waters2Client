@@ -238,6 +238,10 @@ export class WqxOrgDataComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    if (localStorage.getItem('selectedOrgId') !== null) {
+      this.currentOrgId = localStorage.getItem('selectedOrgId');
+    }
   }
 
   onBtnSaveClick(): void {

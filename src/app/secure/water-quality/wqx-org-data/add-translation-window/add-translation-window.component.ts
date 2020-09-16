@@ -13,7 +13,7 @@ import { WqxPubsubServiceService } from '../../../../@core/wqx-services/wqx-pubs
 })
 export class AddTranslationWindowComponent implements OnInit {
 
-  @Output() fieldAdded = new EventEmitter<{isFieldAdded: boolean}>();
+  @Output() fieldAdded = new EventEmitter<{ isFieldAdded: boolean }>();
   user: User;
   currentOrgId: string = '';
   fields: string[] = [];
@@ -32,14 +32,18 @@ export class AddTranslationWindowComponent implements OnInit {
         this.refDataService.GetAllColumnBasic('S').subscribe(
           (data) => {
             this.fields = data;
-           },
+          },
           (err) => { console.log(err); },
         );
       }
     });
-   }
+  }
 
   ngOnInit() {
+
+    if (localStorage.getItem('selectedOrgId') !== null) {
+      this.currentOrgId = localStorage.getItem('selectedOrgId');
+    }
   }
 
   onFieldSelected(selectedItem): void {
@@ -51,7 +55,7 @@ export class AddTranslationWindowComponent implements OnInit {
       (data) => {
         console.log(data);
         this.pubSubService.fieldChanged(true);
-       },
+      },
       (err) => { console.log(err); },
       () => {
         this.windowRef.close();

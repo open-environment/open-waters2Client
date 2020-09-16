@@ -170,9 +170,29 @@
             </div>
             <div *ngIf="divCDXglobal === true">
               <br />
-              <button nbButton size="tiny" status="info" (click)="btnTestNAASGlobalClick()">Check if Open Waters is
+              <button nbButton size="tiny" type="button" status="info" (click)="btnTestNAASGlobalClick()">Check if Open
+                Waters is
                 Authorized to
                 Submit for Your Organization</button>
+            </div>
+            <div *ngIf="pnlCDXResults === true">
+              <div class="row">
+                <div class="col">
+                  <h5>Test Results</h5>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">Authentication:</div>
+                <div class="col-sm-8">
+                  <nb-alert status="info">{{ txtAuthResult }}</nb-alert>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">Ability to Submit:</div>
+                <div class="col-sm-8">
+                  <nb-alert status="info">{{ txtSubmitResult }}</nb-alert>
+                </div>
+              </div>
             </div>
           </nb-card-body>
         </nb-card>
@@ -204,7 +224,7 @@
             <nb-list-item name="nbli" *ngFor="let orgUser of lbAllUsers"
               [ngClass]="{'listItemClass1' : listItemClass1}">
               <label name="nbl"
-                (click)="onOrgAllUserClicked(orgUser)">{{ orgUser.useR_ID + (orgUser.rolE_CD === 'A' ? 'Admin' : 'User') }}</label>
+                (click)="onOrgAllUserClicked(orgUser)">{{ orgUser.fname + ' ' + orgUser.lname + (orgUser.rolE_CD === 'A' ? '(admin)' : '(user)') }}</label>
             </nb-list-item>
           </nb-list>
         </div>
@@ -224,7 +244,7 @@
           <nb-list>
             <nb-list-item *ngFor="let orgUserN of lbUserInRole" [ngClass]="{'listItemClass2' : listItemClass2}">
               <label
-                (click)="onOrgAllUserNotInOrgClicked(orgUserN)">{{ (orgUserN.rolE_CD === 'A') ? orgUserN.useR_ID + '(Admin)' : orgUserN.useR_ID + '(User)' }}</label>
+                (click)="onOrgAllUserNotInOrgClicked(orgUserN)">{{ (orgUserN.rolE_CD === 'A') ? orgUserN.useR_NAME + '(Admin)' : orgUserN.useR_NAME + '(User)' }}</label>
             </nb-list-item>
           </nb-list>
         </div>

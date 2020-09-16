@@ -105,6 +105,9 @@ export class WqxActivityComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (localStorage.getItem('selectedOrgId') !== null) {
+      this.currentOrgId = localStorage.getItem('selectedOrgId');
+    }
     // populate drop-downs
     this.populateDropdowns();
   }
@@ -194,10 +197,11 @@ export class WqxActivityComponent implements OnInit {
     console.log(activity);
     this.router.navigate(['/secure/water-quality/wqx-activity-edit'], { queryParams: { activityIdx: activity.activitY_IDX } });
   }
-  onDeleteClicked(activity: ActivityListDisplay) {
+  onDeleteClicked(activity: any) {
     console.log('onDeleteClicked');
     console.log(activity);
-    this.activityService.DeleteT_WQX_ACTIVITY(activity.activityIdx, this.user.userIdx).subscribe(
+    console.log(activity.activityIdx);
+    this.activityService.DeleteT_WQX_ACTIVITY(activity.activitY_IDX, this.user.userIdx).subscribe(
       (result) => {
         if (result === 1) {
           this.toasterService.success('Record successfully deleted.');

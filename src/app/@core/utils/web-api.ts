@@ -1,12 +1,56 @@
 import { environment } from '../../../environments/environment';
+import { TOeAppTasks } from '../wqx-data/wqx-mgmg';
 
 export module WebApi {
+  export class MgmtApi {
+    public static readonly getVWqxTransactionLog =
+      (tableCd: string,
+        startDt: string, endDt: string, orgId: string) =>
+        `${environment.api.owUrl}/api/mgmt/getVWqxTransactionLog?TableCD=${tableCd}&startDt=${startDt}&endDt=${endDt}&OrgID=${orgId}`
+    public static readonly getVWqxPendingRecords =
+      (orgId: string,
+        startDt: string, endDt: string) =>
+        `${environment.api.owUrl}/api/mgmt/getVWqxPendingRecords?OrgID=${orgId}&startDate=${startDt}&endDate=${endDt}`
+    public static readonly getTOeAppTasksByName =
+      (taskName: string) =>
+        `${environment.api.owUrl}/api/mgmt/getTOeAppTasksByName?taskName=${taskName}`
+    public static readonly wqxMaster =
+      (orgId: string) =>
+        `${environment.api.owUrl}/api/mgmt/wqxMaster?orgId=${orgId}`
+    public static readonly wqxSubmitOneByOne =
+      (typeText: string, recordIdx: number, userId: string, credential: string, nodeUrl: string, orgId: string, insUpdIndicator: boolean) =>
+        `${environment.api.owUrl}/api/mgmt/wqxSubmitOneByOne?typeText=${typeText}&RecordIDX=${recordIdx}&userID=${userId}&credential=${credential}&NodeURL=${nodeUrl}&orgID=${orgId}&InsUpdIndicator=${insUpdIndicator}`
+    public static readonly getCdxSubmitCredentials2 =
+      (orgId: string) =>
+        `${environment.api.owUrl}/api/mgmt/getCdxSubmitCredentials2?orgId=${orgId}`
+    public static readonly updateTOeAppTasks =
+      () =>
+        `${environment.api.owUrl}/api/mgmt/updateTOeAppTasks`
+    public static readonly getWqxTransactionLogByLogId =
+      (logId: number) =>
+        `${environment.api.owUrl}/api/mgmt/getWqxTransactionLogByLogId?LogID=${logId}`
+  }
   export class ImportApi {
     public static readonly processWqxImportData =
       () => `${environment.api.owUrl}/api/import/processWqxImportData`
     public static readonly getWqxImportTempMonloc =
       (userIdx: number) =>
         `${environment.api.owUrl}/api/import/getWqxImportTempMonlocByUserIdx?userIdx=${userIdx}`
+    public static readonly getWqxImportTemplate =
+      (orgId: string) =>
+        `${environment.api.owUrl}/api/import/getWqxImportTemplate?OrgID=${orgId}`
+    public static readonly getWqxImportTemplateDtlDynamicByTemplateId =
+      (templateId: number) =>
+        `${environment.api.owUrl}/api/import/getWqxImportTemplateDtlDynamicByTemplateId?TemplateID=${templateId}`
+    public static readonly getWqxImportTemplateDtlHarCodeByTemplateId =
+      (templateId: number) =>
+        `${environment.api.owUrl}/api/import/getWqxImportTemplateDtlHarCodeByTemplateId?TemplateID=${templateId}`
+    public static readonly deleteTWqxImportTemplate =
+      (templateId: number) =>
+        `${environment.api.owUrl}/api/import/deleteTWqxImportTemplate?TemplateID=${templateId}`
+    public static readonly deleteTWqxImportTemplateDtl =
+      (templateDtlId: number) =>
+        `${environment.api.owUrl}/api/import/deleteTWqxImportTemplateDtl?TemplateDtlID=${templateDtlId}`
     public static readonly getWqxImportTempSample =
       (userIdx: number) =>
         `${environment.api.owUrl}/api/import/getWqxImportTempSampleByUserIdx?userIdx=${userIdx}`
@@ -22,6 +66,12 @@ export module WebApi {
     public static readonly cancelProcessImportTempSample =
       () =>
         `${environment.api.owUrl}/api/import/cancelProcessImportTempSample`
+    public static readonly insertOrUpdateWqxImportTemplate =
+      () =>
+        `${environment.api.owUrl}/api/import/insertOrUpdateWqxImportTemplate`
+    public static readonly insertOrUpdateWqxImportTemplateDtl =
+      () =>
+        `${environment.api.owUrl}/api/import/insertOrUpdateWqxImportTemplateDtl`
   }
   export class UtilityApi {
     public static readonly checkUserAuthentication =
@@ -106,6 +156,9 @@ export module WebApi {
     public static readonly getWQXProjectMyOrgCount =
       (userIDX: number) =>
         `${environment.api.owUrl}/api/project/getWQXProjectMyOrgCount?UserIDX=${userIDX}`
+    public static readonly deleteTWQXProject =
+      (projectIdx: number, userId: string) =>
+        `${environment.api.owUrl}/api/project/deleteTWQXProject?ProjectIDX=${projectIdx}&UserID=${userId}`
     public static readonly getWQXMonLocMyOrgCount =
       (userIDX: number) =>
         `${environment.api.owUrl}/api/monloc/getWQXMonlocMyOrgCount?UserIDX=${userIDX}`

@@ -15,7 +15,7 @@ import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organiza
   styleUrls: ['./wqx-org-new-cs.component.scss'],
 })
 export class WqxOrgNewCSComponent implements OnInit {
-  _orgId: string;
+  _orgId: string; // used in HTML
   msg1: string;
   currentOrgId: string;
   user: User;
@@ -45,6 +45,11 @@ export class WqxOrgNewCSComponent implements OnInit {
             }
           },
         );
+    } else {
+
+      if (localStorage.getItem('selectedOrgId') !== null) {
+        this.currentOrgId = localStorage.getItem('selectedOrgId');
+      }
     }
 
 

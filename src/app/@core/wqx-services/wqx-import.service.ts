@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TWqxImportData, TWqxImportTempMonloc, ImportSampleResultDisplay } from '../wqx-data/wqx-import';
+import { TWqxImportData, TWqxImportTempMonloc, ImportSampleResultDisplay, TWqxImportTemplate, TWqxImportTemplateDtl } from '../wqx-data/wqx-import';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
@@ -8,6 +8,7 @@ import { WebApi } from '../utils/web-api';
   providedIn: 'root',
 })
 export class WqxImportService extends TWqxImportData {
+
 
 
   constructor(private http: HttpClient) {
@@ -76,5 +77,45 @@ export class WqxImportService extends TWqxImportData {
       userIdx: userIdx,
     };
     return this.http.post<number>(WebApi.ImportApi.cancelProcessImportTempSample(), body, httpOptions);
+  }
+  GetWQX_IMPORT_TEMPLATE(orgId: string): Observable<TWqxImportTemplate[]> {
+    return this.http.get<TWqxImportTemplate[]>(WebApi.ImportApi.getWqxImportTemplate(orgId));
+  }
+  GetWQX_IMPORT_TEMPLATE_DTL_DynamicByTemplateID(templateId: number): Observable<TWqxImportTemplateDtl[]> {
+    return this.http.get<TWqxImportTemplateDtl[]>(WebApi.ImportApi.getWqxImportTemplateDtlDynamicByTemplateId(templateId));
+  }
+  GetWQX_IMPORT_TEMPLATE_DTL_HardCodeByTemplateID(templateId: number): Observable<TWqxImportTemplateDtl[]> {
+    return this.http.get<TWqxImportTemplateDtl[]>(WebApi.ImportApi.getWqxImportTemplateDtlHarCodeByTemplateId(templateId));
+  }
+  DeleteT_WQX_IMPORT_TEMPLATE(templateId: number): Observable<number> {
+    return this.http.delete<number>(WebApi.ImportApi.deleteTWqxImportTemplate(templateId));
+  }
+  InsertOrUpdateWQX_IMPORT_TEMPLATE(data: TWqxImportTemplate): Observable<number> {
+    const httpOptions = {};
+    const body = {
+      TemplateId: data.templateId,
+      OrgId: data.orgId,
+      TypeCd: data.typeCd,
+      TemplateName: data.templateName,
+      CreateUserid: data.createUserId,
+    };
+    return this.http.post<number>(WebApi.ImportApi.insertOrUpdateWqxImportTemplate(), body, httpOptions);
+  }
+  InsertOrUpdateWQX_IMPORT_TEMPLATE_DTL(data: TWqxImportTemplateDtl): Observable<number> {
+    const httpOptions = {};
+    const body = {
+      TemplateDtlId: data.templateDtlId,
+      TemplateId: data.templateId,
+      ColNum: data.colNum,
+      FieldMap: data.fieldMap,
+      CharName: data.charName,
+      CharDefaultUnit: data.charDefaultUnit,
+      CreateUserid: data.createUserId,
+      CharDefaultSampFraction: data.charDefaultSampFraction,
+    };
+    return this.http.post<number>(WebApi.ImportApi.insertOrUpdateWqxImportTemplateDtl(), body, httpOptions);
+  }
+  DeleteT_WQX_IMPORT_TEMPLATE_DTL(templateDtlId: number): Observable<number> {
+    return this.http.delete<number>(WebApi.ImportApi.deleteTWqxImportTemplateDtl(templateDtlId));
   }
 }

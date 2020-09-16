@@ -1,0 +1,80 @@
+<form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+  <nb-card>
+    <nb-card-header>Add Mapped Columns</nb-card-header>
+    <nb-card-body>
+      <div class="row mb-3">
+        <div class="col-sm-6">Column Number:</div>
+        <div class="col-sm-6">
+          <input type="text" nbInput fullWidth name="txtColumnNumber" class="form-control" [(ngModel)]="txtColumnNumber"
+            inputmode="numeric" pattern="[0-9]*" digitOnly #vtxtColumnNumber="ngModel"
+            [ngClass]="{ 'is-invalid': f.submitted && vtxtColumnNumber.invalid }" required maxlength="2">
+          <div *ngIf="f.submitted && vtxtColumnNumber.invalid" class="invalid-feedback">
+            <div *ngIf="vtxtColumnNumber.errors.required">Column Number is Required.</div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-sm-6">Field:</div>
+        <div class="col-sm-6">
+          <nb-select placeholder="" [(selected)]="selectedField" (selectedChange)="onFieldSlectionChanged($event)">
+            <nb-option value="ACT_COMMENTS">Activity Comments</nb-option>
+            <nb-option value="ACTIVITY_ID">ACTIVITY ID</nb-option>
+            <nb-option value="ACT_DEPTHHEIGHT_MSR">Activity Depth</nb-option>
+            <nb-option value="ACT_MEDIA">Activity Media</nb-option>
+            <nb-option value="ACT_START_DATE">Activity Start Date</nb-option>
+            <nb-option value="ACT_START_TIME">Activity Start Time</nb-option>
+            <nb-option value="ACT_SUBMEDIA">Activity Submedia</nb-option>
+            <nb-option value="ACT_TYPE">Activity Type</nb-option>
+            <nb-option value="CHAR">Characteristic</nb-option>
+            <nb-option value="MONLOC_ID">Monitoring Location ID</nb-option>
+            <nb-option value="RESULT_VALUE_TYPE">Result Value Type</nb-option>
+            <nb-option value="RESULT_STATUS">Result Status</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="isCharacteristicNameShow === 'show'">
+        <div class="col-sm-6">Characteristic Name:</div>
+        <div class="col-sm-6">
+          <nb-select fullWidth (selectedChange)="onCharSelected($event)" name="ddlChar" [(ngModel)]="selectedChar"
+            #vselectedChar="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vselectedChar.invalid }"
+            status="primary">
+            <nb-option *ngFor="let char of chars" [value]="char.charName"> {{ char.charName }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="isUnitCodeShow === 'show'">
+        <div class="col-sm-6">Unit Code:</div>
+        <div class="col-sm-6">
+          <nb-select fullWidth (selectedChange)="onUnitSelected($event)" name="ddlUnit" [(ngModel)]="selectedUnit"
+            #vselectedUnit="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vselectedUnit.invalid }"
+            status="primary">
+            <nb-option *ngFor="let unit of units" [value]="unit.value"> {{ unit.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="isSampleFractionShow === 'show'">
+        <div class="col-sm-6">Sample Fraction:</div>
+        <div class="col-sm-6">
+          <nb-select fullWidth status="primary" name="ddlSampColl" [(selected)]="sampCollSelected">
+            <nb-option *ngFor="let sampCall of sampCalls" [value]="sampCall.sampCollMethodIdx">
+              {{ sampCall.sampCollMethodId }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row">
+        <div class="col-sm-6">
+          <button nbButton type="submit" size="tiny" class="mr-3" status="success">
+            <nb-icon icon="plus-square-outline"></nb-icon> Save
+          </button>
+        </div>
+        <div class="col-sm-6">
+          <button nbButton type="button" (click)="onMappedColumnCancel()" size="tiny" class="mr-3" status="danger">
+            <nb-icon icon="close-square-outline"></nb-icon> Cancel
+          </button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</form>

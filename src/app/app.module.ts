@@ -30,8 +30,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WQXProjectService } from './@core/wqx-services/wqx-project-service';
 import { WQXActivityService } from './@core/wqx-services/wqx-activity-service';
 import { WqxMonlocService } from './@core/wqx-services/wqx-monloc.service';
-import { MyAppErrorHandler } from './pages/miscellaneous/myAppErrorHandler';
-
 
 @NgModule({
   declarations: [

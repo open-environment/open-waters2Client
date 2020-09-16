@@ -1,3 +1,161 @@
-<p>
-  wqx-mgmt works!
-</p>
+<nb-card status="success">
+  <nb-card-header>WQX Submission Management</nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-sm-6">
+        <form name="myForm" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+          <nb-card size="tiny" status="info">
+            <nb-card-header>Data Filters</nb-card-header>
+            <nb-card-body>
+              <div class="row mb-2">
+                <div class="col">
+                  <nb-radio-group class="NbRadioHorizontal" name="rbViewDataOption"
+                    [(ngModel)]="rbViewDataOptionSelected">
+                    <nb-radio value="SUB">View Submitted Data</nb-radio>
+                    <nb-radio value="PEND">View Pending Data</nb-radio>
+                  </nb-radio-group>
+                </div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-sm-1 SmallText">Start Date</div>
+                <div class="col-sm-5">
+                  <input nbInput type="text" name="txtStartDate" size="tiny" [nbDatepicker]="txtStartDateModel"
+                    [(ngModel)]="txtStartDate" class="DateTextBox" />
+                  <nb-datepicker #txtStartDateModel></nb-datepicker>
+                </div>
+                <div class="col-sm-1 SmallText">End Date</div>
+                <div class="col-sm-5">
+                  <input nbInput type="text" name="txtEndDate" [nbDatepicker]="txtEndDateModel" size="tiny"
+                    [(ngModel)]="txtEndDate" class="DateTextBox" />
+                  <nb-datepicker #txtEndDateModel></nb-datepicker>
+                </div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-sm-6">
+                  <nb-checkbox *ngIf="isSubmissionOptionsView === 'show'" status="success" name="cbShowAllOrgs"
+                    [(ngModel)]="cbShowAllOrgs">Show all Orgs
+                  </nb-checkbox>
+                </div>
+                <div class="col-sm-6">
+                  <button nbButton size="tiny" type="submit" status="success" name="btnFilterData" class="mr-3"
+                    (click)="onApplyClick()">
+                    <nb-icon icon="checkmark-circle-outline"></nb-icon> Apply
+                  </button>
+                </div>
+              </div>
+            </nb-card-body>
+          </nb-card>
+        </form>
+      </div>
+      <div class="col-sm-6">
+        <nb-card *ngIf="isSubmissionOptionsView === 'show'" size="tiny" status="info">
+          <nb-card-header>Submission Options</nb-card-header>
+          <nb-card-body>
+            <div class="row mb-2">
+              <div class="col">
+                <nb-radio-group class="NbRadioHorizontal" name="rbSubmissionOption"
+                  [(ngModel)]="rbSubmissionOptionSelected">
+                  <nb-radio value="0">Submit As Individual Records</nb-radio>
+                  <nb-radio value="1">Submit As One File</nb-radio>
+                </nb-radio-group>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col">
+                <button nbButton size="tiny" type="button" status="success" name="btnFilterData" (click)="onSubmitAll()"
+                  fullWidth>
+                  <nb-icon icon="play-circle-outline"></nb-icon> Submit All Pending Records to EPA
+                </button>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-sm-4">
+                <button nbButton size="tiny" nbTooltip="Reset submission task if it appears to be unresponsive"
+                  nbTooltipStatus="info" type="button" status="danger" name="btnResetService" (click)="onResetClick()">
+                  <nb-icon icon="close-square-outline"></nb-icon> Reset Service
+                </button>
+              </div>
+              <div class="col-sm-8">
+                <nb-alert class="tinyAlert" accent="success" size="tiny">Current Status : {{ txtCurrentStatus }}
+                </nb-alert>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <p-table [columns]="cols" [value]="WqxLogs" [responsive]="true" [resizableColumns]="true" [autoLayout]="true"
+          dataKey="logId">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th style="width:11em">Edit</th>
+              <th *ngFor="let col of columns">
+                {{col.header}}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+              <td style="text-align:center">
+                <div class="row">
+                  <div class="col">
+                    <button nbButton size="tiny" status="success" (click)="onGetFileClicked(rowData)" class="mr-2">
+                      <nb-icon icon="edit-outline"></nb-icon>
+                    </button>
+                  </div>
+                </div>
+              </td>
+              <td *ngFor="let col of columns">
+                <span class="ui-column-title ui-column-title-button">
+                  <button nbButton size="tiny" status="warning">{{col.header}}</button>
+                </span>
+                {{rowData[col.field]}}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+              <td [attr.colspan]="columns.length + 1">
+                None
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <p-table [columns]="cols2" [value]="WqxPendingRecords" [responsive]="true" [resizableColumns]="true"
+          [autoLayout]="true" dataKey="recIdx">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of columns">
+                {{col.header}}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+              <td *ngFor="let col of columns">
+                <span class="ui-column-title ui-column-title-button">
+                  <button nbButton size="tiny" status="warning">{{col.header}}</button>
+                </span>
+                {{rowData[col.field]}}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+              <td [attr.colspan]="columns.length">
+                None
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer></nb-card-footer>
+</nb-card>

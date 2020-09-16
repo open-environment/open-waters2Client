@@ -34,4 +34,7 @@ export class WQXProjectService extends WqxProjectData {
       projectName, projectDesc, sampDesignTypeCd, qAppApprovalInd,
       qAppApprovalAgency, wQxSubmitStatus, wQxSubmitDt, actInd, wqxInd, createUser), '', httpOptions);
   }
+  DeleteT_WQX_PROJECT(projectIdx: number, userId: string): Observable<number> {
+    return this.http.delete<number>(WebApi.TWQXProjectApi.deleteTWQXProject(projectIdx, userId));
+  }
 }

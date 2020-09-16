@@ -47,6 +47,10 @@ export class WqxProjectEditComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    if (localStorage.getItem('selectedOrgId') !== null) {
+      this.currentOrgId = localStorage.getItem('selectedOrgId');
+    }
     this.activatedRoute.queryParams.subscribe(params => {
       this.projectIdx = parseInt(params['projectIdx'], 10);
       if (this.projectIdx > 0 && this.currentOrgId !== '') {
@@ -94,6 +98,7 @@ export class WqxProjectEditComponent implements OnInit {
     this.sampDesignTypeCodeSelected = selectedItem;
   }
   onSubmit(): void {
+    console.log(this.chkWQXInd);
     this.projectService.InsertOrUpdateWQX_PROJECT(this.projectIdx, this.currentOrgId, this.txtProjID,
       this.txtProjName, this.txtProjDesc, this.sampDesignTypeCodeSelected, this.chkQAPPInd,
       this.txtQAPPAgency, 'U', '', this.chkActInd, this.chkWQXInd, this.user.name).subscribe(

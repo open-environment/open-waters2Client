@@ -39,14 +39,14 @@ export class AddCharWindowComponent implements OnInit {
     private authService: NbAuthService,
     private pubSubService: WqxPubsubServiceService,
     private toasterServce: NbToastrService) {
-      this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
-        if (token.isValid()) {
-          this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-          this.currentOrgId = this.user.OrgID;
-        }
-      });
-      // populate drop-downs
-     this.refDataService.GetT_WQX_REF_CHARACTERISTIC(true, false).subscribe(
+    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+      if (token.isValid()) {
+        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
+        this.currentOrgId = this.user.OrgID;
+      }
+    });
+    // populate drop-downs
+    this.refDataService.GetT_WQX_REF_CHARACTERISTIC(true, false).subscribe(
       (data) => { this.chars = data; },
       (err) => { console.log(err); },
     );
@@ -75,6 +75,9 @@ export class AddCharWindowComponent implements OnInit {
 
   ngOnInit() {
 
+    if (localStorage.getItem('selectedOrgId') !== null) {
+      this.currentOrgId = localStorage.getItem('selectedOrgId');
+    }
   }
 
   close() {
@@ -110,21 +113,21 @@ export class AddCharWindowComponent implements OnInit {
     this.refDataService.InsertOrUpdateT_WQX_REF_CHAR_ORG(this.selectedChar, this.currentOrgId, this.user.name,
       this.txtDetectLimit, this.selectedUnit, analVal, this.selectedFrac,
       this.selectedResultValue, '', this.txtQuantLower, this.txtQuantUpper).subscribe(
-      (data) => {
-        if (data === 1) {
-          this.toasterServce.success('Record saved.');
-        } else {
+        (data) => {
+          if (data === 1) {
+            this.toasterServce.success('Record saved.');
+          } else {
+            this.toasterServce.danger('Record could not be saved.');
+          }
+          this.pubSubService.charChanged(true);
+        },
+        (err) => {
           this.toasterServce.danger('Record could not be saved.');
-        }
-        this.pubSubService.charChanged(true);
-       },
-      (err) => {
-        this.toasterServce.danger('Record could not be saved.');
-       },
-      () => {
-        this.windowRef.close();
-      },
-    );
+        },
+        () => {
+          this.windowRef.close();
+        },
+      );
   }
   onCloseModel2Clicked(): void {
     this.windowRef.close();

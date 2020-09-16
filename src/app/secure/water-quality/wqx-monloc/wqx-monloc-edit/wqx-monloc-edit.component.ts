@@ -73,6 +73,10 @@ export class WqxMonlocEditComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    if (localStorage.getItem('selectedOrgId') !== null) {
+      this.currentOrgId = localStorage.getItem('selectedOrgId');
+    }
     this.activatedRoute.queryParams.subscribe(params => {
       this.monlocIdx = parseInt(params['monlocIdx'], 10);
       if (this.monlocIdx > 0 && this.currentOrgId !== '') {

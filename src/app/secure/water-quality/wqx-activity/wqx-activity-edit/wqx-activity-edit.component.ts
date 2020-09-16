@@ -185,6 +185,10 @@ export class WqxActivityEditComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    if (localStorage.getItem('selectedOrgId') !== null) {
+      this.currentOrgId = localStorage.getItem('selectedOrgId');
+    }
     this.resultCols = [
       { 'col': 'Characteristic', show: true },
       { 'col': 'Taxonomy', show: true },

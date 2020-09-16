@@ -1,5 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { NbCardModule, NbTreeGridModule, NbIconModule, NbInputModule, NbSelectModule, NbRadioModule, NbCheckboxModule, NbListModule, NbAlertModule, NbTabsetModule, NbToastrModule, NbWindowModule, NbButtonModule, NbDatepickerModule, NbStepperModule, NbStepperComponent } from '@nebular/theme';
+import { NbCardModule, NbTreeGridModule, NbIconModule, NbInputModule, NbSelectModule, NbRadioModule, NbCheckboxModule, NbListModule, NbAlertModule, NbTabsetModule, NbToastrModule, NbWindowModule, NbButtonModule, NbDatepickerModule, NbStepperModule, NbStepperComponent, NbTooltipModule } from '@nebular/theme';
 import { ThemeModule } from '../../@theme/theme.module';
 // import { WqxMainRoutingModule, wqxRoutedComponents } from '../main/wqx-main-routing.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -30,6 +30,11 @@ import { NgxAuthJWTInterceptor } from '../../NgxAuthJWTInterceptor';
 import { wqxWQRoutedComponents, WqxTablesRoutingModule } from './wqx-water-quality-routing.module';
 import { WqxImportMonlocComponent } from './wqx-import-monloc/wqx-import-monloc.component';
 import { WqxImportSampleComponent } from './wqx-import-sample/wqx-import-sample.component';
+import { WqxImportLogicTemplateComponent } from './wqx-import-logic-template/wqx-import-logic-template.component';
+import { ImportTemplateConfigComponent } from './wqx-import-logic-template/import-template-config/import-template-config.component';
+import { ImportMappedColumnWindowComponent } from './wqx-import-logic-template/import-mapped-column-window/import-mapped-column-window.component';
+import { ImportHardcodedValuesWindowComponent } from './wqx-import-logic-template/import-hardcoded-values-window/import-hardcoded-values-window.component';
+import { DigitOnlyDirective } from '../../@core/utils/digit-only.directive';
 
 @NgModule({
   imports: [
@@ -57,6 +62,7 @@ import { WqxImportSampleComponent } from './wqx-import-sample/wqx-import-sample.
     DropdownModule,
     CalendarModule,
     NbStepperModule,
+    NbTooltipModule,
   ],
   declarations: [
     ...wqxWQRoutedComponents,
@@ -80,6 +86,11 @@ import { WqxImportSampleComponent } from './wqx-import-sample/wqx-import-sample.
     AddRowDirective,
     WqxImportMonlocComponent,
     WqxImportSampleComponent,
+    WqxImportLogicTemplateComponent,
+    ImportTemplateConfigComponent,
+    ImportMappedColumnWindowComponent,
+    ImportHardcodedValuesWindowComponent,
+    DigitOnlyDirective, // Directive
   ],
   providers: [
     WQXRefDataService,
@@ -92,6 +103,9 @@ import { WqxImportSampleComponent } from './wqx-import-sample/wqx-import-sample.
     AddTranslationWindowComponent,
     ProjectConfigWindowComponent,
     ActivityConfigWindowComponent,
+    ImportTemplateConfigComponent,
+    ImportMappedColumnWindowComponent,
+    ImportHardcodedValuesWindowComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

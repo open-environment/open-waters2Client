@@ -1,0 +1,173 @@
+<nb-card status="success">
+  <nb-card-header>
+    Import Logic Templates
+  </nb-card-header>
+  <nb-card-body>
+    <div *ngIf="isImportTemplate === 'show'" class="mb-3">
+      <nb-card status="info">
+        <nb-card-header>Import Template</nb-card-header>
+        <nb-card-body>
+          <p-table [columns]="cols" [value]="importTemplates" [responsive]="true" [resizableColumns]="true"
+            [autoLayout]="true" (onRowSelect)="onRowSelect($event)" [(selection)]="selectedImportTemplate"
+            dataKey="templateId" selectionMode="single">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width:11em">Edit</th>
+                <th *ngFor="let col of columns">
+                  {{col.header}}
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [ngClass]="{'myClass': rowData.selected === true}">
+                <td style="text-align:center">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <button nbButton size="tiny" status="success" (click)="onSelectClicked(rowData)" class="mr-2">
+                        Select
+                      </button>
+                    </div>
+                    <div class="col-sm-6">
+                      <button nbButton size="tiny" status="danger" (click)="onDeleteClicked(rowData)">
+                        <nb-icon icon="close-outline"></nb-icon>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td *ngFor="let col of columns">
+                  <span class="ui-column-title ui-column-title-button">
+                    <button nbButton size="tiny" status="warning">{{col.header}}</button>
+                  </span>
+                  {{rowData[col.field]}}
+                </td>
+
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+              <tr>
+                <td [attr.colspan]="columns.length + 2">
+                  None
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </nb-card-body>
+        <nb-card-footer>
+          <div class="row">
+            <div class="col-6"><button nbButton (click)="onBack()" size="tiny" class="mr-3" status="danger">
+                <nb-icon icon="plus-square-outline"></nb-icon> Back
+              </button></div>
+            <div class="col-6"><button nbButton (click)="onDefine()" size="tiny" class="mr-3" status="success">
+                <nb-icon icon="plus-square-outline"></nb-icon> Define New Import Logic
+              </button></div>
+          </div>
+        </nb-card-footer>
+      </nb-card>
+    </div>
+    <div *ngIf="isMappedColumns === 'show'">
+      <div class="row mb-3">
+        <div class="col-12">
+          <nb-card status="info">
+            <nb-card-header>
+              Mapped Columns<br />
+              <span style="font-size:small;font-weight: lighter;">Any columns that are not mapped will be ignored during
+                import.</span>
+            </nb-card-header>
+            <nb-card-body>
+              <p-table [columns]="cols2" [value]="importMappedColumns" [responsive]="true" [resizableColumns]="true"
+                [autoLayout]="true">
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th style="width:11em">Edit</th>
+                    <th *ngFor="let col of columns">
+                      {{col.header}}
+                    </th>
+
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr>
+                    <td style="text-align:center">
+                      <button nbButton size="tiny" status="danger" (click)="onMCDeleteClicked(rowData)">
+                        <nb-icon icon="close-outline"></nb-icon>
+                      </button>
+                    </td>
+                    <td *ngFor="let col of columns">
+                      <span class="ui-column-title ui-column-title-button">
+                        <button nbButton size="tiny" status="warning">{{col.header}}</button>
+                      </span>
+                      {{rowData[col.field]}}
+                    </td>
+
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                  <tr>
+                    <td [attr.colspan]="columns.length + 2">
+                      None
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </nb-card-body>
+            <nb-card-footer>
+              <button nbButton (click)="onMappedColumnAddNew()" size="tiny" class="mr-3" status="success">
+                <nb-icon icon="plus-square-outline"></nb-icon> Add New
+              </button>
+            </nb-card-footer>
+          </nb-card>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-12">
+          <nb-card status="info">
+            <nb-card-header>Hard-Coded Values</nb-card-header>
+            <nb-card-body>
+              <p-table [columns]="cols3" [value]="importHardCodedValues" [responsive]="true" [resizableColumns]="true"
+                [autoLayout]="true">
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th style="width:11em">Edit</th>
+                    <th *ngFor="let col of columns">
+                      {{col.header}}
+                    </th>
+
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr>
+                    <td style="text-align:center">
+                      <button nbButton size="tiny" status="danger" (click)="onHVDeleteClicked(rowData)">
+                        <nb-icon icon="close-outline"></nb-icon>
+                      </button>
+                    </td>
+                    <td *ngFor="let col of columns">
+                      <span class="ui-column-title ui-column-title-button">
+                        <button nbButton size="tiny" status="warning">{{col.header}}</button>
+                      </span>
+                      {{rowData[col.field]}}
+                    </td>
+
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                  <tr>
+                    <td [attr.colspan]="columns.length + 2">
+                      None
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </nb-card-body>
+            <nb-card-footer>
+              <button nbButton (click)="onHarCodedValuesAddNew()" size="tiny" class="mr-3" status="success">
+                <nb-icon icon="plus-square-outline"></nb-icon> Add New
+              </button>
+            </nb-card-footer>
+          </nb-card>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

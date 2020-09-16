@@ -117,6 +117,26 @@ export interface ImportSampleResultDisplay {
     ImportStatusDesc: string;
 
 }
+export interface TWqxImportTemplate {
+    templateId: number;
+    orgId: string;
+    typeCd: string;
+    templateName: string;
+    createDt: string;
+    createUserId: string;
+}
+export interface TWqxImportTemplateDtl {
+    templateDtlId: number;
+    templateId: number;
+    colNum: number;
+    fieldMap: string;
+    charName: string;
+    charDefaultUnit: string;
+    createDt: string;
+    createUserId: string;
+    charDefaultSampFraction: string;
+}
 export abstract class TWqxImportData {
     abstract GetWQX_IMPORT_TEMP_MONLOCByUserIdx(userIdx: number): Observable<TWqxImportTempMonloc[]>;
+
 }

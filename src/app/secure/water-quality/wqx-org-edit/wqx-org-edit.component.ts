@@ -50,9 +50,13 @@ export class WqxOrgEditComponent implements OnInit {
   isChecked: boolean = false;
   divCDXglobal: boolean = false;
   divCDXme: boolean = true;
+  pnlCDXResults: boolean = false;
 
   lblMsgShow: boolean = false;
   lblMsg: string = '';
+
+  txtAuthResult: string = '';
+  txtSubmitResult: string = '';
 
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -112,7 +116,8 @@ export class WqxOrgEditComponent implements OnInit {
       },
     );
 
-    this.epaSubmissionGroup = '1';
+    this.epaSubmissionGroup = '2';
+    this.onrbCDXChange(this.epaSubmissionGroup);
 
     this.organizationService.getWQXOrganizationById(this.orgEditId).subscribe(
       (o: WqxOrganization) => {
@@ -149,6 +154,7 @@ export class WqxOrgEditComponent implements OnInit {
           // populate listbox with users already in organization
           this.organizationService.GetT_OE_USERSInOrganization(this.orgEditId).subscribe(
             (uio: any) => {
+              console.log(uio);
               this.lbUserInRole = uio;
             },
           );
@@ -156,6 +162,8 @@ export class WqxOrgEditComponent implements OnInit {
           // populate listbox with users not in role
           this.organizationService.GetT_OE_USERSNotInOrganization(this.orgEditId).subscribe(
             (unio: any) => {
+              console.log('unio');
+              console.log(unio);
               this.lbAllUsers = unio;
             },
           );
@@ -164,10 +172,11 @@ export class WqxOrgEditComponent implements OnInit {
     );
   }
   btnTestNAASLocalClick(): void {
+    this.pnlCDXResults = false;
     if (this.orgEditId === '' || this.orgEditId == null) {
       return;
     }
-    this.savePageData();
+    this.savePageData(false);
     if (this.txtCDX === '') {
       this.lblMsgShow = true;
       this.lblMsg = 'Please enter a CDX Submitter first. This is your NAAS username provided by EPA.';
@@ -176,25 +185,38 @@ export class WqxOrgEditComponent implements OnInit {
     this.organizationService.ConnectTestResult(this.orgEditId, 'LOCAL').subscribe(
       (data: ConnectTestResult) => {
         console.log(data);
+        this.pnlCDXResults = true;
+        this.txtAuthResult = data.lblAuthResult;
+        this.txtSubmitResult = data.lblSubmitResult;
+      },
+      (err) => {
+        console.log(err);
       },
     );
   }
   btnTestNAASGlobalClick(): void {
+    this.pnlCDXResults = false;
     if (this.orgEditId === '' || this.orgEditId == null) {
       return;
     }
-    this.savePageData();
+    this.savePageData(false);
     this.organizationService.ConnectTestResult(this.orgEditId, 'GLOBAL').subscribe(
       (data: ConnectTestResult) => {
         console.log(data);
+        this.pnlCDXResults = true;
+        this.txtAuthResult = data.lblAuthResult;
+        this.txtSubmitResult = data.lblSubmitResult;
+      },
+      (err) => {
+        console.log(err);
       },
     );
   }
   onSubmit() {
     console.log('onSubmit called');
-    this.savePageData();
+    this.savePageData(true);
   }
-  savePageData() {
+  savePageData(isSubmit: boolean) {
     console.log('savePageData called');
     if (this.epaSubmissionGroup === '2') {
       // this.txtCDX = '';
@@ -224,6 +246,7 @@ export class WqxOrgEditComponent implements OnInit {
           console.log('InsertOrUpdateTWQXOrganization: valid:' + result);
           if (result === 1) {
             this.toasterService.success('Data Saved!');
+            if (isSubmit === false) { return; }
             this.router.navigate(['../wqx-org'], { relativeTo: this.activatedRoute });
           } else {
             this.toasterService.danger('Error updating record.');
@@ -248,6 +271,8 @@ export class WqxOrgEditComponent implements OnInit {
     }
   }
   onrbCDXChange(event: any) {
+    console.log('onrbCDXChange');
+    console.log(event);
     if (event === '1') {
       this.divCDXglobal = false;
       this.divCDXme = true;

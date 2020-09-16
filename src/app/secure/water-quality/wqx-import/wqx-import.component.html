@@ -5,12 +5,12 @@
       <nb-stepper orientation="vertical" [linear]="true" disableStepNavigation="true" #stepper
         (stepChanged)="handleChange($event)">
         <nb-step label="Step 1:">
-          <div class="row">
+          <div class="row mb-3">
             <div class="col-12">
               <h4>Select Data to Import</h4>
             </div>
           </div>
-          <div class="row">
+          <div class="row mb-3">
             <div class="col-sm-3" style="padding-top:8px">Data to Import:</div>
             <div class="col-sm-5">
               <nb-select fullWidth [(selected)]="selectedImportType" (selectedChange)="onDataToImportChanged($event)">
@@ -25,7 +25,7 @@
         </nb-step>
         <nb-step label="Step 2:">
           <h4>Define Data Import Rules</h4>
-          <div class="row">
+          <div class="row mb-3">
             <div class="col-sm-4">Set Global Import Rules:</div>
             <div class="col-sm-8">
               <button nbButton type="button" size="tiny" status="success" name="btnGlobalRules" class="mr-3"
@@ -34,19 +34,36 @@
               </button>
             </div>
           </div>
-          <div *ngIf="isCustomImportTemplateShow === 'show'">
-            <div class="row">
+
+          <div *ngIf="isCITRadioButtonShow === 'show'">
+            <div class="row mb-3">
               <div class="col-6">Use Custom Import Template:</div>
               <div class="col-6">
-                <nb-radio-group [(ngModel)]="selectedCustomImportTemplate" layout="row" name="CustomImportTemplate">
+                <nb-radio-group [(ngModel)]="selectedCustomImportTemplate" layout="row" name="CustomImportTemplate"
+                  (valueChange)="onCITRBChanged($event)">
                   <nb-radio value="1">No</nb-radio>
                   <nb-radio value="2">Yes</nb-radio>
                 </nb-radio-group>
               </div>
             </div>
           </div>
+          <div *ngIf="isCTSShow === 'show'">
+            <div class="row mb-3">
+              <div class="col-sm-6">
+                <nb-select fullWidth status="primary" name="ddlTemplates" [(selected)]="selectedTemplateId">
+                  <nb-option *ngFor="let template of templates" [value]="template.templateId">
+                    {{ template.templateName }}
+                  </nb-option>
+                </nb-select>
+              </div>
+              <div class="col-sm-6">
+                <button nbButton size="tiny" (click)="onECITClicked()">Edit Custom Import Templates</button>
+              </div>
+            </div>
+
+          </div>
           <div *ngIf="isProjectShow === 'show'">
-            <div class="row">
+            <div class="row mb-3">
               <div class="col-6">
                 Import to Project:
               </div>
@@ -58,7 +75,7 @@
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row mb-3">
             <div class="col-12">
               <button nbButton size="tiny" nbStepperNext (click)="onNextClicked()">Next Step</button>
             </div>
@@ -66,14 +83,14 @@
         </nb-step>
         <nb-step label="Step 3:">
           <h4>Paste Data</h4>
-          <div class="row">
+          <div class="row mb-3">
             <div class="col-12">
               Copy and paste your data from a spreadsheet into the text area below:
               <textarea fullWidth nbInput status="success" name="txtImportData" rows="5" [(ngModel)]="txtImportData">
               </textarea>
             </div>
           </div>
-          <div class="row">
+          <div class="row mb-3">
             <div class="col-12">
               <button nbButton type="button" size="tiny" status="success" name="btnContinue" class="mr-3"
                 (click)="onBtnContinueClick()">

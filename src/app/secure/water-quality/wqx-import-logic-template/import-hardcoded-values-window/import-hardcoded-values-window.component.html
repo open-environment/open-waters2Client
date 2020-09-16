@@ -1,0 +1,80 @@
+<form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+  <nb-card>
+    <nb-card-header>Add New Hardcoded Column</nb-card-header>
+    <nb-card-body>
+      <div class="row mb-3">
+        <div class="col-sm-3">Field:</div>
+        <div class="col-sm-9">
+          <nb-select placeholder="" [(selected)]="selectedField" (selectedChange)="onFieldSlectionChanged($event)"
+            fullWidth>
+            <nb-option value="ACTIVITY_ID">Activity ID</nb-option>
+            <nb-option value="ACT_TYPE">ActivityType</nb-option>
+            <nb-option value="ACT_MEDIA">ActivityMedia</nb-option>
+            <nb-option value="ACT_SUBMEDIA">ActivityMediaSubdivision</nb-option>
+            <nb-option value="ACT_COMMENTS">Activity Comments</nb-option>
+            <nb-option value="SAMP_COLL_METHOD_IDX">Sample Collection Method</nb-option>
+            <nb-option value="SAMP_COLL_EQUIP">SampleCollectionEquipment</nb-option>
+            <nb-option value="RESULT_VALUE_TYPE">ResultValueType</nb-option>
+            <nb-option value="RESULT_STATUS">ResultStatus</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="isHC1Show === 'show'">
+        <div class="col-sm-4">Hardcoded Value:</div>
+        <div class="col-sm-8">
+          <input type="text" nbInput fullWidth name="txtHardCodeValue" class="form-control"
+            [(ngModel)]="txtHardCodeValue" #vtxtHardCodeValue="ngModel"
+            [ngClass]="{ 'is-invalid': f.submitted && vtxtHardCodeValue.invalid }">
+          <div *ngIf="f.submitted && vtxtHardCodeValue.invalid" class="invalid-feedback">
+            <div *ngIf="vtxtHardCodeValue.errors.required">Value is Required.</div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="isHC2Show === 'show'">
+        <div class="col-sm-4">ID Auto Format:</div>
+        <div class="col-sm-8">
+          <nb-select placeholder="" [(selected)]="selectedHardActID" fullWidth>
+            <nb-option value="#M_D_T">MonLoc_Date_Time</nb-option>
+            <nb-option value="#M_D_TS">MonLoc_Date_Time_Seconds</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="isHC3Show === 'show'">
+        <div class="col-sm-4">Hardcoded Value:</div>
+        <div class="col-sm-8">
+          <nb-select fullWidth status="primary" name="ddlSampColl" [(selected)]="sampCollSelected">
+            <nb-option *ngFor="let sampCall of sampCalls" [value]="sampCall.sampCollMethodIdx">
+              {{ sampCall.sampCollMethodId }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="isHC4Show === 'show'">
+        <div class="col-sm-4">Hardcoded Value:</div>
+        <div class="col-sm-8">
+          <nb-select fullWidth status="primary" name="ddlHardcodeValues" [(ngModel)]="hardcodeValueSelected"
+            #vddlActivityType="ngModel" [ngClass]="{
+                              'is-invalid':
+                                f.submitted && vddlActivityType.invalid
+                            }" required>
+            <nb-option *ngFor="let hardcodeValue of hardcodeValues" [value]="hardcodeValue.value">
+              {{ hardcodeValue.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row">
+        <div class="col-sm-6">
+          <button nbButton type="submit" size="tiny" class="mr-3" status="success">
+            <nb-icon icon="plus-square-outline"></nb-icon> Save
+          </button>
+        </div>
+        <div class="col-sm-6">
+          <button nbButton type="button" (click)="onHardCodedValuesCancel()" size="tiny" class="mr-3" status="danger">
+            <nb-icon icon="close-square-outline"></nb-icon> Cancel
+          </button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</form>

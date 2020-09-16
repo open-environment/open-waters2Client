@@ -80,13 +80,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.menuService.onItemClick().subscribe((event) => {
       this.onItemSelection(event.item.title);
     });
-    this.pubSubService.loadOrgId.subscribe((data: string) => {
-      console.log('pubsub seervice called for orgid with data:' + data);
-      if (data !== null && data !== undefined && data !== '') {
-        console.log('selected option set...');
-        this.selectedOrgId = data;
-      }
-    });
+
     // this.currentTheme = this.themeService.currentTheme;
 
     /* this.userService.getUsers()
@@ -135,7 +129,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     } */
   changeOrg(orgId: string) {
     console.log(orgId);
-    this.pubSubService.setData(orgId);
+    this.pubSubService.setOrgId(orgId);
+    localStorage.setItem('selectedOrgId', orgId);
   }
   toggleSidebar(): boolean {
     this.sidebarService.toggle(true, 'menu-sidebar');

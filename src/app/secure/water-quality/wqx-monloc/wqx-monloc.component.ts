@@ -47,6 +47,10 @@ export class WqxMonlocComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    if (localStorage.getItem('selectedOrgId') !== null) {
+      this.currentOrgId = localStorage.getItem('selectedOrgId');
+    }
     this.populateCols();
     this.cols = this.defaultCols;
   }
@@ -69,6 +73,7 @@ export class WqxMonlocComponent implements OnInit {
     console.log(JSON.stringify(this.cols));
     this.monlocService.GetWQX_MONLOC(!this.chkDeletedInd, this.currentOrgId, false).subscribe(
       (data: WqxMonloc[]) => {
+        console.log(data);
         this.wqxMonlocSource = data;
       },
     );

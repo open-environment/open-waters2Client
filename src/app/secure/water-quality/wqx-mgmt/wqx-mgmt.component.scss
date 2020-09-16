@@ -1,0 +1,21 @@
+:host ::ng-deep .DateTextBox {
+  max-width: 8rem !important;
+  font-size: xx-small;
+}
+
+:host ::ng-deep .NbRadioHorizontal nb-radio {
+  float: left;
+}
+
+:host ::ng-deep .NbRadioHorizontal nb-radio > label > span.text {
+  font-size: x-small;
+}
+:host ::ng-deep .SmallText {
+  font-size: x-small;
+}
+
+:host ::ng-deep .tinyAlert {
+  height: fit-content !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}

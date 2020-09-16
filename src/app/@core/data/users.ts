@@ -6,7 +6,7 @@ export interface User {
   picture: string;
   UserIDX: string;
   OrgID: string;
-  isAdmin: boolean;
+  isAdmin: string;
   /* MLOC_HUC_EIGHT: boolean;
   MLOC_HUC_TWELVE: boolean;
   MLOC_TRIBAL_LAND: boolean;

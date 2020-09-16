@@ -1,0 +1,44 @@
+<form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+  <nb-card>
+    <nb-card-body>
+      <div class="row">
+        <div class="col-sm-6">
+          Template Type:
+        </div>
+        <div class="col-sm-6">
+          <nb-select placeholder="Select Showcase" [(selected)]="selectedItem">
+            <nb-option value="S_CT">Sample (1 row per sample)</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          Template Name:
+        </div>
+        <div class="col-sm-6">
+          <input type="text" nbInput fullWidth name="txtTemplateName" class="form-control" [(ngModel)]="txtTemplateName"
+            #vtxtTemplateName="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtTemplateName.invalid }" required
+            maxlength="35">
+          <div *ngIf="f.submitted && vtxtTemplateName.invalid" class="invalid-feedback">
+            <div *ngIf="vtxtTemplateName.errors.required">Template Name is Required.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <button nbButton type="submit" size="tiny" class="mr-3" status="danger">
+            <nb-icon icon="plus-square-outline"></nb-icon> Save
+          </button>
+        </div>
+        <div class="col-sm-6">
+          <button nbButton type="button" (click)="onImportTemplateConfigCancel()" size="tiny" class="mr-3"
+            status="success">
+            <nb-icon icon="plus-square-outline"></nb-icon> Cancel
+          </button>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer></nb-card-footer>
+  </nb-card>
+</form>

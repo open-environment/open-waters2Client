@@ -6,6 +6,7 @@ import { User } from '../../../@core/data/users';
 import { WqxImportService } from '../../../@core/wqx-services/wqx-import.service';
 import { WQXProjectService } from '../../../@core/wqx-services/wqx-project-service';
 import { WqxProject } from '../../../@core/wqx-data/wqx-project';
+import { TWqxImportTemplate } from '../../../@core/wqx-data/wqx-import';
 
 @Component({
   selector: 'ngx-wqx-import',
@@ -18,11 +19,15 @@ export class WqxImportComponent implements OnInit {
   user: User;
   selectedImportType: string = '';
   txtImportData: string = '';
-  isCustomImportTemplateShow: string = '';
+  isCITRadioButtonShow: string = '';
+  isCTSShow: string = '';
   selectedCustomImportTemplate: string = '';
   isProjectShow: string = '';
-  projectSelected: string = '';
   projects: WqxProject[] = [];
+  projectSelected: string = '';
+  templates: TWqxImportTemplate[] = [];
+  selectedTemplateId: number;
+
   constructor(private router: Router,
     private authService: NbAuthService,
     private importService: WqxImportService,
@@ -39,7 +44,24 @@ export class WqxImportComponent implements OnInit {
   ngOnInit() {
     this.projectService.GetWQX_PROJECT(true, this.user.OrgID, false).subscribe(
       (data) => {
+        console.log('GetWQX_PROJECT: valid');
+        console.log(data);
         this.projects = data;
+      },
+      (err) => {
+        console.log('GetWQX_PROJECT: failed');
+        console.log(err);
+      }
+    );
+    this.importService.GetWQX_IMPORT_TEMPLATE(this.user.OrgID).subscribe(
+      (data) => {
+        console.log('GetWQX_IMPORT_TEMPLATE: valid');
+        console.log(data);
+        this.templates = data;
+      },
+      (err) => {
+        console.log('GetWQX_IMPORT_TEMPLATE: failed');
+        console.log(err);
       },
     );
   }
@@ -49,16 +71,16 @@ export class WqxImportComponent implements OnInit {
     console.log(importType);
     if (importType !== '') {
       this.stepper.selectedIndex = 1;
-      this.isCustomImportTemplateShow = '';
+      this.isCITRadioButtonShow = '';
       this.isProjectShow = '';
       if (importType === 'S') {  // Activities
-        this.isCustomImportTemplateShow = 'show';
+        this.isCITRadioButtonShow = 'show';
         this.isProjectShow = 'show';
       } else if (importType === 'I') {
         this.isProjectShow = 'show';
       }
     } else {
-      this.isCustomImportTemplateShow = '';
+      this.isCITRadioButtonShow = '';
     }
   }
   onGlobalRulesClicked() {
@@ -129,5 +151,15 @@ export class WqxImportComponent implements OnInit {
     this.projectSelected = '';
     this.selectedCustomImportTemplate = '';
     this.txtImportData = '';
+  }
+  onCITRBChanged(event) {
+    if (event === '2') {
+      this.isCTSShow = 'show';
+    } else {
+      this.isCTSShow = '';
+    }
+  }
+  onECITClicked() {
+    this.router.navigate(['/secure/water-quality/wqx-import-logic-template']);
   }
 }

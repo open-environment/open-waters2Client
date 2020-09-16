@@ -4,7 +4,7 @@ import { User } from '../../../@core/data/users';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { WQXProjectService } from '../../../@core/wqx-services/wqx-project-service';
 import { Router } from '@angular/router';
-import { NbWindowService, NbWindowRef } from '@nebular/theme';
+import { NbWindowService, NbWindowRef, NbToastrService } from '@nebular/theme';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
 import { ProjectConfigWindowComponent } from './project-config-window/project-config-window.component';
 import { LocalDataSource } from 'ng2-smart-table';
@@ -64,7 +64,8 @@ export class WqxProjectComponent implements OnInit {
     private projectService: WQXProjectService,
     private router: Router,
     private windowService: NbWindowService,
-    private pubSubService: WqxPubsubServiceService) {
+    private pubSubService: WqxPubsubServiceService,
+    private toasterService: NbToastrService) {
     this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
@@ -74,12 +75,24 @@ export class WqxProjectComponent implements OnInit {
           this.onConfigSaved(data);
         });
 
-        this.populateData(true);
+        this.populateData();
       }
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    if (localStorage.getItem('selectedOrgId') !== null) {
+      this.currentOrgId = localStorage.getItem('selectedOrgId');
+    }
+    this.pubSubService.loadOrgId.subscribe((data: string) => {
+      console.log('project-ngoninit pubsubservice:' + data);
+      if (data !== null && data !== undefined && data !== '') {
+        this.currentOrgId = data;
+        this.populateData();
+      }
+    });
+
+  }
   onConfigSaved(data: WqxProjectConfig[]) {
     console.log('config saved!');
     console.log('setting default cols...');
@@ -102,10 +115,11 @@ export class WqxProjectComponent implements OnInit {
       { field: 'projectType', header: 'Type' }
     ];
   }
-  populateData(isFirst: boolean) {
+  populateData() {
     console.log('populateData called!');
     this.populateCols();
     this.cols = this.defaultCols;
+    console.log(this.currentOrgId);
     this.projectService.GetWQX_PROJECT(false, this.currentOrgId, false).subscribe(
       (data: WqxProject[]) => {
         console.log(data);
@@ -133,24 +147,25 @@ export class WqxProjectComponent implements OnInit {
   onDeleteClicked(project: WqxProject) {
     console.log('delete action clicked!');
     console.log(project.projectIdx);
-    /* this.projectService.DeleteT_WQX_MONLOC(project.projectIdx, this.user.userIdx).subscribe(
+
+    this.projectService.DeleteT_WQX_PROJECT(project.projectIdx, this.user.name).subscribe(
       (result) => {
-        console.log('DeleteT_WQX_MONLOC: valid');
+        console.log('DeleteT_WQX_PROJECT: valid');
         if (result === 1) {
           this.toasterService.success('Record successfully deleted.', '', { destroyByClick: true, duration: 5000 });
         } else if (result === -1) {
-          this.toasterService.danger('Activities found for this monitoring location - location cannot be deleted.', '', { destroyByClick: true, duration: 5000 });
+          this.toasterService.danger('Activities found for this project - record cannot be deleted.', '', { destroyByClick: true, duration: 5000 });
         } else if (result === 0) {
-          this.toasterService.danger('Unable to delete monitoring location.', '', { destroyByClick: true, duration: 5000 });
+          this.toasterService.danger('Unable to delete project.', '', { destroyByClick: true, duration: 5000 });
         } else {
 
         }
         this.populateData();
       },
       (err) => {
-        console.log('DeleteT_WQX_MONLOC: failed');
+        console.log('DeleteT_WQX_PROJECT: failed');
       },
-    ); */
+    );
   }
   onSendToEPA(projectIdx: number) {
     console.log('onSendToEPA clicked!');
