@@ -14,7 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import {
   NbChatModule,
-  NbDatepickerModule,
+  // NbDatepickerModule,
   NbDialogModule,
   NbMenuModule,
   NbSidebarModule,
@@ -45,7 +45,7 @@ import { WqxMonlocService } from './@core/wqx-services/wqx-monloc.service';
     ThemeModule.forRoot(),
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
-    NbDatepickerModule.forRoot(),
+    // NbDatepickerModule.forRoot(),
     NbDialogModule.forRoot(),
     NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),

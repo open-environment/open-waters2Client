@@ -12,8 +12,9 @@ import { NbMenuService, NbSidebarService } from '@nebular/theme';
 })
 export class ExtloginComponent implements OnInit {
 
-  data: string;
-  payload: string;
+  lblMsg: string = '';
+  data: string = '';
+  payload: string = '';
   constructor(private activatedRoute: ActivatedRoute,
     private utilityService: WqxUtilityService,
     private authService: NbAuthService,
@@ -39,6 +40,7 @@ export class ExtloginComponent implements OnInit {
               console.log('CheckUserAuthentication: user exist');
               this.tryLogin(result);
             } else {
+              this.lblMsg += '<br/> Creating new user.';
               // Get new user information
               console.log('CreateAndGetNewUserData: calling');
               this.utilityService.CreateAndGetNewUserData(result.userid).subscribe(
@@ -51,11 +53,13 @@ export class ExtloginComponent implements OnInit {
                   } else {
                     console.log('CreateAndGetNewUserData: user not exist');
                     console.log('User sync failed...');
+                    this.lblMsg += '<br/> User sync failed...';
                   }
                 },
                 (err) => {
                   console.log('CreateAndGetNewUserData: called failed');
                   console.log(err);
+                  this.lblMsg += '<br/> User sync failed....';
                 },
               );
             }
@@ -63,6 +67,7 @@ export class ExtloginComponent implements OnInit {
           (err) => {
             console.log('CheckUserAuthentication: called error');
             this.data = 'err: ' + err;
+            this.lblMsg += '<br/> User sync failed.....';
           },
         );
       }
@@ -76,7 +81,7 @@ export class ExtloginComponent implements OnInit {
     console.log('authenticate: calling...');
     console.log('email:' + result.username);
     console.log('password:' + result.password);
-    this.authService.authenticate('email', { email: result.username, password: result.password }).subscribe(
+    this.authService.authenticate('email', { email: result.username, password: 'Mehta@2020' }).subscribe(
       (authresult) => {
         console.log('authenticate: valid');
         if (authresult !== null && authresult !== undefined) {
@@ -103,9 +108,11 @@ export class ExtloginComponent implements OnInit {
               );
             } else {
               console.log('_tokenStr is null');
+              this.lblMsg += '<br/> Token is null....';
             }
           } else {
             console.log('_token is null');
+            this.lblMsg += '<br/> Token is null....';
           }
         } else {
           console.log('authresult: null');
@@ -114,6 +121,7 @@ export class ExtloginComponent implements OnInit {
       (autherr) => {
         console.log('authenticate: error');
         console.log(autherr);
+        this.lblMsg += '<br/> Authentication error....';
       });
   }
 }

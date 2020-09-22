@@ -111,6 +111,7 @@ export class WqxActivityEditComponent implements OnInit {
   lblMsg: string = '';
   lblMsgShow: boolean = false;
   txtActivityID: string;
+  txtTimeZone: string;
   chkActInd: boolean = true;
   txtStartDate = new Date();
   txtEndDate = new Date();
@@ -408,7 +409,9 @@ export class WqxActivityEditComponent implements OnInit {
       );
     }
   }
-  onSubmit() {
+  onSubmit(f) {
+    /*     console.log(f);
+        return; */
     this.activityTypeSelected = (this.activityTypeSelected === null || this.activityTypeSelected === undefined) ? '' : this.activityTypeSelected;
     this.activityMediaSelected = (this.activityMediaSelected === null || this.activityMediaSelected === undefined) ? '' : this.activityMediaSelected;
     this.activitySubMediaSelected = (this.activitySubMediaSelected === null || this.activitySubMediaSelected === undefined) ? '' : this.activitySubMediaSelected;

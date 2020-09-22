@@ -1,5 +1,5 @@
 import { Component, OnInit, NgModule } from '@angular/core';
-import { NbDatepickerModule, NbWindowService, NbWindowRef, NbToastrService } from '@nebular/theme';
+import { NbWindowService, NbWindowRef, NbToastrService } from '@nebular/theme';
 import { WqxMonloc } from '../../../@core/wqx-data/wqx-monloc';
 import { WqxRefData } from '../../../@core/wqx-data/wqx-organization';
 import { WqxProject } from '../../../@core/wqx-data/wqx-project';
@@ -19,12 +19,7 @@ import { WQXProjectService } from '../../../@core/wqx-services/wqx-project-servi
   templateUrl: './wqx-activity.component.html',
   styleUrls: ['./wqx-activity.component.scss'],
 })
-@NgModule({
-  imports: [
-    // ...
-    NbDatepickerModule,
-  ],
-})
+
 export class WqxActivityComponent implements OnInit {
 
   user: User;

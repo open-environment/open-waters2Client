@@ -59,6 +59,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (token.isValid()) {
           this.user = token.getPayload();
           console.log(+this.user.userIdx);
+
           this.organizationService.GetWQX_USER_ORGS_ByUserIDX(+this.user.userIdx, true).subscribe(
             (data) => {
               data.forEach(element => {
@@ -67,6 +68,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
                 newOrg.orgFormalName = element.orgFormalName;
                 this.orgs.push(newOrg);
               });
+              console.log(this.user.OrgID);
+              setTimeout(() => {
+                this.selectedOrgId = this.user.OrgID;
+              }, 100);
+
             },
             (err) => {
               console.log(err);

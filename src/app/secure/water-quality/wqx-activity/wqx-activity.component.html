@@ -34,15 +34,21 @@
                 <div class="form-row row mt-3">
                   <div class="col-sm-2">Date Range:</div>
                   <div class="col-sm-4">
-                    <input nbInput type="text" name="txtStartDate" [nbDatepicker]="txtStartDateModel"
+                    <!-- <input nbInput type="text" name="txtStartDate" [nbDatepicker]="txtStartDateModel"
                       [(ngModel)]="txtStartDate" />
-                    <nb-datepicker #txtStartDateModel></nb-datepicker>
+                    <nb-datepicker #txtStartDateModel></nb-datepicker> -->
+                    <p-calendar appendTo="body" [showIcon]="true" hideOnDateTimeSelect="true" [(ngModel)]="txtStartDate"
+                      name="txtStartDate" showTime="true" hourFormat="24">
+                    </p-calendar>
                   </div>
                   <div class="col-sm-2">To:</div>
                   <div class="col-sm-4">
-                    <input nbInput type="text" name="txtEndDate" [nbDatepicker]="txtEndDateModel"
+                    <!-- <input nbInput type="text" name="txtEndDate" [nbDatepicker]="txtEndDateModel"
                       [(ngModel)]="txtEndDate" />
-                    <nb-datepicker #txtEndDateModel></nb-datepicker>
+                    <nb-datepicker #txtEndDateModel></nb-datepicker> -->
+                    <p-calendar appendTo="body" [showIcon]="true" hideOnDateTimeSelect="true" [(ngModel)]="txtEndDate"
+                      name="txtEndDate" showTime="true" hourFormat="24">
+                    </p-calendar>
                   </div>
 
                 </div>

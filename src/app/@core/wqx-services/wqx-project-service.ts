@@ -21,7 +21,8 @@ export class WQXProjectService extends WqxProjectData {
     return this.http.get<number>(WebApi.TWQXProjectApi.getWQXMonLocMyOrgCount(userIDX));
   }
   GetWQX_PROJECT(actInd: boolean, orgId: string, wqxPending: boolean): Observable<WqxProject[]> {
-    return this.http.get<WqxProject[]>(WebApi.TWQXProjectApi.getWqxProject(actInd, orgId, wqxPending));
+    const strWqxPending = wqxPending === null ? '' : wqxPending.toString();
+    return this.http.get<WqxProject[]>(WebApi.TWQXProjectApi.getWqxProject(actInd, orgId, strWqxPending));
   }
   GetWQX_PROJECT_ByID(projectIdx: number): Observable<WqxProject> {
     return this.http.get<WqxProject>(WebApi.TWQXProjectApi.getWQXProjectByID(projectIdx));

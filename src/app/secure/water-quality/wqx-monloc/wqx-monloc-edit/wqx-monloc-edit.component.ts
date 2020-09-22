@@ -25,7 +25,7 @@ export class WqxMonlocEditComponent implements OnInit {
   txtMonLocDesc: string = '';
   txtHUC8: string = '';
   txtHUC12: string = '';
-  chkLandInd: boolean = false;
+  chkLandInd: boolean;
   txtLandName: string = '';
   txtLatitude: string = '';
   txtLongitude: string = '';
@@ -164,12 +164,16 @@ export class WqxMonlocEditComponent implements OnInit {
     );
     this.refDataService.GetT_WQX_REF_DATA('State', true, true).subscribe(
       (data) => {
+        console.log('state');
+        console.log(data);
         this.states = data;
       },
       (err) => { console.log(err); },
     );
     this.refDataService.GetT_WQX_REF_DATA('Country', true, true).subscribe(
       (data) => {
+        console.log('country');
+        console.log(data);
         this.countries = data;
       },
       (err) => { console.log(err); },
@@ -196,36 +200,14 @@ export class WqxMonlocEditComponent implements OnInit {
       );
     }
   }
-  onChkLandInd(checked: boolean): void {
-    this.chkLandInd = checked;
-  }
-  onChkActInd(checked: boolean): void {
-    this.chkActInd = checked;
-  }
-  onChkWQXInd(checked: boolean): void {
-    this.chkWQXInd = checked;
-  }
-  onMonLocTypeSelect(selectedItem): void {
-    this.monlocTypeSelected = selectedItem;
-  }
-  onHorizMethodSelected(selectedItem): void {
-    this.horizMethodSelected = selectedItem;
-  }
-  onHorizDatumSelected(selectedItem): void {
-    this.horizDetumSelected = selectedItem;
-  }
-  onVertMethodSelected(selectedItem): void {
-    this.vertMethodSelected = selectedItem;
-  }
-  onVertUnitSelected(selectedItem): void {
-    this.vertUnitSelected = selectedItem;
-  }
-  onVertDatumSelected(selectedItem): void {
-    this.vertDetumSelected = selectedItem;
-  }
+
+
+
   onStateSelected(selectedItem): void {
+    console.log('onStateSelected');
+    console.log(selectedItem);
     this.stateSelected = selectedItem;
-    this.bindCounty('');
+    this.bindCounty(selectedItem);
   }
   onCountySelected(selectedItem): void {
 
@@ -233,9 +215,7 @@ export class WqxMonlocEditComponent implements OnInit {
   onCountrySelected(selectedItem): void {
     this.countrySelected = selectedItem;
   }
-  onWellTypeSelected(selectedItem): void {
-    this.wellTypeSelected = selectedItem;
-  }
+
   onSubmit() {
     if (this.txtMonLocID === '') {
       this.toastrService.danger('Monitoring Location ID is required.', 'Error!');
@@ -244,11 +224,31 @@ export class WqxMonlocEditComponent implements OnInit {
       let sms: number = 0;
       sms = parseInt(this.txtSourceMapScale, 10);
       if (isNaN(sms)) sms = 0;
-      console.log(this.currentOrgId);
+      console.log(this.chkLandInd);
       this.monlocService.InsertOrUpdateWQX_MONLOC(this.monlocIdx, this.currentOrgId, this.txtMonLocID, this.txtMonLocName,
-        this.monlocTypeSelected, this.txtMonLocDesc, this.txtHUC8, this.txtHUC12, '', this.txtLandName, this.txtLatitude, this.txtLongitude, sms, '', '', this.horizMethodSelected, this.horizDetumSelected, this.txtVertMeasure,
-        this.vertUnitSelected, this.vertMethodSelected, this.vertDetumSelected, this.countrySelected, this.stateSelected,
-        this.countySelected, this.wellTypeSelected, this.txtAquifer, '', '', '', 'U', '', this.chkActInd, this.chkWQXInd, this.user.name).subscribe(
+        (this.monlocTypeSelected === null) ? '' : this.monlocTypeSelected,
+        this.txtMonLocDesc,
+        this.txtHUC8,
+        this.txtHUC12,
+        (this.chkLandInd === null) ? '' : this.chkLandInd === true ? 'true' : 'false',
+        this.txtLandName,
+        this.txtLatitude,
+        this.txtLongitude, sms, '', '',
+        (this.horizMethodSelected === null) ? '' : this.horizMethodSelected,
+        this.horizDetumSelected,
+        this.txtVertMeasure,
+        (this.vertUnitSelected === null) ? '' : encodeURIComponent(this.vertUnitSelected),
+        (this.vertMethodSelected === null) ? '' : this.vertMethodSelected,
+        (this.vertDetumSelected === null) ? '' : this.vertDetumSelected,
+        (this.countrySelected === null) ? '' : this.countrySelected,
+        (this.stateSelected === null) ? '' : this.stateSelected,
+        (this.countySelected === null) ? '' : this.countySelected,
+        (this.wellTypeSelected === null) ? '' : this.wellTypeSelected,
+        (this.txtAquifer === null) ? '' : this.txtAquifer,
+        '', '', '', 'U', '',
+        (this.chkActInd === null) ? false : this.chkActInd,
+        (this.chkWQXInd === null) ? false : this.chkWQXInd,
+        this.user.name).subscribe(
           (data) => {
             console.log(data);
             this.router.navigate(['/secure/water-quality/wqx-monloc']);

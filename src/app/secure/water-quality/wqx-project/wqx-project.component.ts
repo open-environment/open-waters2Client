@@ -120,7 +120,7 @@ export class WqxProjectComponent implements OnInit {
     this.populateCols();
     this.cols = this.defaultCols;
     console.log(this.currentOrgId);
-    this.projectService.GetWQX_PROJECT(false, this.currentOrgId, false).subscribe(
+    this.projectService.GetWQX_PROJECT(false, this.currentOrgId, null).subscribe(
       (data: WqxProject[]) => {
         console.log(data);
         this.WqxProjects = data;

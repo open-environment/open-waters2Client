@@ -53,6 +53,13 @@ export class WqxMonlocComponent implements OnInit {
     }
     this.populateCols();
     this.cols = this.defaultCols;
+    this.pubSubService.loadOrgId.subscribe((data: string) => {
+      console.log('monloc-ngoninit pubsubservice:' + data);
+      if (data !== null && data !== undefined && data !== '') {
+        this.currentOrgId = data;
+        this.populateData();
+      }
+    });
   }
   populateCols() {
     console.log('populateCols called!');
@@ -71,6 +78,7 @@ export class WqxMonlocComponent implements OnInit {
     this.populateCols();
     this.cols = this.defaultCols;
     console.log(JSON.stringify(this.cols));
+    console.log(this.currentOrgId);
     this.monlocService.GetWQX_MONLOC(!this.chkDeletedInd, this.currentOrgId, false).subscribe(
       (data: WqxMonloc[]) => {
         console.log(data);

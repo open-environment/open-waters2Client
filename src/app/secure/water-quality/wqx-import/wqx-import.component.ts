@@ -121,6 +121,7 @@ export class WqxImportComponent implements OnInit {
           (err) => {
             console.log('ProcessWqxImportData: failed');
             console.log(err);
+            this.toasterService.danger('Something went wrong!', 'Data processing failed!', { destroyByClick: true });
           },
         );
     }

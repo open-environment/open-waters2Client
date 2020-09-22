@@ -73,6 +73,7 @@ export class WqxProjectEditComponent implements OnInit {
         this.txtProjDesc = data.projectDesc;
         this.sampDesignTypeCodeSelected = data.sampDesignTypeCd;
         this.chkQAPPInd = data.qappApprovalInd;
+        this.txtQAPPAgency = data.qappApprovalAgency;
         this.chkWQXInd = data.wqxInd;
         this.chkActInd = data.actInd;
       },
@@ -98,7 +99,7 @@ export class WqxProjectEditComponent implements OnInit {
     this.sampDesignTypeCodeSelected = selectedItem;
   }
   onSubmit(): void {
-    console.log(this.chkWQXInd);
+    console.log(this.txtQAPPAgency);
     this.projectService.InsertOrUpdateWQX_PROJECT(this.projectIdx, this.currentOrgId, this.txtProjID,
       this.txtProjName, this.txtProjDesc, this.sampDesignTypeCodeSelected, this.chkQAPPInd,
       this.txtQAPPAgency, 'U', '', this.chkActInd, this.chkWQXInd, this.user.name).subscribe(

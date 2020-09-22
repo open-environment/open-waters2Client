@@ -195,10 +195,12 @@ export class WqxMgmtComponent implements OnInit {
           (result) => {
             console.log('WQX_Master: valid');
             console.log(result);
+            this.toasterService.success('Submission done');
           },
           (err) => {
             console.log('WQX_Master: failed');
             console.log(err);
+            this.toasterService.danger('Submission failed');
           },
         );
       }

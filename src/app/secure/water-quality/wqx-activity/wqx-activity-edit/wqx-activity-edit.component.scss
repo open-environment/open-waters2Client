@@ -1,4 +1,4 @@
-@import "../../../../@theme/styles/themes";
+@import '../../../../@theme/styles/themes';
 
 @include nb-install-component() {
   nb-card {
@@ -35,4 +35,10 @@
 }
 .invalid-feedback {
   color: red;
+}
+:host ::ng-deep input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched,
+nb-select.ng-invalid.ng-touched,
+p-calendar.ng-invalid.ng-touched {
+  border: 2px solid red;
 }

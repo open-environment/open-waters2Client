@@ -1,32 +1,43 @@
 <div class="row">
   <div class="col-12">
-    <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+    <form name="form" (ngSubmit)="f.form.valid && onSubmit(f)" #f="ngForm" novalidate>
       <nb-card>
         <nb-card-header>ACTIVITY</nb-card-header>
         <nb-card-body>
           <div class="row">
             <div class="col-12">
               <div class="row">
-                <div class="col">
+                <div class="col-12">
                   <nb-alert *ngIf="!lblMsgShow === false" status="danger">
                     {{ lblMsg }}</nb-alert>
                 </div>
               </div>
               <div class="row">
-                <div class="col">Activity ID:</div>
-                <div class="col">
-                  <input type="text" nbInput name="txtActivityID" [(ngModel)]="txtActivityID" #vtxtActivityID="ngModel"
-                    [ngClass]="{
+                <div class="col-sm-1">Activity ID:</div>
+                <div class="col-sm-3">
+                  <input type="text" fieldSize="tiny" nbInput name="txtActivityID" [(ngModel)]="txtActivityID"
+                    #vtxtActivityID="ngModel" [ngClass]="{
                       'is-invalid': f.submitted && vtxtActivityID.invalid
                     }" required maxlength="35" />
                 </div>
-                <div class="col">Activity Date/Time</div>
-                <div class="col">
-                  <input nbInput type="text" name="txtStartDate" [nbDatepicker]="txtStartDateModel"
+                <div class="col-sm-2">Activity Date/Time</div>
+                <div class="col-sm-3">
+                  <!-- <input nbInput type="text" fieldSize="tiny" name="txtStartDate" [nbDatepicker]="txtStartDateModel"
                     [(ngModel)]="txtStartDate" #vtxtStartDate="ngModel" [ngClass]="{
                       'is-invalid': f.submitted && vtxtStartDate.invalid
                     }" required />
-                  <nb-datepicker #txtStartDateModel></nb-datepicker>
+                  <nb-datepicker withSeconds #txtStartDateModel></nb-datepicker> -->
+                  <p-calendar appendTo="body" [showIcon]="true" hideOnDateTimeSelect="true" [(ngModel)]="txtStartDate"
+                    #vtxtStartDate="ngModel" [ngClass]="{
+                    'is-invalid': f.submitted && vtxtStartDate.invalid
+                  }" name="txtStartDate" showTime="true" hourFormat="24" required>
+                  </p-calendar>
+                </div>
+                <div class="col-sm-2">
+                  <input nbInput type="text" fieldSize="tiny" name="txtTimeZone" [(ngModel)]="txtTimeZone"
+                    #vtxtTimeZone="ngModel" [ngClass]="{
+                      'is-invalid': f.submitted && vtxtTimeZone.invalid
+                    }" />
                 </div>
               </div>
               <div class="row">

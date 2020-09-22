@@ -30,30 +30,41 @@
 
     <div class="row mb-3">
       <div class="col-12">
-        <p-table [value]="importSamples" dataKey="tempMonlocIdx" [(selection)]="selectedimportSamples"
-          selectionMode="multiple" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
-          <ng-template pTemplate="header">
+        <!-- dataKey="tempMonlocIdx" -->
+        <p-table [columns]="cols" [value]="importSamples" [resizableColumns]="true" [autoLayout]="true"
+          dataKey="TempSampleIdx" [responsive]="true" [(selection)]="selectedimportSamples" selectionMode="multiple"
+          (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+          <ng-template pTemplate="header" let-columns>
             <tr>
               <th style="width: 3rem">
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
               </th>
-              <th>Import Status</th>
+              <th *ngFor="let col of columns">
+                {{col.header}}
+              </th>
+              <!--  <th>Import Status</th>
               <th>Import Errors</th>
               <th>Project ID</th>
               <th>Monloc ID</th>
-              <th>Activity ID</th>
+              <th>Activity ID</th> -->
             </tr>
           </ng-template>
-          <ng-template pTemplate="body" let-importSample>
+          <ng-template pTemplate="body" let-importSample let-columns="columns">
             <tr>
               <td>
                 <p-tableCheckbox [value]="importSample"></p-tableCheckbox>
               </td>
-              <td>{{importSample.importStatusCd}}</td>
+              <td *ngFor="let col of columns">
+                <span class="ui-column-title ui-column-title-button">
+                  <button nbButton size="tiny" status="warning">{{col.header}}</button>
+                </span>
+                {{importSample[col.field]}}
+              </td>
+              <!-- <td>{{importSample.importStatusCd}}</td>
               <td>{{importSample.importStatusDesc}}</td>
               <td>{{importSample.ProjectId}}</td>
               <td>{{importSample.MonlocId}}</td>
-              <td>{{importSample.ActivityId}}</td>
+              <td>{{importSample.ActivityId}}</td> -->
             </tr>
           </ng-template>
         </p-table>

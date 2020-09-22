@@ -163,8 +163,8 @@ export module WebApi {
       (userIDX: number) =>
         `${environment.api.owUrl}/api/monloc/getWQXMonlocMyOrgCount?UserIDX=${userIDX}`
     public static readonly getWqxProject =
-      (actInd: boolean, orgId: string, wqxPending: boolean) =>
-        `${environment.api.owUrl}/api/project/getWqxProject?ActInd=${actInd}&OrgID=${orgId}&WQXPending=${wqxPending}`
+      (actInd: boolean, orgId: string, wqxPending: string) =>
+        `${environment.api.owUrl}/api/project/getWqxProject?ActInd=${actInd}&OrgID=${orgId}&WQXPending=${wqxPending}`;
     public static readonly getWQXProjectByID =
       (projectIdx: number) =>
         `${environment.api.owUrl}/api/project/getWQXProjectByID?ProjectIDX=${projectIdx}`

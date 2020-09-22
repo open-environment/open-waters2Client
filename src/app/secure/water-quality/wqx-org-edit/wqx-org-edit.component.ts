@@ -110,68 +110,81 @@ export class WqxOrgEditComponent implements OnInit {
     // read session variables
     // this is done in ngOnInit()
 
+    // Populate Tribal Codes
     this.organizationService.GetT_WQX_REF_DATA('Tribe', true, true).subscribe(
       (tribeData: any) => {
         this.tcs = tribeData;
+
+        this.epaSubmissionGroup = '2';
+        this.onrbCDXChange(this.epaSubmissionGroup);
+
+        this.organizationService.getWQXOrganizationById(this.orgEditId).subscribe(
+          (o: WqxOrganization) => {
+            console.log(o);
+
+            if (o !== null) {
+              this.txtOrgID = o.orgId;
+              this.txtOrgIDReadOnly = false;
+              this.txtOrgName = o.orgFormalName;
+              this.txtOrgDesc = o.orgDesc;
+              this.tribalCodeSelected = o.tribalCode;
+              this.txtOrgEmail = o.electronicaddress;
+              this.txtOrgPhone = o.telephoneNum;
+              this.txtOrgPhoneExt = o.telephoneExt;
+              this.txtMailingAddress = o.mailingAddress;
+              this.txtMailCity = o.mailingAddCity;
+              this.txtMailState = o.mailingAddState;
+              this.txtMailZIP = o.mailingAddZip;
+              if (o.cdxSubmitInd === true) {
+                // lblCDXSubmitInd.CssClass = "fldPass";
+                this.lblCDXSubmitInd = 'This Organization is able to submit to EPA.';
+              } else {
+                // lblCDXSubmitInd.CssClass = "fldErr";
+                this.lblCDXSubmitInd = 'This Organization is unable to submit to EPA. Please correct this below.';
+              }
+
+              this.txtCDX = o.cdxSubmitterId;
+              this.txtCDXPwd = '--------';
+
+              if (o.cdxSubmitterId !== null && o.cdxSubmitterId !== '' && o.cdxSubmitterId.length > 0) {
+                this.epaSubmissionGroup = '1';
+              } else {
+                this.epaSubmissionGroup = '2';
+              }
+
+              // populate listbox with users already in organization
+              this.organizationService.GetT_OE_USERSInOrganization(this.orgEditId).subscribe(
+                (uio: any) => {
+                  console.log(uio);
+                  this.lbUserInRole = uio;
+                },
+              );
+
+              // populate listbox with users not in role
+              this.organizationService.GetT_OE_USERSNotInOrganization(this.orgEditId).subscribe(
+                (unio: any) => {
+                  console.log('unio');
+                  console.log(unio);
+                  this.lbAllUsers = unio;
+                },
+              );
+            }
+          },
+          (err) => {
+            console.log(err);
+          },
+        );
+
+      },
+      (err) => {
+        console.log(err);
       },
     );
 
-    this.epaSubmissionGroup = '2';
-    this.onrbCDXChange(this.epaSubmissionGroup);
 
-    this.organizationService.getWQXOrganizationById(this.orgEditId).subscribe(
-      (o: WqxOrganization) => {
-        if (o !== null) {
-          this.txtOrgID = o.orgId;
-          this.txtOrgIDReadOnly = false;
-          this.txtOrgName = o.orgFormalName;
-          this.txtOrgDesc = o.orgDesc;
-          this.tribalCodeSelected = o.tribalCode;
-          this.txtOrgEmail = o.electronicaddress;
-          this.txtOrgPhone = o.telephoneNum;
-          this.txtOrgPhoneExt = o.telephoneExt;
-          this.txtMailingAddress = o.mailingAddress;
-          this.txtMailCity = o.mailingAddCity;
-          this.txtMailState = o.mailingAddState;
-          this.txtMailZIP = o.mailingAddZip;
-          if (o.cdxSubmitInd === true) {
-            // lblCDXSubmitInd.CssClass = "fldPass";
-            this.lblCDXSubmitInd = 'This Organization is able to submit to EPA.';
-          } else {
-            // lblCDXSubmitInd.CssClass = "fldErr";
-            this.lblCDXSubmitInd = 'This Organization is unable to submit to EPA. Please correct this below.';
-          }
-
-          this.txtCDX = o.cdxSubmitterId;
-          this.txtCDXPwd = '--------';
-
-          if (o.cdxSubmitterId !== null && o.cdxSubmitterId !== '' && o.cdxSubmitterId.length > 0) {
-            this.epaSubmissionGroup = '1';
-          } else {
-            this.epaSubmissionGroup = '2';
-          }
-
-          // populate listbox with users already in organization
-          this.organizationService.GetT_OE_USERSInOrganization(this.orgEditId).subscribe(
-            (uio: any) => {
-              console.log(uio);
-              this.lbUserInRole = uio;
-            },
-          );
-
-          // populate listbox with users not in role
-          this.organizationService.GetT_OE_USERSNotInOrganization(this.orgEditId).subscribe(
-            (unio: any) => {
-              console.log('unio');
-              console.log(unio);
-              this.lbAllUsers = unio;
-            },
-          );
-        }
-      },
-    );
   }
   btnTestNAASLocalClick(): void {
+    console.log('btnTestNAASLocalClick');
     this.pnlCDXResults = false;
     if (this.orgEditId === '' || this.orgEditId == null) {
       return;
@@ -188,13 +201,34 @@ export class WqxOrgEditComponent implements OnInit {
         this.pnlCDXResults = true;
         this.txtAuthResult = data.lblAuthResult;
         this.txtSubmitResult = data.lblSubmitResult;
+        this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', true, '', this.user.name, '', '', '', '').subscribe(
+          (result) => {
+            console.log('InsertOrUpdateTWQXOrganization: valid');
+            console.log(result);
+          },
+          (err) => {
+            console.log('InsertOrUpdateTWQXOrganization: failed');
+            console.log(err);
+          },
+        );
       },
       (err) => {
         console.log(err);
+        this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
+          (result2) => {
+            console.log('InsertOrUpdateTWQXOrganization2: valid');
+            console.log(result2);
+          },
+          (err2) => {
+            console.log('InsertOrUpdateTWQXOrganization2: failed');
+            console.log(err2);
+          },
+        );
       },
     );
   }
   btnTestNAASGlobalClick(): void {
+    console.log('btnTestNAASGlobalClick');
     this.pnlCDXResults = false;
     if (this.orgEditId === '' || this.orgEditId == null) {
       return;
@@ -206,9 +240,29 @@ export class WqxOrgEditComponent implements OnInit {
         this.pnlCDXResults = true;
         this.txtAuthResult = data.lblAuthResult;
         this.txtSubmitResult = data.lblSubmitResult;
+        this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', true, '', this.user.name, '', '', '', '').subscribe(
+          (result) => {
+            console.log('InsertOrUpdateTWQXOrganization: valid');
+            console.log(result);
+          },
+          (err) => {
+            console.log('InsertOrUpdateTWQXOrganization: failed');
+            console.log(err);
+          },
+        );
       },
       (err) => {
         console.log(err);
+        this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
+          (result2) => {
+            console.log('InsertOrUpdateTWQXOrganization2: valid');
+            console.log(result2);
+          },
+          (err2) => {
+            console.log('InsertOrUpdateTWQXOrganization2: failed');
+            console.log(err2);
+          },
+        );
       },
     );
   }
@@ -222,32 +276,33 @@ export class WqxOrgEditComponent implements OnInit {
       // this.txtCDX = '';
       this.txtCDXPwd = '';
     }
-
+    console.log(this.txtOrgName);
+    console.log(this.tribalCodeSelected);
     // save updates to Organization
     this.organizationService.
       InsertOrUpdateTWQXOrganization(
-        this.txtOrgID === undefined || this.txtOrgID === null ? '' : this.txtOrgID,
-        this.txtOrgName === undefined || this.txtOrgName === null ? '' : this.txtOrgName,
-        this.txtOrgDesc === undefined || this.txtOrgDesc === null ? '' : this.txtOrgDesc,
-        this.tribalCodeSelected === undefined || this.tribalCodeSelected === null ? '' : this.tribalCodeSelected,
-        this.txtOrgEmail === undefined || this.txtOrgEmail === null ? '' : this.txtOrgEmail,
+        (this.txtOrgID === null) ? '' : this.txtOrgID,
+        (this.txtOrgName === null) ? '' : this.txtOrgName,
+        (this.txtOrgDesc === null) ? '' : this.txtOrgDesc,
+        (this.tribalCodeSelected === null) ? '' : this.tribalCodeSelected,
+        (this.txtOrgEmail === null) ? '' : this.txtOrgEmail,
         '',
-        this.txtOrgPhone === undefined || this.txtOrgPhone === null ? '' : this.txtOrgPhone,
+        (this.txtOrgPhone === null) ? '' : this.txtOrgPhone,
         '',
-        this.txtOrgPhoneExt === undefined || this.txtOrgPhoneExt === null ? '' : this.txtOrgPhoneExt,
+        (this.txtOrgPhoneExt === null) ? '' : this.txtOrgPhoneExt,
         '', '', false, '',
         this.user.name,
-        this.txtMailingAddress === undefined || this.txtMailingAddress === null ? '' : this.txtMailingAddress,
-        this.txtMailCity === undefined || this.txtMailCity === null ? '' : this.txtMailCity,
-        this.txtMailState === undefined || this.txtMailState === null ? '' : this.txtMailState,
-        this.txtMailZIP === undefined || this.txtMailZIP === null ? '' : this.txtMailZIP,
+        (this.txtMailingAddress === null) ? '' : this.txtMailingAddress,
+        (this.txtMailCity === null) ? '' : this.txtMailCity,
+        (this.txtMailState === null) ? '' : this.txtMailState,
+        (this.txtMailZIP === null) ? '' : this.txtMailZIP,
       ).subscribe(
         (result) => {
           console.log('InsertOrUpdateTWQXOrganization: valid:' + result);
           if (result === 1) {
             this.toasterService.success('Data Saved!');
             if (isSubmit === false) { return; }
-            this.router.navigate(['../wqx-org'], { relativeTo: this.activatedRoute });
+            // this.router.navigate(['../wqx-org'], { relativeTo: this.activatedRoute });
           } else {
             this.toasterService.danger('Error updating record.');
           }

@@ -18,12 +18,79 @@ export class WqxImportSampleComponent implements OnInit {
   wqxImport: boolean = false;
   wqxSubmitStatus: string = 'U';
   activityReplaceType: string = 'R';
+  cols: any[];
   constructor(private activatedRout: ActivatedRoute,
     private authService: NbAuthService,
     private importService: WqxImportService,
     private router: Router) { }
 
   ngOnInit() {
+    this.cols = [
+      { field: 'importStatusCd', header: 'Import Status' },
+      { field: 'importStatusDesc', header: 'Import Errors' },
+      { field: 'projectId', header: 'Project ID' },
+      { field: 'monlocId', header: 'Monloc ID' },
+      { field: 'activityId', header: 'Activity IDe' },
+      { field: 'actType', header: 'Activity Type' },
+      { field: 'actMedia', header: 'Activity Media' },
+      { field: 'actSubmedia', header: 'Sub-Media' },
+      { field: 'actStartDt', header: 'Start Date' },
+      { field: 'actEndDt', header: 'End Date' },
+      { field: 'actTimeZone', header: 'Time Zone' },
+      { field: 'relativeDepthName', header: 'Relative Depth' },
+      { field: 'actDepthheightMsr', header: 'Activity Depth' },
+      { field: 'actDepthheightMsrUnit', header: 'Depth Unit' },
+      { field: 'topDepthheightMsr', header: 'Top Depth' },
+      { field: 'topDepthheightMsrUnit', header: 'Top Depth Unit' },
+      { field: 'botDepthheightMsr', header: 'Bot Depth' },
+      { field: 'botDepthheightMsrUnit', header: 'Bot Depth Unit' },
+      { field: 'actComment', header: 'Activity Comment' },
+      { field: 'bioAssemblageSampled', header: 'Assemblage Sampled' },
+      { field: 'bioDurationMsr', header: 'Duration' },
+      { field: 'bioDurationMsrUnit', header: 'Duration Unit' },
+      { field: 'bioSampComponent', header: 'Bio Samp Component' },
+      { field: 'bioSampComponentSeq', header: 'Samp Component Seq' },
+      { field: 'sampCollMethodId', header: 'Collection Method' },
+      { field: 'sampCollMethodCtx', header: 'Collection Method Context' },
+      { field: 'sampCollEquip', header: 'Equipment' },
+      { field: 'sampCollEquipComment', header: 'Equipment Comment' },
+      { field: 'sampPrepId', header: 'Samp Prep' },
+      { field: 'sampPrepCtx', header: 'Samp Prep Context' },
+      { field: 'resultDetectCondition', header: 'Detect Condition' },
+      { field: 'charName', header: 'Characteristic' },
+      { field: 'methodSpeciationName', header: 'Method Speciation' },
+      { field: 'resultSampFraction', header: 'Samp Fraction' },
+      { field: 'resultMsr', header: 'Result' },
+      { field: 'resultMsrUnit', header: 'Unit' },
+      { field: 'resultMsrQual', header: 'Qualifier' },
+      { field: 'resultStatus', header: 'Result Status' },
+      { field: 'statisticBaseCode', header: 'Statistic Base' },
+      { field: 'resultValueType', header: 'Result Value Type' },
+      { field: 'weightBasis', header: 'Weight Basis' },
+      { field: 'timeBasis', header: 'Time Basis' },
+      { field: 'tempBasis', header: 'Temp Basis' },
+      { field: 'particlesizeBasis', header: 'Partical Size' },
+      { field: 'precisionValue', header: 'Precision' },
+      { field: 'biasValue', header: 'Bias' },
+      { field: 'resultComment', header: 'Result Comment' },
+      { field: 'bioIntentName', header: 'Bio Intent' },
+      { field: 'bioSubjectTaxonomy', header: 'Taxonomy' },
+      { field: 'freqClassCode', header: 'Freq Class' },
+      { field: 'freqClassUnit', header: 'Freq Class Unit' },
+      { field: 'analyticMethodId', header: 'Anal Method' },
+      { field: 'analyticMethodCtx', header: 'Anal Method Context' },
+      { field: 'labName', header: 'Lab Name' },
+      { field: 'labAnalysisStartDt', header: 'Analysis Start Date' },
+      { field: 'labAnalysisEndDt', header: 'Analysis End Date' },
+      { field: 'resultLabCommentCode', header: 'Lab Comment' },
+      { field: 'methodDetectionLevel', header: 'Detection Limit' },
+      { field: 'labReportingLevel', header: 'Lab Reporting Level' },
+      { field: 'pql', header: 'PQL' },
+      { field: 'lowerQuantLimit', header: 'Lower Quant Limit' },
+      { field: 'detectionLimitUnit', header: 'Detection Limit Unit' },
+      { field: 'labSampPrepStartDt', header: 'Lab Prep Start Date' },
+      { field: 'dilutionFactor', header: 'Dilution Factor' },
+    ];
     this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
@@ -120,3 +187,7 @@ export class WqxImportSampleComponent implements OnInit {
     );
   }
 }
+
+
+
+
