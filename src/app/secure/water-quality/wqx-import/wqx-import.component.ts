@@ -7,6 +7,7 @@ import { WqxImportService } from '../../../@core/wqx-services/wqx-import.service
 import { WQXProjectService } from '../../../@core/wqx-services/wqx-project-service';
 import { WqxProject } from '../../../@core/wqx-data/wqx-project';
 import { TWqxImportTemplate } from '../../../@core/wqx-data/wqx-import';
+import { AuthService } from '../../../@core/auth/auth.service';
 
 @Component({
   selector: 'ngx-wqx-import',
@@ -17,6 +18,8 @@ export class WqxImportComponent implements OnInit {
   @ViewChild('stepper', { static: true }) stepper: NbStepperComponent;
 
   user: User;
+  currentOrgId: string = '';
+
   selectedImportType: string = '';
   txtImportData: string = '';
   isCITRadioButtonShow: string = '';
@@ -28,21 +31,47 @@ export class WqxImportComponent implements OnInit {
   templates: TWqxImportTemplate[] = [];
   selectedTemplateId: number;
 
+
   constructor(private router: Router,
     private authService: NbAuthService,
+    private authService1: AuthService,
     private importService: WqxImportService,
     private projectService: WQXProjectService,
     private toasterService: NbToastrService) {
-    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      console.log(u.profile.sub);
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+      this.currentOrgId = this.user.OrgID;
+    }
+    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
         console.log(this.user);
       }
-    });
+    }); */
   }
 
   ngOnInit() {
-    this.projectService.GetWQX_PROJECT(true, this.user.OrgID, false).subscribe(
+    if (localStorage.getItem('selectedOrgId') !== null) {
+      this.currentOrgId = localStorage.getItem('selectedOrgId');
+    }
+    this.projectService.GetWQX_PROJECT(true, this.currentOrgId, false).subscribe(
       (data) => {
         console.log('GetWQX_PROJECT: valid');
         console.log(data);
@@ -53,7 +82,7 @@ export class WqxImportComponent implements OnInit {
         console.log(err);
       }
     );
-    this.importService.GetWQX_IMPORT_TEMPLATE(this.user.OrgID).subscribe(
+    this.importService.GetWQX_IMPORT_TEMPLATE(this.currentOrgId).subscribe(
       (data) => {
         console.log('GetWQX_IMPORT_TEMPLATE: valid');
         console.log(data);
@@ -93,7 +122,7 @@ export class WqxImportComponent implements OnInit {
       this.toasterService.danger('You must copy and paste data from a spreadsheet into the large textbox.', 'Validation Failed');
     } else {
       const userIdx: number = this.user.userIdx;
-      const orgId: string = this.user.OrgID;
+      const orgId: string = this.currentOrgId;
       const importType: string = this.selectedImportType;
       const importData: string = btoa(this.txtImportData);
       const templateInd: string = this.selectedCustomImportTemplate;

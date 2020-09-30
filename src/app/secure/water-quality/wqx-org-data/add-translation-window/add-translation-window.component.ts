@@ -4,6 +4,7 @@ import { User } from '../../../../@core/data/users';
 import { NbWindowRef } from '@nebular/theme';
 import { WQXRefDataService } from '../../../../@core/wqx-services/wqx-refdata-service';
 import { WqxPubsubServiceService } from '../../../../@core/wqx-services/wqx-pubsub-service.service';
+import { AuthService } from '../../../../@core/auth/auth.service';
 
 
 @Component({
@@ -24,19 +25,40 @@ export class AddTranslationWindowComponent implements OnInit {
   constructor(public windowRef: NbWindowRef,
     private refDataService: WQXRefDataService,
     private authService: NbAuthService,
+    private authService1: AuthService,
     private pubSubService: WqxPubsubServiceService) {
-    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      console.log(u.profile.sub);
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+      this.currentOrgId = this.user.OrgID;
+      this.refDataService.GetAllColumnBasic('S').subscribe(
+        (data) => {
+          this.fields = data;
+        },
+        (err) => { console.log(err); },
+      );
+    }
+    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-        this.currentOrgId = this.user.OrgID;
-        this.refDataService.GetAllColumnBasic('S').subscribe(
-          (data) => {
-            this.fields = data;
-          },
-          (err) => { console.log(err); },
-        );
+        
       }
-    });
+    }); */
   }
 
   ngOnInit() {

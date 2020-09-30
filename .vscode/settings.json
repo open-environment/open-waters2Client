@@ -4,5 +4,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "[html]": { "editor.defaultFormatter": "vscode.html-language-features" },
-  "editor.formatOnPaste": false
+  "editor.formatOnPaste": false,
+  "appService.defaultWebAppToDeploy": "/subscriptions/2e538d04-4cb5-499f-b9bc-2545402d0436/resourceGroups/OpenEnvironmentDev/providers/Microsoft.Web/sites/openwater2clientdev",
+  "appService.deploySubpath": "dist"
 }

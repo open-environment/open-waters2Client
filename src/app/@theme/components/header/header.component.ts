@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organization-service';
 import { WqxOrganization } from '../../../@core/wqx-data/wqx-organization';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
+import { AuthService } from '../../../@core/auth/auth.service';
+
 
 @Component({
   selector: 'ngx-header',
@@ -50,36 +52,55 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // private themeService: NbThemeService,
     private layoutService: LayoutService,
     private authService: NbAuthService,
+    private authService1: AuthService,
     private router: Router,
     private organizationService: WQXOrganizationService,
     private pubSubService: WqxPubsubServiceService) {
 
-    this.authService.onTokenChange()
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.organizationService.GetWQX_USER_ORGS_ByUserIDX(+this.user.userIdx, true).subscribe(
+        (data) => {
+          data.forEach(element => {
+            const newOrg = {} as WqxOrganization;
+            newOrg.orgId = element.orgId;
+            newOrg.orgFormalName = element.orgFormalName;
+            this.orgs.push(newOrg);
+          });
+          console.log('setting default orgid');
+          console.log(this.user.OrgID);
+          setTimeout(() => {
+            this.selectedOrgId = this.user.OrgID;
+          }, 100);
+
+        },
+        (err) => {
+          console.log(err);
+        },
+      );
+    }
+
+
+    /* this.authService.onTokenChange()
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.user = token.getPayload();
           console.log(+this.user.userIdx);
-
-          this.organizationService.GetWQX_USER_ORGS_ByUserIDX(+this.user.userIdx, true).subscribe(
-            (data) => {
-              data.forEach(element => {
-                const newOrg = {} as WqxOrganization;
-                newOrg.orgId = element.orgId;
-                newOrg.orgFormalName = element.orgFormalName;
-                this.orgs.push(newOrg);
-              });
-              console.log(this.user.OrgID);
-              setTimeout(() => {
-                this.selectedOrgId = this.user.OrgID;
-              }, 100);
-
-            },
-            (err) => {
-              console.log(err);
-            },
-          );
         }
-      });
+      }); */
   }
 
   ngOnInit() {
@@ -114,12 +135,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onItemSelection(title: string) {
     if (title === 'Log out') {
-      this.authService.logout('email').subscribe(
-        (result: NbAuthResult) => {
-          this.router.navigateByUrl('/auth/login');
-        },
-        (err) => { console.log(err); },
-      );
+      this.authService1.signout();
+      /*  this.authService.logout('email').subscribe(
+         (result: NbAuthResult) => {
+           this.router.navigateByUrl('/auth/login');
+         },
+         (err) => { console.log(err); },
+       ); */
     } else if (title === 'Profile') {
       // Do something on Profile
     }
@@ -148,5 +170,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.menuService.navigateHome();
     return false;
   }
-
+  ReturnToPortal() {
+    this.authService1.signout();
+  }
 }

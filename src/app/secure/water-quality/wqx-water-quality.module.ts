@@ -1,5 +1,5 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { NbCardModule, NbTreeGridModule, NbIconModule, NbInputModule, NbSelectModule, NbRadioModule, NbCheckboxModule, NbListModule, NbAlertModule, NbTabsetModule, NbToastrModule, NbWindowModule, NbButtonModule, NbDatepickerModule, NbStepperModule, NbStepperComponent, NbTooltipModule } from '@nebular/theme';
+import { NbCardModule, NbTreeGridModule, NbIconModule, NbInputModule, NbSelectModule, NbRadioModule, NbCheckboxModule, NbListModule, NbAlertModule, NbTabsetModule, NbToastrModule, NbWindowModule, NbButtonModule, NbDatepickerModule, NbStepperModule, NbStepperComponent, NbTooltipModule, NbSpinnerModule } from '@nebular/theme';
 import { ThemeModule } from '../../@theme/theme.module';
 // import { WqxMainRoutingModule, wqxRoutedComponents } from '../main/wqx-main-routing.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -63,6 +63,7 @@ import { DigitOnlyDirective } from '../../@core/utils/digit-only.directive';
     CalendarModule,
     NbStepperModule,
     NbTooltipModule,
+    NbSpinnerModule,
   ],
   declarations: [
     ...wqxWQRoutedComponents,

@@ -12,8 +12,9 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <script type="text/javascript">
     if (location.protocol !== 'http:') {
+      alert("On Azure: protocol conversion from https to http is skipped..but need to turn on on AppleTech Staging Server.");
       alert("before: " + location.protocol);
-      location.replace(`http:${location.href.substring(location.protocol.length)}`);
+      // location.replace(`http:${location.href.substring(location.protocol.length)}`);
       alert("after: " + location.protocol);
     }
   </script>

@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import {
+  NbCardModule,
   NbChatModule,
   // NbDatepickerModule,
   NbDialogModule,
@@ -30,12 +31,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WQXProjectService } from './@core/wqx-services/wqx-project-service';
 import { WQXActivityService } from './@core/wqx-services/wqx-activity-service';
 import { WqxMonlocService } from './@core/wqx-services/wqx-monloc.service';
+import { AuthService } from './@core/auth/auth.service';
+import { AccountModule } from './account/account.module';
+import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
+    AuthCallbackComponent,
   ],
   imports: [
+    NbCardModule,
     AppRoutingModule,
     BrowserModule,
     FormsModule,
@@ -53,6 +60,7 @@ import { WqxMonlocService } from './@core/wqx-services/wqx-monloc.service';
       messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
     }),
     CoreModule.forRoot(),
+    AccountModule,
     NbAuthModule.forRoot({
       strategies: [
         NbPasswordAuthStrategy.setup({
@@ -136,6 +144,7 @@ import { WqxMonlocService } from './@core/wqx-services/wqx-monloc.service';
     WQXProjectService,
     WQXActivityService,
     WqxMonlocService,
+    AuthService,
     // { provide: ErrorHandler, useClass: MyAppErrorHandler },
   ],
   bootstrap: [AppComponent],

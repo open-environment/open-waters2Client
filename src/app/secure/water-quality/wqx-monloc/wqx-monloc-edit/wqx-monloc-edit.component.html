@@ -5,8 +5,9 @@
       <div class="form-row">
         <div class="form-group col-4">Mon Loc ID:</div>
         <div class="form-group col-8">
-          <input type="text" name="txtMonLocID" class="form-control" [(ngModel)]="txtMonLocID" #vtxtMonLocID="ngModel"
-            [ngClass]="{ 'is-invalid': f.submitted && vtxtMonLocID.invalid }" required maxlength="35">
+          <input type="text" id="focusField" name="txtMonLocID" class="form-control" [(ngModel)]="txtMonLocID"
+            #vtxtMonLocID="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtMonLocID.invalid }" required
+            maxlength="35">
         </div>
       </div>
       <div class="form-row">
@@ -68,7 +69,7 @@
         <div class="form-group col-4">Latitude:</div>
         <div class="form-group col-8">
           <div class="row">
-            <div class="col-5">
+            <div class="col-4">
               <input type="text" class="form-control" name="txtLatitude" [(ngModel)]="txtLatitude"
                 #vtxtLatitude="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtLatitude.invalid }" required
                 maxlength="12">
@@ -76,10 +77,15 @@
             <div class="col-2">
               <label for="txtLongitude">Longitude:</label>
             </div>
-            <div class="col-5">
+            <div class="col-4">
               <input type="text" class="form-control" name="txtLongitude" [(ngModel)]="txtLongitude"
                 #vtxtLongitude="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtLongitude.invalid }" required
                 maxlength="14">
+            </div>
+            <div class="col-2">
+              <button nbButton type="button" status="success" name="btnMap" class="mr-3">
+                <nb-icon icon="save-outline"></nb-icon> Map
+              </button>
             </div>
           </div>
         </div>

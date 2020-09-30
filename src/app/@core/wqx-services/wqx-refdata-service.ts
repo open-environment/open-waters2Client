@@ -70,7 +70,7 @@ export class WQXRefDataService extends WqxRefDataData {
     return this.http.delete<number>(WebApi.TWQXRefDataApi.deleteTWqxImportTranslate(translateId));
   }
   DeleteT_WQX_REF_CHAR_ORG(orgName: string, charName: string): Observable<number> {
-    return this.http.delete<number>(WebApi.TWQXRefDataApi.deleteTWqxRefTaxaOrg(orgName, charName));
+    return this.http.delete<number>(WebApi.TWQXRefDataApi.deleteWqxRefCharOrg(orgName, charName));
   }
   GetT_WQX_REF_DATA_Count(): Observable<number> {
     return this.http.get<number>(WebApi.TWQXRefDataApi.getTWqxRefDataCount());
@@ -84,6 +84,10 @@ export class WQXRefDataService extends WqxRefDataData {
   GetT_WQX_REF_CHARACTERISTIC_ByOrg(orgId: string, rbpInd: boolean): Observable<WqxRefCharacteristic[]> {
     return this.http.get<WqxRefCharacteristic[]>(WebApi.TWQXRefDataApi.getTWqxRefCharacteristicByOrg(orgId, rbpInd));
   }
+  GetT_WQX_REF_CHAR_ORGByName(orgName: string, charName: string): Observable<WqxRefCharOrg> {
+    return this.http.get<WqxRefCharOrg>(WebApi.TWQXRefDataApi.getTWqxRefCharOrgByName(orgName, charName));
+  }
+
   InsertOrUpdateT_WQX_RESULT(resultIdx: number, activityIdx: number, resultDetectCondition: string,
     charName: string, resultSampFraction: string, resultMsr: string, resultMsrUnit: string,
     resultStatus: string, resultValueType: string, resultComment: string,

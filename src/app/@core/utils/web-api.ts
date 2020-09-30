@@ -77,6 +77,9 @@ export module WebApi {
     public static readonly checkUserAuthentication =
       (payload: string) =>
         `${environment.api.owUrl}/api/auth/CheckUserAuthentication?payload=${payload}`
+    public static readonly checkUserExist =
+      () =>
+        `${environment.api.owUrl}/api/auth/checkUserExist`
     public static readonly createAndGetNewUserData =
       (userid: string) =>
         `${environment.api.owUrl}/api/auth/CreateAndGetNewUserData?userid=${userid}`
@@ -164,7 +167,7 @@ export module WebApi {
         `${environment.api.owUrl}/api/monloc/getWQXMonlocMyOrgCount?UserIDX=${userIDX}`
     public static readonly getWqxProject =
       (actInd: boolean, orgId: string, wqxPending: string) =>
-        `${environment.api.owUrl}/api/project/getWqxProject?ActInd=${actInd}&OrgID=${orgId}&WQXPending=${wqxPending}`;
+        `${environment.api.owUrl}/api/project/getWqxProject?ActInd=${actInd}&OrgID=${orgId}&WQXPending=${wqxPending}`
     public static readonly getWQXProjectByID =
       (projectIdx: number) =>
         `${environment.api.owUrl}/api/project/getWQXProjectByID?ProjectIDX=${projectIdx}`
@@ -267,7 +270,7 @@ export module WebApi {
         `${environment.api.owUrl}/api/refdata/getTWqxRefDataCount`
     public static readonly GetTWqxRefCharOrgCount =
       (orgName: string) =>
-        `${environment.api.owUrl}/api/refdata/getTWqxRefDataCount?orgName=${orgName}`
+        `${environment.api.owUrl}/api/refdata/GetTWqxRefCharOrgCount?orgName=${orgName}`
     public static readonly GetTWqxRefSampColMethodByContext =
       (context: string) =>
         `${environment.api.owUrl}/api/refdata/GetTWqxRefSampColMethodByContext?Context=${context}`
@@ -288,6 +291,9 @@ export module WebApi {
     public static readonly getTWqxRefCharacteristicByOrg =
       (orgId: string, rbpInd: boolean) =>
         `${environment.api.owUrl}/api/refdata/getTWqxRefCharacteristicByOrg?OrgID=${orgId}&RBPInd=${rbpInd}`
+    public static readonly getTWqxRefCharOrgByName =
+      (orgName: string, charName: string) =>
+        `${environment.api.owUrl}/api/refdata/GetTWqxRefCharOrgByName?orgName=${orgName}&charName=${charName}`
     public static readonly insertOrUpdateTWqxResult =
       (resultIdx: number, activityIdx: number, resultDetectCondition: string,
         charName: string, resultSampFraction: string, resultMsr: string, resultMsrUnit: string,

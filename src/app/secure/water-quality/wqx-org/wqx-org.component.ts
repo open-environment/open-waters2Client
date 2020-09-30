@@ -7,6 +7,7 @@ import { Column } from 'primeng/primeng';
 import { WqxAllOrgs, WqxOrganization } from '../../../@core/wqx-data/wqx-organization';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { User } from '../../../@core/data/users';
+import { AuthService } from '../../../@core/auth/auth.service';
 
 @Component({
   selector: 'ngx-wqx-org',
@@ -15,19 +16,42 @@ import { User } from '../../../@core/data/users';
 })
 export class WqxOrgComponent implements OnInit {
   user: User;
+  currentOrgId: string = '';
   orgs: WqxOrganization[] = [];
+
 
   constructor(private service: WQXOrganizationService,
     private pubSubService: WqxPubsubServiceService,
     private router: Router,
-    private authService: NbAuthService) {
-    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+    private authService: NbAuthService,
+    private authService1: AuthService) {
+
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      console.log(u.profile.sub);
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+
+    }
+    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
         console.log(this.user);
-        this.loadData();
       }
-    });
+    }); */
     this.pubSubService.loadData.subscribe((data: any) => {
       console.log('pubSubService called: ' + data);
     });
@@ -35,6 +59,10 @@ export class WqxOrgComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (localStorage.getItem('selectedOrgId') !== null) {
+      this.currentOrgId = localStorage.getItem('selectedOrgId');
+    }
+    this.loadData();
   }
 
   loadData(): void {

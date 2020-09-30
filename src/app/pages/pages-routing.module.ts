@@ -6,6 +6,8 @@ import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { ExtloginComponent } from './extlogin/extlogin.component';
 import { AuthGuard } from '../auth-guard.service';
+import { WqxLicenseComponent } from './miscellaneous/wqx-license/wqx-license.component';
+import { WqxTermsComponent } from './miscellaneous/wqx-terms/wqx-terms.component';
 
 const routes: Routes = [{
   path: '',
@@ -19,6 +21,14 @@ const routes: Routes = [{
       path: 'dashboard',
       component: ECommerceComponent,
       canActivate: [AuthGuard],
+    },
+    {
+      path: 'license',
+      component: WqxLicenseComponent,
+    },
+    {
+      path: 'terms',
+      component: WqxTermsComponent,
     },
     {
       path: 'miscellaneous',

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
+import { AuthService } from '../../../@core/auth/auth.service';
 import { User } from '../../../@core/data/users';
 import { TWqxImportTempMonloc, ImportSampleResultDisplay } from '../../../@core/wqx-data/wqx-import';
 import { WqxImportService } from '../../../@core/wqx-services/wqx-import.service';
@@ -13,18 +14,65 @@ import { WqxImportService } from '../../../@core/wqx-services/wqx-import.service
 export class WqxImportSampleComponent implements OnInit {
 
   user: User;
+  currentOrgId: string = '';
+
   importSamples: ImportSampleResultDisplay[];
   selectedimportSamples: ImportSampleResultDisplay[];
   wqxImport: boolean = false;
   wqxSubmitStatus: string = 'U';
   activityReplaceType: string = 'R';
   cols: any[];
+
   constructor(private activatedRout: ActivatedRoute,
     private authService: NbAuthService,
+    private authService1: AuthService,
     private importService: WqxImportService,
-    private router: Router) { }
+    private router: Router) {
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      console.log(u.profile.sub);
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+      this.currentOrgId = this.user.OrgID;
+
+      this.importService.GetWQX_IMPORT_TEMP_SAMPLEByUserIdx(this.user.userIdx).subscribe(
+        (data: ImportSampleResultDisplay[]) => {
+          console.log('GetWQX_IMPORT_TEMP_SAMPLEByUserIdx: valid');
+          console.log(data);
+          this.importSamples = data;
+        },
+        (err) => {
+          console.log('GetWQX_IMPORT_TEMP_SAMPLEByUserIdx: falied');
+          console.log(err);
+        },
+      );
+    }
+    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+      if (token.isValid()) {
+        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
+        console.log(this.user);
+        console.log('called GetWQX_IMPORT_TEMP_SAMPLEByUserIdx wtih userIdx: ' + this.user.userIdx);
+      }
+    }); */
+  }
 
   ngOnInit() {
+    if (localStorage.getItem('selectedOrgId') !== null) {
+      this.currentOrgId = localStorage.getItem('selectedOrgId');
+    }
     this.cols = [
       { field: 'importStatusCd', header: 'Import Status' },
       { field: 'importStatusDesc', header: 'Import Errors' },
@@ -91,24 +139,7 @@ export class WqxImportSampleComponent implements OnInit {
       { field: 'labSampPrepStartDt', header: 'Lab Prep Start Date' },
       { field: 'dilutionFactor', header: 'Dilution Factor' },
     ];
-    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
-      if (token.isValid()) {
-        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-        console.log(this.user);
-        console.log('called GetWQX_IMPORT_TEMP_SAMPLEByUserIdx wtih userIdx: ' + this.user.userIdx);
-        this.importService.GetWQX_IMPORT_TEMP_SAMPLEByUserIdx(this.user.userIdx).subscribe(
-          (data: ImportSampleResultDisplay[]) => {
-            console.log('GetWQX_IMPORT_TEMP_SAMPLEByUserIdx: valid');
-            console.log(data);
-            this.importSamples = data;
-          },
-          (err) => {
-            console.log('GetWQX_IMPORT_TEMP_SAMPLEByUserIdx: falied');
-            console.log(err);
-          },
-        );
-      }
-    });
+
     /* this.activatedRoute.queryParams.subscribe(params => {
       this.orgEditId = params['userid'];
     }); */

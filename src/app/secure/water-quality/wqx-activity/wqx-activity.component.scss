@@ -6,3 +6,15 @@ th {
 td {
   font-size: 10px;
 }
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+.rotateMe {
+  animation: rotate 1.5s infinite linear;
+}

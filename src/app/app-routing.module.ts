@@ -8,9 +8,18 @@ import {
   NbRequestPasswordComponent,
   NbResetPasswordComponent,
 } from '@nebular/auth';
+import { LoginComponent } from './account/login/login.component';
+import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { AuthGuard } from './auth-guard.service';
 
+
 const routes: Routes = [
+  {
+    path: 'login', component: LoginComponent,
+  },
+  {
+    path: 'signinoidc', component: AuthCallbackComponent,
+  },
   {
     path: 'pages',
 
@@ -54,6 +63,7 @@ const routes: Routes = [
       },
     ],
   },
+
   { path: '', redirectTo: 'pages', pathMatch: 'full' },
   { path: '**', redirectTo: 'pages' },
 ];

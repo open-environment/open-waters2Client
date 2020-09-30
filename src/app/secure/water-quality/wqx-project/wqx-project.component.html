@@ -1,7 +1,7 @@
-<form>
-  <nb-card status="success">
-    <nb-card-header>PROJECTS</nb-card-header>
-    <nb-card-body>
+<nb-card status="success">
+  <nb-card-header>PROJECTS</nb-card-header>
+  <nb-card-body>
+    <form>
       <div class="row">
         <p-table [columns]="cols" [value]="WqxProjects" [responsive]="true">
           <ng-template pTemplate="header" let-columns>
@@ -41,28 +41,45 @@
                 </span>
                 <div class="row">
                   <div class="col">
-                    <nb-checkbox [checked]="rowData['wqxInd']" disabled></nb-checkbox>
+                    <button nbButton size="tiny" status="basic">
+                      <div *ngIf="rowData['wqxInd'] === true">
+                        <nb-icon icon="checkmark-square-2"></nb-icon>
+                      </div>
+                      <div *ngIf="rowData['wqxInd'] !== true">
+                        <nb-icon icon="square"></nb-icon>
+                      </div>
+
+                    </button>
+                    <!-- <nb-checkbox [checked]="rowData['wqxInd']" disabled></nb-checkbox> -->
                   </div>
                   <div class="col">
                     <div *ngIf="rowData['wqxInd'] === true">
                       <container-element [ngSwitch]="rowData['wqxSubmitStatus']">
                         <!-- the same view can be shown in more than one case -->
                         <some-element *ngSwitchCase="'U'">
-                          <img src="../../../../assets/images/progress.gif" alt="1" style="cursor: pointer;"
-                            title="Click to view WQX History" (click)="onSendToEPA(rowData['monlocIdx'])">
+                          <nb-icon icon="cloud-upload" class="rotateMe" nbTooltip="Click to view WQX History"
+                            nbTooltipStatus="primary" (click)="onSendToEPA(rowData['projectIdx'])"></nb-icon>
                         </some-element>
                         <some-element *ngSwitchCase="'N'">
-                          <img src="../../../../assets/images/ico_alert.png" alt="image2" style="cursor: pointer;"
-                            title="Click to view WQX History" (click)="onSendToEPA(rowData['monlocIdx'])">
+                          <button nbButton size="tiny" status="danger" (click)="onSendToEPA(rowData['projectIdx'])"
+                            nbTooltip="Click to view WQX History" nbTooltipStatus="primary">
+                            <nb-icon icon="alert-triangle"></nb-icon>
+                          </button>
                         </some-element>
                         <some-other-element *ngSwitchCase="'Y'">
-                          <img src="../../../../assets/images/ico_pass.png" alt="image3" style="cursor: pointer;"
-                            title="Click to view WQX History" (click)="onSendToEPA(rowData['monlocIdx'])">
+
+                          <button nbButton size="tiny" status="success" (click)="onSendToEPA(rowData['projectIdx'])"
+                            nbTooltip="Click to view WQX History" nbTooltipStatus="primary">
+                            <nb-icon icon="checkmark-square-2"></nb-icon>
+                          </button>
                         </some-other-element>
                         <!--default case when there are no matches -->
                         <some-element *ngSwitchDefault>
-                          <img src="../../../../assets/images/0.png" alt="image4" style="cursor: pointer;"
-                            title="Click to view WQX History" (click)="onSendToEPA(rowData['monlocIdx'])">
+                          <button nbButton size="tiny" status="basic" (click)="onSendToEPA(rowData['projectIdx'])"
+                            nbTooltip="Click to view WQX History" nbTooltipStatus="primary">
+                            <nb-icon icon="eye-outline"></nb-icon>
+                          </button>
+
                         </some-element>
                       </container-element>
                     </div>
@@ -86,7 +103,7 @@
           </button>
         </span>
       </div>
-    </nb-card-body>
-    <nb-card-footer></nb-card-footer>
-  </nb-card>
-</form>
+    </form>
+  </nb-card-body>
+  <nb-card-footer></nb-card-footer>
+</nb-card>

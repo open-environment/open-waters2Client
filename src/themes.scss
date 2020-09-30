@@ -1,0 +1,11 @@
+@import '~@nebular/theme/styles/theming';
+@import '~@nebular/theme/styles/themes/corporate';
+
+$nb-themes: nb-register-theme(
+  (
+    // add your variables here like:
+    // text-paragraph-font-size: 2.9375rem
+  ),
+  corporate,
+  corporate
+);

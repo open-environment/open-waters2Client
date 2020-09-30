@@ -1,4 +1,4 @@
-import { Component, OnInit, NgModule } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NbWindowService, NbWindowRef, NbToastrService } from '@nebular/theme';
 import { WqxMonloc } from '../../../@core/wqx-data/wqx-monloc';
 import { WqxRefData } from '../../../@core/wqx-data/wqx-organization';
@@ -13,6 +13,7 @@ import { ActivityConfigWindowComponent } from './activity-config-window/activity
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
 import { WqxMonlocService } from '../../../@core/wqx-services/wqx-monloc.service';
 import { WQXProjectService } from '../../../@core/wqx-services/wqx-project-service';
+import { AuthService } from '../../../@core/auth/auth.service';
 
 @Component({
   selector: 'ngx-wqx-activity',
@@ -79,24 +80,44 @@ export class WqxActivityComponent implements OnInit {
   constructor(private router: Router,
     private windowService: NbWindowService,
     private authService: NbAuthService,
+    private authService1: AuthService,
     private activityService: WQXActivityService,
     private pubSubService: WqxPubsubServiceService,
     private toasterService: NbToastrService,
     private monlocService: WqxMonlocService,
     private projectService: WQXProjectService,
   ) {
-    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+    console.log('wqx-activity');
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+      this.currentOrgId = this.user.OrgID;
+
+      this.pubSubService.activityChkData.subscribe((data: WqxActivityConfig[]) => {
+        this.onConfigSaved(data);
+      });
+
+      this.populateData(true);
+    }
+    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-        this.currentOrgId = this.user.OrgID;
-
-        this.pubSubService.activityChkData.subscribe((data: WqxActivityConfig[]) => {
-          this.onConfigSaved(data);
-        });
-
-        this.populateData(true);
       }
-    });
+    }); */
   }
 
   ngOnInit() {
@@ -120,6 +141,8 @@ export class WqxActivityComponent implements OnInit {
     ];
   }
   populateDropdowns() {
+    console.log('populateDropdowns');
+    console.log(this.currentOrgId);
     this.monlocService.GetWQX_MONLOC_ByOrgID(this.currentOrgId).subscribe(
       (data) => {
         this.monlocs = data;
@@ -132,6 +155,8 @@ export class WqxActivityComponent implements OnInit {
     );
     this.projectService.GetWQX_PROJECT(true, this.currentOrgId, false).subscribe(
       (data) => {
+        console.log('GetWQX_PROJECT: valid');
+        console.log(data);
         this.projects = data;
       },
     );

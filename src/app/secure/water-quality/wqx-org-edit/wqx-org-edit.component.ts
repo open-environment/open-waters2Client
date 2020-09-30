@@ -6,6 +6,7 @@ import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-
 import { User } from '../../../@core/data/users';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { NbToastrService } from '@nebular/theme';
+import { AuthService } from '../../../@core/auth/auth.service';
 
 @Component({
   selector: 'ngx-wqx-org-edit',
@@ -63,13 +64,35 @@ export class WqxOrgEditComponent implements OnInit {
     private organizationService: WQXOrganizationService,
     private pubSubService: WqxPubsubServiceService,
     private authService: NbAuthService,
+    private authService1: AuthService,
     private toasterService: NbToastrService) {
-    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      console.log(u.profile.sub);
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+
+    }
+    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
         console.log(this.user);
       }
-    });
+    }); */
     if (this.orgEditId === null) {
       this.router.navigate(['/secure/water-quality/wqx-org']);
     }
@@ -151,23 +174,8 @@ export class WqxOrgEditComponent implements OnInit {
               } else {
                 this.epaSubmissionGroup = '2';
               }
+              this.loadOrgDropDowns();
 
-              // populate listbox with users already in organization
-              this.organizationService.GetT_OE_USERSInOrganization(this.orgEditId).subscribe(
-                (uio: any) => {
-                  console.log(uio);
-                  this.lbUserInRole = uio;
-                },
-              );
-
-              // populate listbox with users not in role
-              this.organizationService.GetT_OE_USERSNotInOrganization(this.orgEditId).subscribe(
-                (unio: any) => {
-                  console.log('unio');
-                  console.log(unio);
-                  this.lbAllUsers = unio;
-                },
-              );
             }
           },
           (err) => {
@@ -183,6 +191,24 @@ export class WqxOrgEditComponent implements OnInit {
 
 
   }
+  loadOrgDropDowns() {
+    // populate listbox with users already in organization
+    this.organizationService.GetT_OE_USERSInOrganization(this.orgEditId).subscribe(
+      (uio: any) => {
+        console.log(uio);
+        this.lbUserInRole = uio;
+      },
+    );
+
+    // populate listbox with users not in role
+    this.organizationService.GetT_OE_USERSNotInOrganization(this.orgEditId).subscribe(
+      (unio: any) => {
+        console.log('unio');
+        console.log(unio);
+        this.lbAllUsers = unio;
+      },
+    );
+  }
   btnTestNAASLocalClick(): void {
     console.log('btnTestNAASLocalClick');
     this.pnlCDXResults = false;
@@ -193,6 +219,7 @@ export class WqxOrgEditComponent implements OnInit {
     if (this.txtCDX === '') {
       this.lblMsgShow = true;
       this.lblMsg = 'Please enter a CDX Submitter first. This is your NAAS username provided by EPA.';
+      this.toasterService.danger(this.lblMsg);
       return;
     }
     this.organizationService.ConnectTestResult(this.orgEditId, 'LOCAL').subscribe(
@@ -278,11 +305,16 @@ export class WqxOrgEditComponent implements OnInit {
     }
     console.log(this.txtOrgName);
     console.log(this.tribalCodeSelected);
+    const orgID = (this.txtOrgID === null) ? '' : this.txtOrgID;
+    const orgName = (this.txtOrgName === null) ? '' : this.txtOrgName;
+    if (orgID === '' || orgName === '') {
+      this.toasterService.danger('Enter Organization ID and Name.');
+      return;
+    }
     // save updates to Organization
     this.organizationService.
       InsertOrUpdateTWQXOrganization(
-        (this.txtOrgID === null) ? '' : this.txtOrgID,
-        (this.txtOrgName === null) ? '' : this.txtOrgName,
+        orgID, orgName,
         (this.txtOrgDesc === null) ? '' : this.txtOrgDesc,
         (this.tribalCodeSelected === null) ? '' : this.tribalCodeSelected,
         (this.txtOrgEmail === null) ? '' : this.txtOrgEmail,
@@ -300,9 +332,9 @@ export class WqxOrgEditComponent implements OnInit {
         (result) => {
           console.log('InsertOrUpdateTWQXOrganization: valid:' + result);
           if (result === 1) {
-            this.toasterService.success('Data Saved!');
             if (isSubmit === false) { return; }
-            // this.router.navigate(['../wqx-org'], { relativeTo: this.activatedRoute });
+            this.toasterService.success('Data Saved!');
+            this.router.navigate(['../wqx-org'], { relativeTo: this.activatedRoute });
           } else {
             this.toasterService.danger('Error updating record.');
           }
@@ -344,25 +376,35 @@ export class WqxOrgEditComponent implements OnInit {
     }
   }
   onAddUserToOrg(): void {
+    console.log('user 1');
+    console.log(this.selectedUser1);
     if (this.selectedUser1 !== null) {
       const roleCD: string = (this.isChecked === true) ? 'A' : 'U';
-      this.organizationService.insertTWQXUserOrgs(this.selectedUser1.orG_ID, this.selectedUser1.useR_IDX, roleCD, this.selectedUser1.useR_NAME).subscribe(
+      this.organizationService.insertTWQXUserOrgs(this.orgEditId, this.selectedUser1.userIdx, roleCD, this.selectedUser1.fname).subscribe(
         (result) => {
-          // console.log(result);
+          console.log('insertTWQXUserOrgs: valid');
+          console.log(result);
+          this.loadOrgDropDowns();
         },
         (err) => {
-          // console.log(err);
+          this.toasterService.danger('User could not be added to organization.');
+          console.log('insertTWQXUserOrgs: failed');
+          console.log(err);
         },
       );
     }
   }
   onRemoveUserFromOrg(): void {
     if (this.selectedUser2 !== null) {
-      this.organizationService.deleteTWqxUserOrgs(this.selectedUser2.orG_ID, this.selectedUser2.useR_IDX).subscribe(
+      this.organizationService.deleteTWqxUserOrgs(this.orgEditId, this.selectedUser2.useR_IDX).subscribe(
         (result) => {
+          console.log('deleteTWqxUserOrgs: valid');
           console.log(result);
+          this.loadOrgDropDowns();
         },
         (err) => {
+          this.toasterService.danger('User could not be removed from organization.');
+          console.log('deleteTWqxUserOrgs: failed');
           console.log(err);
         },
       );

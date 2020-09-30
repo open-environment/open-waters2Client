@@ -1,9 +1,9 @@
-<form>
-  <nb-card status="succes">
-    <nb-card-header>
-      ACTIVITIES (SAMPLES)
-    </nb-card-header>
-    <nb-card-body>
+<nb-card status="success">
+  <nb-card-header>
+    ACTIVITIES (SAMPLES)
+  </nb-card-header>
+  <nb-card-body>
+    <form>
       <div class="row">
         <div class="col-12">
           <form name="myForm" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
@@ -38,7 +38,7 @@
                       [(ngModel)]="txtStartDate" />
                     <nb-datepicker #txtStartDateModel></nb-datepicker> -->
                     <p-calendar appendTo="body" [showIcon]="true" hideOnDateTimeSelect="true" [(ngModel)]="txtStartDate"
-                      name="txtStartDate" showTime="true" hourFormat="24">
+                      name="txtStartDate" showTime="true" hourFormat="24" [baseZIndex]="100000">
                     </p-calendar>
                   </div>
                   <div class="col-sm-2">To:</div>
@@ -47,7 +47,7 @@
                       [(ngModel)]="txtEndDate" />
                     <nb-datepicker #txtEndDateModel></nb-datepicker> -->
                     <p-calendar appendTo="body" [showIcon]="true" hideOnDateTimeSelect="true" [(ngModel)]="txtEndDate"
-                      name="txtEndDate" showTime="true" hourFormat="24">
+                      name="txtEndDate" showTime="true" hourFormat="24" [baseZIndex]="100000">
                     </p-calendar>
                   </div>
 
@@ -126,20 +126,29 @@
                       <div *ngIf="rowData['wqX_IND'] === true">
                         <container-element [ngSwitch]="rowData['wqX_SUBMIT_STATUS']">
                           <some-element *ngSwitchCase="'U'">
-                            <img src="../../../../assets/images/progress.gif" alt="1" style="cursor: pointer;"
-                              title="Click to view WQX History" (click)="onSendToEPA(rowData['activitY_IDX'])">
+                            <nb-icon icon="cloud-upload" class="rotateMe" nbTooltip="Click to view WQX History"
+                              nbTooltipStatus="primary" (click)="onSendToEPA(rowData['activitY_IDX'])"></nb-icon>
                           </some-element>
                           <some-element *ngSwitchCase="'N'">
-                            <img src="../../../../assets/images/ico_alert.png" alt="image2" style="cursor: pointer;"
-                              title="Click to view WQX History" (click)="onSendToEPA(rowData['activitY_IDX'])">
+                            <button nbButton size="tiny" status="danger" (click)="onSendToEPA(rowData['activitY_IDX'])"
+                              nbTooltip="Click to view WQX History" nbTooltipStatus="primary">
+                              <nb-icon icon="alert-triangle"></nb-icon>
+                            </button>
                           </some-element>
                           <some-other-element *ngSwitchCase="'Y'">
-                            <img src="../../../../assets/images/ico_pass.png" alt="image3" style="cursor: pointer;"
-                              title="Click to view WQX History" (click)="onSendToEPA(rowData['activitY_IDX'])">
+
+                            <button nbButton size="tiny" status="success" (click)="onSendToEPA(rowData['activitY_IDX'])"
+                              nbTooltip="Click to view WQX History" nbTooltipStatus="primary">
+                              <nb-icon icon="checkmark-square-2"></nb-icon>
+                            </button>
                           </some-other-element>
+                          <!--default case when there are no matches -->
                           <some-element *ngSwitchDefault>
-                            <img src="../../../../assets/images/0.png" alt="image4" style="cursor: pointer;"
-                              title="Click to view WQX History" (click)="onSendToEPA(rowData['activitY_IDX'])">
+                            <button nbButton size="tiny" status="basic" (click)="onSendToEPA(rowData['activitY_IDX'])"
+                              nbTooltip="Click to view WQX History" nbTooltipStatus="primary">
+                              <nb-icon icon="eye-outline"></nb-icon>
+                            </button>
+
                           </some-element>
                         </container-element>
                       </div>
@@ -168,7 +177,6 @@
           </div>
         </div>
       </div>
-    </nb-card-body>
-    <nb-card-footer></nb-card-footer>
-  </nb-card>
-</form>
+    </form>
+  </nb-card-body>
+  <nb-card-footer></nb-card-footer>

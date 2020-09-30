@@ -8,6 +8,7 @@ import { NbWindowService, NbWindowRef, NbToastrService } from '@nebular/theme';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
 import { ProjectConfigWindowComponent } from './project-config-window/project-config-window.component';
 import { LocalDataSource } from 'ng2-smart-table';
+import { AuthService } from '../../../@core/auth/auth.service';
 
 @Component({
   selector: 'ngx-wqx-project',
@@ -61,29 +62,52 @@ export class WqxProjectComponent implements OnInit {
   defaultCols: any[];
 
   constructor(private authService: NbAuthService,
+    private authService1: AuthService,
     private projectService: WQXProjectService,
     private router: Router,
     private windowService: NbWindowService,
     private pubSubService: WqxPubsubServiceService,
     private toasterService: NbToastrService) {
-    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      console.log(u.profile.sub);
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+      this.currentOrgId = this.user.OrgID;
+      if (localStorage.getItem('selectedOrgId') !== null) {
+        this.currentOrgId = localStorage.getItem('selectedOrgId');
+      }
+      this.populateData();
+      this.pubSubService.projectChkData.subscribe((data: WqxProjectConfig[]) => {
+        this.onConfigSaved(data);
+      });
+
+
+    }
+    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-        this.currentOrgId = this.user.OrgID;
 
-        this.pubSubService.projectChkData.subscribe((data: WqxProjectConfig[]) => {
-          this.onConfigSaved(data);
-        });
-
-        this.populateData();
       }
-    });
+    }); */
   }
 
   ngOnInit() {
-    if (localStorage.getItem('selectedOrgId') !== null) {
-      this.currentOrgId = localStorage.getItem('selectedOrgId');
-    }
+
     this.pubSubService.loadOrgId.subscribe((data: string) => {
       console.log('project-ngoninit pubsubservice:' + data);
       if (data !== null && data !== undefined && data !== '') {
@@ -112,7 +136,7 @@ export class WqxProjectComponent implements OnInit {
       { field: 'projectId', header: 'ID' },
       { field: 'projectName', header: 'Name' },
       { field: 'projectDesc', header: 'Description' },
-      { field: 'projectType', header: 'Type' }
+      { field: 'projectType', header: 'Type' },
     ];
   }
   populateData() {

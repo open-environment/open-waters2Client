@@ -4,6 +4,7 @@ import { WqxMgmtService } from '../../../@core/wqx-services/wqx-mgmt.service';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { User } from '../../../@core/data/users';
 import { NbToastrService } from '@nebular/theme';
+import { AuthService } from '../../../@core/auth/auth.service';
 
 @Component({
   selector: 'ngx-wqx-mgmt',
@@ -27,7 +28,50 @@ export class WqxMgmtComponent implements OnInit {
   isSubmissionOptionsView: string = '';
   constructor(private mgmtService: WqxMgmtService,
     private authService: NbAuthService,
-    private toasterService: NbToastrService) { }
+    private authService1: AuthService,
+    private toasterService: NbToastrService) {
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      console.log(u.profile.sub);
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+      this.currentOrgID = this.user.OrgID;
+      if (this.user.isAdmin === 'true') {
+        this.isSubmissionOptionsView = 'show';
+      }
+      this.mgmtService.GetT_OE_APP_TASKS_ByName('WQXSubmit').subscribe(
+        (data: TOeAppTasks) => {
+          console.log('GetT_OE_APP_TASKS_ByName: valid');
+          console.log(data);
+          this.txtCurrentStatus = data.taskStatus;
+        },
+        (err) => {
+          console.log('GetT_OE_APP_TASKS_ByName: failed');
+          console.log(err);
+        },
+      );
+    }
+    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+      if (token.isValid()) {
+        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
+        console.log(this.user);
+        
+      }
+    }); */
+  }
 
   ngOnInit() {
 
@@ -51,27 +95,7 @@ export class WqxMgmtComponent implements OnInit {
       { field: 'userId', header: 'Last Updated' },
       { field: 'updateDt', header: 'Updated Date' },
     ];
-    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
-      if (token.isValid()) {
-        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-        console.log(this.user);
-        this.currentOrgID = this.user.OrgID;
-        if (this.user.isAdmin === 'true') {
-          this.isSubmissionOptionsView = 'show';
-        }
-        this.mgmtService.GetT_OE_APP_TASKS_ByName('WQXSubmit').subscribe(
-          (data: TOeAppTasks) => {
-            console.log('GetT_OE_APP_TASKS_ByName: valid');
-            console.log(data);
-            this.txtCurrentStatus = data.taskStatus;
-          },
-          (err) => {
-            console.log('GetT_OE_APP_TASKS_ByName: failed');
-            console.log(err);
-          },
-        );
-      }
-    });
+
   }
 
   onSubmit() {

@@ -8,6 +8,7 @@ import { ImportTemplateConfigComponent } from './import-template-config/import-t
 import { NbWindowService, NbWindowRef, NbToastrService } from '@nebular/theme';
 import { ImportMappedColumnWindowComponent } from './import-mapped-column-window/import-mapped-column-window.component';
 import { ImportHardcodedValuesWindowComponent } from './import-hardcoded-values-window/import-hardcoded-values-window.component';
+import { AuthService } from '../../../@core/auth/auth.service';
 
 
 @Component({
@@ -34,18 +35,39 @@ export class WqxImportLogicTemplateComponent implements OnInit {
   configWinRef3: NbWindowRef;
 
   constructor(private authService: NbAuthService,
+    private authService1: AuthService,
     private importService: WqxImportService,
     private router: Router,
     private windowService: NbWindowService,
     private toasterService: NbToastrService) {
-    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      console.log(u.profile.sub);
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+      this.currentOrgId = this.user.OrgID;
+
+      this.populateData();
+    }
+    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-        this.currentOrgId = this.user.OrgID;
 
-        this.populateData();
       }
-    });
+    }); */
   }
 
   ngOnInit() {

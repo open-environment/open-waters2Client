@@ -10,6 +10,7 @@ import { AddCharWindowComponent } from './add-char-window/add-char-window.compon
 import { AddTranslationWindowComponent } from './add-translation-window/add-translation-window.component';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
 import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organization-service';
+import { AuthService } from '../../../@core/auth/auth.service';
 
 @Component({
   selector: 'ngx-wqx-org-data',
@@ -207,41 +208,63 @@ export class WqxOrgDataComponent implements OnInit {
   ddlTaxaShow: boolean = false;
   constructor(private refDataService: WQXRefDataService,
     private authService: NbAuthService,
+    private authService1: AuthService,
     private toasterSerice: NbToastrService,
     private router: Router,
     private windowService: NbWindowService,
     private pubSubService: WqxPubsubServiceService,
     private organizationService: WQXOrganizationService) {
-    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+    if (authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      console.log(u.profile.sub);
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+      this.currentOrgId = this.user.OrgID;
+      if (localStorage.getItem('selectedOrgId') !== null) {
+        this.currentOrgId = localStorage.getItem('selectedOrgId');
+      }
+
+      this.pubSubService.fieldData.subscribe((data: any) => {
+        this.onFieldDataCalled(data);
+      });
+      this.pubSubService.charData.subscribe((data: any) => {
+        this.onCharDataCalled(data);
+      });
+
+      this.refDataService.GetT_WQX_REF_DEFAULT_TIME_ZONE().subscribe(
+        (data) => {
+          this.timeZones = data;
+        },
+      );
+
+      this.PopulateTabsData();
+    }
+    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-        this.currentOrgId = this.user.OrgID;
 
-        this.pubSubService.fieldData.subscribe((data: any) => {
-          this.onFieldDataCalled(data);
-        });
-        this.pubSubService.charData.subscribe((data: any) => {
-          this.onCharDataCalled(data);
-        });
-
-        this.refDataService.GetT_WQX_REF_DEFAULT_TIME_ZONE().subscribe(
-          (data) => {
-            this.timeZones = data;
-          },
-        );
-
-        this.PopulateTabsData();
       }
-    });
+    }); */
 
 
   }
 
   ngOnInit() {
 
-    if (localStorage.getItem('selectedOrgId') !== null) {
-      this.currentOrgId = localStorage.getItem('selectedOrgId');
-    }
+
   }
 
   onBtnSaveClick(): void {
@@ -263,7 +286,13 @@ export class WqxOrgDataComponent implements OnInit {
   }
   onAddCharateristicClicked(): void {
     console.log('onAddCharateristicClicked clicked!');
-    this.windowService.open(AddCharWindowComponent, { title: `Add/Edit Characteristic Defaults`, initialState: NbWindowState.MAXIMIZED });
+    this.windowService.open(AddCharWindowComponent,
+      {
+        title: `Add/Edit Characteristic Defaults`,
+        initialState: NbWindowState.FULL_SCREEN,
+        hasBackdrop: true,
+        context: { charName: '', orgId: '', mode: 'new' },
+      });
   }
   onAddTaxaClciked(): void {
     console.log('onAddTaxaClciked clicked!');
@@ -300,16 +329,16 @@ export class WqxOrgDataComponent implements OnInit {
       (err) => { console.log(err); },
     );
   }
-  populateTaxaGrid(orgName): void {
-    this.refDataService.GetT_WQX_REF_TAXA_ORG(orgName).subscribe(
+  populateTaxaGrid(orgId): void {
+    this.refDataService.GetT_WQX_REF_TAXA_ORG(orgId).subscribe(
       (data) => {
         this.taxaSource = data;
       },
       (err) => { console.log(err); },
     );
   }
-  populateCharGrid(orgName): void {
-    this.refDataService.GetT_WQX_REF_CHAR_ORG(orgName).subscribe(
+  populateCharGrid(orgId): void {
+    this.refDataService.GetT_WQX_REF_CHAR_ORG(orgId).subscribe(
       (data) => {
         console.log(data);
         this.charSource = data;
@@ -349,6 +378,13 @@ export class WqxOrgDataComponent implements OnInit {
     if (event.action === 'edit') {
       console.log(event.data);
       // implementation pending
+      this.windowService.open(AddCharWindowComponent,
+        {
+          title: `Add/Edit Characteristic Defaults`,
+          initialState: NbWindowState.FULL_SCREEN,
+          hasBackdrop: true,
+          context: { charName: event.data.charName, orgId: this.currentOrgId, mode: 'edit' },
+        });
     }
     if (event.action === 'delete') {
       this.refDataService.DeleteT_WQX_REF_CHAR_ORG(this.currentOrgId, event.data.charName).subscribe(

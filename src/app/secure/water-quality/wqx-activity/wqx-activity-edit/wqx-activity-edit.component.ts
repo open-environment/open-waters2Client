@@ -18,6 +18,7 @@ import { WqxActivity, WqxResult } from '../../../../@core/wqx-data/wqx-activity'
 import { LocalDataSource } from 'ng2-smart-table';
 import { NgModel } from '@angular/forms';
 import { SelectItem } from 'primeng/primeng';
+import { AuthService } from '../../../../@core/auth/auth.service';
 
 @Component({
   selector: 'ngx-wqx-activity-edit',
@@ -147,6 +148,7 @@ export class WqxActivityEditComponent implements OnInit {
   showMatrics: boolean = true;
 
   constructor(private authService: NbAuthService,
+    private authService1: AuthService,
     private pubSubService: WqxPubsubServiceService,
     private refDataService: WQXRefDataService,
     private organizationService: WQXOrganizationService,
@@ -157,23 +159,55 @@ export class WqxActivityEditComponent implements OnInit {
     private toasterService: NbToastrService,
     private router: Router) {
 
-    // here finalize method did not work,
+    // ToDo:  here finalize method did not work,
     // so we added counter decrement logic in all 3 methods
     // one of which will be executed
     // need to fix this
-    this.authService.onTokenChange()
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      console.log(u.profile.sub);
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+      this.populateCounter--;
+      this.currentOrgId = this.user.OrgID;
+      if (localStorage.getItem('selectedOrgId') !== null) {
+        this.currentOrgId = localStorage.getItem('selectedOrgId');
+        // Get Default TimeZone
+        console.log('Set Default Timezone');
+        this.organizationService.getWQXOrganizationById(this.currentOrgId).subscribe(
+          (result) => {
+            if (result !== null) {
+              if (result.defaultTimezone !== null || result.defaultTimezone !== undefined) {
+                this.txtTimeZone = result.defaultTimezone;
+              }
+            }
+          }
+        );
+
+      }
+      if (this.user !== null && this.currentOrgId !== null) {
+
+      }
+
+    }
+    /* this.authService.onTokenChange()
       .subscribe(
         (token: NbAuthJWTToken) => {
-          this.populateCounter--;
           if (token.isValid()) {
             this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-            this.currentOrgId = this.user.OrgID;
-            if (this.user !== null && this.currentOrgId !== null) {
-
-            }
-            /* this.pubSubService.activityChkData.subscribe((data: WqxActivityConfig[]) => {
-              this.onConfigSaved(data);
-            }); */
           }
         },
         (err) => {
@@ -182,14 +216,12 @@ export class WqxActivityEditComponent implements OnInit {
         () => {
           this.populateCounter--;
         },
-      );
+      ); */
   }
 
   ngOnInit() {
 
-    if (localStorage.getItem('selectedOrgId') !== null) {
-      this.currentOrgId = localStorage.getItem('selectedOrgId');
-    }
+
     this.resultCols = [
       { 'col': 'Characteristic', show: true },
       { 'col': 'Taxonomy', show: true },
@@ -224,6 +256,7 @@ export class WqxActivityEditComponent implements OnInit {
 
     });
     // display warning if no reference data imported yet
+    console.log('display warning if no reference data imported yet');
     this.refDataService.GetT_WQX_REF_DATA_Count()
       .pipe(
         finalize(() => {
@@ -232,6 +265,7 @@ export class WqxActivityEditComponent implements OnInit {
       )
       .subscribe(
         (result) => {
+          console.log(result);
           if (result === 0) {
             this.lblMsg = 'You must import reference data from EPA before you can enter sample data.';
             this.lblMsgShow = true;
@@ -243,6 +277,7 @@ export class WqxActivityEditComponent implements OnInit {
       );
 
     // redirect to org settings page if no org chars defined yet
+    console.log('redirect to org settings page if no org chars defined yet');
     this.refDataService.GetT_WQX_REF_CHAR_ORG_Count(this.currentOrgId)
       .pipe(
         finalize(() => {
@@ -251,14 +286,19 @@ export class WqxActivityEditComponent implements OnInit {
       )
       .subscribe(
         (result) => {
+          console.log(result);
           if (result === 0) {
             this.lblMsg = 'You must define the characteristics that your organization will use (Organization screen) before you can enter sample data.';
             this.lblMsgShow = true;
           }
         },
+        (err) => {
+          console.log(err);
+        },
       );
 
     // ONLY ALLOW EDIT FOR AUTHORIZED USERS OF ORG
+    console.log('ONLY ALLOW EDIT FOR AUTHORIZED USERS OF ORG');
     this.organizationService.CanUserEditOrg(this.user.userIdx, this.currentOrgId)
       .pipe(
         finalize(() => {
@@ -267,6 +307,7 @@ export class WqxActivityEditComponent implements OnInit {
       )
       .subscribe(
         (result) => {
+          console.log(result);
           this.canUserEdit = result;
         },
         (err) => { console.log(err); },
@@ -447,7 +488,7 @@ export class WqxActivityEditComponent implements OnInit {
     // display metrics grid
     // pnlMetrics.Visible = grdMetrics.Rows.Count > 0 || ddlEntryType.SelectedValue == "H" || ddlEntryType.SelectedValue == "T";
 
-
+    console.log('populateResultsGrid');
     this.refDataService.GetT_WQX_REF_CHARACTERISTIC_ByOrg(this.currentOrgId, false).subscribe(
       (data: WqxRefCharacteristic[]) => {
         if (data !== null && data !== undefined) {
@@ -618,7 +659,7 @@ export class WqxActivityEditComponent implements OnInit {
       (err2) => {
         console.log(err2);
         this.toasterService.danger('Record could not be deleted!');
-      }
+      },
     );
   }
   onRowEditSave(result: WqxResult) {
@@ -654,16 +695,16 @@ export class WqxActivityEditComponent implements OnInit {
       this.refDataService.InsertOrUpdateT_WQX_RESULT(
         r.resultIdx, r.activityIdx,
         (r.resultDetectCondition === null) ? '' : r.resultDetectCondition,
-        r.charName,
+        (r.charName === null) ? '' : encodeURIComponent(r.charName),
         (r.resultSampFraction === null) ? '' : r.resultSampFraction,
         (r.resultMsr === null) ? '' : r.resultMsr,
-        (r.resultMsrUnit === null) ? '' : r.resultMsrUnit,
-        (r.resultStatus === null) ? '' : r.resultStatus,
-        (r.resultValueType === null) ? '' : r.resultValueType,
+        (r.resultMsrUnit === null) ? '' : encodeURIComponent(r.resultMsrUnit),
+        (r.resultStatus === null) ? '' : encodeURIComponent(r.resultStatus),
+        (r.resultValueType === null) ? '' : encodeURIComponent(r.resultValueType),
         (r.resultComment === null) ? '' : r.resultComment,
-        (r.bioIntentName === null) ? '' : r.bioIntentName,
+        (r.bioIntentName === null) ? '' : encodeURIComponent(r.bioIntentName),
         (r.bioIndividualId === null) ? '' : r.bioIndividualId,
-        (r.bioSubjectTaxonomy === null) ? '' : r.bioSubjectTaxonomy,
+        (r.bioSubjectTaxonomy === null) ? '' : encodeURIComponent(r.bioSubjectTaxonomy),
         (r.bioSampleTissueAnatomy === null) ? '' : r.bioSampleTissueAnatomy,
         (r.analyticMethodIdx === null) ? 0 : r.analyticMethodIdx,
         (r.labIdx === null) ? 0 : r.labIdx,
@@ -675,8 +716,8 @@ export class WqxActivityEditComponent implements OnInit {
         (r.labSampPrepIdx === null) ? 0 : r.labSampPrepIdx,
         (r.labSampPrepStartDt === null) ? '' : r.labSampPrepStartDt,
         (r.dilutionFactor === null) ? '' : r.dilutionFactor,
-        (r.freqClassCode === null) ? '' : r.freqClassCode,
-        (r.freqClassUnit === null) ? '' : r.freqClassUnit,
+        (r.freqClassCode === null) ? '' : encodeURIComponent(r.freqClassCode),
+        (r.freqClassUnit === null) ? '' : encodeURIComponent(r.freqClassUnit),
         this.user.name).subscribe(
           (result2) => {
             if (result2 > 0) {
@@ -699,14 +740,9 @@ export class WqxActivityEditComponent implements OnInit {
             this.toasterService.danger('Error saving update.');
           },
         );
-    }
-    // ***VALIDATION***
-    /* if (car.year > 0) {
-       delete this.clonedCars[car.vin];
-       this.toasterService.success('Car is updated');
     } else {
-      this.toasterService.danger('Year is required');
-    } */
+      this.toasterService.danger('Validation failed.');
+    }
   }
 
   onRowEditCancel(result: WqxResult, index: number) {

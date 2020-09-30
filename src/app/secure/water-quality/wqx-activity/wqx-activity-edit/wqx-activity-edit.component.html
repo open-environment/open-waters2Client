@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-12">
     <form name="form" (ngSubmit)="f.form.valid && onSubmit(f)" #f="ngForm" novalidate>
-      <nb-card>
+      <nb-card status="success">
         <nb-card-header>ACTIVITY</nb-card-header>
         <nb-card-body>
           <div class="row">
@@ -19,25 +19,32 @@
                     #vtxtActivityID="ngModel" [ngClass]="{
                       'is-invalid': f.submitted && vtxtActivityID.invalid
                     }" required maxlength="35" />
+                  <div *ngIf="f.submitted && vtxtActivityID.invalid" class="invalid-feedback">
+                    abd
+                    <div *ngIf="vtxtActivityID.errors.required">Required</div>
+                  </div>
                 </div>
-                <div class="col-sm-2">Activity Date/Time</div>
-                <div class="col-sm-3">
+                <div class="col-sm-1">Activity Date/Time</div>
+                <div class="col-sm-4">
                   <!-- <input nbInput type="text" fieldSize="tiny" name="txtStartDate" [nbDatepicker]="txtStartDateModel"
                     [(ngModel)]="txtStartDate" #vtxtStartDate="ngModel" [ngClass]="{
                       'is-invalid': f.submitted && vtxtStartDate.invalid
                     }" required />
                   <nb-datepicker withSeconds #txtStartDateModel></nb-datepicker> -->
-                  <p-calendar appendTo="body" [showIcon]="true" hideOnDateTimeSelect="true" [(ngModel)]="txtStartDate"
-                    #vtxtStartDate="ngModel" [ngClass]="{
+                  <p-calendar appendTo="body" [baseZIndex]="100000" [showIcon]="true" hideOnDateTimeSelect="true"
+                    [(ngModel)]="txtStartDate" #vtxtStartDate="ngModel" [ngClass]="{
                     'is-invalid': f.submitted && vtxtStartDate.invalid
                   }" name="txtStartDate" showTime="true" hourFormat="24" required>
                   </p-calendar>
+                  <div *ngIf="f.submitted && vtxtStartDate.invalid" class="invalid-feedback">
+                    <div *ngIf="vtxtStartDate.errors.required">Required</div>
+                  </div>
                 </div>
                 <div class="col-sm-2">
                   <input nbInput type="text" fieldSize="tiny" name="txtTimeZone" [(ngModel)]="txtTimeZone"
                     #vtxtTimeZone="ngModel" [ngClass]="{
                       'is-invalid': f.submitted && vtxtTimeZone.invalid
-                    }" />
+                    }" readonly />
                 </div>
               </div>
               <div class="row">
@@ -57,16 +64,22 @@
                     <nb-option *ngFor="let monloc of monlocs" [value]="monloc.monlocIdx">
                       {{ monloc.monlocId }}</nb-option>
                   </nb-select>
+                  <div *ngIf="f.submitted && vddlMonLoc.invalid" class="invalid-feedback">
+                    <div *ngIf="vddlMonLoc.errors.required">Required</div>
+                  </div>
                 </div>
                 <div class="col">Project</div>
                 <div class="col">
                   <nb-select fullWidth status="primary" name="ddlProject" [(ngModel)]="projectSelected"
                     #vddlProject="ngModel" [ngClass]="{
                       'is-invalid': f.submitted && vddlProject.invalid
-                    }">
+                    }" required>
                     <nb-option *ngFor="let project of projects" [value]="project.projectIdx">
                       {{ project.projectId }}</nb-option>
                   </nb-select>
+                  <div *ngIf="f.submitted && vddlProject.invalid" class="invalid-feedback">
+                    <div *ngIf="vddlProject.errors.required">Required</div>
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -95,6 +108,9 @@
                             <nb-option *ngFor="let activityType of activityTypes" [value]="activityType.value">
                               {{ activityType.value }}</nb-option>
                           </nb-select>
+                          <div *ngIf="f.submitted && vddlActivityType.invalid" class="invalid-feedback">
+                            <div *ngIf="vddlActivityType.errors.required">Required</div>
+                          </div>
                         </div>
                       </div>
                       <div class="row">
@@ -108,6 +124,9 @@
                             <nb-option *ngFor="let activityMedia of activityMedias" [value]="activityMedia.value">
                               {{ activityMedia.value }}</nb-option>
                           </nb-select>
+                          <div *ngIf="f.submitted && vddlActivityMedia.invalid" class="invalid-feedback">
+                            <div *ngIf="vddlActivityMedia.errors.required">Required</div>
+                          </div>
                         </div>
                       </div>
                       <div class="row">
@@ -135,23 +154,32 @@
                       <div class="row">
                         <div class="col">Activity End Date:</div>
                         <div class="col">
-                          <input nbInput type="text" name="txtEndDate" [nbDatepicker]="txtEndDateModel"
+                          <!-- <input nbInput type="text" name="txtEndDate" [nbDatepicker]="txtEndDateModel"
                             [(ngModel)]="txtEndDate" />
-                          <nb-datepicker #txtEndDateModel></nb-datepicker>
+                          <nb-datepicker #txtEndDateModel></nb-datepicker> -->
+                          <p-calendar [inputStyle]="{'width':'80%'}" appendTo="body" [baseZIndex]="100000"
+                            [showIcon]="true" hideOnDateTimeSelect="true" [(ngModel)]="txtEndDate"
+                            #vtxtEndDate="ngModel" [ngClass]="{
+                    'is-invalid': f.submitted && vtxtStartDate.invalid
+                  }" name="txtEndDate" showTime="true" hourFormat="24">
+                          </p-calendar>
+                          <div *ngIf="f.submitted && vtxtEndDate.invalid" class="invalid-feedback">
+                            <div *ngIf="vtxtEndDate.errors.required">Required</div>
+                          </div>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col">Activity Depth:</div>
                         <div class="col">
                           <div class="row">
-                            <div class="col-9">
-                              <input fieldSize="small" type="text" nbInput name="txtDepth" [(ngModel)]="txtDepth"
-                                #vtxtDepth="ngModel" [ngClass]="{
+                            <div class="col-6">
+                              <input fieldSize="tiny" type="text" style="width:80%" nbInput name="txtDepth"
+                                [(ngModel)]="txtDepth" #vtxtDepth="ngModel" [ngClass]="{
                                   'is-invalid': f.submitted && vtxtDepth.invalid
                                 }" />
                             </div>
-                            <div class="col-3">
-                              <nb-select fullWidth size="tiny" status="primary" name="ddlDepthUnit"
+                            <div class="col-6">
+                              <nb-select fullWidth size="small" status="primary" name="ddlDepthUnit"
                                 [(selected)]="depthUnitSelected">
                                 <nb-option value=""></nb-option>
                                 <nb-option value="m">m</nb-option>
@@ -243,7 +271,7 @@
             <div class="col-3">
               <div class="row">
                 <div class="col-6">
-                  <button nbButton status="success" class="mr-2" [disabled]="!f.form.valid && !canUserEdit">
+                  <button nbButton status="success" class="mr-2" [disabled]="!(f.form.valid && canUserEdit)">
                     <nb-icon icon="save-outline"></nb-icon>Save
                   </button>
                 </div>
@@ -461,7 +489,7 @@
                               <!-- <input pInputText type="text" [(ngModel)]="rowData.labAnalysisStartDt"
                                 name="labAnalysisStartDt"> -->
                               <p-calendar dataType="string" [(ngModel)]="rowData.labAnalysisStartDt"
-                                name="labAnalysisStartDt" appendTo="body"></p-calendar>
+                                name="labAnalysisStartDt" appendTo="body" [baseZIndex]="100000"></p-calendar>
                             </ng-template>
                             <ng-template pTemplate="output">
                               {{ rowData.labAnalysisStartDt | date:'shortDate' }}

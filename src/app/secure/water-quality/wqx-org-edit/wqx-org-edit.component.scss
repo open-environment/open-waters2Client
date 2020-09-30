@@ -1,4 +1,4 @@
-@import "../../../@theme/styles/themes";
+@import '../../../@theme/styles/themes';
 
 @include nb-install-component() {
   nb-card {
@@ -26,9 +26,15 @@
 .grayBox {
   background-color: lightgray;
 }
-.listItemClass1 {
-  background-color: lightgray;
+.listItemClass1.ng-star-inserted.active {
+  background-color: rgb(43, 43, 136);
+  color: white;
+  font-size: xx-small;
+  font-weight: bold;
 }
-.listItemClass2 {
-  background-color: lightgreen;
+.listItemClass2.ng-star-inserted.active {
+  background-color: rgb(43, 43, 136);
+  color: white;
+  font-size: xx-small;
+  font-weight: bold;
 }

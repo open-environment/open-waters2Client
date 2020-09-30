@@ -8,6 +8,7 @@ import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { WqxMonlocService } from '../../../@core/wqx-services/wqx-monloc.service';
 import { Router } from '@angular/router';
 import { LocalDataSource } from 'ng2-smart-table';
+import { AuthService } from '../../../@core/auth/auth.service';
 
 @Component({
   selector: 'ngx-wqx-monloc',
@@ -29,37 +30,59 @@ export class WqxMonlocComponent implements OnInit {
   constructor(private windowService: NbWindowService,
     private pubSubService: WqxPubsubServiceService,
     private authService: NbAuthService,
+    private authService1: AuthService,
     private monlocService: WqxMonlocService,
     private router: Router,
     private toasterService: NbToastrService) {
-    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      console.log(u.profile.sub);
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+
+      this.currentOrgId = this.user.OrgID;
+      if (localStorage.getItem('selectedOrgId') !== null) {
+        this.currentOrgId = localStorage.getItem('selectedOrgId');
+      }
+      this.populateCols();
+      this.cols = this.defaultCols;
+      this.populateData();
+      this.pubSubService.loadOrgId.subscribe((data: string) => {
+        console.log('monloc-ngoninit pubsubservice:' + data);
+        if (data !== null && data !== undefined && data !== '') {
+          this.currentOrgId = data;
+          this.populateData();
+        }
+      });
+      this.pubSubService.monlocChkData.subscribe((data: WqxMonlocConfig[]) => {
+        this.onConfigSaved(data);
+      });
+
+
+    }
+    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-        this.currentOrgId = this.user.OrgID;
-
-        this.pubSubService.monlocChkData.subscribe((data: WqxMonlocConfig[]) => {
-          this.onConfigSaved(data);
-        });
-
-        this.populateData();
       }
-    });
+    }); */
   }
 
   ngOnInit() {
 
-    if (localStorage.getItem('selectedOrgId') !== null) {
-      this.currentOrgId = localStorage.getItem('selectedOrgId');
-    }
-    this.populateCols();
-    this.cols = this.defaultCols;
-    this.pubSubService.loadOrgId.subscribe((data: string) => {
-      console.log('monloc-ngoninit pubsubservice:' + data);
-      if (data !== null && data !== undefined && data !== '') {
-        this.currentOrgId = data;
-        this.populateData();
-      }
-    });
+
   }
   populateCols() {
     console.log('populateCols called!');

@@ -8,6 +8,7 @@ import { NbToastrService } from '@nebular/theme';
 import { WqxMonlocService } from '../../../../@core/wqx-services/wqx-monloc.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WqxMonloc } from '../../../../@core/wqx-data/wqx-monloc';
+import { AuthService } from '../../../../@core/auth/auth.service';
 
 @Component({
   selector: 'ngx-wqx-monloc-edit',
@@ -57,19 +58,40 @@ export class WqxMonlocEditComponent implements OnInit {
   wellTypeSelected: string = '';
 
   constructor(private authService: NbAuthService,
+    private authService1: AuthService,
     private refDataService: WQXRefDataService,
     private toastrService: NbToastrService,
     private monlocService: WqxMonlocService,
     private activatedRoute: ActivatedRoute,
     private router: Router) {
-    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
-      if (token.isValid()) {
-        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-        console.log(this.user);
-        this.currentOrgId = this.user.OrgID;
-        this.populateDropdowns();
-      }
-    });
+
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      console.log(u.profile.sub);
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+      this.currentOrgId = this.user.OrgID;
+      this.populateDropdowns();
+    }
+    /*  this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+       if (token.isValid()) {
+         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
+         console.log(this.user);
+       }
+     }); */
   }
 
   ngOnInit() {
@@ -120,6 +142,7 @@ export class WqxMonlocEditComponent implements OnInit {
         this.txtAquifer = data.aquiferName;
         this.chkWQXInd = data.wqxInd;
         this.chkActInd = data.actInd;
+        document.getElementById('focusField').focus();
       },
       (err) => { console.log(err); },
     );
@@ -230,7 +253,7 @@ export class WqxMonlocEditComponent implements OnInit {
         this.txtMonLocDesc,
         this.txtHUC8,
         this.txtHUC12,
-        (this.chkLandInd === null) ? '' : this.chkLandInd === true ? 'true' : 'false',
+        '', // (this.chkLandInd === null) ? '' : this.chkLandInd === true ? 'true' : 'false',
         this.txtLandName,
         this.txtLatitude,
         this.txtLongitude, sms, '', '',
@@ -249,11 +272,19 @@ export class WqxMonlocEditComponent implements OnInit {
         (this.chkActInd === null) ? false : this.chkActInd,
         (this.chkWQXInd === null) ? false : this.chkWQXInd,
         this.user.name).subscribe(
-          (data) => {
-            console.log(data);
+          (result) => {
+            console.log(result);
+            if (result > 0) {
+              this.toastrService.success('Data saved successfully.');
+            } else {
+              this.toastrService.danger('Error saving data.');
+            }
             this.router.navigate(['/secure/water-quality/wqx-monloc']);
           },
-          (err) => { console.log(err); },
+          (err) => {
+            this.toastrService.danger('Error saving data.');
+            console.log(err);
+          },
         );
     }
   }

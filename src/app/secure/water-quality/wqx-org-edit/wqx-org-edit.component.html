@@ -218,35 +218,66 @@
   <nb-card status="success">
     <nb-card-body>
       <div class="form-row">
-        <div class="form-group col-md-4">
-          <p>Available Users</p>
-          <nb-list name="nl">
-            <nb-list-item name="nbli" *ngFor="let orgUser of lbAllUsers"
-              [ngClass]="{'listItemClass1' : listItemClass1}">
-              <label name="nbl"
-                (click)="onOrgAllUserClicked(orgUser)">{{ orgUser.fname + ' ' + orgUser.lname + (orgUser.rolE_CD === 'A' ? '(admin)' : '(user)') }}</label>
-            </nb-list-item>
-          </nb-list>
+        <div class="form-group col-md-6">
+          <div class="row">
+            <div class="col">
+              <nb-icon icon="people-outline"></nb-icon>
+              Available Users
+            </div>
+          </div>
+          <div class="row">
+            <div class="clo">
+              <nb-list name="nl">
+                <!-- <nb-list-item name="nbli" *ngFor="let orgUser of lbAllUsers; let i = index"
+                  [ngClass]="{'listItemClass1' : listItemClass1}" (click)="onOrgAllUserClicked(orgUser, i)">
+                  <label
+                    name="nbl">{{ orgUser.fname + ' ' + orgUser.lname + (orgUser.rolE_CD === 'A' ? '(admin)' : '(user)') }}</label>
+                </nb-list-item> -->
+                <nb-icon icon="person-outline"></nb-icon>
+                <nb-list-item name="nbli" *ngFor="let orgUser of lbAllUsers" (click)="onOrgAllUserClicked(orgUser)"
+                  [ngClass]="{'active': selectedUser1 == orgUser}" class="listItemClass1">
+                  <label
+                    name="nbl">{{ orgUser.fname + ' ' + orgUser.lname + (orgUser.rolE_CD === 'A' ? '(admin)' : '(user)') }}</label>
+                </nb-list-item>
+              </nb-list>
+            </div>
+          </div>
+
         </div>
-        <div class="form-group col-md-4">
+        <!-- <div class="form-group col-md-4">
           <nb-checkbox name="nbc" [(ngModel)]="isChecked">Add as Admin</nb-checkbox>
           <br />
-          <button class="mb-2" nbButton size="tiny" status="basic" (click)="onAddUserToOrg()">
+          <button type="button" class="mb-2" nbButton size="tiny" status="basic" (click)="onAddUserToOrg()">
             <nb-icon icon="plus-square-outline"></nb-icon>
             Add User to Org >>
           </button>
-          <button class="mb-2" nbButton size="tiny" status="basic" (click)="onRemoveUserFromOrg()">
+          <button type="button" class="mb-2" nbButton size="tiny" status="basic" (click)="onRemoveUserFromOrg()">
             <nb-icon icon="minus-square-outline"></nb-icon>
             << Remove User from Org</button>
-        </div>
-        <div class="form-group col-md-4">
-          <p>Users in Organization</p>
-          <nb-list>
-            <nb-list-item *ngFor="let orgUserN of lbUserInRole" [ngClass]="{'listItemClass2' : listItemClass2}">
-              <label
-                (click)="onOrgAllUserNotInOrgClicked(orgUserN)">{{ (orgUserN.rolE_CD === 'A') ? orgUserN.useR_NAME + '(Admin)' : orgUserN.useR_NAME + '(User)' }}</label>
-            </nb-list-item>
-          </nb-list>
+        </div> -->
+        <div class="form-group col-md-6">
+          <div class="row">
+            <div class="col">
+              <nb-icon icon="people-outline"></nb-icon>
+              Users in Organization
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <nb-list>
+                <!--  <nb-list-item *ngFor="let orgUserN of lbUserInRole" [ngClass]="{'listItemClass2' : listItemClass2}">
+                  <label
+                    (click)="onOrgAllUserNotInOrgClicked(orgUserN)">{{ (orgUserN.rolE_CD === 'A') ? orgUserN.useR_NAME + '(Admin)' : orgUserN.useR_NAME + '(User)' }}</label>
+                </nb-list-item> -->
+                <nb-icon icon="person-outline"></nb-icon>
+                <nb-list-item *ngFor="let orgUserN of lbUserInRole" (click)="onOrgAllUserNotInOrgClicked(orgUserN)"
+                  [ngClass]="{'active': selectedUser2 == orgUserN}" class="listItemClass2">
+                  <label>{{ (orgUserN.rolE_CD === 'A') ? orgUserN.useR_NAME + '(Admin)' : orgUserN.useR_NAME + '(User)' }}</label>
+                </nb-list-item>
+              </nb-list>
+            </div>
+          </div>
+
         </div>
       </div>
     </nb-card-body>

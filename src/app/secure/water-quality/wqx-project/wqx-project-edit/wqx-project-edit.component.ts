@@ -7,6 +7,7 @@ import { WQXProjectService } from '../../../../@core/wqx-services/wqx-project-se
 import { ActivatedRoute, Router } from '@angular/router';
 import { WqxProject } from '../../../../@core/wqx-data/wqx-project';
 import { NbToastrService } from '@nebular/theme';
+import { AuthService } from '../../../../@core/auth/auth.service';
 
 @Component({
   selector: 'ngx-wqx-project-edit',
@@ -30,20 +31,40 @@ export class WqxProjectEditComponent implements OnInit {
   sampDesignTypeCodeSelected: string = '';
   projectIdx: number = 0;
   constructor(private authService: NbAuthService,
+    private authService1: AuthService,
     private refDataService: WQXRefDataService,
     private projectService: WQXProjectService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private toasterSerivice: NbToastrService) {
-    this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
+
+    if (this.authService1.isAuthenticated() === true) {
+      const u = this.authService1.getUser();
+      console.log(u.profile.sub);
+      // this.currentUser = token.getPayload();
+      // TODO: need to fix this
+      if (this.user === undefined || this.user === null)
+        this.user = {
+          userIdx: 0,
+          name: '',
+          picture: '',
+          UserIDX: '',
+          OrgID: '',
+          isAdmin: '',
+        };
+      this.user.userIdx = u.userIdx;
+      this.user.name = u.name;
+      this.user.OrgID = u.OrgID;
+      this.user.isAdmin = u.isAdmin;
+      this.currentOrgId = this.user.OrgID;
+      // populate drop-downs
+      this.populateDropdowns();
+    }
+    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-        this.currentOrgId = this.user.OrgID;
-        // populate drop-downs
-        this.populateDropdowns();
-
       }
-    });
+    }); */
   }
 
   ngOnInit() {

@@ -11,8 +11,21 @@
 export const environment = {
   production: false,
   api: {
+
     owUrl: 'https://localhost:44327',
     // owUrl: 'http://208.109.10.214:89',
+    authUrl: 'https://localhost:44362',
+    client_id: 'open_waters',
+    redirect_uri: 'http://localhost:4200/signinoidc',
+    post_logout_redirect_uri: 'http://localhost:4200/signoutcallbackoidc',
+    silent_redirect_uri: 'http://localhost:4200/silent-refresh.html',
+
+    //  owUrl: 'https://open-water2webapi20200925122743.azurewebsites.net',
+    //  authUrl: 'https://tribalportaltest.azurewebsites.net/',
+    //  client_id: 'open_waters',
+    //  redirect_uri: 'https://openwater2clientdev.azurewebsites.net/signinoidc',
+    //  post_logout_redirect_uri: 'https://openwater2clientdev.azurewebsites.net/signoutcallbackoidc',
+    //  silent_redirect_uri: 'https://openwater2clientdev.azurewebsites.net/silent-refresh.html',
   },
 };
 export const globals = {
