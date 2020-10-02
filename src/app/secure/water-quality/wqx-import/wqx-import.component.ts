@@ -58,6 +58,9 @@ export class WqxImportComponent implements OnInit {
       this.user.OrgID = u.OrgID;
       this.user.isAdmin = u.isAdmin;
       this.currentOrgId = this.user.OrgID;
+      if (localStorage.getItem('selectedOrgId') !== null) {
+        this.currentOrgId = localStorage.getItem('selectedOrgId');
+      }
     }
     /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
@@ -68,9 +71,6 @@ export class WqxImportComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (localStorage.getItem('selectedOrgId') !== null) {
-      this.currentOrgId = localStorage.getItem('selectedOrgId');
-    }
     this.projectService.GetWQX_PROJECT(true, this.currentOrgId, false).subscribe(
       (data) => {
         console.log('GetWQX_PROJECT: valid');

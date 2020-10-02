@@ -209,7 +209,8 @@ export class WqxActivityComponent implements OnInit {
     console.log('onExcel Click!');
   }
   onConfig(): void {
-    this.configWinRef = this.windowService.open(ActivityConfigWindowComponent, { title: `` });
+    this.configWinRef = this.windowService.open(ActivityConfigWindowComponent,
+      { title: ``, hasBackdrop: true });
   }
 
   onEditClicked(activity: any) {

@@ -80,7 +80,8 @@
   <div class="col-md-8">
     <nb-card size="medium">
       <nb-card-body>
-        <nb-stepper orientation="vertical" [linear]="true">
+        <nb-stepper orientation="vertical" [linear]="true" disableStepNavigation="true" #stepper
+          (stepChanged)="handleChange($event)">
           <nb-step label="Create or Join an Organization">
             <h4>Create or Join an Organization</h4>
             <label *ngIf='lblWiz1Show'>{{lblWiz1}}</label>
@@ -144,6 +145,9 @@
           </nb-step>
         </nb-stepper>
       </nb-card-body>
+      <nb-card-footer>
+        <button size="tiny" nbButton (click)="onFreeStepper()">{{ stepButton }}</button>
+      </nb-card-footer>
     </nb-card>
   </div>
 </div>

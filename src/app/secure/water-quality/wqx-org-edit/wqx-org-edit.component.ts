@@ -224,22 +224,42 @@ export class WqxOrgEditComponent implements OnInit {
     }
     this.organizationService.ConnectTestResult(this.orgEditId, 'LOCAL').subscribe(
       (data: ConnectTestResult) => {
+        console.log('ConnectTestResult: valid');
         console.log(data);
         this.pnlCDXResults = true;
         this.txtAuthResult = data.lblAuthResult;
-        this.txtSubmitResult = data.lblSubmitResult;
-        this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', true, '', this.user.name, '', '', '', '').subscribe(
-          (result) => {
-            console.log('InsertOrUpdateTWQXOrganization: valid');
-            console.log(result);
-          },
-          (err) => {
-            console.log('InsertOrUpdateTWQXOrganization: failed');
-            console.log(err);
-          },
-        );
+        if (data.msg !== null && data.msg !== '') {
+          console.log('data.msg has got value');
+          this.txtSubmitResult = data.msg;
+          console.log(this.txtSubmitResult);
+          this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
+            (result) => {
+              console.log('InsertOrUpdateTWQXOrganization: valid');
+              console.log(result);
+            },
+            (err) => {
+              console.log('InsertOrUpdateTWQXOrganization: failed');
+              console.log(err);
+            },
+          );
+        } else {
+          console.log('data.msg has no value');
+          this.txtSubmitResult = data.lblSubmitResult;
+          console.log(this.txtSubmitResult);
+          this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', true, '', this.user.name, '', '', '', '').subscribe(
+            (result) => {
+              console.log('InsertOrUpdateTWQXOrganization: valid');
+              console.log(result);
+            },
+            (err) => {
+              console.log('InsertOrUpdateTWQXOrganization: failed');
+              console.log(err);
+            },
+          );
+        }
       },
       (err) => {
+        this.toasterService.danger('Something went wrong!');
         console.log(err);
         this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
           (result2) => {
@@ -266,19 +286,38 @@ export class WqxOrgEditComponent implements OnInit {
         console.log(data);
         this.pnlCDXResults = true;
         this.txtAuthResult = data.lblAuthResult;
-        this.txtSubmitResult = data.lblSubmitResult;
-        this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', true, '', this.user.name, '', '', '', '').subscribe(
-          (result) => {
-            console.log('InsertOrUpdateTWQXOrganization: valid');
-            console.log(result);
-          },
-          (err) => {
-            console.log('InsertOrUpdateTWQXOrganization: failed');
-            console.log(err);
-          },
-        );
+        if (data.msg !== null && data.msg !== '') {
+          console.log('data.msg has got value');
+          this.txtSubmitResult = data.msg;
+          console.log(this.txtSubmitResult);
+          this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
+            (result) => {
+              console.log('InsertOrUpdateTWQXOrganization: valid');
+              console.log(result);
+            },
+            (err) => {
+              console.log('InsertOrUpdateTWQXOrganization: failed');
+              console.log(err);
+            },
+          );
+        } else {
+          console.log('data.msg has no value');
+          this.txtSubmitResult = data.lblSubmitResult;
+          console.log(this.txtSubmitResult);
+          this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', true, '', this.user.name, '', '', '', '').subscribe(
+            (result) => {
+              console.log('InsertOrUpdateTWQXOrganization: valid');
+              console.log(result);
+            },
+            (err) => {
+              console.log('InsertOrUpdateTWQXOrganization: failed');
+              console.log(err);
+            },
+          );
+        }
       },
       (err) => {
+        this.toasterService.danger('Something went wrong!');
         console.log(err);
         this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
           (result2) => {
@@ -299,8 +338,10 @@ export class WqxOrgEditComponent implements OnInit {
   }
   savePageData(isSubmit: boolean) {
     console.log('savePageData called');
+    console.log(this.epaSubmissionGroup);
     if (this.epaSubmissionGroup === '2') {
-      // this.txtCDX = '';
+      console.log('setting cdx values');
+      this.txtCDX = '';
       this.txtCDXPwd = '';
     }
     console.log(this.txtOrgName);
@@ -322,7 +363,9 @@ export class WqxOrgEditComponent implements OnInit {
         (this.txtOrgPhone === null) ? '' : this.txtOrgPhone,
         '',
         (this.txtOrgPhoneExt === null) ? '' : this.txtOrgPhoneExt,
-        '', '', false, '',
+        (this.txtCDX === null) ? '' : this.txtCDX,
+        (this.txtCDX === '') ? '' : (this.txtCDXPwd === null) ? '' : this.txtCDXPwd,
+        false, '', // default time zone is set to empty
         this.user.name,
         (this.txtMailingAddress === null) ? '' : this.txtMailingAddress,
         (this.txtMailCity === null) ? '' : this.txtMailCity,

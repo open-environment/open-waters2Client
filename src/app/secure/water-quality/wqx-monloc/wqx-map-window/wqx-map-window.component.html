@@ -1,0 +1,5 @@
+<div class="row" style="min-width: 40rem;">
+  <agm-map [latitude]="lat" [longitude]="lng" #agmMap (mapClick)="mapClicked($event)">
+    <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+  </agm-map>
+</div>

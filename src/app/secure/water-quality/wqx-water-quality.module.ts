@@ -35,6 +35,8 @@ import { ImportTemplateConfigComponent } from './wqx-import-logic-template/impor
 import { ImportMappedColumnWindowComponent } from './wqx-import-logic-template/import-mapped-column-window/import-mapped-column-window.component';
 import { ImportHardcodedValuesWindowComponent } from './wqx-import-logic-template/import-hardcoded-values-window/import-hardcoded-values-window.component';
 import { DigitOnlyDirective } from '../../@core/utils/digit-only.directive';
+import { AgmCoreModule } from '@agm/core';
+import { WqxMapWindowComponent } from './wqx-monloc/wqx-map-window/wqx-map-window.component';
 
 @NgModule({
   imports: [
@@ -64,6 +66,9 @@ import { DigitOnlyDirective } from '../../@core/utils/digit-only.directive';
     NbStepperModule,
     NbTooltipModule,
     NbSpinnerModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCEohIbvKCfnAfGgT0omUpaifCQdBLLAz0',
+    }),
   ],
   declarations: [
     ...wqxWQRoutedComponents,
@@ -79,6 +84,7 @@ import { DigitOnlyDirective } from '../../@core/utils/digit-only.directive';
     AddCharWindowComponent,
     AddTranslationWindowComponent,
     MonlocConfigWindowComponent,
+    WqxMapWindowComponent,
     WqxMonlocEditComponent,
     ProjectConfigWindowComponent,
     WqxProjectEditComponent,
@@ -91,7 +97,8 @@ import { DigitOnlyDirective } from '../../@core/utils/digit-only.directive';
     ImportTemplateConfigComponent,
     ImportMappedColumnWindowComponent,
     ImportHardcodedValuesWindowComponent,
-    DigitOnlyDirective, // Directive
+    DigitOnlyDirective,
+    WqxMapWindowComponent, // Directive
   ],
   providers: [
     WQXRefDataService,
@@ -100,6 +107,7 @@ import { DigitOnlyDirective } from '../../@core/utils/digit-only.directive';
   ],
   entryComponents: [
     MonlocConfigWindowComponent,
+    WqxMapWindowComponent,
     AddCharWindowComponent,
     AddTranslationWindowComponent,
     ProjectConfigWindowComponent,

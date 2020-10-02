@@ -169,6 +169,7 @@ export class WqxMgmtComponent implements OnInit {
             const anchor = document.createElement('a');
             if (result.wqxTransactionLog.responseFile !== undefined && result.wqxTransactionLog.responseFile !== null) {
               console.log('3');
+              console.log(result.wqxTransactionLog.responseTxt);
               anchor.download = result.wqxTransactionLog.responseTxt;
             } else {
               console.log('4');

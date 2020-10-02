@@ -136,7 +136,8 @@ export class WqxMonlocComponent implements OnInit {
   }
   onConfig(): void {
     console.log('onConfig Click!');
-    this.configWinRef = this.windowService.open(MonlocConfigWindowComponent, { title: `` });
+    this.configWinRef = this.windowService.open(MonlocConfigWindowComponent,
+      { title: ``, hasBackdrop: true });
   }
 
   onEditClicked(monloc: WqxMonloc) {

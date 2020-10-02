@@ -351,7 +351,8 @@ export class WqxOrgDataComponent implements OnInit {
   }
   onAddTranslationClicked(): void {
     console.log('onAddTranslationClicked clicked!');
-    this.windowService.open(AddTranslationWindowComponent, { title: `Add New Translation` });
+    this.windowService.open(AddTranslationWindowComponent,
+      { title: `Add New Translation`, hasBackdrop: true });
   }
   onDeleteConfirm(event): void {
     if (window.confirm('Are you sure you want to delete?')) {

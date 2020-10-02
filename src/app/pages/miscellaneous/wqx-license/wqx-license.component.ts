@@ -1,4 +1,5 @@
 import { Component, NgModule, OnInit } from '@angular/core';
+import { NbMenuService, NbSidebarService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-wqx-license',
@@ -7,7 +8,9 @@ import { Component, NgModule, OnInit } from '@angular/core';
 })
 export class WqxLicenseComponent implements OnInit {
 
-  constructor() { }
+  constructor(private sideBar: NbSidebarService) {
+    // this.sideBar.compact('menu-sidebar');
+  }
 
   ngOnInit() {
   }

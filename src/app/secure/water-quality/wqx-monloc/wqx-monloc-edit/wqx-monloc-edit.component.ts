@@ -1,21 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { WqxRefData } from '../../../../@core/wqx-data/wqx-organization';
 import { WQXRefDataService } from '../../../../@core/wqx-services/wqx-refdata-service';
 import { User } from '../../../../@core/data/users';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { WqxRefCounty } from '../../../../@core/wqx-data/wqx-refdata';
-import { NbToastrService } from '@nebular/theme';
+import { NbToastrService, NbWindowRef, NbWindowService } from '@nebular/theme';
 import { WqxMonlocService } from '../../../../@core/wqx-services/wqx-monloc.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WqxMonloc } from '../../../../@core/wqx-data/wqx-monloc';
 import { AuthService } from '../../../../@core/auth/auth.service';
+import { AgmMap } from '@agm/core';
+import { WqxMapWindowComponent } from '../wqx-map-window/wqx-map-window.component';
 
 @Component({
   selector: 'ngx-wqx-monloc-edit',
   templateUrl: './wqx-monloc-edit.component.html',
   styleUrls: ['./wqx-monloc-edit.component.scss'],
 })
-export class WqxMonlocEditComponent implements OnInit {
+export class WqxMonlocEditComponent implements OnInit, AfterViewInit {
 
   user: User;
   currentOrgId: string;
@@ -56,6 +58,9 @@ export class WqxMonlocEditComponent implements OnInit {
   countrySelected: string = '';
   wellTypes: WqxRefData[] = [];
   wellTypeSelected: string = '';
+  configWinRef: NbWindowRef;
+
+
 
   constructor(private authService: NbAuthService,
     private authService1: AuthService,
@@ -63,7 +68,8 @@ export class WqxMonlocEditComponent implements OnInit {
     private toastrService: NbToastrService,
     private monlocService: WqxMonlocService,
     private activatedRoute: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private windowService: NbWindowService) {
 
     if (this.authService1.isAuthenticated() === true) {
       const u = this.authService1.getUser();
@@ -92,6 +98,9 @@ export class WqxMonlocEditComponent implements OnInit {
          console.log(this.user);
        }
      }); */
+  }
+  ngAfterViewInit(): void {
+
   }
 
   ngOnInit() {
@@ -292,4 +301,55 @@ export class WqxMonlocEditComponent implements OnInit {
   onBtnCancelClicked(): void {
     this.router.navigate(['/secure/water-quality/wqx-monloc']);
   }
+  onMapClicked() {
+
+    if (this.txtLatitude !== '' && this.txtLongitude !== '') {
+      this.configWinRef = this.windowService.open(WqxMapWindowComponent,
+        {
+          title: ``,
+          hasBackdrop: true,
+          windowClass: 'mapWinClass',
+          context: { lat: this.txtLatitude, lng: this.txtLongitude },
+        });
+      this.configWinRef.onClose.subscribe(
+        (result) => {
+          if (this.configWinRef.config !== null && this.configWinRef.config.context !== null) {
+            let data = {} as DummyLatLng;
+            data = JSON.parse(JSON.stringify(this.configWinRef.config.context));
+            this.txtLatitude = data.lat;
+            this.txtLongitude = data.lng;
+          }
+        },
+        (err) => {
+          console.log(err);
+        },
+      );
+    } else {
+      this.configWinRef = this.windowService.open(WqxMapWindowComponent,
+        {
+          title: ``,
+          hasBackdrop: true,
+          windowClass: 'mapWinClass',
+          context: { lat: '', lng: '' },
+        });
+      this.configWinRef.onClose.subscribe(
+        (result) => {
+          if (this.configWinRef.config !== null && this.configWinRef.config.context !== null) {
+            let data = {} as DummyLatLng;
+            data = JSON.parse(JSON.stringify(this.configWinRef.config.context));
+            this.txtLatitude = data.lat;
+            this.txtLongitude = data.lng;
+          }
+        },
+        (err) => {
+          console.log(err);
+        },
+      );
+    }
+  }
+}
+
+interface DummyLatLng {
+  lat: string;
+  lng: string;
 }

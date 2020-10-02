@@ -195,7 +195,8 @@ export class WqxImportLogicTemplateComponent implements OnInit {
   onDefine() {
     console.log('onDefine');
     console.log(this.currentOrgId);
-    this.configWinRef = this.windowService.open(ImportTemplateConfigComponent, { title: ``, context: this.currentOrgId });
+    this.configWinRef = this.windowService.open(ImportTemplateConfigComponent,
+      { title: ``, hasBackdrop: true, context: this.currentOrgId });
     this.configWinRef.onClose.subscribe(
       (result) => {
         console.log('window close event');
@@ -212,7 +213,7 @@ export class WqxImportLogicTemplateComponent implements OnInit {
   onMappedColumnAddNew() {
     this.configWinRef2 = this.windowService
       .open(ImportMappedColumnWindowComponent,
-        { title: ``, context: `{ "templateId": "${this.selectedTemplateId}", "orgId": "${this.currentOrgId}" }` });
+        { title: ``, hasBackdrop: true, context: `{ "templateId": "${this.selectedTemplateId}", "orgId": "${this.currentOrgId}" }` });
     this.configWinRef2.onClose.subscribe(
       (result) => {
         console.log('window2 close event');
@@ -229,7 +230,7 @@ export class WqxImportLogicTemplateComponent implements OnInit {
   onHarCodedValuesAddNew() {
     this.configWinRef3 = this.windowService
       .open(ImportHardcodedValuesWindowComponent,
-        { title: ``, context: `{ "templateId": "${this.selectedTemplateId}", "orgId": "${this.currentOrgId}" }` });
+        { title: ``, hasBackdrop: true, context: `{ "templateId": "${this.selectedTemplateId}", "orgId": "${this.currentOrgId}" }` });
     this.configWinRef3.onClose.subscribe(
       (result) => {
         console.log('windo3 close event');

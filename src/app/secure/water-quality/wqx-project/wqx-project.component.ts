@@ -161,7 +161,8 @@ export class WqxProjectComponent implements OnInit {
   }
   onConfig(): void {
     console.log('onConfig Click!');
-    this.configWinRef = this.windowService.open(ProjectConfigWindowComponent, { title: `` });
+    this.configWinRef = this.windowService.open(ProjectConfigWindowComponent,
+      { title: ``, hasBackdrop: true });
   }
 
   onEditClicked(project: WqxProject) {

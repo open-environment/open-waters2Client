@@ -83,8 +83,8 @@
                 maxlength="14">
             </div>
             <div class="col-2">
-              <button nbButton type="button" status="success" name="btnMap" class="mr-3">
-                <nb-icon icon="save-outline"></nb-icon> Map
+              <button nbButton size="tiny" type="button" status="success" name="btnMap" (click)="onMapClicked()">
+                <nb-icon icon="map"></nb-icon> Map
               </button>
             </div>
           </div>
@@ -207,6 +207,7 @@
           <nb-checkbox status="danger" [(ngModel)]="chkWQXInd" name="chkWQXIndName" [checked]="chkWQXInd"></nb-checkbox>
         </div>
       </div>
+
     </nb-card-body>
     <nb-card-footer>
       <button nbButton type="submit" status="success" name="btnSave" class="mr-3">

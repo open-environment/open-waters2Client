@@ -1,4 +1,4 @@
-import { Component, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, NgModule, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
 import { WqxOrganization, UserOrgDisplay } from '../../@core/wqx-data/wqx-organization';
 import { User } from '../../@core/data/users';
 import { WQXOrganizationService } from '../../@core/wqx-services/wqx-organization-service';
@@ -6,7 +6,7 @@ import { WQXProjectService } from '../../@core/wqx-services/wqx-project-service'
 import { WQXActivityService } from '../../@core/wqx-services/wqx-activity-service';
 import { Router } from '@angular/router';
 import { WqxPubsubServiceService } from '../../@core/wqx-services/wqx-pubsub-service.service';
-import { NbToastrService } from '@nebular/theme';
+import { NbStepperComponent, NbToastrService } from '@nebular/theme';
 import { AuthService } from '../../@core/auth/auth.service';
 
 @NgModule({
@@ -18,6 +18,10 @@ import { AuthService } from '../../@core/auth/auth.service';
   styleUrls: ['./e-commerce.component.scss'],
 })
 export class ECommerceComponent {
+  @ViewChild('stepper', { static: true }) stepper: NbStepperComponent;
+  disableStepNavigation = true;
+  stepButton: string = 'Enable Step Navigation';
+
   currentUser: User;
   myOrgusers: WqxOrganization[];
   lblOrg: string;
@@ -179,13 +183,13 @@ export class ECommerceComponent {
                 // STEP 1 IS COMPLETE, now try out tests 2-6
                 this.btnWiz1 = 'View';
                 this.lblWiz1 = 'Congrats! You are associated with an Organization. Click to view its details.';
-
+                this.stepper.selectedIndex = 1;
                 // STEP 2: submit authorization ******************************************
                 oNotPends.forEach(element => {
                   if (element.cdxSubmitInd === true) {
                     this.lblWiz2 = 'Congrats! Your organization is authorized to submit to EPA-WQX.';
                     this.btnWiz2 = 'Change Credentials';
-                    console.log(element.orgId);
+                    this.stepper.selectedIndex = 2;
                   } else {
                     this.lblWiz2 = 'In order to submit data to EPA using Open Waters, you must contact EPA and request that they authorize Open Waters to submit data.';
                     this.btnWiz2 = 'Get Started';
@@ -201,6 +205,7 @@ export class ECommerceComponent {
                       this.lblWiz3 = 'One or more monitoring locations have been created. Click to view.';
                       this.btnWiz3 = 'View';
                       this.monLocOk = true;
+                      this.stepper.selectedIndex = 3;
                     } else {
                       this.lblWiz3 = 'Click to enter a monitoring location record.';
                     }
@@ -214,6 +219,7 @@ export class ECommerceComponent {
                       this.lblWiz4 = 'One or more projects have been created. Click to view.';
                       this.btnWiz4 = 'View';
                       this.projOk = true;
+                      this.stepper.selectedIndex = 4;
                     } else {
                       this.lblWiz4 = 'Click to manually enter a project record or import records from a spreadsheet or EPA.';
                     }
@@ -224,6 +230,7 @@ export class ECommerceComponent {
 
                 if (oNotPends[0].defaultTimezone === null || oNotPends[0].defaultTimezone === '') {
                   this.lblWiz5 = 'Click to enter default organization data (e.g. Default Timezone, characteristics) that will be helpful during activity data entry.';
+                  this.stepper.selectedIndex = 5;
                 } else {
                   this.lblWiz5 = 'Organization default data (e.g. Default Timezone) has been defined. Click to view.';
                 }
@@ -238,6 +245,7 @@ export class ECommerceComponent {
                       if (result > 0) {
                         this.lblWiz6 = 'One or more activities have been created. Click to view.';
                         this.btnWiz6 = 'View';
+                        // this.stepper.selectedIndex = 0; (Index out of range)
                       } else {
                         this.lblWiz6 = 'Click to enter an activity record.';
                       }
@@ -370,5 +378,18 @@ export class ECommerceComponent {
           this.toasterService.danger('Unable to complete this action.');
         },
       );
+  }
+  handleChange(event) {
+    console.log('handleChange!');
+    console.log(event);
+  }
+  onFreeStepper() {
+    if (this.stepper.disableStepNavigation) {
+      this.stepButton = 'Disable Step Navigation';
+    } else {
+      this.stepButton = 'Enable Step Navigation';
+    }
+    this.stepper.linear = !this.stepper.linear;
+    this.stepper.disableStepNavigation = !this.stepper.disableStepNavigation;
   }
 }
