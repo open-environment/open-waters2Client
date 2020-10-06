@@ -1,3 +1,94 @@
-<p>
-  app-settings works!
-</p>
+<nb-card>
+  <nb-card-header>General Application Settings</nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col">
+        <nb-alert status="success">This page allows administrators to edit global application settings.
+        </nb-alert>
+      </div>
+    </div>
+    <div class="row">
+      <div class="row">
+        <p-table [columns]="cols" [value]="appSettings" dataKey="settingIdx" editMode="row" [autoLayout]="true">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th style="width:8em"></th>
+              <th>ID</th>
+              <th>Setting Name</th>
+              <th>Description</th>
+              <th>Setting Value</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-appSetting let-columns="columns" let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="appSetting">
+              <td style="text-align:center">
+
+                <button nbButton ghost status="basic" *ngIf="!editing" (click)="onRowEditInit(appSetting)"
+                  pInitEditableRow>
+                  <nb-icon icon="edit-outline"></nb-icon>
+                </button>
+                <button nbButton ghost status="basic" *ngIf="!editing" (click)="onRowDelete(appSetting)"
+                  pInitEditableRow>
+                  <nb-icon icon="trash-2-outline"></nb-icon>
+                </button>
+                <button nbButton ghost status="success" *ngIf="editing" (click)="onRowEditSave(appSetting)"
+                  pSaveEditableRow style="margin-right: .5em">
+                  <nb-icon icon="checkmark"></nb-icon>
+                </button>
+                <button nbButton ghost status="danger" *ngIf="editing" (click)="onRowEditCancel(appSetting, ri)"
+                  pCancelEditableRow>
+                  <nb-icon icon="close-outline"></nb-icon>
+                </button>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="appSetting.settingIdx" name="result" maxlength="12"
+                      required>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{appSetting.settingIdx}}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="appSetting.settingName" name="result" maxlength="12"
+                      required>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{appSetting.settingName}}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="appSetting.settingDesc" name="result" maxlength="12"
+                      required>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{appSetting.settingDesc}}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <input pInputText type="text" [(ngModel)]="appSetting.settingValue" name="result" maxlength="12"
+                      required>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{appSetting.settingValue}}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer></nb-card-footer>
+</nb-card>

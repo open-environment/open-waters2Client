@@ -195,6 +195,6 @@ export class WqxProjectComponent implements OnInit {
   onSendToEPA(projectIdx: number) {
     console.log('onSendToEPA clicked!');
     console.log(projectIdx);
-    this.router.navigate(['/secure/water-quality/wqx-hist'], { queryParams: { proejctIdx: projectIdx } });
+    this.router.navigate(['/secure/water-quality/wqx-hist'], { queryParams: { TableCD: 'PROJ', TableIdx: projectIdx } });
   }
 }

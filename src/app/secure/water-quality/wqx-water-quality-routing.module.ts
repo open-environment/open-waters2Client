@@ -16,6 +16,7 @@ import { WqxActivityEditComponent } from './wqx-activity/wqx-activity-edit/wqx-a
 import { WqxImportMonlocComponent } from './wqx-import-monloc/wqx-import-monloc.component';
 import { WqxImportSampleComponent } from './wqx-import-sample/wqx-import-sample.component';
 import { WqxImportLogicTemplateComponent } from './wqx-import-logic-template/wqx-import-logic-template.component';
+import { WqxHistComponent } from './wqx-hist/wqx-hist.component';
 
 const routes: Routes = [{
   path: '',
@@ -79,6 +80,10 @@ const routes: Routes = [{
     {
       path: 'wqx-mgmt',
       component: WqxMgmtComponent,
+    },
+    {
+      path: 'wqx-hist',
+      component: WqxHistComponent,
     },
   ],
 }];

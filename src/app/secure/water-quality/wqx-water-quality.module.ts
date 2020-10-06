@@ -37,6 +37,7 @@ import { ImportHardcodedValuesWindowComponent } from './wqx-import-logic-templat
 import { DigitOnlyDirective } from '../../@core/utils/digit-only.directive';
 import { AgmCoreModule } from '@agm/core';
 import { WqxMapWindowComponent } from './wqx-monloc/wqx-map-window/wqx-map-window.component';
+import { WqxHistComponent } from './wqx-hist/wqx-hist.component';
 
 @NgModule({
   imports: [
@@ -98,7 +99,8 @@ import { WqxMapWindowComponent } from './wqx-monloc/wqx-map-window/wqx-map-windo
     ImportMappedColumnWindowComponent,
     ImportHardcodedValuesWindowComponent,
     DigitOnlyDirective,
-    WqxMapWindowComponent, // Directive
+    WqxMapWindowComponent,
+    WqxHistComponent, // Directive
   ],
   providers: [
     WQXRefDataService,

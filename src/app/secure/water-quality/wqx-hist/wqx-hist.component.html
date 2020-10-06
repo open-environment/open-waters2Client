@@ -1,0 +1,49 @@
+<nb-card>
+  <nb-card-header>
+
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col">
+        <p-table [columns]="cols" [value]="WqxLogs" [responsive]="true" [resizableColumns]="true" [autoLayout]="true"
+          dataKey="logId">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th style="width:11em">Edit</th>
+              <th *ngFor="let col of columns">
+                {{col.header}}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+              <td style="text-align:center">
+                <div class="row">
+                  <div class="col">
+                    <button nbButton size="tiny" status="success" (click)="onGetFileClicked(rowData)" class="mr-2">
+                      <nb-icon icon="edit-outline"></nb-icon>
+                    </button>
+                  </div>
+                </div>
+              </td>
+              <td *ngFor="let col of columns">
+                <span class="ui-column-title ui-column-title-button">
+                  <button nbButton size="tiny" status="warning">{{col.header}}</button>
+                </span>
+                {{rowData[col.field]}}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+              <td [attr.colspan]="columns.length + 1">
+                None
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer></nb-card-footer>
+</nb-card>

@@ -169,6 +169,6 @@ export class WqxMonlocComponent implements OnInit {
   onSendToEPA(monlocIdx: number) {
     console.log('onSendToEPA clicked!');
     console.log(monlocIdx);
-    this.router.navigate(['/secure/water-quality/wqx-hist'], { queryParams: { monlocIdx: monlocIdx } });
+    this.router.navigate(['/secure/water-quality/wqx-hist'], { queryParams: { TableCD: 'MLOC', TableIdx: monlocIdx } });
   }
 }

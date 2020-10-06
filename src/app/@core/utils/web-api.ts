@@ -2,11 +2,18 @@ import { environment } from '../../../environments/environment';
 import { TOeAppTasks } from '../wqx-data/wqx-mgmg';
 
 export module WebApi {
+  export class TWQXAdminApi {
+    public static readonly getAppSettings =
+      () => `${environment.api.owUrl}/api/admin/getAppSettings`
+  }
   export class MgmtApi {
     public static readonly getVWqxTransactionLog =
       (tableCd: string,
         startDt: string, endDt: string, orgId: string) =>
         `${environment.api.owUrl}/api/mgmt/getVWqxTransactionLog?TableCD=${tableCd}&startDt=${startDt}&endDt=${endDt}&OrgID=${orgId}`
+    public static readonly getWqxTransactionLog =
+      (tableCd: string, tableIdx: number) =>
+        `${environment.api.owUrl}/api/mgmt/getVWqxTransactionLog?TableCD=${tableCd}&TableIdx=${tableIdx}`
     public static readonly getVWqxPendingRecords =
       (orgId: string,
         startDt: string, endDt: string) =>

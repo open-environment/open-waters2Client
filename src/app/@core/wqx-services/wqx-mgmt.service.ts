@@ -20,7 +20,10 @@ export class WqxMgmtService extends WqxMgmtData {
     return this.http.get<VWqxTransactionLog[]>(
       WebApi.MgmtApi.getVWqxTransactionLog(tableCd, startDt, endDt, orgId));
   }
-
+  GetWQX_TRANSACTION_LOG(tableCd: string, tableIdx: number): Observable<VWqxTransactionLog[]> {
+    return this.http.get<VWqxTransactionLog[]>(
+      WebApi.MgmtApi.getWqxTransactionLog(tableCd, tableIdx));
+  }
   GetV_WQX_PENDING_RECORDS(orgId: string,
     startDt: string, endDt: string): Observable<VWqxPendingRecords[]> {
     return this.http.get<VWqxPendingRecords[]>(

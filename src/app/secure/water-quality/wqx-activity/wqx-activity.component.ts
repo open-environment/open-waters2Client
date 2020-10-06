@@ -240,5 +240,7 @@ export class WqxActivityComponent implements OnInit {
   onSendToEPA(activityIdx: number) {
     console.log('onSendToEPA');
     console.log(activityIdx);
+    this.router.navigate(['/secure/water-quality/wqx-hist'],
+      { queryParams: { TableCD: 'ACT', TableIdx: activityIdx } });
   }
 }
