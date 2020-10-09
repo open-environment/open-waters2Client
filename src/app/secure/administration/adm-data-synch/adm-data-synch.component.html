@@ -1,3 +1,145 @@
-<p>
-  adm-data-synch works!ok
-</p>
+<nb-card status="success">
+  <nb-card-header>Administration Data Synchronization Tasks</nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col">
+        <nb-alert size="tiny" status="info">Site Administrators can use this page to pull necessary information from
+          EPA.
+        </nb-alert>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <nb-flip-card #flipcard [nbSpinner]="loading1" nbSpinnerStatus="danger" nbSpinnerSize="large"
+          nbSpinnerMessage="">
+          <nb-card-front>
+            <nb-card accent="warning">
+              <nb-card-body>
+                <div class="row mb-3">
+                  <div class="col">
+                    <button nbButton size="tiny" (click)="pullFromEPA()">
+                      <nb-icon icon="cloud-download-outline"></nb-icon>
+                      Pull Organization List from EPA
+                    </button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">Data Last Retrieved:</div>
+                  <div class="col-sm-3">{{ lastRetvd1 }}</div>
+                  <div class="col-sm-3">&nbsp;</div>
+                  <div class="col-sm-3">&nbsp;</div>
+                </div>
+              </nb-card-body>
+            </nb-card>
+          </nb-card-front>
+          <nb-card-back>
+            <nb-card>
+              <nb-card-body>
+                <nb-alert status="success" *ngIf="msg1.toString() === '1'">Import successful</nb-alert>
+                <nb-alert status="danger" *ngIf="msg1.toString() === '2'">Import failed to remove orgs.</nb-alert>
+                <nb-alert status="danger" *ngIf="msg1.toString() === '3'">Import failed.</nb-alert>
+                <button nbButton status="success" (click)="flip()">Back</button>
+              </nb-card-body>
+            </nb-card>
+          </nb-card-back>
+        </nb-flip-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <nb-flip-card #flipcard2 [nbSpinner]="loading2" nbSpinnerStatus="danger" nbSpinnerSize="large"
+          nbSpinnerMessage="">
+          <nb-card-front>
+            <nb-card accent="success">
+              <nb-card-body>
+                <div class="row mb-3">
+                  <div class="col">
+                    <nb-select placeholder="Select" (selectedChange)="RefDataSelect($event)" fullWidth>
+                      <nb-option-group title="Select All">
+                        <nb-option value="ALL">All Tables</nb-option>
+                      </nb-option-group>
+                      <nb-option-group title="Select Any">
+                        <nb-option value="ActivityMedia">ActivityMedia</nb-option>
+                        <nb-option value="ActivityMediaSubdivision">ActivityMediaSubdivision</nb-option>
+                        <nb-option value="ActivityType">ActivityType</nb-option>
+                        <nb-option value="ActivityRelativeDepth">ActivityRelativeDepth</nb-option>
+                        <nb-option value="AnalyticalMethod">AnalyticalMethod</nb-option>
+                        <nb-option value="Assemblage">Assemblage</nb-option>
+                        <nb-option value="BiologicalIntent">BiologicalIntent</nb-option>
+                        <nb-option value="CellForm">CellForm</nb-option>
+                        <nb-option value="CellShape">CellShape</nb-option>
+                        <nb-option value="Characteristic">Characteristic</nb-option>
+                        <nb-option value="County">County</nb-option>
+                        <nb-option value="Country">Country</nb-option>
+                        <nb-option value="DetectionQuantitationLimitType">DetectionQuantitationLimitType</nb-option>
+                        <nb-option value="FrequencyClassDescriptor">FrequencyClassDescriptor</nb-option>
+                        <nb-option value="Habit">Habit</nb-option>
+                        <nb-option value="HorizontalCollectionMethod">HorizontalCollectionMethod</nb-option>
+                        <nb-option value="HorizontalCoordinateReferenceSystemDatum">
+                          HorizontalCoordinateReferenceSystemDatum</nb-option>
+                        <nb-option value="MeasureUnit">MeasureUnit</nb-option>
+                        <nb-option value="MethodSpeciation">MethodSpeciation</nb-option>
+                        <nb-option value="MetricType">MetricType</nb-option>
+                        <nb-option value="MonitoringLocationType">MonitoringLocationType</nb-option>
+                        <nb-option value="NetType">NetType</nb-option>
+                        <nb-option value="ResultDetectionCondition">ResultDetectionCondition</nb-option>
+                        <nb-option value="ResultLaboratoryComment">ResultLaboratoryComment</nb-option>
+                        <nb-option value="ResultMeasureQualifier">ResultMeasureQualifier</nb-option>
+                        <nb-option value="ResultSampleFraction">ResultSampleFraction</nb-option>
+                        <nb-option value="ResultStatus">ResultStatus</nb-option>
+                        <nb-option value="ResultTemperatureBasis">ResultTemperatureBasis</nb-option>
+                        <nb-option value="ResultTimeBasis">ResultTimeBasis</nb-option>
+                        <nb-option value="ResultValueType">ResultValueType</nb-option>
+                        <nb-option value="ResultWeightBasis">ResultWeightBasis</nb-option>
+                        <nb-option value="SampleCollectionEquipment">SampleCollectionEquipment</nb-option>
+                        <nb-option value="SampleContainerColor">SampleContainerColor</nb-option>
+                        <nb-option value="SampleContainerType">SampleContainerType</nb-option>
+                        <nb-option value="SampleTissueAnatomy">SampleTissueAnatomy</nb-option>
+                        <nb-option value="SamplingDesignType">SamplingDesignType</nb-option>
+                        <nb-option value="State">State</nb-option>
+                        <nb-option value="StatisticalBase">StatisticalBase</nb-option>
+                        <nb-option value="Taxon">Taxon</nb-option>
+                        <nb-option value="ThermalPreservativeUsed">ThermalPreservativeUsed</nb-option>
+                        <nb-option value="TimeZone">TimeZone</nb-option>
+                        <nb-option value="ToxicityTestType">ToxicityTestType</nb-option>
+                        <nb-option value="Tribe">Tribes</nb-option>
+                        <nb-option value="VerticalCollectionMethod">VerticalCollectionMethod</nb-option>
+                        <nb-option value="VerticalCoordinateReferenceSystemDatum">VerticalCoordinateReferenceSystemDatum
+                        </nb-option>
+                        <nb-option value="Voltinism">Voltinism</nb-option>
+                        <nb-option value="WellFormationType">WellFormationType</nb-option>
+                        <nb-option value="WellType">WellType</nb-option>
+                      </nb-option-group>
+                    </nb-select>
+                  </div>
+                  <div class="col">
+                    <button nbButton size="tiny" (click)="pullRefDataFromEPA()">
+                      <nb-icon icon="cloud-download-outline"></nb-icon>
+                      Pull Reference Data from EPA
+                    </button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3">Data Last Retrieved:</div>
+                  <div class="col-sm-3">{{ lastRetvd2 }}</div>
+                  <div class="col-sm-3">&nbsp;</div>
+                  <div class="col-sm-3">&nbsp;</div>
+                </div>
+              </nb-card-body>
+            </nb-card>
+          </nb-card-front>
+          <nb-card-back>
+            <nb-card>
+              <nb-card-body>
+                <nb-alert status="success" *ngIf="msg2.toString() === '1'">Data Retrieval Complete.</nb-alert>
+                <nb-alert status="danger" *ngIf="msg2.toString() === '0'">Data retrieval failed.</nb-alert>
+                <button nbButton status="success" (click)="flip2()">Back</button>
+              </nb-card-body>
+            </nb-card>
+          </nb-card-back>
+        </nb-flip-card>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer></nb-card-footer>
+</nb-card>

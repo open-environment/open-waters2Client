@@ -88,4 +88,11 @@ export class WQXOrganizationService extends WqxOrganizationData {
   CanUserEditOrg(userIdx: number, orgId: string): Observable<Boolean> {
     return this.http.get<Boolean>(WebApi.TWQXOrganizationApi.canUserEditOrg(userIdx, orgId));
   }
+  GetT_EPA_ORGS_LastUpdateDate(): Observable<string> {
+    const requestOptions: Object = {
+      /* other options here */
+      responseType: 'text',
+    }
+    return this.http.get<string>(WebApi.TWQXOrganizationApi.getTEPAOrgsLastUpdateDate(), requestOptions);
+  }
 }

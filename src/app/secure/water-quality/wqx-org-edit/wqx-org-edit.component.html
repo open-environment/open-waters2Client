@@ -131,7 +131,8 @@
         <nb-card class="m-3">
           <nb-card-header>Credentials for Submitting to EPA</nb-card-header>
           <nb-card-body class="p-3">
-            <label for="lblCDXSubmitInd" class="label col-form-label">{{lblCDXSubmitInd}}</label>
+            <!-- <label for="lblCDXSubmitInd" class="label col-form-label">{{lblCDXSubmitInd}}</label> -->
+            <nb-alert size="tiny" status="danger">{{lblCDXSubmitInd}}</nb-alert>
             <br />
             <nb-radio-group name="rbCDX" [(ngModel)]="epaSubmissionGroup" (valueChange)="onrbCDXChange($event)">
               <nb-radio [value]="'1'">

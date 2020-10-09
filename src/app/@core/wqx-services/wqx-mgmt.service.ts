@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { WqxMgmtData, VWqxTransactionLog, VWqxPendingRecords, TOeAppTasks, CDXCredentials, VWqxTransactionLogModel } from '../wqx-data/wqx-mgmg';
 import { Observable } from 'rxjs';
-import { HttpBackend, HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
 
 @Injectable({
@@ -47,10 +47,15 @@ export class WqxMgmtService extends WqxMgmtData {
     };
     return this.http.put<number>(WebApi.MgmtApi.updateTOeAppTasks(), body, httpOptions);
   }
-  GetWQX_TRANSACTION_LOG_ByLogID(logId: number): Observable<VWqxTransactionLogModel> {
+  /* GetWQX_TRANSACTION_LOG_ByLogID(logId: number): Observable<VWqxTransactionLogModel> {
     return this.http.get<VWqxTransactionLogModel>(
       WebApi.MgmtApi.getWqxTransactionLogByLogId(logId));
+  } */
+  GetWQX_TRANSACTION_LOG_ByLogID(logId: number): Observable<HttpResponse<Blob>> {
+    return this.http.get(
+      WebApi.MgmtApi.getWqxTransactionLogByLogId(logId), { responseType: 'blob', observe: 'response' });
   }
+
   WQX_Master(orgId: string): Observable<number> {
     return this.http.get<number>(WebApi.MgmtApi.wqxMaster(orgId));
   }

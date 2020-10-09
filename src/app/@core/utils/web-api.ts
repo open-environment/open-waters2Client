@@ -5,6 +5,8 @@ export module WebApi {
   export class TWQXAdminApi {
     public static readonly getAppSettings =
       () => `${environment.api.owUrl}/api/admin/getAppSettings`
+    public static readonly updateAppSetting =
+      () => `${environment.api.owUrl}/api/admin/updateAppSetting`
   }
   export class MgmtApi {
     public static readonly getVWqxTransactionLog =
@@ -144,6 +146,9 @@ export module WebApi {
     public static readonly canUserEditOrg =
       (userIdx: number, orgId: string) =>
         `${environment.api.owUrl}/api/org/canUserEditOrg?UserIDX=${userIdx}&OrgID=${orgId}`
+    public static readonly getTEPAOrgsLastUpdateDate =
+      () =>
+        `${environment.api.owUrl}/api/org/getTEPAOrgsLastUpdateDate`
   }
   export class TWQXMonlocApi {
     public static readonly getWQXMonLoc =
@@ -322,5 +327,14 @@ export module WebApi {
     public static readonly deleteTWqxResult =
       (resultIdx: number) =>
         `${environment.api.owUrl}/api/refdata/deleteTWqxResult?ResultIdx=${resultIdx}`
+    public static readonly getTWqxRefDataLastUpdate =
+      () =>
+        `${environment.api.owUrl}/api/refdata/getTWqxRefDataLastUpdate`
+    public static readonly wqxImportOrg =
+      () =>
+        `${environment.api.owUrl}/api/refdata/wqxImportOrg`
+    public static readonly wqxImportRefData =
+      (tableName: string) =>
+        `${environment.api.owUrl}/api/refdata/wqxImportRefData?tableName=${tableName}`
   }
 }

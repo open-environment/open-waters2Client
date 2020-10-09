@@ -8,7 +8,7 @@ import { UserListComponent } from './user-list/user-list.component';
 import { AdminComponent } from './admin.component';
 import { RouterModule } from '@angular/router';
 import { AdminRoutingModule } from './admin-routing.module';
-import { NbAlertModule, NbButtonModule, NbCardModule, NbIconModule } from '@nebular/theme';
+import { NbAlertModule, NbButtonModule, NbCardModule, NbIconModule, NbSelectModule, NbSpinnerModule } from '@nebular/theme';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -24,6 +24,8 @@ import { FormsModule } from '@angular/forms';
         CommonModule,
         NbIconModule,
         NbButtonModule,
+        NbSpinnerModule,
+        NbSelectModule,
     ],
     declarations: [
         AdmDataSynchComponent,

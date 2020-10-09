@@ -8,43 +8,44 @@
       </div>
     </div>
     <div class="row">
-      <div class="row">
+      <div class="col">
         <p-table [columns]="cols" [value]="appSettings" dataKey="settingIdx" editMode="row" [autoLayout]="true">
           <ng-template pTemplate="header" let-columns>
             <tr>
-              <th style="width:8em"></th>
+              <th style="width:12em"></th>
               <th>ID</th>
-              <th>Setting Name</th>
-              <th>Description</th>
+              <th style="min-width: 14em">Setting Name</th>
+              <th style="min-width: 14em">Description</th>
               <th>Setting Value</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-appSetting let-columns="columns" let-editing="editing" let-ri="rowIndex">
             <tr [pEditableRow]="appSetting">
               <td style="text-align:center">
+                <div class="row">
+                  <div class="col" *ngIf="!editing"><button nbButton size="tiny" status="success"
+                      (click)="onRowEditInit(appSetting)" pInitEditableRow>
+                      <nb-icon icon="edit-outline"></nb-icon>
+                    </button></div>
+                  <!-- <div class="col"><button nbButton size="tiny" status="danger" 
+                    *ngIf="!editing" (click)="onRowDelete(appSetting)" pInitEditableRow>
+                      <nb-icon icon="trash-2-outline"></nb-icon>
+                    </button></div> -->
+                  <div class="col" *ngIf="editing"><button nbButton size="tiny" status="success"
+                      (click)="onRowEditSave(appSetting)" pSaveEditableRow style="margin-right: .5em">
+                      <nb-icon icon="checkmark"></nb-icon>
+                    </button></div>
+                  <div class="col" *ngIf="editing"><button nbButton size="tiny" status="danger"
+                      (click)="onRowEditCancel(appSetting, ri)" pCancelEditableRow>
+                      <nb-icon icon="close-outline"></nb-icon>
+                    </button></div>
+                </div>
 
-                <button nbButton ghost status="basic" *ngIf="!editing" (click)="onRowEditInit(appSetting)"
-                  pInitEditableRow>
-                  <nb-icon icon="edit-outline"></nb-icon>
-                </button>
-                <button nbButton ghost status="basic" *ngIf="!editing" (click)="onRowDelete(appSetting)"
-                  pInitEditableRow>
-                  <nb-icon icon="trash-2-outline"></nb-icon>
-                </button>
-                <button nbButton ghost status="success" *ngIf="editing" (click)="onRowEditSave(appSetting)"
-                  pSaveEditableRow style="margin-right: .5em">
-                  <nb-icon icon="checkmark"></nb-icon>
-                </button>
-                <button nbButton ghost status="danger" *ngIf="editing" (click)="onRowEditCancel(appSetting, ri)"
-                  pCancelEditableRow>
-                  <nb-icon icon="close-outline"></nb-icon>
-                </button>
               </td>
               <td>
                 <p-cellEditor>
                   <ng-template pTemplate="input">
-                    <input pInputText type="text" [(ngModel)]="appSetting.settingIdx" name="result" maxlength="12"
-                      required>
+                    {{appSetting.settingIdx}}
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{appSetting.settingIdx}}
@@ -54,8 +55,8 @@
               <td>
                 <p-cellEditor>
                   <ng-template pTemplate="input">
-                    <input pInputText type="text" [(ngModel)]="appSetting.settingName" name="result" maxlength="12"
-                      required>
+                    <input pInputText type="text" style="width: 100%" [(ngModel)]="appSetting.settingName"
+                      name="settingName">
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{appSetting.settingName}}
@@ -65,8 +66,8 @@
               <td>
                 <p-cellEditor>
                   <ng-template pTemplate="input">
-                    <input pInputText type="text" [(ngModel)]="appSetting.settingDesc" name="result" maxlength="12"
-                      required>
+                    <input pInputText type="text" style="width: 100%" [(ngModel)]="appSetting.settingDesc"
+                      name="settingDesc">
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{appSetting.settingDesc}}
@@ -76,8 +77,8 @@
               <td>
                 <p-cellEditor>
                   <ng-template pTemplate="input">
-                    <input pInputText type="text" [(ngModel)]="appSetting.settingValue" name="result" maxlength="12"
-                      required>
+                    <input pInputText type="text" style="width: 100%" [(ngModel)]="appSetting.settingValue"
+                      name="settingValue">
                   </ng-template>
                   <ng-template pTemplate="output">
                     {{appSetting.settingValue}}

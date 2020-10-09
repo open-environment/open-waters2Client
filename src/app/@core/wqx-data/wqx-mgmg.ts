@@ -10,7 +10,7 @@ export interface VWqxTransactionLog {
     tableIdx: number;
     submitDt: string;
     submitType: string;
-    responseFile: Uint8Array;
+    responseFile: Uint16Array;
     responseTxt: string;
     cdxSubmitTransId: string;
     cdxSubmitStatus: string;

@@ -40,8 +40,18 @@ export class AppSettingsComponent implements OnInit {
   onRowDelete(result: TOeAppSettings) {
 
   }
-  onRowEditSave(result: TOeAppSettings) {
-
+  onRowEditSave(appSetting: TOeAppSettings) {
+    console.log(appSetting);
+    this.adminService.UpdateTOeAppSetting(appSetting).subscribe(
+      (result: any) => {
+        console.log('UpdateTOeAppSetting: valid');
+        console.log(result);
+      },
+      (err) => {
+        console.log('UpdateTOeAppSetting: error');
+        console.log(err);
+      },
+    );
   }
 
   onRowEditCancel(result: TOeAppSettings, index: number) {

@@ -116,4 +116,25 @@ export class WQXRefDataService extends WqxRefDataData {
   DeleteT_WQX_RESULT(resultIdx: number): Observable<number> {
     return this.http.delete<number>(WebApi.TWQXRefDataApi.deleteTWqxResult(resultIdx));
   }
+  GetT_WQX_REF_DATA_LastUpdate(): Observable<string> {
+    const requestOptions: Object = {
+      /* other options here */
+      responseType: 'text',
+    };
+    return this.http.get<string>(WebApi.TWQXRefDataApi.getTWqxRefDataLastUpdate(), requestOptions);
+  }
+  WQXImport_Org(): Observable<number> {
+    const requestOptions: Object = {
+      /* other options here */
+      responseType: 'text',
+    };
+    return this.http.get<number>(WebApi.TWQXRefDataApi.wqxImportOrg(), requestOptions);
+  }
+  WQXImport_RefData(tableName: string): Observable<number> {
+    const requestOptions: Object = {
+      /* other options here */
+      responseType: 'text',
+    };
+    return this.http.get<number>(WebApi.TWQXRefDataApi.wqxImportRefData(tableName), requestOptions);
+  }
 }

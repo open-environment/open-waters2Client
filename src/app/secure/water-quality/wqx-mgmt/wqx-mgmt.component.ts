@@ -5,6 +5,7 @@ import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { User } from '../../../@core/data/users';
 import { NbToastrService } from '@nebular/theme';
 import { AuthService } from '../../../@core/auth/auth.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'ngx-wqx-mgmt',
@@ -68,7 +69,7 @@ export class WqxMgmtComponent implements OnInit {
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
         console.log(this.user);
-        
+
       }
     }); */
   }
@@ -143,49 +144,26 @@ export class WqxMgmtComponent implements OnInit {
     this.processGetFile(rowData.logId);
   }
   processGetFile(logId: number) {
+    console.log(logId);
     this.mgmtService.GetWQX_TRANSACTION_LOG_ByLogID(logId).subscribe(
-      (result: VWqxTransactionLogModel) => {
+      (result: any) => {
         console.log('GetWQX_TRANSACTION_LOG_ByLogID: valid');
         console.log(result);
-        if (result !== undefined && result !== null) {
-          if (result.wqxTransactionLog.responseFile === null &&
-            result.wqxTransactionLog.responseTxt === null) {
-            this.toasterService.danger('No validation details because submission succeeded.');
-            return;
-          } else {
-            let data: Uint8Array;
-            if (result.wqxTransactionLog.responseFile !== undefined && result.wqxTransactionLog.responseFile !== null) {
-              console.log('1');
-              // data = result.wqxTransactionLog.responseFile;
-              console.log(result.responseFileXML);
-              data = new TextEncoder().encode(result.responseFileXML);
-            } else {
-              console.log('2');
-              data = new TextEncoder().encode(result.wqxTransactionLog.responseTxt);
-            }
-            console.log(data);
-            const blob = new Blob([data], { type: 'text/xml' });
-            const url = window.URL.createObjectURL(blob);
-            const anchor = document.createElement('a');
-            if (result.wqxTransactionLog.responseFile !== undefined && result.wqxTransactionLog.responseFile !== null) {
-              console.log('3');
-              console.log(result.wqxTransactionLog.responseTxt);
-              anchor.download = result.wqxTransactionLog.responseTxt;
-            } else {
-              console.log('4');
-              anchor.download = 'download.xml';
-            }
-            anchor.href = url;
-            anchor.click();
-            // window.open(url);
-          }
-        }
+        const contentDisposition = result.headers.get('content-disposition');
+        const filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
+        this.download(result.body, filename);
       },
       (err) => {
         console.log('GetWQX_TRANSACTION_LOG_ByLogID: failed');
         console.log(err);
       },
     );
+  }
+
+  download(blob: Blob, nameFile?: string, type?: string) {
+    saveAs(blob, nameFile, {
+      type: type,
+    });
   }
   onApplyClick() {
     this.populateData();

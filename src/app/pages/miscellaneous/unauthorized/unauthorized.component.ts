@@ -21,6 +21,6 @@ export class UnauthorizedComponent implements OnInit {
   }
 
   goToHome() {
-    this.router.navigate(['/auth/login']);
+    this.router.navigate(['/pages/dashboard']);
   }
 }

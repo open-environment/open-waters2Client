@@ -16,4 +16,8 @@ export class WqxAdminService extends TWqxAdminData {
     return this.http.get<TOeAppSettings[]>(
       WebApi.TWQXAdminApi.getAppSettings());
   }
+  UpdateTOeAppSetting(appSetting: TOeAppSettings): Observable<number> {
+    const httpOptions = {};
+    return this.http.put<number>(WebApi.TWQXAdminApi.updateAppSetting(), appSetting, httpOptions);
+  }
 }
