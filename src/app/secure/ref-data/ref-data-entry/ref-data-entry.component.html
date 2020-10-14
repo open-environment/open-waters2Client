@@ -1,0 +1,47 @@
+<form name="form" (ngSubmit)="f.form.valid && onSubmit(f)" #f="ngForm" novalidate>
+  <nb-card size="small">
+    <nb-card-header>Enter New Reference Record</nb-card-header>
+    <nb-card-body>
+      <div class="row mb-3" *ngIf="!(ctx === 'Laboratory')">
+        <div class="col">ID:</div>
+        <div class="col">
+          <input type="text" fieldSize="tiny" nbInput name="txtID" [(ngModel)]="txtID" #vtxtID="ngModel" [ngClass]="{
+                      'is-invalid': f.submitted && vtxtID.invalid
+                    }" maxlength="20" fullWidth />
+          <!-- <div *ngIf="f.submitted && vtxtID.invalid" class="invalid-feedback">
+                    <div *ngIf="vtxtID.errors.required">Required</div>
+                  </div> -->
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">Name:</div>
+        <div class="col">
+          <input type="text" fieldSize="tiny" nbInput name="txtName" [(ngModel)]="txtName" #vtxtName="ngModel"
+            [ngClass]="{
+                      'is-invalid': f.submitted && vtxtName.invalid
+                    }" maxlength="120" fullWidth />
+
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="!(ctx === 'Laboratory')">
+        <div class="col">Description:</div>
+        <div class="col">
+          <textarea type="text" fieldSize="tiny" nbInput name="txtDesc" [(ngModel)]="txtDesc" #vtxtDesc="ngModel"
+            [ngClass]="{
+                      'is-invalid': f.submitted && vtxtDesc.invalid
+                    }" maxlength="1000" fullWidth></textarea>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <button nbButton type="submit" name="btnSave">Save</button>
+        </div>
+        <div class="col">
+          <button nbButton type="button" name="btnCancel" (click)="onCancelClicked()">Cancel</button>
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer></nb-card-footer>
+  </nb-card>
+</form>

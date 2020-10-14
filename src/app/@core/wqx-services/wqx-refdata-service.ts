@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
-import { WqxRefDataData, WqxRefDefaultTimeZone, WqxRefCharacteristic, AnalMethodDisplay, WqxRefTaxaOrg, WqxRefCharOrg, WqxRefCounty, WqxRefSampColMethod, WqxRefCharLimits } from '../wqx-data/wqx-refdata';
+import { WqxRefDataData, WqxRefDefaultTimeZone, WqxRefCharacteristic, AnalMethodDisplay, WqxRefTaxaOrg, WqxRefCharOrg, WqxRefCounty, WqxRefSampColMethod, WqxRefCharLimits, TWqxRefAnalMethod, TWqxRefSampPrep, TWqxRefLab } from '../wqx-data/wqx-refdata';
 import { WqxRefData } from '../wqx-data/wqx-organization';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
 
 @Injectable()
 export class WQXRefDataService extends WqxRefDataData {
@@ -136,5 +137,57 @@ export class WQXRefDataService extends WqxRefDataData {
       responseType: 'text',
     };
     return this.http.get<number>(WebApi.TWQXRefDataApi.wqxImportRefData(tableName), requestOptions);
+  }
+  GetT_WQX_REF_DATA_ByValueOrText(table: string, value: string): Observable<WqxRefData[]> {
+    return this.http.get<WqxRefData[]>(WebApi.TWQXRefDataApi.getTWqxRefDataByValueOrText(table, value));
+  }
+  InsertOrUpdateT_WQX_REF_DATA(refData: WqxRefData): Observable<number> {
+    const httpOptions = {};
+    const body = refData;
+    return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateTWqxRefData(), body, httpOptions);
+  }
+  UpdateT_WQX_REF_DATAByIDX(idx: number, value: string, text: string, actInd: boolean): Observable<number> {
+    const httpOptions = {};
+    return this.http.put<number>(WebApi.TWQXRefDataApi.updateTWQXRefDataByIdx(idx, value, text, actInd), '', httpOptions);
+  }
+  GetT_WQX_REF_CHARACTERISTICByCharName(charName: string): Observable<WqxRefCharacteristic[]> {
+    return this.http.get<WqxRefCharacteristic[]>(WebApi.TWQXRefDataApi.getTWqxRefCharacteristicByCharName(charName));
+  }
+  InsertOrUpdateT_WQX_REF_CHARACTERISTIC(refChar: WqxRefCharacteristic): Observable<number> {
+    const httpOptions = {};
+    const body = refChar;
+    return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateTWQXRefCharacteristic(), body, httpOptions);
+  }
+  GetT_WQX_REF_ANAL_METHODByValue(value: string): Observable<TWqxRefAnalMethod[]> {
+    return this.http.get<TWqxRefAnalMethod[]>(WebApi.TWQXRefDataApi.getTWqxRefAnalMethodByValue(value));
+  }
+  InsertOrUpdateT_WQX_REF_ANAL_METHOD(refAnal: TWqxRefAnalMethod): Observable<number> {
+    const httpOptions = {};
+    const body = refAnal;
+    return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateTWQXRefAnalMethod(), body, httpOptions);
+  }
+  GetAllT_WQX_REF_SAMP_PREPByContext(ctx: string): Observable<TWqxRefSampPrep[]> {
+    return this.http.get<TWqxRefSampPrep[]>(WebApi.TWQXRefDataApi.getAllTWqxRefSampPrepByContext(ctx));
+  }
+  InsertOrUpdateT_WQX_REF_SAMP_PREP(refSamp: TWqxRefSampPrep): Observable<number> {
+    const httpOptions = {};
+    const body = refSamp;
+    return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateTWQXRefSampPrep(), body, httpOptions);
+  }
+  InsertOrUpdateT_WQX_REF_SAMP_COL_METHOD(refSampCol: WqxRefSampColMethod): Observable<number> {
+    const httpOptions = {};
+    const body = refSampCol;
+    return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateTWQXRefSampColMethod(), body, httpOptions);
+  }
+  GetT_WQX_REF_LAB_ByOrgId(orgId: string): Observable<TWqxRefLab[]> {
+    return this.http.get<TWqxRefLab[]>(WebApi.TWQXRefDataApi.getTWqxRefLabByOrgId(orgId));
+  }
+  InsertOrUpdateT_WQX_REF_LAB(refLab: TWqxRefLab): Observable<number> {
+    const httpOptions = {};
+    const body = refLab;
+    return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateTWQXRefLab(), body, httpOptions);
+  }
+  GetAllT_WQX_REF_COUNTY(): Observable<WqxRefCounty[]> {
+    return this.http.get<WqxRefCounty[]>(WebApi.TWQXRefDataApi.GetAllTWqxRefCounty());
   }
 }

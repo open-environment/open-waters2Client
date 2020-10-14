@@ -1,3 +1,89 @@
-<p>
-  wqx-import-from-epa works!
-</p>
+<nb-card status="success">
+  <nb-card-header>
+    Retrieve Data from EPA
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row mb-3">
+      <div class="col">
+        <nb-card status="info">
+          <nb-card-header>
+            Step 1: Select Data Source
+          </nb-card-header>
+          <nb-card-body></nb-card-body>
+          <nb-card-footer></nb-card-footer>
+        </nb-card>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <nb-card status="info">
+          <nb-card-header>
+            Step 2: Select Type of Data to Import from EPA-WQX:
+          </nb-card-header>
+          <nb-card-body></nb-card-body>
+          <nb-card-footer></nb-card-footer>
+        </nb-card>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <nb-card status="info">
+          <nb-card-header>
+            Import History
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col">
+                <p-table [value]="importLogs" dataKey="importId" editMode="row" [autoLayout]="true" [paginator]="true"
+                  [rows]="25" [rowsPerPageOptions]="[25,50,75]" totalRecords="rd_totalRecords" pageLinks="3">
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th style="width:12em"></th>
+                      <th>ID</th>
+                      <th>Data Type</th>
+                      <th>Import Date</th>
+                      <th>Import Status</th>
+                      <th>Status Description</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-importLog let-columns="columns" let-ri="rowIndex">
+                    <tr>
+                      <td style="text-align:center">
+                        <div class="row">
+
+                          <div class="col"><button nbButton size="tiny" status="danger"
+                              (click)="onRowDelete(importLog)">
+                              <nb-icon icon="trash-2-outline"></nb-icon>
+                            </button></div>
+
+                        </div>
+
+                      </td>
+                      <td>
+                        {{importLog.importId}}
+                      </td>
+                      <td>
+                        {{importLog.fileName}}
+                      </td>
+                      <td>
+                        {{importLog.createDt | date:"medium"}}
+                      </td>
+                      <td>
+                        {{importLog.importStatus}}
+                      </td>
+                      <td>
+                        {{importLog.importProgressMsg}}
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </div>
+          </nb-card-body>
+          <nb-card-footer></nb-card-footer>
+        </nb-card>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer></nb-card-footer>
+</nb-card>

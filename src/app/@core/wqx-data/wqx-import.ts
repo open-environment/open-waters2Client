@@ -136,6 +136,19 @@ export interface TWqxImportTemplateDtl {
     createUserId: string;
     charDefaultSampFraction: string;
 }
+export interface TWqxImportLog {
+    importId: number;
+    orgId: string;
+    typeCd: string;
+    fileName: string;
+    fileSize: number;
+    importStatus: string;
+    importProgress: string;
+    importProgressMsg: string;
+    importFile: Uint8Array;
+    createDt: string;
+    createUserId: string;
+}
 export abstract class TWqxImportData {
     abstract GetWQX_IMPORT_TEMP_MONLOCByUserIdx(userIdx: number): Observable<TWqxImportTempMonloc[]>;
 

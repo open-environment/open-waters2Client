@@ -5,6 +5,7 @@ import { AuthService } from '../../../@core/auth/auth.service';
 import { User } from '../../../@core/data/users';
 import { VWqxTransactionLog, VWqxTransactionLogModel } from '../../../@core/wqx-data/wqx-mgmg';
 import { WqxMgmtService } from '../../../@core/wqx-services/wqx-mgmt.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'ngx-wqx-hist',
@@ -82,10 +83,13 @@ export class WqxHistComponent implements OnInit {
   }
   processGetFile(logId: number) {
     this.mgmtService.GetWQX_TRANSACTION_LOG_ByLogID(logId).subscribe(
-      (result: VWqxTransactionLogModel) => {
+      (result: any) => {
         console.log('GetWQX_TRANSACTION_LOG_ByLogID: valid');
         console.log(result);
-        if (result !== undefined && result !== null) {
+        const contentDisposition = result.headers.get('content-disposition');
+        const filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
+        this.download(result.body, filename);
+        /* if (result !== undefined && result !== null) {
           if (result.wqxTransactionLog.responseFile === null &&
             result.wqxTransactionLog.responseTxt === null) {
             this.toasterService.danger('No validation details because submission succeeded.');
@@ -117,12 +121,17 @@ export class WqxHistComponent implements OnInit {
             anchor.click();
             // window.open(url);
           }
-        }
+        } */
       },
       (err) => {
         console.log('GetWQX_TRANSACTION_LOG_ByLogID: failed');
         console.log(err);
       },
     );
+  }
+  download(blob: Blob, nameFile?: string, type?: string) {
+    saveAs(blob, nameFile, {
+      type: type,
+    });
   }
 }

@@ -131,7 +131,7 @@ export class ECommerceComponent {
       } else {
         this.pnlOrgSpecificShow = false;
       }
-      this.organizationService.getVWQXAllOrgs().subscribe(
+      this.organizationService.GetWQX_ORGANIZATION().subscribe(
         (result) => { this.lblOrg = result.length.toString(); },
       );
 

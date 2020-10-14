@@ -81,6 +81,9 @@ export module WebApi {
     public static readonly insertOrUpdateWqxImportTemplateDtl =
       () =>
         `${environment.api.owUrl}/api/import/insertOrUpdateWqxImportTemplateDtl`
+    public static readonly getWqxImportLog =
+      (orgId: string) =>
+        `${environment.api.owUrl}/api/import/getWqxImportLog?OrgID=${orgId}`
   }
   export class UtilityApi {
     public static readonly checkUserAuthentication =
@@ -336,5 +339,44 @@ export module WebApi {
     public static readonly wqxImportRefData =
       (tableName: string) =>
         `${environment.api.owUrl}/api/refdata/wqxImportRefData?tableName=${tableName}`
+    public static readonly getTWqxRefDataByValueOrText =
+      (table: string, value: string) =>
+        `${environment.api.owUrl}/api/refdata/getTWqxRefDataByValueOrText?table=${table}&value=${value}`
+    public static readonly insertOrUpdateTWqxRefData =
+      () =>
+        `${environment.api.owUrl}/api/refdata/insertOrUpdateTWqxRefData`
+    public static readonly updateTWQXRefDataByIdx =
+      (idx: number, value: string, text: string, actInd: boolean) =>
+        `${environment.api.owUrl}/api/refdata/updateTWQXRefDataByIdx?idx=${idx}&value=${value}&text=${text}&actInd=${actInd}`
+    public static readonly getTWqxRefCharacteristicByCharName =
+      (charName: string) =>
+        `${environment.api.owUrl}/api/refdata/getTWqxRefCharacteristicByCharName?charName=${charName}`
+    public static readonly insertOrUpdateTWQXRefCharacteristic =
+      () =>
+        `${environment.api.owUrl}/api/refdata/insertOrUpdateTWQXRefCharacteristic`
+    public static readonly getTWqxRefAnalMethodByValue =
+      (value: string) =>
+        `${environment.api.owUrl}/api/refdata/getTWqxRefAnalMethodByValue?value=${value}`
+    public static readonly insertOrUpdateTWQXRefAnalMethod =
+      () =>
+        `${environment.api.owUrl}/api/refdata/insertOrUpdateTWQXRefAnalMethod`
+    public static readonly getAllTWqxRefSampPrepByContext =
+      (ctx: string) =>
+        `${environment.api.owUrl}/api/refdata/getAllTWqxRefSampPrepByContext?Context=${ctx}`
+    public static readonly insertOrUpdateTWQXRefSampPrep =
+      () =>
+        `${environment.api.owUrl}/api/refdata/insertOrUpdateTWQXRefSampPrep`
+    public static readonly insertOrUpdateTWQXRefSampColMethod =
+      () =>
+        `${environment.api.owUrl}/api/refdata/insertOrUpdateTWQXRefSampColMethod`
+    public static readonly getTWqxRefLabByOrgId =
+      (orgId: string) =>
+        `${environment.api.owUrl}/api/refdata/getTWqxRefLabByOrgId?OrgId=${orgId}`
+    public static readonly insertOrUpdateTWQXRefLab =
+      () =>
+        `${environment.api.owUrl}/api/refdata/insertOrUpdateTWQXRefLab`
+    public static readonly GetAllTWqxRefCounty =
+      () =>
+        `${environment.api.owUrl}/api/refdata/GetAllTWqxRefCounty`
   }
 }

@@ -1,3 +1,631 @@
-<p>
-  ref-data works!
-</p>
+<nb-card>
+
+  <nb-card-body>
+    <div class="row mb-3">
+      <div class="col-2">
+        Select Reference Table:
+      </div>
+      <div class="col-4">
+        <nb-select placeholder="Select" (selectedChange)="RefDataSelect($event)" fullWidth>
+          <nb-option-group title="--ORGANIZATION--">
+            <nb-option value="Tribe">Tribes</nb-option>
+          </nb-option-group>
+          <nb-option-group title="--PROJECTS--">
+            <nb-option value="SamplingDesignType">Sampling Design Type</nb-option>
+          </nb-option-group>
+          <nb-option-group title="--MONITORING LOCATION--">
+            <nb-option value="County">County</nb-option>
+            <nb-option value="Country">Country</nb-option>
+            <nb-option value="HorizontalCollectionMethod">Horizontal Collection Method</nb-option>
+            <nb-option value="HorizontalCoordinateReferenceSystemDatum">Horizontal Reference Datum</nb-option>
+            <nb-option value="MonitoringLocationType">Monitoring Location Type</nb-option>
+            <nb-option value="State">State</nb-option>
+            <nb-option value="VerticalCollectionMethod">Vertical Collection Method</nb-option>
+            <nb-option value="VerticalCoordinateReferenceSystemDatum">Vertical Reference Datum</nb-option>
+            <nb-option value="WellFormationType">Well Formation Type</nb-option>
+            <nb-option value="WellType">Well Type</nb-option>
+          </nb-option-group>
+          <nb-option-group title="--ACTIVITY--">
+            <nb-option value="ActivityMedia">Activity Media</nb-option>
+            <nb-option value="ActivityMediaSubdivision">Activity Media Subdivision</nb-option>
+            <nb-option value="ActivityType">Activity Type</nb-option>
+            <nb-option value="ActivityRelativeDepth">Activity Relative Depth</nb-option>
+            <nb-option value="Assemblage">Assemblage</nb-option>
+            <nb-option value="BiologicalIntent">Biological Intent</nb-option>
+            <nb-option value="MetricType">Metric Type</nb-option>
+            <nb-option value="NetType">Net Type</nb-option>
+            <nb-option value="SampleCollectionEquipment">Sample Collection Equipment</nb-option>
+            <nb-option value="SampleCollectionMethod">Sample Collection Method</nb-option>
+            <nb-option value="SampleContainerColor">Sample Container Color</nb-option>
+            <nb-option value="SampleContainerType">Sample Container Type</nb-option>
+            <nb-option value="SamplePrepMethod">Sample Prep Method</nb-option>
+            <nb-option value="SampleTissueAnatomy">Sample Tissue Anatomy</nb-option>
+            <nb-option value="ThermalPreservativeUsed">Thermal Preservative Used</nb-option>
+            <nb-option value="TimeZone">TimeZone</nb-option>
+            <nb-option value="ToxicityTestType">Toxicity Test Type</nb-option>
+          </nb-option-group>
+          <nb-option-group title="--RESULTS--">
+            <nb-option value="AnalyticalMethod">Analytical Method</nb-option>
+            <nb-option value="CellForm">Cell Form</nb-option>
+            <nb-option value="CellShape">Cell Shape</nb-option>
+            <nb-option value="Characteristic">Characteristic</nb-option>
+            <nb-option value="DetectionQuantitationLimitType">Detection Quantitation Limit Type</nb-option>
+            <nb-option value="FrequencyClassDescriptor">Frequency Class Descriptor</nb-option>
+            <nb-option value="Habit">Habit</nb-option>
+            <nb-option value="Laboratory">Laboratory</nb-option>
+            <nb-option value="MeasureUnit">Measure Unit</nb-option>
+            <nb-option value="MethodSpeciation">Method Speciation</nb-option>
+            <nb-option value="ResultDetectionCondition">Result Detection Condition</nb-option>
+            <nb-option value="ResultLaboratoryComment">Result Laboratory Comment</nb-option>
+            <nb-option value="ResultMeasureQualifier">Result Measure Qualifier</nb-option>
+            <nb-option value="ResultSampleFraction">Result Sample Fraction</nb-option>
+            <nb-option value="ResultStatus">Result Status</nb-option>
+            <nb-option value="ResultTemperatureBasis">Result Temperature Basis</nb-option>
+            <nb-option value="ResultTimeBasis">Result Time Basis</nb-option>
+            <nb-option value="ResultValueType">Result Value Type</nb-option>
+            <nb-option value="ResultWeightBasis">Result Weight Basis</nb-option>
+            <nb-option value="StatisticalBase">StatisticalBase</nb-option>
+            <nb-option value="Taxon">Taxon</nb-option>
+            <nb-option value="Voltinism">Voltinism</nb-option>
+          </nb-option-group>
+        </nb-select>
+      </div>
+      <div class="col-2">
+        Search Data:
+      </div>
+      <div class="col-2">
+        <input type="text" nbInput [(ngModel)]="searchString" fullWidth>
+      </div>
+      <div class="col-2">
+        <button nbButton size="tiny" type="button" (click)="onSearchClicked()">
+          <nb-icon icon="search-outline"></nb-icon>
+          Search
+        </button>
+      </div>
+    </div>
+    <div class="row  mb-3">
+      <div class="col">
+        <div *ngIf="displayGrid === 'Other'">
+
+          <p-table [value]="refDatas" dataKey="refDataIdx" editMode="row" [autoLayout]="true" [paginator]="true"
+            [rows]="25" [rowsPerPageOptions]="[25,50,75]" totalRecords="rd_totalRecords" pageLinks="3">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width:12em"></th>
+                <th>Value</th>
+                <th style="min-width: 14em">Description</th>
+                <th style="min-width: 14em">Active</th>
+                <th>Last Updated</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-refData let-columns="columns" let-editing="editing" let-ri="rowIndex">
+              <tr [pEditableRow]="refData">
+                <td style="text-align:center">
+                  <div class="row">
+                    <div class="col" *ngIf="!editing"><button nbButton size="tiny" status="success" pInitEditableRow>
+                        <nb-icon icon="edit-outline"></nb-icon>
+                      </button></div>
+                    <div class="col"><button nbButton size="tiny" status="danger" *ngIf="!editing"
+                        (click)="onRowDelete1(refData)">
+                        <nb-icon icon="trash-2-outline"></nb-icon>
+                      </button></div>
+                    <div class="col" *ngIf="editing"><button nbButton size="tiny" status="success"
+                        (click)="onRowEditSave1(refData)" pSaveEditableRow style="margin-right: .5em">
+                        <nb-icon icon="checkmark"></nb-icon>
+                      </button></div>
+                    <div class="col" *ngIf="editing"><button nbButton size="tiny" status="danger" pCancelEditableRow>
+                        <nb-icon icon="close-outline"></nb-icon>
+                      </button></div>
+                  </div>
+
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" style="width: 100%" [(ngModel)]="refData.value" name="rdValue">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refData.value}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <textarea pInputText type="text" style="width: 100%" [(ngModel)]="refData.text"
+                        name="rdValue"></textarea>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refData.text}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <!-- <input pInputText type="text" style="width: 100%" [(ngModel)]="refData.actInd" name="rdActInd"> -->
+                      <nb-checkbox status="basic" [(ngModel)]="refData.actInd"></nb-checkbox>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refData.actInd}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      {{refData.updateDt | date:"medium"}}
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refData.updateDt | date:"medium"}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        <div *ngIf="displayGrid === 'County'">
+          <p-table [value]="refCounties" dataKey="countyCode" [autoLayout]="true" [paginator]="true" [rows]="25"
+            [rowsPerPageOptions]="[25,50,75]" totalRecords="ra_totalRecords" pageLinks="3">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th>State Code</th>
+                <th>County Code</th>
+                <th style="min-width: 14em">County Name</th>
+                <th>Active</th>
+                <th>Last Updated</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-refCounty let-columns="columns" let-ri="rowIndex">
+              <tr>
+                <td>
+                  {{refCounty.stateCode}}
+                </td>
+                <td>
+                  {{refCounty.countyCode}}
+                </td>
+                <td>
+                  {{refCounty.countyName}}
+                </td>
+                <td>
+                  {{refCounty.actInd}}
+                </td>
+                <td>
+                  {{refCounty.updateDt | date:"medium"}}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        <div *ngIf="displayGrid === 'Characteristic'">
+          <p-table [value]="refChars" dataKey="charName" editMode="row" [autoLayout]="true" [paginator]="true"
+            [rows]="25" [rowsPerPageOptions]="[25,50,75]" totalRecords="rc_totalRecords" pageLinks="3">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width:12em"></th>
+                <th>Characteristic</th>
+                <th style="min-width: 14em">Samp Fraction Required</th>
+                <th>Last Updated</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-refChar let-columns="columns" let-editing="editing" let-ri="rowIndex">
+              <tr [pEditableRow]="refChar">
+                <td style="text-align:center">
+                  <div class="row">
+                    <div class="col" *ngIf="!editing"><button nbButton size="tiny" status="success" pInitEditableRow
+                        disabled>
+                        <nb-icon icon="edit-outline"></nb-icon>
+                      </button></div>
+                    <div class="col"><button nbButton size="tiny" status="danger" *ngIf="!editing"
+                        (click)="onRowDelete2(refChar)">
+                        <nb-icon icon="trash-2-outline"></nb-icon>
+                      </button></div>
+                    <div class="col" *ngIf="editing"><button nbButton size="tiny" status="success"
+                        (click)="onRowEditSave2(refChar)" pSaveEditableRow style="margin-right: .5em">
+                        <nb-icon icon="checkmark"></nb-icon>
+                      </button></div>
+                    <div class="col" *ngIf="editing"><button nbButton size="tiny" status="danger" pCancelEditableRow>
+                        <nb-icon icon="close-outline"></nb-icon>
+                      </button></div>
+                  </div>
+
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" style="width: 100%" [(ngModel)]="refChar.charName" name="charName">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refChar.charName}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      {{refChar.sampFracReq}}
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refChar.sampFracReq}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      {{refChar.updateDt | date:"medium"}}
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refChar.updateDt | date:"medium"}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        <div *ngIf="displayGrid === 'SampleCollectionMethod'">
+          <p-table [value]="refSampCols" dataKey="sampCollMethodIdx" editMode="row" [autoLayout]="true"
+            [paginator]="true" [rows]="25" [rowsPerPageOptions]="[25,50,75]" totalRecords="rsc_totalRecords"
+            pageLinks="3">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width:12em"></th>
+                <th>Sample Collection ID</th>
+                <th>Context</th>
+                <th style="min-width: 14em">Name</th>
+                <th>Description</th>
+                <th>Active</th>
+                <th>Last Updated</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-refSampCol let-columns="columns" let-editing="editing" let-ri="rowIndex">
+              <tr [pEditableRow]="refSampCol">
+                <td style="text-align:center">
+                  <div class="row">
+                    <div class="col" *ngIf="!editing"><button nbButton size="tiny" status="success" pInitEditableRow>
+                        <nb-icon icon="edit-outline"></nb-icon>
+                      </button></div>
+                    <div class="col"><button nbButton size="tiny" status="danger" *ngIf="!editing"
+                        (click)="onRowDelete5(refSampCol)">
+                        <nb-icon icon="trash-2-outline"></nb-icon>
+                      </button></div>
+                    <div class="col" *ngIf="editing"><button nbButton size="tiny" status="success"
+                        (click)="onRowEditSave5(refSampCol)" pSaveEditableRow style="margin-right: .5em">
+                        <nb-icon icon="checkmark"></nb-icon>
+                      </button></div>
+                    <div class="col" *ngIf="editing"><button nbButton size="tiny" status="danger" pCancelEditableRow>
+                        <nb-icon icon="close-outline"></nb-icon>
+                      </button></div>
+                  </div>
+
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" style="width: 100%" [(ngModel)]="refSampCol.sampCollMethodId"
+                        name="sampCollMethodId">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refSampCol.sampCollMethodId}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      {{refSampCol.sampCollMethodCtx}}
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refSampCol.sampCollMethodCtx}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" style="width: 100%" [(ngModel)]="refSampCol.sampCollMethodName"
+                        name="sampCollMethodName">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refSampCol.sampCollMethodName}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" style="width: 100%" [(ngModel)]="refSampCol.sampCollMethodDesc"
+                        name="sampCollMethodDesc">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refSampCol.sampCollMethodDesc}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      {{refSampCol.actInd}}
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refSampCol.actInd}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      {{refSampCol.updateDt | date:"medium"}}
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refSampCol.updateDt | date:"medium"}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        <div *ngIf="displayGrid === 'SamplePrepMethod'">
+          <p-table [value]="refSamps" dataKey="sampPrepIdx" editMode="row" [autoLayout]="true" [paginator]="true"
+            [rows]="25" [rowsPerPageOptions]="[25,50,75]" totalRecords="rs_totalRecords" pageLinks="3">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width:12em"></th>
+                <th>Samp Prep ID</th>
+                <th>Context</th>
+                <th style="min-width: 14em">Name</th>
+                <th>Description</th>
+                <th>Active</th>
+                <th>Last Updated</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-refSamp let-columns="columns" let-editing="editing" let-ri="rowIndex">
+              <tr [pEditableRow]="refSamp">
+                <td style="text-align:center">
+                  <div class="row">
+                    <div class="col" *ngIf="!editing"><button nbButton size="tiny" status="success" pInitEditableRow>
+                        <nb-icon icon="edit-outline"></nb-icon>
+                      </button></div>
+                    <div class="col"><button nbButton size="tiny" status="danger" *ngIf="!editing"
+                        (click)="onRowDelete4(refSamp)">
+                        <nb-icon icon="trash-2-outline"></nb-icon>
+                      </button></div>
+                    <div class="col" *ngIf="editing"><button nbButton size="tiny" status="success"
+                        (click)="onRowEditSave4(refSamp)" pSaveEditableRow style="margin-right: .5em">
+                        <nb-icon icon="checkmark"></nb-icon>
+                      </button></div>
+                    <div class="col" *ngIf="editing"><button nbButton size="tiny" status="danger" pCancelEditableRow>
+                        <nb-icon icon="close-outline"></nb-icon>
+                      </button></div>
+                  </div>
+
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" style="width: 100%" [(ngModel)]="refSamp.sampPrepMethodId"
+                        name="sampPrepMethodId">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refSamp.sampPrepMethodId}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" style="width: 100%" [(ngModel)]="refSamp.sampPrepMethodCtx"
+                        name="sampPrepMethodCtx">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refSamp.sampPrepMethodCtx}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" style="width: 100%" [(ngModel)]="refSamp.sampPrepMethodName"
+                        name="sampPrepMethodName">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refSamp.sampPrepMethodName}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" style="width: 100%" [(ngModel)]="refSamp.sampPrepMethodDesc"
+                        name="sampPrepMethodDesc">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refSamp.sampPrepMethodDesc}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      {{refSamp.actInd}}
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refSamp.actInd}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      {{refSamp.updateDt | date:"medium"}}
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refSamp.updateDt | date:"medium"}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        <div *ngIf="displayGrid === 'AnalyticalMethod'">
+          <p-table [value]="refAnals" dataKey="analyticMethodIdx" editMode="row" [autoLayout]="true" [paginator]="true"
+            [rows]="25" [rowsPerPageOptions]="[25,50,75]" totalRecords="ra_totalRecords" pageLinks="3">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width:12em"></th>
+                <th>Analytical Method ID</th>
+                <th>Context</th>
+                <th style="min-width: 14em">Name</th>
+                <th>Active</th>
+                <th>Last Updated</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-refAnal let-columns="columns" let-editing="editing" let-ri="rowIndex">
+              <tr [pEditableRow]="refAnal">
+                <td style="text-align:center">
+                  <div class="row">
+                    <div class="col" *ngIf="!editing">
+                      <button nbButton size="tiny" status="success" pInitEditableRow
+                        [disabled]="!(refAnal.analyticMethodCtx === currentOrgID)">
+                        <nb-icon icon="edit-outline"></nb-icon>
+                      </button></div>
+                    <div class="col"><button nbButton size="tiny" status="danger" *ngIf="!editing"
+                        (click)="onRowDelete3(refAnal)">
+                        <nb-icon icon="trash-2-outline"></nb-icon>
+                      </button></div>
+                    <div class="col" *ngIf="editing"><button nbButton size="tiny" status="success"
+                        (click)="onRowEditSave3(refAnal)" pSaveEditableRow style="margin-right: .5em">
+                        <nb-icon icon="checkmark"></nb-icon>
+                      </button></div>
+                    <div class="col" *ngIf="editing"><button nbButton size="tiny" status="danger" pCancelEditableRow>
+                        <nb-icon icon="close-outline"></nb-icon>
+                      </button></div>
+                  </div>
+
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" style="width: 100%" [(ngModel)]="refAnal.analyticMethodId"
+                        name="charName">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refAnal.analyticMethodId}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      {{refAnal.analyticMethodCtx}}
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refAnal.analyticMethodCtx}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" style="width: 100%" [(ngModel)]="refAnal.analyticMethodName"
+                        name="analyticMethodName">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refAnal.analyticMethodName}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      {{refAnal.actInd}}
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refAnal.actInd}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      {{refAnal.updateDt | date:"medium"}}
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refAnal.updateDt | date:"medium"}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        <div *ngIf="displayGrid === 'Laboratory'">
+          <p-table [value]="refLabs" dataKey="labIdx" editMode="row" [autoLayout]="true">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th style="width:12em"></th>
+                <th>Lab Name</th>
+                <th>Last Updated</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-refLab let-columns="columns" let-editing="editing" let-ri="rowIndex">
+              <tr [pEditableRow]="refLab">
+                <td style="text-align:center">
+                  <div class="row">
+                    <div class="col" *ngIf="!editing"><button nbButton size="tiny" status="success" pInitEditableRow>
+                        <nb-icon icon="edit-outline"></nb-icon>
+                      </button></div>
+                    <div class="col"><button nbButton size="tiny" status="danger" *ngIf="!editing"
+                        (click)="onRowDelete6(refLab)">
+                        <nb-icon icon="trash-2-outline"></nb-icon>
+                      </button></div>
+                    <div class="col" *ngIf="editing"><button nbButton size="tiny" status="success"
+                        (click)="onRowEditSave6(refLab)" pSaveEditableRow style="margin-right: .5em">
+                        <nb-icon icon="checkmark"></nb-icon>
+                      </button></div>
+                    <div class="col" *ngIf="editing"><button nbButton size="tiny" status="danger" pCancelEditableRow>
+                        <nb-icon icon="close-outline"></nb-icon>
+                      </button></div>
+                  </div>
+
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      <input pInputText type="text" style="width: 100%" [(ngModel)]="refLab.labName" name="labName">
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refLab.labName}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+                <td>
+                  <p-cellEditor>
+                    <ng-template pTemplate="input">
+                      {{refLab.updateDt | date:"medium"}}
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                      {{refLab.updateDt | date:"medium"}}
+                    </ng-template>
+                  </p-cellEditor>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+    <div class="row  mb-3">
+      <div class="col">
+        <button *ngIf="isAddNewShow" size="tiny" status="success" nbButton type="button" (click)="btnAddNewClicked()">
+          <nb-icon icon="plus-square-outline"></nb-icon> Add New
+        </button>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer></nb-card-footer>
+</nb-card>

@@ -28,6 +28,15 @@ export interface WqxRefCharacteristic {
   sampFracReq: string;
   pickList: string;
 }
+export interface TWqxRefAnalMethod {
+  analyticMethodIdx: number;
+  analyticMethodId: string;
+  analyticMethodCtx: string;
+  analyticMethodName: string;
+  analyticMethodDesc: string;
+  actInd: boolean;
+  updateDt: string;
+}
 export interface AnalMethodDisplay {
   analytiC_METHOD_IDX: number;
   analMethodDisplayName: string;
@@ -58,6 +67,26 @@ export interface WqxRefCounty {
   countyName: string;
   actInd: boolean;
   usedInd: boolean;
+  updateDt: string;
+}
+export interface TWqxRefLab {
+  labIdx: number;
+  orgId: string;
+  labName: string;
+  labAccredInd: string;
+  labAccredAuthority: string;
+  actInd: boolean;
+  createDt: string;
+  createUserId: string;
+  updateDt: string;
+}
+export interface TWqxRefSampPrep {
+  sampPrepIdx: number;
+  sampPrepMethodId: string;
+  sampPrepMethodCtx: string;
+  sampPrepMethodName: string;
+  sampPrepMethodDesc: string;
+  actInd: boolean;
   updateDt: string;
 }
 export interface WqxRefSampColMethod {

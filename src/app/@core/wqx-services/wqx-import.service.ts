@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TWqxImportData, TWqxImportTempMonloc, ImportSampleResultDisplay, TWqxImportTemplate, TWqxImportTemplateDtl } from '../wqx-data/wqx-import';
+import { TWqxImportData, TWqxImportTempMonloc, ImportSampleResultDisplay, TWqxImportTemplate, TWqxImportTemplateDtl, TWqxImportLog } from '../wqx-data/wqx-import';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
@@ -117,5 +117,8 @@ export class WqxImportService extends TWqxImportData {
   }
   DeleteT_WQX_IMPORT_TEMPLATE_DTL(templateDtlId: number): Observable<number> {
     return this.http.delete<number>(WebApi.ImportApi.deleteTWqxImportTemplateDtl(templateDtlId));
+  }
+  GetWQX_IMPORT_LOG(orgId: string): Observable<TWqxImportLog[]> {
+    return this.http.get<TWqxImportLog[]>(WebApi.ImportApi.getWqxImportLog(orgId));
   }
 }

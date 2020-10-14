@@ -16,8 +16,8 @@ export class AdmDataSynchComponent implements OnInit {
   @ViewChild('flipcard2', { static: true }) flipcard2: NbFlipCardComponent;
 
   user: User;
-  currentOrgId: string;
-
+  currentOrgId: string = '';
+  selectedTableName: string = '';
   msg1: number = 0;
   msg2: number = 0;
   lastRetvd1: string = '';
@@ -94,6 +94,7 @@ export class AdmDataSynchComponent implements OnInit {
   flip2() {
     this.msg2 = 0;
     this.flipcard2.toggle();
+    this.selectedTableName = '';
   }
   pullFromEPA() {
     this.loading1 = true;
@@ -117,13 +118,9 @@ export class AdmDataSynchComponent implements OnInit {
 
   }
   pullRefDataFromEPA() {
-    this.msg2 = 1;
-    this.flipcard2.toggle();
-  }
-  RefDataSelect(tableName: string) {
     this.loading2 = true;
-    console.log(tableName);
-    this.refDataService.WQXImport_RefData(tableName).subscribe(
+    console.log(this.selectedTableName);
+    this.refDataService.WQXImport_RefData(this.selectedTableName).subscribe(
       (result: number) => {
         console.log('WQXImport_RefData: valid');
         console.log(result);
@@ -139,5 +136,8 @@ export class AdmDataSynchComponent implements OnInit {
         this.flipcard2.toggle();
       },
     );
+  }
+  RefDataSelect(tableName: string) {
+    this.selectedTableName = tableName;
   }
 }

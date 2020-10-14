@@ -194,7 +194,7 @@ export class WqxActivityEditComponent implements OnInit {
                 this.txtTimeZone = result.defaultTimezone;
               }
             }
-          }
+          },
         );
 
       }
