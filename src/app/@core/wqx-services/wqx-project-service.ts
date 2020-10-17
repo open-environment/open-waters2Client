@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { WqxProject, WqxProjectData } from '../wqx-data/wqx-project';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
+import { ImportStatusModel } from '../wqx-data/wqx-import';
 
 @Injectable()
 export class WQXProjectService extends WqxProjectData {
@@ -37,5 +38,11 @@ export class WQXProjectService extends WqxProjectData {
   }
   DeleteT_WQX_PROJECT(projectIdx: number, userId: string): Observable<number> {
     return this.http.delete<number>(WebApi.TWQXProjectApi.deleteTWQXProject(projectIdx, userId));
+  }
+  DeleteTWqxImportTempProject(userIdx: number): Observable<number> {
+    return this.http.delete<number>(WebApi.TWQXProjectApi.deleteTWqxImportTempProject(userIdx));
+  }
+  WQXImportProjectAsync(orgId: string, userIdx: number): Observable<ImportStatusModel> {
+    return this.http.get<ImportStatusModel>(WebApi.TWQXProjectApi.wqxImportProject(orgId, userIdx));
   }
 }

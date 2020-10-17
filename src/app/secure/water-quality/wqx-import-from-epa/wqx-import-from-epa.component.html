@@ -9,18 +9,45 @@
           <nb-card-header>
             Step 1: Select Data Source
           </nb-card-header>
-          <nb-card-body></nb-card-body>
+          <nb-card-body>
+            <nb-radio-group [(ngModel)]="importTypeOption">
+              <nb-radio value="1" disabled>
+                Import data from spreadsheet
+              </nb-radio>
+              <nb-radio value="2">
+                Import data directly from EPA-WQX
+              </nb-radio>
+            </nb-radio-group>
+          </nb-card-body>
           <nb-card-footer></nb-card-footer>
         </nb-card>
       </div>
     </div>
     <div class="row mb-3">
       <div class="col">
-        <nb-card status="info">
+        <nb-card status="info" [nbSpinner]="loading" nbSpinnerStatus="info" nbSpinnerSize="large"
+          nbSpinnerMessage="Importing data...please wait!">
           <nb-card-header>
             Step 2: Select Type of Data to Import from EPA-WQX:
           </nb-card-header>
-          <nb-card-body></nb-card-body>
+          <nb-card-body>
+            <div class="row mb-3">
+              <div class="col">
+                <nb-select [(selected)]="selectedImportType">
+                  <nb-option value="MLOC">Monitoring Locations</nb-option>
+                  <nb-option value="PROJ">Projects</nb-option>
+                  <nb-option value="ACT">Activities</nb-option>
+                </nb-select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <button nbButton type="button" status="success" size="tiny" (click)="btnContinueClicked()">
+                  <nb-icon icon="cloud-download-outline"></nb-icon> Begin Import from EPA-WQX
+                </button>
+              </div>
+            </div>
+          </nb-card-body>
           <nb-card-footer></nb-card-footer>
         </nb-card>
       </div>
@@ -32,7 +59,7 @@
             Import History
           </nb-card-header>
           <nb-card-body>
-            <div class="row">
+            <div class="row mb-3">
               <div class="col">
                 <p-table [value]="importLogs" dataKey="importId" editMode="row" [autoLayout]="true" [paginator]="true"
                   [rows]="25" [rowsPerPageOptions]="[25,50,75]" totalRecords="rd_totalRecords" pageLinks="3">
@@ -49,7 +76,7 @@
                   <ng-template pTemplate="body" let-importLog let-columns="columns" let-ri="rowIndex">
                     <tr>
                       <td style="text-align:center">
-                        <div class="row">
+                        <div class="row mb-3">
 
                           <div class="col"><button nbButton size="tiny" status="danger"
                               (click)="onRowDelete(importLog)">

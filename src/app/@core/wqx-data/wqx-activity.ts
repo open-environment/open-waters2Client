@@ -163,6 +163,35 @@ export interface WqxResult {
   labSampPrepEndDt: string;
   dilutionFactor: string;
 }
+export interface VWqxActivityLatest {
+  activityIdx: number;
+  orgId: string;
+  projectIdx: number;
+  monlocIdx: number;
+  monlocName: string;
+  activityId: string;
+  actType: string;
+  actStartDt: string;
+  wqxInd: boolean;
+  createDt: string;
+  createUserId: string;
+  actComment: string;
+  alkalinityTotal: string;
+  ammonia: string;
+  dissolvedOxygenDo: string;
+  escherichiaColi: string;
+  nitrate: string;
+  nitrite: string;
+  pH: string;
+  phosphorus: string;
+  salinity: string;
+  specificConductance: string;
+  temperatureAir: string;
+  temperatureWater: string;
+  totalDissolvedSolids: string;
+  turbidity: string;
+
+}
 export abstract class WqxActivityData {
   abstract GetWQX_Activities(ActInd: boolean, OrgID: string, MonLocIDX: number, startDt: string, endDt: string, ActType: string, WQXPending: boolean, ProjectIDX: number): Observable<WqxActivity[]>;
 }

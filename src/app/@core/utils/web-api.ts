@@ -45,6 +45,9 @@ export module WebApi {
     public static readonly getWqxImportTempMonloc =
       (userIdx: number) =>
         `${environment.api.owUrl}/api/import/getWqxImportTempMonlocByUserIdx?userIdx=${userIdx}`
+    public static readonly getWqxImportTempProject =
+      (userIdx: number) =>
+        `${environment.api.owUrl}/api/import/getWqxImportTempProjectByUserIdx?userIdx=${userIdx}`
     public static readonly getWqxImportTemplate =
       (orgId: string) =>
         `${environment.api.owUrl}/api/import/getWqxImportTemplate?OrgID=${orgId}`
@@ -66,12 +69,18 @@ export module WebApi {
     public static readonly processImportTempMonloc =
       () =>
         `${environment.api.owUrl}/api/import/processImportTempMonloc`
+    public static readonly processImportTempProject =
+      () =>
+        `${environment.api.owUrl}/api/import/processImportTempProject`
     public static readonly processImportTempSample =
       () =>
         `${environment.api.owUrl}/api/import/processImportTempSample`
     public static readonly cancelProcessImportTempMonloc =
       () =>
         `${environment.api.owUrl}/api/import/cancelProcessImportTempMonloc`
+    public static readonly cancelProcessImportTempProject =
+      () =>
+        `${environment.api.owUrl}/api/import/cancelProcessImportTempProject`
     public static readonly cancelProcessImportTempSample =
       () =>
         `${environment.api.owUrl}/api/import/cancelProcessImportTempSample`
@@ -81,9 +90,18 @@ export module WebApi {
     public static readonly insertOrUpdateWqxImportTemplateDtl =
       () =>
         `${environment.api.owUrl}/api/import/insertOrUpdateWqxImportTemplateDtl`
+    public static readonly insertOrUpdateTwqxImportLog =
+      () =>
+        `${environment.api.owUrl}/api/import/insertOrUpdateTwqxImportLog`
     public static readonly getWqxImportLog =
       (orgId: string) =>
         `${environment.api.owUrl}/api/import/getWqxImportLog?OrgID=${orgId}`
+    public static readonly deleteTWqxImportLog =
+      (importId: number) =>
+        `${environment.api.owUrl}/api/import/deleteTWqxImportLog?importId=${importId}`
+    public static readonly importActivity =
+      (orgId: string, importId: number, userId: string) =>
+        `${environment.api.owUrl}/api/import/importActivity?orgId=${orgId}&importId=${importId}&userId=${userId}`
   }
   export class UtilityApi {
     public static readonly checkUserAuthentication =
@@ -166,6 +184,12 @@ export module WebApi {
     public static readonly deleteWQXMonLoc =
       (monlocIdx: number, userIdx: number) =>
         `${environment.api.owUrl}/api/monloc/deleteWQXMonLoc?monLocIDX=${monlocIdx}&userIdx=${userIdx}`
+    public static readonly deleteTWqxImportTempMonloc =
+      (userIdx: number) =>
+        `${environment.api.owUrl}/api/monloc/deleteTWqxImportTempMonloc?userIdx=${userIdx}`
+    public static readonly wqxImportMonLoc =
+      (orgId: string, userIdx: number) =>
+        `${environment.api.owUrl}/api/monloc/wqxImportMonLoc?orgId=${orgId}&userIdx=${userIdx}`
   }
   export class TWQXProjectApi {
     public static readonly getAllProjects =
@@ -191,6 +215,12 @@ export module WebApi {
         projectName: string, projectDesc: string, sampDesignTypeCd: string, qAppApprovalInd: boolean,
         qAppApprovalAgency: string, wQxSubmitStatus: string, wQxSubmitDt: string, actInd: boolean, wqxInd: boolean, createUser: string) =>
         `${environment.api.owUrl}/api/project/InsertOrUpdateWQXProject?pROJECT_IDX=${projectIdx}&oRG_ID=${orgId}&pROJECT_ID=${projectId}&pROJECT_NAME=${projectName}&pROJECT_DESC=${projectDesc}&sAMP_DESIGN_TYPE_CD=${sampDesignTypeCd}&qAPP_APPROVAL_IND=${qAppApprovalInd}&qAPP_APPROVAL_AGENCY=${qAppApprovalAgency}&wQX_SUBMIT_STATUS=${wQxSubmitStatus}&wQX_SUBMIT_DT=${wQxSubmitDt}&aCT_IND=${actInd}&wQX_IND=${wqxInd}&cREATE_USER=${createUser}`
+    public static readonly deleteTWqxImportTempProject =
+      (userIdx: number) =>
+        `${environment.api.owUrl}/api/project/deleteTWqxImportTempProject?userIdx=${userIdx}`
+    public static readonly wqxImportProject =
+      (orgId: string, userIdx: number) =>
+        `${environment.api.owUrl}/api/project/wqxImportProject?orgId=${orgId}&userIdx=${userIdx}`
   }
   export class TWQXActivityApi {
     public static readonly getAllActivities =
@@ -217,6 +247,12 @@ export module WebApi {
     public static readonly getTWqxResult =
       (activityIdx: number) =>
         `${environment.api.owUrl}/api/activity/getTWqxResult?ActivityIDX=${activityIdx}`
+    public static readonly deleteTWqxImportTempSample =
+      (userIdx: number) =>
+        `${environment.api.owUrl}/api/activity/deleteTWqxImportTempSample?userIdx=${userIdx}`
+    public static readonly getVWqxActivityLatest =
+      (orgId: string) =>
+        `${environment.api.owUrl}/api/activity/getVWqxActivityLatest?orgId=${orgId}`
   }
   export class TWQXRefDataApi {
     public static readonly getTWqxRefDefaultTimeZone =

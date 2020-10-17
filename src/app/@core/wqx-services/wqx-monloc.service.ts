@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
 import { WqxMonlocData, WqxMonloc } from '../wqx-data/wqx-monloc';
+import { ImportStatusModel } from '../wqx-data/wqx-import';
 
 @Injectable()
 export class WqxMonlocService extends WqxMonlocData {
@@ -37,5 +38,11 @@ export class WqxMonlocService extends WqxMonlocData {
   }
   DeleteT_WQX_MONLOC(monlocIdx: number, userIdx: number): Observable<number> {
     return this.http.delete<number>(WebApi.TWQXMonlocApi.deleteWQXMonLoc(monlocIdx, userIdx));
+  }
+  DeleteTWqxImportTempMonloc(userIdx: number): Observable<number> {
+    return this.http.delete<number>(WebApi.TWQXMonlocApi.deleteTWqxImportTempMonloc(userIdx));
+  }
+  WQXImportMonLocAsync(orgId: string, userIdx: number): Observable<ImportStatusModel> {
+    return this.http.get<ImportStatusModel>(WebApi.TWQXMonlocApi.wqxImportMonLoc(orgId, userIdx));
   }
 }

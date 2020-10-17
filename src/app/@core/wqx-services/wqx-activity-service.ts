@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { WqxActivity, WqxActivityData, ActivityListDisplay, WqxResult } from '../wqx-data/wqx-activity';
+import { WqxActivity, WqxActivityData, ActivityListDisplay, WqxResult, VWqxActivityLatest } from '../wqx-data/wqx-activity';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
 import { WqxRefData } from '../wqx-data/wqx-organization';
@@ -65,5 +65,11 @@ export class WQXActivityService extends WqxActivityData {
   UpdateWQX_ACTIVITY_WQXStatus(activityIdx: number, wqxSubmitStatus, actInd: boolean, wqxInd: boolean, createUser: string): Observable<number> {
     const httpOptions = {};
     return this.http.put<number>(WebApi.TWQXRefDataApi.updateWqxActivityWqxStatus(activityIdx, wqxSubmitStatus, actInd, wqxInd, createUser), '', httpOptions);
+  }
+  DeleteTWqxImportTempSample(userIdx: number): Observable<number> {
+    return this.http.delete<number>(WebApi.TWQXActivityApi.deleteTWqxImportTempSample(userIdx));
+  }
+  GetVWqxActivityLatest(orgId: string): Observable<VWqxActivityLatest[]> {
+    return this.http.get<VWqxActivityLatest[]>(WebApi.TWQXActivityApi.getVWqxActivityLatest(orgId));
   }
 }

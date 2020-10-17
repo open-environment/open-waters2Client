@@ -1,5 +1,18 @@
 import { Observable } from 'rxjs';
-
+export interface TWqxImportTempProject {
+    tempProjectIdx: number;
+    userId: string;
+    projectIdx: number;
+    orgId: string;
+    projectId: string;
+    projectName: string;
+    projectDesc: string;
+    sampDesignTypeCd: string;
+    qappApprovalInd: boolean;
+    qappApprovalAgency: string;
+    importStatusCd: string;
+    importStatusDesc: string;
+}
 export interface TWqxImportTempMonloc {
     tempMonlocIdx: number;
     userId: string;
@@ -148,6 +161,10 @@ export interface TWqxImportLog {
     importFile: Uint8Array;
     createDt: string;
     createUserId: string;
+}
+export interface ImportStatusModel {
+    importStatus: boolean;
+    importStatusMsg: string;
 }
 export abstract class TWqxImportData {
     abstract GetWQX_IMPORT_TEMP_MONLOCByUserIdx(userIdx: number): Observable<TWqxImportTempMonloc[]>;

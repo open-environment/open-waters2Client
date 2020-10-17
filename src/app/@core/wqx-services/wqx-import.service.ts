@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TWqxImportData, TWqxImportTempMonloc, ImportSampleResultDisplay, TWqxImportTemplate, TWqxImportTemplateDtl, TWqxImportLog } from '../wqx-data/wqx-import';
+import { TWqxImportData, TWqxImportTempMonloc, ImportSampleResultDisplay, TWqxImportTemplate, TWqxImportTemplateDtl, TWqxImportLog, TWqxImportTempProject } from '../wqx-data/wqx-import';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
@@ -34,6 +34,9 @@ export class WqxImportService extends TWqxImportData {
   GetWQX_IMPORT_TEMP_MONLOCByUserIdx(userIdx: number): Observable<TWqxImportTempMonloc[]> {
     return this.http.get<TWqxImportTempMonloc[]>(WebApi.ImportApi.getWqxImportTempMonloc(userIdx));
   }
+  GetWQX_IMPORT_TEMP_ProjectByUserIdx(userIdx: number): Observable<TWqxImportTempProject[]> {
+    return this.http.get<TWqxImportTempProject[]>(WebApi.ImportApi.getWqxImportTempProject(userIdx));
+  }
   GetWQX_IMPORT_TEMP_SAMPLEByUserIdx(userIdx: number): Observable<ImportSampleResultDisplay[]> {
     return this.http.get<ImportSampleResultDisplay[]>(WebApi.ImportApi.getWqxImportTempSample(userIdx));
   }
@@ -46,6 +49,16 @@ export class WqxImportService extends TWqxImportData {
       userIdx: userIdx,
     };
     return this.http.post<number>(WebApi.ImportApi.processImportTempMonloc(), body, httpOptions);
+  }
+  ProcessImportTempProject(wqxImport: boolean, wqxSubmitStatus: string, selectedTempProjectIds: string, userIdx: number): Observable<number> {
+    const httpOptions = {};
+    const body = {
+      wqxImport: wqxImport,
+      wqxSubmitStatus: wqxSubmitStatus,
+      selectedTempMonlocIds: selectedTempProjectIds,
+      userIdx: userIdx,
+    };
+    return this.http.post<number>(WebApi.ImportApi.processImportTempProject(), body, httpOptions);
   }
   ProcessImportTempSample(wqxSubmitStatus: string, activityReplaceType: string, userIdx: number): Observable<number> {
     const httpOptions = {};
@@ -67,6 +80,16 @@ export class WqxImportService extends TWqxImportData {
       userIdx: userIdx,
     };
     return this.http.post<number>(WebApi.ImportApi.cancelProcessImportTempMonloc(), body, httpOptions);
+  }
+  CancelProcessImportTempProject(userIdx: number): Observable<number> {
+    const httpOptions = {};
+    const body = {
+      wqxImport: false,
+      wqxSubmitStatus: '',
+      selectedTempMonlocIds: '',
+      userIdx: userIdx,
+    };
+    return this.http.post<number>(WebApi.ImportApi.cancelProcessImportTempProject(), body, httpOptions);
   }
   CancelProcessImportTempSample(userIdx: number): Observable<number> {
     const httpOptions = {};
@@ -120,5 +143,16 @@ export class WqxImportService extends TWqxImportData {
   }
   GetWQX_IMPORT_LOG(orgId: string): Observable<TWqxImportLog[]> {
     return this.http.get<TWqxImportLog[]>(WebApi.ImportApi.getWqxImportLog(orgId));
+  }
+  DeleteTWqxImportLog(importId: number): Observable<number> {
+    return this.http.delete<number>(WebApi.ImportApi.deleteTWqxImportLog(importId));
+  }
+  InsertOrUpdateTwqxImportLog(data: TWqxImportLog): Observable<number> {
+    const httpOptions = {};
+    const body = data;
+    return this.http.post<number>(WebApi.ImportApi.insertOrUpdateTwqxImportLog(), body, httpOptions);
+  }
+  ImportActivityAsync(orgId: string, importId: number, userId: string): Observable<boolean> {
+    return this.http.get<boolean>(WebApi.ImportApi.importActivity(orgId, importId, userId));
   }
 }

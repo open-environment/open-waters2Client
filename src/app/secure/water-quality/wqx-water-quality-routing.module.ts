@@ -17,6 +17,7 @@ import { WqxImportMonlocComponent } from './wqx-import-monloc/wqx-import-monloc.
 import { WqxImportSampleComponent } from './wqx-import-sample/wqx-import-sample.component';
 import { WqxImportLogicTemplateComponent } from './wqx-import-logic-template/wqx-import-logic-template.component';
 import { WqxHistComponent } from './wqx-hist/wqx-hist.component';
+import { WqxImportProjectComponent } from './wqx-import-project/wqx-import-project.component';
 
 const routes: Routes = [{
   path: '',
@@ -65,6 +66,10 @@ const routes: Routes = [{
     {
       path: 'wqx-import-monloc',
       component: WqxImportMonlocComponent,
+    },
+    {
+      path: 'wqx-import-project',
+      component: WqxImportProjectComponent,
     },
     {
       path: 'wqx-import-sample',
