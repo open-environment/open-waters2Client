@@ -16,6 +16,7 @@ import { WqxRefDataModule } from './ref-data/ref-data.module';
 import { AdminModule } from './administration/admin.module';
 
 
+
 @NgModule({
   declarations: [
     WqxPagesComponent,

@@ -2,8 +2,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
-import { WqxMonlocData, WqxMonloc } from '../wqx-data/wqx-monloc';
+import { WqxMonlocData, WqxMonloc, MapMarkerModel } from '../wqx-data/wqx-monloc';
 import { ImportStatusModel } from '../wqx-data/wqx-import';
+import { observableToBeFn } from 'rxjs/internal/testing/TestScheduler';
+import { HTTP_VERSION_NOT_SUPPORTED } from 'http-status-codes';
+import { ExecFileOptionsWithStringEncoding } from 'child_process';
 
 @Injectable()
 export class WqxMonlocService extends WqxMonlocData {
@@ -44,5 +47,23 @@ export class WqxMonlocService extends WqxMonlocData {
   }
   WQXImportMonLocAsync(orgId: string, userIdx: number): Observable<ImportStatusModel> {
     return this.http.get<ImportStatusModel>(WebApi.TWQXMonlocApi.wqxImportMonLoc(orgId, userIdx));
+  }
+  GetSitesAsync(actInd: boolean, orgId: string, wqxPending: boolean): Observable<MapMarkerModel[]> {
+    return this.http.get<MapMarkerModel[]>(WebApi.TWQXMonlocApi.getSitesAsync(actInd, orgId, wqxPending));
+  }
+  GetChartData(orgId: string, chartType: string, charName: string, charName2: string, begDt: string, endDt: string, monloc: any, decimals: string, wqxInd: string): Observable<any> {
+    const httpOptions = { responseType: 'text' as 'json' };
+    const body = {
+      orgId: orgId,
+      chartType: chartType,
+      charName: charName,
+      charName2: charName2,
+      begDt: begDt,
+      endDt: endDt,
+      monLoc: monloc,
+      decimals: decimals,
+      wqxInd: wqxInd,
+    };
+    return this.http.post<any>(WebApi.TWQXMonlocApi.getChartData(), body, httpOptions);
   }
 }

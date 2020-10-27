@@ -69,7 +69,8 @@ import { WqxImportProjectComponent } from './wqx-import-project/wqx-import-proje
     NbTooltipModule,
     NbSpinnerModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCEohIbvKCfnAfGgT0omUpaifCQdBLLAz0',
+      //apiKey: 'AIzaSyCEohIbvKCfnAfGgT0omUpaifCQdBLLAz0',
+      apiKey: 'AIzaSyDfIwM8J3FoXCAcBSwBzyB18xxGWsUg9ik',
     }),
   ],
   declarations: [

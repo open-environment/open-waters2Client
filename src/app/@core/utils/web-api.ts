@@ -170,6 +170,12 @@ export module WebApi {
     public static readonly getTEPAOrgsLastUpdateDate =
       () =>
         `${environment.api.owUrl}/api/org/getTEPAOrgsLastUpdateDate`
+    public static readonly getMyAccountByUserIdx =
+      (userIdx: number) =>
+        `${environment.api.owUrl}/api/org/getMyAccountByUserIdx?UserIDX=${userIdx}`
+    public static readonly updateMyAccountUser =
+      (userIdx: number, firstName: string, lastName: string, email: string, phone: string, userName: string) =>
+        `${environment.api.owUrl}/api/org/updateMyAccountUser?UserIDX=${userIdx}&firstName=${firstName}&lastName=${lastName}&email=${email}&phone=${phone}&userName=${userName}`
   }
   export class TWQXMonlocApi {
     public static readonly getWQXMonLoc =
@@ -190,6 +196,15 @@ export module WebApi {
     public static readonly wqxImportMonLoc =
       (orgId: string, userIdx: number) =>
         `${environment.api.owUrl}/api/monloc/wqxImportMonLoc?orgId=${orgId}&userIdx=${userIdx}`
+    public static readonly getSitesAsync =
+      (actInd: boolean, orgId: string, wqxPending: boolean) =>
+        `${environment.api.owUrl}/api/monloc/getSitesAsync?ActInd=${actInd}&OrgID=${orgId}&WQXPending=${wqxPending}`
+    public static readonly getChartData =
+      () =>
+        `${environment.api.owUrl}/api/monloc/getChartData`
+    /* public static readonly getChartData =
+      (orgId: string, chartType: string, charName: string, charName2: string, begDt: string, endDt: string, monloc: string, decimals: string, wqxInd: string) =>
+        `${environment.api.owUrl}/api/monloc/getChartData?orgId=${orgId}&chartType=${chartType}&charName=${charName}&charName2=${charName2}&begDt=${begDt}&endDt=${endDt}&monLoc=${monloc}&decimals=${decimals}&wqxInd=${wqxInd}` */
   }
   export class TWQXProjectApi {
     public static readonly getAllProjects =
@@ -253,6 +268,9 @@ export module WebApi {
     public static readonly getVWqxActivityLatest =
       (orgId: string) =>
         `${environment.api.owUrl}/api/activity/getVWqxActivityLatest?orgId=${orgId}`
+    public static readonly getTWqxResultSampledCharacteristics =
+      (orgId: string) =>
+        `${environment.api.owUrl}/api/activity/getTWqxResultSampledCharacteristics?orgId=${orgId}`
   }
   export class TWQXRefDataApi {
     public static readonly getTWqxRefDefaultTimeZone =

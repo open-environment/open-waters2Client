@@ -192,6 +192,9 @@ export interface VWqxActivityLatest {
   turbidity: string;
 
 }
+export interface CharDisplay {
+  charName: string;
+}
 export abstract class WqxActivityData {
   abstract GetWQX_Activities(ActInd: boolean, OrgID: string, MonLocIDX: number, startDt: string, endDt: string, ActType: string, WQXPending: boolean, ProjectIDX: number): Observable<WqxActivity[]>;
 }

@@ -106,11 +106,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'My Account',
     icon: 'person-outline',
-    link: '/pages/dashboard',
+    link: '/secure/my-account',
   },
   {
     title: 'Help',
     icon: 'question-mark-circle-outline',
-    link: '/pages/dashboard',
+    link: '/pages/help',
   },
 ];

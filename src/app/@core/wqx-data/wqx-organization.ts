@@ -58,6 +58,11 @@ export interface UserOrgDisplay {
   orgID: string;
   roleCD: string;
 }
+export interface MyAccountModel {
+  user: TOeUsers;
+  roles: string[];
+  organizations: string[];
+}
 export interface TOeUsers {
   UserIdx: number;
   UserId: string;

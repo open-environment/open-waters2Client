@@ -108,11 +108,11 @@ export const WQX_MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'My Account',
     icon: 'person-outline',
-    link: '/pages/dashboard',
+    link: '/pages/my-account',
   },
   {
     title: 'Help',
     icon: 'question-mark-circle-outline',
-    link: '/pages/dashboard',
+    link: '/pages/help',
   },
 ];

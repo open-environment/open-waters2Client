@@ -8,6 +8,7 @@ import { ExtloginComponent } from './extlogin/extlogin.component';
 import { AuthGuard } from '../auth-guard.service';
 import { WqxLicenseComponent } from './miscellaneous/wqx-license/wqx-license.component';
 import { WqxTermsComponent } from './miscellaneous/wqx-terms/wqx-terms.component';
+import { HelpComponent } from './help/help.component';
 
 const routes: Routes = [{
   path: '',
@@ -34,6 +35,10 @@ const routes: Routes = [{
       path: 'miscellaneous',
       loadChildren: () => import('./miscellaneous/miscellaneous.module')
         .then(m => m.MiscellaneousModule),
+    },
+    {
+      path: 'help',
+      component: HelpComponent,
     },
     {
       path: '',

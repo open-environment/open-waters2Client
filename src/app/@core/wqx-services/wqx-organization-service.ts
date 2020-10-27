@@ -10,6 +10,7 @@ import {
   ConnectTestResult,
   WqxImportTranslate,
   WqxRefData,
+  MyAccountModel,
 } from '../wqx-data/wqx-organization';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
@@ -92,7 +93,14 @@ export class WQXOrganizationService extends WqxOrganizationData {
     const requestOptions: Object = {
       /* other options here */
       responseType: 'text',
-    }
+    };
     return this.http.get<string>(WebApi.TWQXOrganizationApi.getTEPAOrgsLastUpdateDate(), requestOptions);
+  }
+  GetMyAccountByUserIdx(userIdx: number): Observable<MyAccountModel> {
+    return this.http.get<MyAccountModel>(WebApi.TWQXOrganizationApi.getMyAccountByUserIdx(userIdx));
+  }
+  UpdateMyAccountUser(userIdx: number, firstName: string, lastName: string, email: string, phone: string, userName: string): Observable<number> {
+    const httpOptions = {};
+    return this.http.post<number>(WebApi.TWQXOrganizationApi.updateMyAccountUser(userIdx, firstName, lastName, email, phone, userName), '', httpOptions)
   }
 }

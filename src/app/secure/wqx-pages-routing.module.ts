@@ -3,6 +3,7 @@ import { NgModule, Component } from '@angular/core';
 
 import { WqxPagesComponent } from './wqx-pages.component';
 import { NotFoundComponent } from '../pages/miscellaneous/not-found/not-found.component';
+
 /* import { RefDataComponent } from './ref-data/ref-data.component';
 import { UserListComponent } from './administration/user-list/user-list.component';
 import { RSA_PKCS1_OAEP_PADDING } from 'constants';
@@ -35,10 +36,16 @@ const routes: Routes = [{
         .then(m => m.DataAnalysisModule),
     },
     {
+      path: 'my-account',
+      loadChildren: () => import('./my-account/my-account.module')
+        .then(m => m.MyAccountModule),
+    },
+    {
       path: 'admin',
       loadChildren: () => import('./administration/admin.module')
         .then(m => m.AdminModule),
     },
+
     {
       path: '**',
       component: NotFoundComponent,

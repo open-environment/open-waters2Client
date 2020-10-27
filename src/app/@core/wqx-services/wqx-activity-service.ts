@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { WqxActivity, WqxActivityData, ActivityListDisplay, WqxResult, VWqxActivityLatest } from '../wqx-data/wqx-activity';
+import { WqxActivity, WqxActivityData, ActivityListDisplay, WqxResult, VWqxActivityLatest, CharDisplay } from '../wqx-data/wqx-activity';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
 import { WqxRefData } from '../wqx-data/wqx-organization';
@@ -71,5 +71,8 @@ export class WQXActivityService extends WqxActivityData {
   }
   GetVWqxActivityLatest(orgId: string): Observable<VWqxActivityLatest[]> {
     return this.http.get<VWqxActivityLatest[]>(WebApi.TWQXActivityApi.getVWqxActivityLatest(orgId));
+  }
+  GetTWqxResultSampledCharacteristics(orgId: string): Observable<CharDisplay[]> {
+    return this.http.get<CharDisplay[]>(WebApi.TWQXActivityApi.getTWqxResultSampledCharacteristics(orgId));
   }
 }

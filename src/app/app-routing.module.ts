@@ -27,7 +27,6 @@ const routes: Routes = [
       .then(m => m.PagesModule),
   },
   {
-
     path: 'secure',
     canActivate: [AuthGuard],
     loadChildren: () => import('./secure/wqx-pages.module')

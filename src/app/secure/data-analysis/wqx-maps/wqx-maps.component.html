@@ -3,7 +3,10 @@
   <nb-card-body>
     <div class="row">
       <div class="col">
-        Map
+        <!-- <agm-map [latitude]="lat" [longitude]="lng">
+          <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+        </agm-map> -->
+        <div #mapContainer id="map"></div>
       </div>
     </div>
     <div class="row">
@@ -14,6 +17,7 @@
             <p-table [columns]="cols" [value]="latestActivities">
               <ng-template pTemplate="header" let-columns>
                 <tr>
+                  <th style="width:12em">Edit</th>
                   <th *ngFor="let col of columns">
                     {{col.header}}
                   </th>
@@ -21,8 +25,33 @@
               </ng-template>
               <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
+                  <td>
+                    <div class="row">
+                      <div class="col">
+                        <button nbButton size="tiny" status="success" nbTooltip="View All Results"
+                          nbTooltipStatus="primary" (click)="onShowData(rowData)">
+                          <nb-icon icon="info-outline"></nb-icon>
+                        </button>
+                      </div>
+                      <div class="col">
+                        <button nbButton size="tiny" status="success" nbTooltip="Chart" nbTooltipStatus="primary"
+                          (click)="onShowChart(rowData)">
+                          <nb-icon icon="pie-chart-outline"></nb-icon>
+                        </button>
+                      </div>
+                    </div>
+
+
+                  </td>
                   <td *ngFor="let col of columns">
                     {{rowData[col.field]}}
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                  <td [attr.colspan]="columns.length + 1">
+                    No records found for selected organization.
                   </td>
                 </tr>
               </ng-template>

@@ -68,6 +68,9 @@ import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
           token: {
             class: NbAuthJWTToken,
           },
+          // This is used for NbAuthentication, since
+          // we are using custom authentication,
+          // this is not in use
           baseEndpoint: 'https://localhost:44327',
           //baseEndpoint: 'http://208.109.10.214:89',
           login: {

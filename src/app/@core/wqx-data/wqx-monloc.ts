@@ -46,7 +46,12 @@ export interface WqxMonlocConfig {
   field: string;
   header: string;
 }
-
+export interface MapMarkerModel {
+  lat: string;
+  lng: string;
+  infoTitle: string;
+  infoBody: string;
+}
 export abstract class WqxMonlocData {
   abstract GetWQX_MONLOC(ActInd: boolean, OrgID: string, WQXPending: boolean): Observable<WqxMonloc[]>;
 }

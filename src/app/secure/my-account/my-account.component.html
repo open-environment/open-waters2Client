@@ -1,0 +1,82 @@
+<nb-card>
+    <nb-card-header></nb-card-header>
+    <nb-card-body>
+        <form name="form" (ngSubmit)="f.form.valid && onSubmit(f)" #f="ngForm" novalidate>
+            <div class="row mb-2">
+                <div class="col">
+                    <nb-alert size="tiny" status="success">View and edit your account information.</nb-alert>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-3">User Name:</div>
+                <div class="col-9">
+                    <input nbInput type="text" size="tiny" [(ngModel)]="txtUserName" #vtxtUserName name="txtUserName"
+                        readonly>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-3">First Name:</div>
+                <div class="col-9">
+                    <input nbInput type="text" size="tiny" [(ngModel)]="txtFName" #vtxtFName name="txtFName"
+                        maxlength="40" fullWidth>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-3">Last Name:</div>
+                <div class="col-9">
+                    <input nbInput type="text" size="tiny" [(ngModel)]="txtLName" #vtxtLname name="txtLName"
+                        maxlength="40" fullWidth>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-3">Email:</div>
+                <div class="col-9">
+                    <input nbInput type="text" size="tiny" [(ngModel)]="txtEmail" #vtxtEmail name="txtEmail"
+                        maxlength="150" fullWidth>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-3">Phone:</div>
+                <div class="col-9">
+                    <input nbInput type="text" [(ngModel)]="txtPhone" #vtxtPhone name="txtPhone" maxlength="12"
+                        fullWidth>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-3">Roles:</div>
+                <div class="col-9">
+                    <nb-card accent="info">
+                        <nb-card-body>
+                            <nb-list>
+                                <nb-list-item *ngFor="let role of roles">
+                                    {{ role }}
+                                </nb-list-item>
+                            </nb-list>
+                        </nb-card-body>
+                    </nb-card>
+
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-3">Organizations:</div>
+                <div class="col-9">
+                    <nb-card accent="danger">
+                        <nb-card-body>
+                            <nb-list>
+                                <nb-list-item *ngFor="let org of orgs">
+                                    {{ org }}
+                                </nb-list-item>
+                            </nb-list>
+                        </nb-card-body>
+                    </nb-card>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button nbButton type="submit" status="success">Save</button>
+                </div>
+            </div>
+        </form>
+    </nb-card-body>
+</nb-card>
