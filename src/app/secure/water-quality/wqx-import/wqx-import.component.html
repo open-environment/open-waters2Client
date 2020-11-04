@@ -13,14 +13,32 @@
           <div class="row mb-3">
             <div class="col-sm-3" style="padding-top:8px">Data to Import:</div>
             <div class="col-sm-5">
-              <nb-select fullWidth [(selected)]="selectedImportType" (selectedChange)="onDataToImportChanged($event)">
+              <nb-select fullWidth [(selected)]="selectedImportType">
                 <nb-option value="">-- select option --</nb-option>
                 <nb-option value="M">Monitoring Locations</nb-option>
                 <nb-option value="S">Activities</nb-option>
                 <nb-option value="I">Bio Metrics/Indices</nb-option>
               </nb-select>
             </div>
-            <div class="col-sm-4" style="padding-top:8px">Download Link</div>
+            <div class="col-sm-4" style="padding-top:8px">
+              <button *ngIf="selectedImportType === 'M'" nbButton size="tiny" status="success"
+                (click)="downloadFile('MonLoc_ImportTemplate.xlsx')">
+                <nb-icon icon="download-outline"></nb-icon>Download Default Import Template
+              </button>
+              <button *ngIf="selectedImportType === 'S'" nbButton size="tiny" status="success"
+                (click)="downloadFile('Samp_ImportTemplate.xlsx')">
+                <nb-icon icon="download-outline"></nb-icon>Download Default Import Template
+              </button>
+              <button *ngIf="selectedImportType === 'I'" nbButton size="tiny" status="success"
+                (click)="downloadFile('SampBio_ImportTemplate.xlsx')">
+                <nb-icon icon="download-outline"></nb-icon>Download Default Import Template
+              </button>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-12">
+              <button nbButton size="tiny" nbStepperNext (click)="onNext1Clicked()">Next Step</button>
+            </div>
           </div>
         </nb-step>
         <nb-step label="Step 2:">
@@ -77,7 +95,7 @@
           </div>
           <div class="row mb-3">
             <div class="col-12">
-              <button nbButton size="tiny" nbStepperNext (click)="onNextClicked()">Next Step</button>
+              <button nbButton size="tiny" nbStepperNext (click)="onNext2Clicked()">Next Step</button>
             </div>
           </div>
         </nb-step>

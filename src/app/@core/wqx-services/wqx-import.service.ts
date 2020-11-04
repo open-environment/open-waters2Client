@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TWqxImportData, TWqxImportTempMonloc, ImportSampleResultDisplay, TWqxImportTemplate, TWqxImportTemplateDtl, TWqxImportLog, TWqxImportTempProject } from '../wqx-data/wqx-import';
+import { TWqxImportData, TWqxImportTempMonloc, ImportSampleResultDisplay, TWqxImportTemplate, TWqxImportTemplateDtl, TWqxImportLog, TWqxImportTempProject, TWqxImportTempActivityMetric } from '../wqx-data/wqx-import';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
@@ -154,5 +154,8 @@ export class WqxImportService extends TWqxImportData {
   }
   ImportActivityAsync(orgId: string, importId: number, userId: string): Observable<boolean> {
     return this.http.get<boolean>(WebApi.ImportApi.importActivity(orgId, importId, userId));
+  }
+  GetWqxImportTempActivityMetric(userIdx: number): Observable<TWqxImportTempActivityMetric[]> {
+    return this.http.get<TWqxImportTempActivityMetric[]>(WebApi.ImportApi.getWqxImportTempActivityMetric(userIdx));
   }
 }

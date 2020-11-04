@@ -1,10 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NbMenuService, NbSidebarService, NbSelectComponent } from '@nebular/theme';
-
+import { NbMenuService, NbSidebarService } from '@nebular/theme';
 import { User } from '../../../@core/data/users';
-import { LayoutService } from '../../../@core/utils';
 import { Subject } from 'rxjs';
-import { NbAuthJWTToken, NbAuthService, NbAuthResult } from '@nebular/auth';
 import { Router } from '@angular/router';
 import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organization-service';
 import { WqxOrganization } from '../../../@core/wqx-data/wqx-organization';
@@ -23,42 +20,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userPictureOnly: boolean = false;
   user: User;
   token: any;
-  /* themes = [
-    {
-      value: 'default',
-      name: 'Light',
-    },
-    {
-      value: 'dark',
-      name: 'Dark',
-    },
-    {
-      value: 'cosmic',
-      name: 'Cosmic',
-    },
-    {
-      value: 'corporate',
-      name: 'Corporate',
-    },
-  ]; */
+
   orgs: WqxOrganization[] = [];
   selectedOrgId: string;
-  // currentTheme = 'default';
+
 
   userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
 
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
-    // private themeService: NbThemeService,
-    private layoutService: LayoutService,
-    private authService: NbAuthService,
-    private authService1: AuthService,
+    private authService: AuthService,
     private router: Router,
     private organizationService: WQXOrganizationService,
     private pubSubService: WqxPubsubServiceService) {
-
-    if (this.authService1.isAuthenticated() === true) {
-      const u = this.authService1.getUser();
+    console.log('header component - constructor called');
+    if (this.authService.isAuthenticated() === true) {
+      const u = this.authService.getUser();
       // TODO: need to fix this
       if (this.user === undefined || this.user === null)
         this.user = {
@@ -72,76 +49,51 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.user.userIdx = u.userIdx;
       this.user.name = u.name;
       this.user.OrgID = u.OrgID;
-      this.organizationService.GetWQX_USER_ORGS_ByUserIDX(+this.user.userIdx, true).subscribe(
-        (data) => {
-          data.forEach(element => {
-            const newOrg = {} as WqxOrganization;
-            newOrg.orgId = element.orgId;
-            newOrg.orgFormalName = element.orgFormalName;
-            this.orgs.push(newOrg);
-          });
-          console.log('setting default orgid');
-          console.log(this.user.OrgID);
-          setTimeout(() => {
+      const hdrOrgJson = localStorage.getItem('headerOrgs');
+      if (hdrOrgJson) {
+        this.orgs = JSON.parse(hdrOrgJson);
+        setTimeout(() => {
+          if (localStorage.getItem('selectedOrgId') !== null) {
+            this.selectedOrgId = localStorage.getItem('selectedOrgId');
+          } else {
             this.selectedOrgId = this.user.OrgID;
-          }, 100);
+          }
 
-        },
-        (err) => {
-          console.log(err);
-        },
-      );
+        }, 100);
+      } else {
+        this.organizationService.GetWQX_USER_ORGS_ByUserIDX(+this.user.userIdx, true).subscribe(
+          (data) => {
+            data.forEach(element => {
+              const newOrg = {} as WqxOrganization;
+              newOrg.orgId = element.orgId;
+              newOrg.orgFormalName = element.orgFormalName;
+              this.orgs.push(newOrg);
+            });
+            localStorage.setItem('headerOrgs', JSON.stringify(this.orgs));
+            setTimeout(() => {
+              this.selectedOrgId = this.user.OrgID;
+            }, 100);
+
+          },
+          (err) => {
+            console.log(err);
+          },
+        );
+      }
+
     }
-
-
-    /* this.authService.onTokenChange()
-      .subscribe((token: NbAuthJWTToken) => {
-        if (token.isValid()) {
-          this.user = token.getPayload();
-          console.log(+this.user.userIdx);
-        }
-      }); */
   }
 
   ngOnInit() {
+    console.log('header component - ngOnInit called');
     this.menuService.onItemClick().subscribe((event) => {
       this.onItemSelection(event.item.title);
     });
-
-    // this.currentTheme = this.themeService.currentTheme;
-
-    /* this.userService.getUsers()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => this.user = users.nick); */
-
-    // const { xl } = this.breakpointService.getBreakpointsMap();
-    /* this.themeService.onMediaQueryChange()
-      .pipe(
-        map(([, currentBreakpoint]) => currentBreakpoint.width < xl),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
-
-    this.themeService.onThemeChange()
-      .pipe(
-        map(({ name }) => name),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(themeName => this.currentTheme = themeName);
-       this.menuService.onItemClick().subscribe(( event ) => {
-        this.onItemSelection(event.item.title);
-      }); */
   }
 
   onItemSelection(title: string) {
     if (title === 'Log out') {
-      this.authService1.signout();
-      /*  this.authService.logout('email').subscribe(
-         (result: NbAuthResult) => {
-           this.router.navigateByUrl('/auth/login');
-         },
-         (err) => { console.log(err); },
-       ); */
+      this.authService.signout();
     } else if (title === 'Profile') {
       // Do something on Profile
     }
@@ -152,17 +104,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  /*   changeTheme(themeName: string) {
-      this.themeService.changeTheme(themeName);
-    } */
   changeOrg(orgId: string) {
-    console.log(orgId);
+    console.log('changeOrg:' + orgId);
     this.pubSubService.setOrgId(orgId);
     localStorage.setItem('selectedOrgId', orgId);
   }
   toggleSidebar(): boolean {
     this.sidebarService.toggle(true, 'menu-sidebar');
-    this.layoutService.changeLayoutSize();
     return false;
   }
 
@@ -171,6 +119,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return false;
   }
   ReturnToPortal() {
-    this.authService1.signout();
+    this.authService.signout();
   }
 }

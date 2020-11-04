@@ -56,8 +56,6 @@ export class AuthService {
     this.user.name = userName;
     this.user.OrgID = defaultOrgId;
     this.user.isAdmin = isAdmin === true ? 'true' : 'false';
-    console.log('setUserData');
-    console.log(this.user);
   }
   get authorizationHeaderValue(): string {
     return `${this.user.token_type} ${this.user.access_token}`;

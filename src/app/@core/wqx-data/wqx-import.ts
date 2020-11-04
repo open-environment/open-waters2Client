@@ -1,4 +1,23 @@
 import { Observable } from 'rxjs';
+export interface TWqxImportTempActivityMetric {
+    tempActivityMetricIdx: number;
+    userId: string;
+    orgId: string;
+    activityIdx: number;
+    metricTypeId: string;
+    metricTypeIdContext: string;
+    metricTypeName: string;
+    metricScale: string;
+    metricFormulaDesc: string;
+    metricValueMsr: string;
+    metricValueMsrUnit: string;
+    metricScore: string;
+    metricComment: string;
+    tempBioHabitatIndexIdx: number;
+    importStatusCd: string;
+    importStatusDesc: string;
+    activityId: string;
+}
 export interface TWqxImportTempProject {
     tempProjectIdx: number;
     userId: string;

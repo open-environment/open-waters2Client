@@ -26,18 +26,12 @@ export class AuthCallbackComponent implements OnInit {
     }
 
     const user = await this.authService.completeAuthentication();
-    console.log('===============**********=============');
-    console.log(user);
     if (this.authService.isAuthenticated) {
-      console.log('authenticated');
-      console.log(user.profile.open_waters);
       const defaultOrgId: string = this.GetDefaultOrgId(user.profile.open_waters);
       localStorage.setItem('selectedOrgId', defaultOrgId);
       const isAdmin: boolean = this.GetIsAdmin(user.profile.open_waters);
       this.utilityService.CheckUserExist(user).subscribe(
         (result) => {
-          console.log('CheckUserExist');
-          console.log(result);
           if (result.userexist === true) {
             this.authService.setUserData(result.useridx, result.username, defaultOrgId, isAdmin);
             this.router.navigate(['/home']);
@@ -48,7 +42,6 @@ export class AuthCallbackComponent implements OnInit {
 
         },
         (err) => {
-          console.log('CheckUserExist');
           console.log(err);
         },
       );
@@ -68,8 +61,6 @@ export class AuthCallbackComponent implements OnInit {
       const splitted = owa[0].split(';');
       actResult = splitted[0];
     }
-    console.log('DefaultOrgId:');
-    console.log(actResult);
     return actResult;
   }
   GetIsAdmin(ow: any): boolean {
@@ -88,8 +79,6 @@ export class AuthCallbackComponent implements OnInit {
         }
       });
     }
-    console.log('IsAdmin:');
-    console.log(actResult);
     return actResult;
   }
 }

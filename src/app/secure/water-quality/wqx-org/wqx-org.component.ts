@@ -1,22 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { LocalDataSource } from 'ng2-smart-table/lib/data-source/local/local.data-source';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organization-service';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
 import { Router } from '@angular/router';
-import { Column } from 'primeng/primeng';
-import { WqxAllOrgs, WqxOrganization } from '../../../@core/wqx-data/wqx-organization';
-import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
+import { WqxOrganization } from '../../../@core/wqx-data/wqx-organization';
+import { NbAuthService } from '@nebular/auth';
 import { User } from '../../../@core/data/users';
 import { AuthService } from '../../../@core/auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ngx-wqx-org',
   templateUrl: './wqx-org.component.html',
   styleUrls: ['./wqx-org.component.scss'],
 })
-export class WqxOrgComponent implements OnInit {
+export class WqxOrgComponent implements OnInit, OnDestroy {
   user: User;
   currentOrgId: string = '';
+
+  pubSubServiceSubscription: Subscription[] = [];
+
   orgs: WqxOrganization[] = [];
 
 
@@ -46,16 +48,14 @@ export class WqxOrgComponent implements OnInit {
       this.user.isAdmin = u.isAdmin;
 
     }
-    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
-      if (token.isValid()) {
-        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-        console.log(this.user);
-      }
-    }); */
-    this.pubSubService.loadData.subscribe((data: any) => {
-      console.log('pubSubService called: ' + data);
-    });
+    this.pubSubServiceSubscription.push(this.pubSubService.loadData.subscribe((data: any) => {
+    }));
 
+  }
+  ngOnDestroy(): void {
+    this.pubSubServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
   }
 
   ngOnInit() {
@@ -66,28 +66,23 @@ export class WqxOrgComponent implements OnInit {
   }
 
   loadData(): void {
-    console.log('loadData called..');
     if (this.user.isAdmin.toString() === 'true') {
-      console.log('User is admin..');
       this.service.GetWQX_ORGANIZATION()
         .subscribe(
           (data) => {
-            console.log('GetWQX_ORGANIZATION: valid');
             this.orgs = data;
           },
           (err) => {
-            console.log('GetWQX_ORGANIZATION: error: ' + err);
+            console.log(err);
           },
         );
     } else {
-      console.log('User is not admin..');
       this.service.GetWQX_USER_ORGS_ByUserIDX(this.user.userIdx, true).subscribe(
         (data) => {
-          console.log('GetWQX_USER_ORGS_ByUserIDX: valid');
           this.orgs = data;
         },
         (err) => {
-          console.log('GetWQX_USER_ORGS_ByUserIDX: error: ' + err);
+          console.log(err);
         },
       );
     }
@@ -98,7 +93,6 @@ export class WqxOrgComponent implements OnInit {
     this.router.navigate(['/secure/water-quality/wqx-org-edit'], { queryParams: { orgEditId: orgId } });
   }
   onAddNewClick(): void {
-    console.log('Add new clicked!');
     this.router.navigate(['/secure/water-quality/wqx-org-edit'], { queryParams: { orgEditId: -1 } });
   }
 }

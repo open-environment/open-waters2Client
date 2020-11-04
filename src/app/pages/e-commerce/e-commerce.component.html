@@ -80,9 +80,12 @@
   <div class="col-md-8">
     <nb-card size="medium">
       <nb-card-body>
-        <nb-stepper orientation="vertical" [linear]="true" disableStepNavigation="true" #stepper
-          (stepChanged)="handleChange($event)">
-          <nb-step label="Create or Join an Organization">
+        <!-- 
+          <nb-stepper orientation="vertical" [linear]="true" disableStepNavigation="true" #stepper
+          (stepChanged)="handleStepChanged($event)">
+         -->
+        <nb-stepper orientation="vertical" #stepper (selectionChange)="handleStepChanged($event)">
+          <nb-step label="Create or Join an Organization" stepid="0">
             <h4>Create or Join an Organization</h4>
             <label *ngIf='lblWiz1Show'>{{lblWiz1}}</label>
             <button nbButton status='info' size="small" *ngIf='btnWiz1Show' (click)='onBtnWiz1Click()'>
@@ -91,7 +94,7 @@
               {{btnWiz1}}
             </button>
           </nb-step>
-          <nb-step label="Authorize Open Waters to Submit Data">
+          <nb-step label="Authorize Open Waters to Submit Data" stepid="1">
             <h4>Authorize Open Waters to Submit Data</h4>
             <label *ngIf='lblWiz2Show'>{{lblWiz2}}</label>
             <button nbButton status='info' size="small" *ngIf='btnWiz2Show' (click)='onBtnWiz2Click()'>
@@ -100,7 +103,7 @@
               {{btnWiz2}}
             </button>
           </nb-step>
-          <nb-step label="Enter 1 or more monitoring locations">
+          <nb-step label="Enter 1 or more monitoring locations" stepid="2">
             <h4>Enter 1 or more monitoring locations</h4>
             <label *ngIf='lblWiz3Show'>{{lblWiz3}}</label>
             <button nbButton class="mr-3" status='info' size="small" *ngIf='btnWiz3Show' (click)='onBtnWiz3Click()'>
@@ -112,7 +115,7 @@
               <nb-icon icon="upload-outline"></nb-icon>Import
             </button>
           </nb-step>
-          <nb-step label="Enter 1 or more projects">
+          <nb-step label="Enter 1 or more projects" stepid="3">
             <h4>Enter 1 or more projects</h4>
             <label *ngIf='lblWiz4Show'>{{lblWiz4}}</label>
             <button nbButton class="mr-3" status='info' size="small" *ngIf='btnWiz4Show' (click)='onBtnWiz4Click()'>
@@ -124,14 +127,14 @@
               <nb-icon icon="upload-outline"></nb-icon>Import
             </button>
           </nb-step>
-          <nb-step label="Pick default settings for your Organization">
+          <nb-step label="Pick default settings for your Organization" stepid="4">
             <h4>Pick default settings for your Organization</h4>
             <label *ngIf='lblWiz5Show'>{{lblWiz5}}</label>
             <button nbButton status='info' size="small" *ngIf='btnWiz5Show' (click)='onBtnWiz5Click()'>
               <nb-icon icon="play-circle-outline"></nb-icon>Get Started
             </button>
           </nb-step>
-          <nb-step label="Enter 1 or more activites">
+          <nb-step label="Enter 1 or more activites" stepid="5">
             <h4>Enter 1 or more projects</h4>
             <label *ngIf='lblWiz6Show'>{{lblWiz6}}</label>
             <button nbButton class="mr-3" status='info' size="small" *ngIf='btnWiz6Show' (click)='onBtnWiz6Click()'>
@@ -146,7 +149,7 @@
         </nb-stepper>
       </nb-card-body>
       <nb-card-footer>
-        <button size="tiny" nbButton (click)="onFreeStepper()">{{ stepButton }}</button>
+        <!-- <button size="tiny" nbButton (click)="onFreeStepper()">{{ stepButton }}</button> -->
       </nb-card-footer>
     </nb-card>
   </div>

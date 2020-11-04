@@ -1,4 +1,4 @@
-import { Component, NgModule, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
+import { Component, NgModule, CUSTOM_ELEMENTS_SCHEMA, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { WqxOrganization, UserOrgDisplay } from '../../@core/wqx-data/wqx-organization';
 import { User } from '../../@core/data/users';
 import { WQXOrganizationService } from '../../@core/wqx-services/wqx-organization-service';
@@ -6,8 +6,9 @@ import { WQXProjectService } from '../../@core/wqx-services/wqx-project-service'
 import { WQXActivityService } from '../../@core/wqx-services/wqx-activity-service';
 import { Router } from '@angular/router';
 import { WqxPubsubServiceService } from '../../@core/wqx-services/wqx-pubsub-service.service';
-import { NbStepperComponent, NbToastrService } from '@nebular/theme';
+import { NbStepComponent, NbStepperComponent, NbToastrService } from '@nebular/theme';
 import { AuthService } from '../../@core/auth/auth.service';
+declare var jQuery: any;
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -17,10 +18,13 @@ import { AuthService } from '../../@core/auth/auth.service';
   templateUrl: './e-commerce.component.html',
   styleUrls: ['./e-commerce.component.scss'],
 })
-export class ECommerceComponent {
+export class ECommerceComponent implements OnInit, AfterViewInit {
   @ViewChild('stepper', { static: true }) stepper: NbStepperComponent;
+
   disableStepNavigation = true;
   stepButton: string = 'Enable Step Navigation';
+  stepData: StepDataView[] = [];
+  stepText: string = '';
 
   currentUser: User;
   myOrgusers: WqxOrganization[];
@@ -30,9 +34,7 @@ export class ECommerceComponent {
   lblSamp: string;
   lblSampPend2: string;
   lblResult: string;
-  // private UserIDX: '1';
-  // private excludePendingInd: false;
-  // tslint:disable-next-line: one-line
+
   lblWiz1: string;
   btnWiz1: string = 'Get Started';
   pnlOrgSpecificShow: boolean;
@@ -79,8 +81,7 @@ export class ECommerceComponent {
     private router: Router,
     private pubSubService: WqxPubsubServiceService,
     private toasterService: NbToastrService,
-    private authService1: AuthService) {
-    console.log('dashboard: constructor called...');
+    private authService: AuthService) {
 
     this.cols = [
       { field: 'useR_ID', header: 'User ID' },
@@ -90,12 +91,8 @@ export class ECommerceComponent {
     // *******************************************************************************
     // ************* Data Collection Metrics Panel ***********************************
     // *******************************************************************************
-    console.log('OIDC');
-    if (this.authService1.isAuthenticated() === true) {
-      const u = this.authService1.getUser();
-      console.log(u.profile.sub);
-      // this.currentUser = token.getPayload();
-      // TODO: need to fix this
+    if (this.authService.isAuthenticated() === true) {
+      const u = this.authService.getUser();
       if (this.currentUser === undefined || this.currentUser === null)
         this.currentUser = {
           userIdx: 0,
@@ -114,15 +111,8 @@ export class ECommerceComponent {
       }
       if (this.currentUser.OrgID !== null || this.currentUser.OrgID !== '') {
         if (this.currentUser.OrgID === '-1') {
-          /* this.authService.logout('email').subscribe(
-            (result: NbAuthResult) => {
-              const navigationExtras: NavigationExtras = { state: { data: 'You need authorization to access your current organization.' } };
-              this.router.navigate(['/pages/miscellaneous/unauthorized'], navigationExtras);
-            },
-            (err) => { console.log(err); },
-          ); */
+          // do something
         } else {
-          console.log('setting default orgid to' + this.currentUser.OrgID);
           this.pubSubService.setOrgId(this.currentUser.OrgID);
           this.pnlOrgSpecificShow = true;
           this.PopulateOrgSpecific();
@@ -147,6 +137,12 @@ export class ECommerceComponent {
       // **************Getting started wizard ***************************************
       // ****************************************************************************
 
+      this.stepData.push({ stepid: 0, completed: false, interacted: false });
+      this.stepData.push({ stepid: 1, completed: false, interacted: false });
+      this.stepData.push({ stepid: 2, completed: false, interacted: false });
+      this.stepData.push({ stepid: 3, completed: false, interacted: false });
+      this.stepData.push({ stepid: 4, completed: false, interacted: false });
+      this.stepData.push({ stepid: 5, completed: false, interacted: false });
       // STEP 1 ***********************************
       this.organizationService.GetWQX_USER_ORGS_ByUserIDX(this.currentUser.userIdx, false).subscribe((o1s) => {
         this.myOrgusers = o1s;
@@ -178,18 +174,20 @@ export class ECommerceComponent {
                 this.btnWiz6bShow = false;
 
               } else {
-                console.log('oNotPends');
-                console.log(oNotPends);
                 // STEP 1 IS COMPLETE, now try out tests 2-6
                 this.btnWiz1 = 'View';
                 this.lblWiz1 = 'Congrats! You are associated with an Organization. Click to view its details.';
-                this.stepper.selectedIndex = 1;
+                this.stepData[0].completed = true;
+                this.stepData[0].interacted = true;
+                // this.stepper.selectedIndex = 1;
                 // STEP 2: submit authorization ******************************************
                 oNotPends.forEach(element => {
                   if (element.cdxSubmitInd === true) {
                     this.lblWiz2 = 'Congrats! Your organization is authorized to submit to EPA-WQX.';
                     this.btnWiz2 = 'Change Credentials';
-                    this.stepper.selectedIndex = 2;
+                    this.stepData[1].completed = true;
+                    this.stepData[1].interacted = true;
+                    // this.stepper.selectedIndex = 2;
                   } else {
                     this.lblWiz2 = 'In order to submit data to EPA using Open Waters, you must contact EPA and request that they authorize Open Waters to submit data.';
                     this.btnWiz2 = 'Get Started';
@@ -205,7 +203,9 @@ export class ECommerceComponent {
                       this.lblWiz3 = 'One or more monitoring locations have been created. Click to view.';
                       this.btnWiz3 = 'View';
                       this.monLocOk = true;
-                      this.stepper.selectedIndex = 3;
+                      // this.stepper.selectedIndex = 3;
+                      this.stepData[2].completed = true;
+                      this.stepData[2].interacted = true;
                     } else {
                       this.lblWiz3 = 'Click to enter a monitoring location record.';
                     }
@@ -219,7 +219,9 @@ export class ECommerceComponent {
                       this.lblWiz4 = 'One or more projects have been created. Click to view.';
                       this.btnWiz4 = 'View';
                       this.projOk = true;
-                      this.stepper.selectedIndex = 4;
+                      // this.stepper.selectedIndex = 4;
+                      this.stepData[3].completed = true;
+                      this.stepData[3].interacted = true;
                     } else {
                       this.lblWiz4 = 'Click to manually enter a project record or import records from a spreadsheet or EPA.';
                     }
@@ -230,9 +232,11 @@ export class ECommerceComponent {
 
                 if (oNotPends[0].defaultTimezone === null || oNotPends[0].defaultTimezone === '') {
                   this.lblWiz5 = 'Click to enter default organization data (e.g. Default Timezone, characteristics) that will be helpful during activity data entry.';
-                  this.stepper.selectedIndex = 5;
                 } else {
                   this.lblWiz5 = 'Organization default data (e.g. Default Timezone) has been defined. Click to view.';
+                  // this.stepper.selectedIndex = 5;
+                  this.stepData[4].completed = true;
+                  this.stepData[4].interacted = true;
                 }
 
                 // STEP 6: Activity ******************************************
@@ -245,6 +249,8 @@ export class ECommerceComponent {
                       if (result > 0) {
                         this.lblWiz6 = 'One or more activities have been created. Click to view.';
                         this.btnWiz6 = 'View';
+                        this.stepData[5].completed = true;
+                        this.stepData[5].interacted = true;
                         // this.stepper.selectedIndex = 0; (Index out of range)
                       } else {
                         this.lblWiz6 = 'Click to enter an activity record.';
@@ -267,6 +273,26 @@ export class ECommerceComponent {
 
 
   }
+  ngAfterViewInit(): void {
+
+  }
+  ngOnInit(): void {
+    const self = this;
+    (function ($) {
+      $(document).ready(function () {
+        $('.step').click(function () {
+          console.log($(this).clone().wrap('<p>').parent().html());
+          const step = $.parseHTML($(this).clone().wrap('<p>').parent().html());
+          const stepText = $(step).find('.label').find('.ng-star-inserted').text();
+          self.stepText = stepText;
+          self.setStapperState(false);
+        });
+      });
+    })(jQuery);
+    setTimeout(() => {
+      this.setStapperState(true);
+    }, 1500);
+  }
   private PopulateOrgSpecific() {
     this.organizationService.GetWQX_ORGANIZATION_ByID(this.currentUser.OrgID)
       .subscribe((x) => { this.lblOrgName = x.orgFormalName; });
@@ -285,10 +311,6 @@ export class ECommerceComponent {
         (er) => { console.log(er); });
   }
 
-  Step1GetStarted() {
-    console.log('route');
-  }
-
   bindAdminTaskData() {
     this.organizationService.getAdminTaskData(this.currentUser.userIdx, this.currentUser.OrgID)
       .subscribe(
@@ -298,12 +320,9 @@ export class ECommerceComponent {
       );
   }
   onBtnWiz1Click() {
-    console.log('onBtnWiz1Click clicked');
     if (this.btnWiz1 === 'View') {
-      console.log('View');
       this.router.navigate(['/secure/water-quality/wqx-org']);
     } else {
-      console.log('not View');
       this.router.navigate(['/secure/main/wqx-org-new']);
     }
 
@@ -334,13 +353,10 @@ export class ECommerceComponent {
     this.router.navigate(['/secure/water-quality/wqx-import']);
   }
   onApprove(uod: any) {
-    console.log('onApprove');
-    console.log(uod);
     const ApproveRejectCode = 'U';
     this.organizationService.ApproveRejectTWqxUserOrgs(uod.orG_ID, uod.useR_IDX, ApproveRejectCode)
       .subscribe(
         (result) => {
-          console.log(result);
           if (result === -1) {
             this.toasterService.danger('User\'s request has been declined.');
           } else if (result === 1) {
@@ -357,13 +373,10 @@ export class ECommerceComponent {
       );
   }
   onReject(uod: any) {
-    console.log('onApprove');
-    console.log(uod);
     const ApproveRejectCode = 'R';
     this.organizationService.ApproveRejectTWqxUserOrgs(uod.orG_ID, uod.useR_IDX, ApproveRejectCode)
       .subscribe(
         (result) => {
-          console.log(result);
           if (result === -1) {
             this.toasterService.danger('User\'s request has been declined.');
           } else if (result === 1) {
@@ -379,10 +392,11 @@ export class ECommerceComponent {
         },
       );
   }
-  handleChange(event) {
-    console.log('handleChange!');
-    console.log(event);
+  handleStepChanged(event) {
+    // do something with stepper step change
+
   }
+
   onFreeStepper() {
     if (this.stepper.disableStepNavigation) {
       this.stepButton = 'Disable Step Navigation';
@@ -392,4 +406,50 @@ export class ECommerceComponent {
     this.stepper.linear = !this.stepper.linear;
     this.stepper.disableStepNavigation = !this.stepper.disableStepNavigation;
   }
+  setStapperState(isFirst: boolean) {
+    console.log(this.stepData);
+    let stopAtStep: number = -1;
+    let i: number = 0;
+    this.stepper.steps.forEach(step => {
+      if (this.stepData[i].interacted === false || this.stepData[i].completed === false) {
+        if (stopAtStep === -1) stopAtStep = i;
+      }
+      step.completed = this.stepData[i].completed;
+      step.interacted = this.stepData[i].interacted;
+      i++;
+    });
+    if (isFirst) {
+      this.stepper.selectedIndex = stopAtStep;
+    } else {
+      switch (this.stepText) {
+        case 'Create or Join an Organization':
+          this.stepper.selectedIndex = 0;
+          break;
+        case 'Authorize Open Waters to Submit Data':
+          this.stepper.selectedIndex = 1;
+          break;
+        case 'Authorize Open Waters to Submit Data':
+          this.stepper.selectedIndex = 2;
+          break;
+        case 'Enter 1 or more projects':
+          this.stepper.selectedIndex = 3;
+          break;
+        case 'Pick default settings for your Organization':
+          this.stepper.selectedIndex = 4;
+          break;
+        case 'Enter 1 or more activites':
+          this.stepper.selectedIndex = 5;
+          break;
+        default:
+          break;
+      }
+
+    }
+
+  }
+}
+export interface StepDataView {
+  stepid: number;
+  completed: boolean;
+  interacted: boolean;
 }

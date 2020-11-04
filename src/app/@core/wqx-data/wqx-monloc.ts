@@ -1,5 +1,32 @@
 import { Observable } from 'rxjs';
 
+export interface WqxMonloc4Excel {
+  ID: string;
+  Name: string;
+  Type: string;
+  Description: string;
+  EightDigitHUC: string;
+  TwelveDigitHUC: string;
+  TribalLand: string;
+  Latitude: string;
+  Longitude: string;
+  SourceMapScale: string;
+  HorizCollectionMethod: string;
+  HorizDatum: string;
+  VertialMeasure: string;
+  Unit: string;
+  VerticalCollectionMethod: string;
+  VerticalDatum: string;
+  County: string;
+  State: string;
+  Country: string;
+  WellType: string;
+  Aquifer: string;
+  Formation: string;
+  WellholeDepth: string;
+  DepthUnit: string;
+  SendToEPA: string;
+}
 export interface WqxMonloc {
   monlocIdx: number;
   orgId: string;

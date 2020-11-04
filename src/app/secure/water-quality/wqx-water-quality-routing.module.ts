@@ -18,6 +18,7 @@ import { WqxImportSampleComponent } from './wqx-import-sample/wqx-import-sample.
 import { WqxImportLogicTemplateComponent } from './wqx-import-logic-template/wqx-import-logic-template.component';
 import { WqxHistComponent } from './wqx-hist/wqx-hist.component';
 import { WqxImportProjectComponent } from './wqx-import-project/wqx-import-project.component';
+import { WqxImportMetricComponent } from './wqx-import-metric/wqx-import-metric.component';
 
 const routes: Routes = [{
   path: '',
@@ -74,6 +75,10 @@ const routes: Routes = [{
     {
       path: 'wqx-import-sample',
       component: WqxImportSampleComponent,
+    },
+    {
+      path: 'wqx-import-metric',
+      component: WqxImportMetricComponent,
     },
     {
       path: 'wqx-import-from-epa',

@@ -1,5 +1,4 @@
-import { formatDate } from '@angular/common';
-import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NbThemeService, NbToastrService } from '@nebular/theme';
 import { ChartComponent } from 'angular2-chartjs';
 import { AuthService } from '../../../@core/auth/auth.service';
@@ -8,6 +7,10 @@ import { CharDisplay } from '../../../@core/wqx-data/wqx-activity';
 import { WqxMonloc } from '../../../@core/wqx-data/wqx-monloc';
 import { WQXActivityService } from '../../../@core/wqx-services/wqx-activity-service';
 import { WqxMonlocService } from '../../../@core/wqx-services/wqx-monloc.service';
+import * as $ from 'jquery';
+import 'datatables.net';
+import { Subject } from 'rxjs';
+
 
 @Component({
   selector: 'ngx-wqx-charting',
@@ -16,6 +19,13 @@ import { WqxMonlocService } from '../../../@core/wqx-services/wqx-monloc.service
 })
 export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('myChart', { static: true }) myChart: ChartComponent;
+
+  // dtOptions: DataTables.Settings = {};
+  dtOptions: any = {};
+  myTable: string = '';
+  rows: any;
+  dtTrigger: Subject<any> = new Subject();
+  dtTableShow: boolean = false;
 
   user: User;
   currentOrgID: string = '';
@@ -126,10 +136,18 @@ export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   ngOnDestroy(): void {
     this.themeSubscription.unsubscribe();
+    this.dtTrigger.unsubscribe();
   }
 
   ngOnInit() {
-    console.log(this.myChart);
+    this.dtOptions = {
+      destroy: true,
+      searching: true,
+      pageLength: 50,
+      dom: 'Bfrtip',
+      buttons: ['copy', 'excel', 'pdf'],
+    };
+    this.dtTrigger.next();
     this.activityService.GetTWqxResultSampledCharacteristics(this.currentOrgID).subscribe(
       (result: CharDisplay[]) => {
         console.log('GetTWqxResultSampledCharacteristics: valid');
@@ -202,6 +220,8 @@ export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
             const aLabels = Array.of(jsonResult[0]);
             let aDatasets1 = Array.of(jsonResult[1]);
             const aRawData = Array.of(jsonResult[2]);
+            // populate table
+            this.PopulateTable(aRawData);
             let unitText = '';
             if (aRawData[0][0].resulT_MSR_UNIT) {
               unitText = aRawData[0][0].resulT_MSR_UNIT;
@@ -263,8 +283,13 @@ export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         () => {
           this.showChart = 'show';
-        }
+        },
       );
+  }
+  PopulateTable(aRawData: any[]) {
+    this.dtTableShow = true;
+    this.rows = aRawData[0];
+    this.dtTrigger.next();
   }
   onChageChartType(chartType: string) {
     console.log(chartType);
@@ -292,7 +317,15 @@ export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
       this.showSecondCharacteristic = true;
     }
   }
+  getDecimals(val: string) {
+    let yVal: string = val;
+    if (this.txtDecimals && +this.txtDecimals > 0) {
+      yVal = parseFloat(val).toFixed(+this.txtDecimals);
+    }
+    return yVal;
+  }
   private random() {
     return Math.round(Math.random() * 100);
   }
 }
+

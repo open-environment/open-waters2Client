@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { NbCardModule, NbMenuModule } from '@nebular/theme';
+import { NbAlertModule, NbButtonModule, NbCardModule, NbIconModule, NbMenuModule } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
@@ -19,6 +19,9 @@ import { HelpComponent } from './help/help.component';
     ECommerceModule,
     MiscellaneousModule,
     NbCardModule,
+    NbButtonModule,
+    NbIconModule,
+    NbAlertModule,
   ],
   declarations: [
     PagesComponent,

@@ -39,6 +39,7 @@ import { AgmCoreModule } from '@agm/core';
 import { WqxMapWindowComponent } from './wqx-monloc/wqx-map-window/wqx-map-window.component';
 import { WqxHistComponent } from './wqx-hist/wqx-hist.component';
 import { WqxImportProjectComponent } from './wqx-import-project/wqx-import-project.component';
+import { WqxImportMetricComponent } from './wqx-import-metric/wqx-import-metric.component';
 
 @NgModule({
   imports: [
@@ -103,7 +104,8 @@ import { WqxImportProjectComponent } from './wqx-import-project/wqx-import-proje
     DigitOnlyDirective,
     WqxMapWindowComponent,
     WqxHistComponent,
-    WqxImportProjectComponent, // Directive
+    WqxImportProjectComponent,
+    WqxImportMetricComponent, // Directive
   ],
   providers: [
     WQXRefDataService,

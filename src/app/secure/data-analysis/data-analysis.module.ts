@@ -9,10 +9,10 @@ import { NbButtonModule, NbCardModule, NbCheckboxModule, NbIconModule, NbSelectM
 import { TableModule } from 'primeng/table';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
 import { AgmCoreModule } from '@agm/core';
 import { ChartModule } from 'angular2-chartjs';
 import { CalendarModule } from 'primeng/primeng';
+import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
     declarations: [
@@ -39,6 +39,7 @@ import { CalendarModule } from 'primeng/primeng';
             //apiKey: 'AIzaSyDfIwM8J3FoXCAcBSwBzyB18xxGWsUg9ik',
         }),
         ChartModule,
+        DataTablesModule,
     ],
 })
 export class DataAnalysisModule {

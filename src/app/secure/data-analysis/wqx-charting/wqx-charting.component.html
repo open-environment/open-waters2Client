@@ -141,3 +141,31 @@
     </div>
   </nb-card-body>
 </nb-card>
+<nb-card>
+  <nb-card-body>
+    <div [hidden]="!dtTableShow">
+      <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+        <thead>
+          <tr>
+            <th>Monitoring Location</th>
+            <th>Characteristic</th>
+            <th>Date</th>
+            <th>Result</th>
+            <th>Detection Limit</th>
+            <th>Unit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of rows">
+            <td>{{ row.monloC_ID }}</td>
+            <td>{{ row.chaR_NAME }}</td>
+            <td>{{ row.acT_START_DT | date: 'yyyy-MM-dd' }}</td>
+            <td>{{ getDecimals(row.resulT_MSR) }}</td>
+            <td>{{ row.detectioN_LIMIT }}</td>
+            <td>{{ row.resulT_MSR_UNIT }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </nb-card-body>
+</nb-card>

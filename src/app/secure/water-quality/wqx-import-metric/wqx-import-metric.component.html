@@ -1,0 +1,74 @@
+<nb-card status="success">
+  <nb-card-header>
+    Confirm Activity Metrics Data to Import
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row mb-3">
+      <div class="col-12">
+        <nb-card status="danger">
+          <nb-card-header>Note: You must click the 'Import Selected Rows' button to complete the import process!
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row mb-2">
+              <div class="col-12">
+                <nb-checkbox status="success" [(checked)]="wqxImport">Automatically submit imported data to EPA/WQX
+                </nb-checkbox>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-12">
+                <button nbButton type="button" status="success" name="btnImport" class="mr-3"
+                  (click)="onBtnImportClicked()">
+                  <nb-icon icon="save-outline"></nb-icon> Import Selected Rows
+                </button>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-12">
+        <!-- dataKey="tempMonlocIdx" -->
+        <p-table [columns]="cols" [value]="importMetrics" [resizableColumns]="true" [autoLayout]="true"
+          dataKey="tempActivityMetricIdx" [responsive]="true" [(selection)]="selectedimportMetrics"
+          selectionMode="multiple" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th style="width: 3rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th *ngFor="let col of columns">
+                {{col.header}}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-importMetric let-columns="columns">
+            <tr>
+              <td>
+                <p-tableCheckbox [value]="importMetric"></p-tableCheckbox>
+              </td>
+              <td *ngFor="let col of columns">
+                <span class="ui-column-title ui-column-title-button">
+                  <button nbButton size="tiny" status="warning">{{col.header}}</button>
+                </span>
+                {{importMetric[col.field]}}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </nb-card-body>
+  <nb-card-footer>
+    <div class="row mb-3">
+      <div class="col-12">
+        <button nbButton type="button" status="danger" name="btnCancelImport" class="mr-3"
+          (click)="onButtonCancelImportClicked()">
+          <nb-icon icon="save-outline"></nb-icon> Cancel Import
+        </button>
+      </div>
+    </div>
+  </nb-card-footer>
+</nb-card>

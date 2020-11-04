@@ -4,6 +4,7 @@ import { WqxProject, WqxProjectData } from '../wqx-data/wqx-project';
 import { HttpClient } from '@angular/common/http';
 import { WebApi } from '../utils/web-api';
 import { ImportStatusModel } from '../wqx-data/wqx-import';
+import { share } from 'rxjs/operators';
 
 @Injectable()
 export class WQXProjectService extends WqxProjectData {
@@ -23,7 +24,7 @@ export class WQXProjectService extends WqxProjectData {
   }
   GetWQX_PROJECT(actInd: boolean, orgId: string, wqxPending: boolean): Observable<WqxProject[]> {
     const strWqxPending = wqxPending === null ? '' : wqxPending.toString();
-    return this.http.get<WqxProject[]>(WebApi.TWQXProjectApi.getWqxProject(actInd, orgId, strWqxPending));
+    return this.http.get<WqxProject[]>(WebApi.TWQXProjectApi.getWqxProject(actInd, orgId, strWqxPending)).pipe(share());
   }
   GetWQX_PROJECT_ByID(projectIdx: number): Observable<WqxProject> {
     return this.http.get<WqxProject>(WebApi.TWQXProjectApi.getWQXProjectByID(projectIdx));

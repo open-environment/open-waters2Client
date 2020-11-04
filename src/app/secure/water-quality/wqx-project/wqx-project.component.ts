@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WqxProjectConfig, WqxProject } from '../../../@core/wqx-data/wqx-project';
 import { User } from '../../../@core/data/users';
 import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
@@ -9,16 +9,20 @@ import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-
 import { ProjectConfigWindowComponent } from './project-config-window/project-config-window.component';
 import { LocalDataSource } from 'ng2-smart-table';
 import { AuthService } from '../../../@core/auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ngx-wqx-project',
   templateUrl: './wqx-project.component.html',
   styleUrls: ['./wqx-project.component.scss'],
 })
-export class WqxProjectComponent implements OnInit {
+export class WqxProjectComponent implements OnInit, OnDestroy {
 
   user: User;
   currentOrgId: string;
+
+  projectSerivceSubscription: Subscription[] = [];
+  pubSubServiceSubscription: Subscription[] = [];
 
   i: number = 0;
   projectSetting;
@@ -68,10 +72,9 @@ export class WqxProjectComponent implements OnInit {
     private windowService: NbWindowService,
     private pubSubService: WqxPubsubServiceService,
     private toasterService: NbToastrService) {
-
+    localStorage.setItem('currentPage', 'project');
     if (this.authService1.isAuthenticated() === true) {
       const u = this.authService1.getUser();
-      console.log(u.profile.sub);
       // this.currentUser = token.getPayload();
       // TODO: need to fix this
       if (this.user === undefined || this.user === null)
@@ -91,36 +94,39 @@ export class WqxProjectComponent implements OnInit {
       if (localStorage.getItem('selectedOrgId') !== null) {
         this.currentOrgId = localStorage.getItem('selectedOrgId');
       }
+      console.log('populateData1');
       this.populateData();
-      this.pubSubService.projectChkData.subscribe((data: WqxProjectConfig[]) => {
+      this.pubSubServiceSubscription.push(this.pubSubService.projectChkData.subscribe((data: WqxProjectConfig[]) => {
         this.onConfigSaved(data);
-      });
+      }));
 
 
     }
-    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
-      if (token.isValid()) {
-        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-
-      }
-    }); */
+  }
+  ngOnDestroy(): void {
+    console.log('project - ngOnDestroy called');
+    this.projectSerivceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
+    this.pubSubServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
   }
 
   ngOnInit() {
 
-    this.pubSubService.loadOrgId.subscribe((data: string) => {
-      console.log('project-ngoninit pubsubservice:' + data);
-      if (data !== null && data !== undefined && data !== '') {
-        this.currentOrgId = data;
-        this.populateData();
-      }
-    });
+    this.pubSubServiceSubscription.push(this.pubSubService.loadOrgId.subscribe((data: any) => {
+      console.log('pubsubservice called - project');
+      if (localStorage.getItem('currentPage') === 'project')
+        if (data) {
+          this.currentOrgId = data;
+          console.log('populateData2');
+          this.populateData();
+        }
+    }));
 
   }
   onConfigSaved(data: WqxProjectConfig[]) {
-    console.log('config saved!');
-    console.log('setting default cols...');
-
     // Avoid copy by reference
     this.cols = JSON.parse(JSON.stringify(this.defaultCols));
 
@@ -131,7 +137,6 @@ export class WqxProjectComponent implements OnInit {
     });
   }
   populateCols() {
-    console.log('populateCols called!');
     this.defaultCols = [
       { field: 'projectId', header: 'ID' },
       { field: 'projectName', header: 'Name' },
@@ -140,42 +145,34 @@ export class WqxProjectComponent implements OnInit {
     ];
   }
   populateData() {
-    console.log('populateData called!');
     this.populateCols();
     this.cols = this.defaultCols;
-    console.log(this.currentOrgId);
-    this.projectService.GetWQX_PROJECT(false, this.currentOrgId, null).subscribe(
+    this.projectSerivceSubscription.push(this.projectService.GetWQX_PROJECT(false, this.currentOrgId, null).subscribe(
       (data: WqxProject[]) => {
-        console.log(data);
         this.WqxProjects = data;
       },
-    );
+      (err) => {
+        console.log(err);
+      },
+    ));
   }
 
   onAddNew(): void {
-    console.log('Add New Click!');
     this.router.navigate(['/secure/water-quality/wqx-project-edit'], { queryParams: { projectIdx: -1 } });
   }
   onExcel(): void {
-    console.log('onExcel Click!');
   }
   onConfig(): void {
-    console.log('onConfig Click!');
     this.configWinRef = this.windowService.open(ProjectConfigWindowComponent,
       { title: ``, hasBackdrop: true });
   }
 
   onEditClicked(project: WqxProject) {
-    console.log(project);
     this.router.navigate(['/secure/water-quality/wqx-project-edit'], { queryParams: { projectIdx: project.projectIdx } });
   }
   onDeleteClicked(project: WqxProject) {
-    console.log('delete action clicked!');
-    console.log(project.projectIdx);
-
-    this.projectService.DeleteT_WQX_PROJECT(project.projectIdx, this.user.name).subscribe(
+    this.projectSerivceSubscription.push(this.projectService.DeleteT_WQX_PROJECT(project.projectIdx, this.user.name).subscribe(
       (result) => {
-        console.log('DeleteT_WQX_PROJECT: valid');
         if (result === 1) {
           this.toasterService.success('Record successfully deleted.', '', { destroyByClick: true, duration: 5000 });
         } else if (result === -1) {
@@ -189,12 +186,11 @@ export class WqxProjectComponent implements OnInit {
       },
       (err) => {
         console.log('DeleteT_WQX_PROJECT: failed');
+        console.log(err);
       },
-    );
+    ));
   }
   onSendToEPA(projectIdx: number) {
-    console.log('onSendToEPA clicked!');
-    console.log(projectIdx);
     this.router.navigate(['/secure/water-quality/wqx-hist'], { queryParams: { TableCD: 'PROJ', TableIdx: projectIdx } });
   }
 }

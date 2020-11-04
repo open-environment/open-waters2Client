@@ -160,10 +160,8 @@ export class WqxMgmtComponent implements OnInit {
     );
   }
 
-  download(blob: Blob, nameFile?: string, type?: string) {
-    saveAs(blob, nameFile, {
-      type: type,
-    });
+  download(blob: Blob, nameFile?: string) {
+    saveAs(blob, nameFile);
   }
   onApplyClick() {
     this.populateData();

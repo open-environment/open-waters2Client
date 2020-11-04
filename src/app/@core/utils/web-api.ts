@@ -7,6 +7,8 @@ export module WebApi {
       () => `${environment.api.owUrl}/api/admin/getAppSettings`
     public static readonly updateAppSetting =
       () => `${environment.api.owUrl}/api/admin/updateAppSetting`
+    public static readonly downloadFile =
+      (fileName: string) => `${environment.api.owUrl}/api/admin/downloadFile?fileName=${fileName}`
   }
   export class MgmtApi {
     public static readonly getVWqxTransactionLog =
@@ -102,6 +104,9 @@ export module WebApi {
     public static readonly importActivity =
       (orgId: string, importId: number, userId: string) =>
         `${environment.api.owUrl}/api/import/importActivity?orgId=${orgId}&importId=${importId}&userId=${userId}`
+    public static readonly getWqxImportTempActivityMetric =
+      (userIdx: number) =>
+        `${environment.api.owUrl}/api/import/getWqxImportTempActivityMetric?userIdx=${userIdx}`
   }
   export class UtilityApi {
     public static readonly checkUserAuthentication =

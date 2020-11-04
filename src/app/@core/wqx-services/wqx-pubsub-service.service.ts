@@ -1,17 +1,20 @@
+import { nullSafeIsEquivalent } from '@angular/compiler/src/output/output_ast';
 import { Injectable } from '@angular/core';
+import { AsyncSubject, BehaviorSubject } from 'rxjs';
 import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WqxPubsubServiceService {
-  loadData = new ReplaySubject<any>();
-  loadOrgId = new ReplaySubject<any>();
-  fieldData = new ReplaySubject<any>();
-  charData = new ReplaySubject<any>();
-  monlocChkData = new ReplaySubject<any>();
-  projectChkData = new ReplaySubject<any>();
-  activityChkData = new ReplaySubject<any>();
+  // checkout BehaviorSubject, AsyncSubject
+  loadData = new ReplaySubject<any>(1);
+  loadOrgId = new ReplaySubject<any>(1);
+  fieldData = new ReplaySubject<any>(1);
+  charData = new ReplaySubject<any>(1);
+  monlocChkData = new ReplaySubject<any>(1);
+  projectChkData = new ReplaySubject<any>(1);
+  activityChkData = new ReplaySubject<any>(1);
 
   constructor() { }
 
@@ -20,8 +23,8 @@ export class WqxPubsubServiceService {
     this.loadData.next(data);
   }
   setOrgId(data: string) {
-    console.log('setOrgId called in pubsubservice... ');
     this.loadOrgId.next(data);
+    // this.loadOrgId.complete();
   }
   fieldChanged(data: any) {
     this.fieldData.next(data);

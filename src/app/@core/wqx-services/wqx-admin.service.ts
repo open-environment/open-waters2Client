@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { WebApi } from '../utils/web-api';
@@ -19,5 +19,9 @@ export class WqxAdminService extends TWqxAdminData {
   UpdateTOeAppSetting(appSetting: TOeAppSettings): Observable<number> {
     const httpOptions = {};
     return this.http.put<number>(WebApi.TWQXAdminApi.updateAppSetting(), appSetting, httpOptions);
+  }
+  DownloadFile(fileName: string): Observable<HttpResponse<Blob>> {
+    return this.http.get(
+      WebApi.TWQXAdminApi.downloadFile(fileName), { responseType: 'blob', observe: 'response' });
   }
 }
