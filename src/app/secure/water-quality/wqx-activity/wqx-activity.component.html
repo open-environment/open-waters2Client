@@ -97,12 +97,14 @@
                 <td style="text-align:center">
                   <div class="row">
                     <div class="col">
-                      <button nbButton size="tiny" status="success" (click)="onEditClicked(rowData)" class="mr-2">
+                      <button nbButton size="tiny" status="success" (click)="onEditClicked(rowData)" class="mr-2"
+                        style="padding: 0px;font-size:1rem;">
                         <nb-icon icon="edit-outline"></nb-icon>
                       </button>
                     </div>
                     <div class="col">
-                      <button nbButton size="tiny" status="danger" (click)="onDeleteClicked(rowData)">
+                      <button nbButton size="tiny" status="danger" (click)="onDeleteClicked(rowData)"
+                        style="padding: 0px;font-size:1rem;">
                         <nb-icon icon="close-outline"></nb-icon>
                       </button>
                     </div>
@@ -167,7 +169,7 @@
               <nb-icon icon="plus-square-outline"></nb-icon>Add New
             </button>
             <span class="float-right">
-              <button nbButton (click)="onExcel()" size="tiny" status="info" class="mr-3">
+              <button nbButton (click)="exportExcel()" size="tiny" status="info" class="mr-3">
                 <nb-icon icon="download-outline"></nb-icon>Excel
               </button>
               <button nbButton (click)="onConfig()" size="tiny" status="info">

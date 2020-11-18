@@ -21,6 +21,17 @@ export interface ConnectTestResult {
   msg: string;
   typ: string;
 }
+export interface WqxOrganization4Excel {
+  ID: string;
+  Name: string;
+  Description: string;
+  TribalCode: string;
+  ElectronicAddress: string;
+  AddressType: string;
+  Phone: string;
+  Ext: string;
+  PhoneType: string;
+}
 export interface WqxOrganization {
   orgId: string;
   orgFormalName: string;

@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { NbFlipCardComponent } from '@nebular/theme';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@core/auth/auth.service';
 import { User } from '../../../@core/data/users';
 import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organization-service';
@@ -11,7 +12,7 @@ import { WQXRefDataService } from '../../../@core/wqx-services/wqx-refdata-servi
   templateUrl: './adm-data-synch.component.html',
   styleUrls: ['./adm-data-synch.component.scss'],
 })
-export class AdmDataSynchComponent implements OnInit {
+export class AdmDataSynchComponent implements OnInit, OnDestroy {
   @ViewChild('flipcard', { static: true }) flipcard: NbFlipCardComponent;
   @ViewChild('flipcard2', { static: true }) flipcard2: NbFlipCardComponent;
 
@@ -25,14 +26,15 @@ export class AdmDataSynchComponent implements OnInit {
   loading1 = false;
   loading2 = false;
 
-  constructor(private refDataService: WQXRefDataService,
-    private organizationService: WQXOrganizationService,
+  organizationServiceSubscription: Subscription[] = [];
+  refDataServiceSubscription: Subscription[] = [];
+  constructor(
     private authService: AuthService,
-    private router: Router) {
-    console.log('admin-data-sync const');
+    private router: Router,
+    private refDataService: WQXRefDataService,
+    private organizationService: WQXOrganizationService,
+  ) {
     const u = this.authService.getUser();
-    // this.currentUser = token.getPayload();
-    // TODO: need to fix this
     if (this.user === undefined || this.user === null)
       this.user = {
         userIdx: 0,
@@ -57,6 +59,14 @@ export class AdmDataSynchComponent implements OnInit {
     }
     this.currentOrgId = this.user.OrgID;
   }
+  ngOnDestroy(): void {
+    this.organizationServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
+    this.refDataServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
+  }
 
   ngOnInit() {
     this.flipcard.showToggleButton = false;
@@ -64,28 +74,22 @@ export class AdmDataSynchComponent implements OnInit {
     this.DisplayDates();
   }
   DisplayDates() {
-    this.refDataService.GetT_WQX_REF_DATA_LastUpdate().subscribe(
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA_LastUpdate().subscribe(
       (result: string) => {
-        console.log('GetT_WQX_REF_DATA_LastUpdate: valid');
-        console.log(result);
         this.lastRetvd1 = result;
       },
       (err) => {
-        console.log('GetT_WQX_REF_DATA_LastUpdate: failed');
         console.log(err);
       },
-    );
-    this.organizationService.GetT_EPA_ORGS_LastUpdateDate().subscribe(
+    ));
+    this.organizationServiceSubscription.push(this.organizationService.GetT_EPA_ORGS_LastUpdateDate().subscribe(
       (result: string) => {
-        console.log('GetT_EPA_ORGS_LastUpdateDate: valid');
-        console.log(result);
         this.lastRetvd2 = result;
       },
       (err) => {
-        console.log('GetT_EPA_ORGS_LastUpdateDate: failed');
         console.log(err);
       },
-    );
+    ));
   }
   flip() {
     this.msg1 = 0;
@@ -98,36 +102,29 @@ export class AdmDataSynchComponent implements OnInit {
   }
   pullFromEPA() {
     this.loading1 = true;
-    this.refDataService.WQXImport_Org().subscribe(
+    this.refDataServiceSubscription.push(this.refDataService.WQXImport_Org().subscribe(
       (result: number) => {
-        console.log('WQXImport_Org: valid');
-        console.log(result);
         if (result === 0) result = 3;
         this.msg1 = result;
       },
       (err) => {
-        console.log('WQXImport_Org: failed');
-        console.log(err);
         this.msg1 = 3;
       },
       () => {
         this.loading1 = false;
         this.flipcard.toggle();
       },
-    );
+    ));
 
   }
   pullRefDataFromEPA() {
     this.loading2 = true;
     console.log(this.selectedTableName);
-    this.refDataService.WQXImport_RefData(this.selectedTableName).subscribe(
+    this.refDataServiceSubscription.push(this.refDataService.WQXImport_RefData(this.selectedTableName).subscribe(
       (result: number) => {
-        console.log('WQXImport_RefData: valid');
-        console.log(result);
         this.msg2 = 1;
       },
       (err) => {
-        console.log('WQXImport_RefData: failed');
         console.log(err);
         this.msg2 = 0;
       },
@@ -135,7 +132,7 @@ export class AdmDataSynchComponent implements OnInit {
         this.loading2 = false;
         this.flipcard2.toggle();
       },
-    );
+    ));
   }
   RefDataSelect(tableName: string) {
     this.selectedTableName = tableName;

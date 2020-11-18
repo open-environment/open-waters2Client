@@ -158,4 +158,8 @@ export class WqxImportService extends TWqxImportData {
   GetWqxImportTempActivityMetric(userIdx: number): Observable<TWqxImportTempActivityMetric[]> {
     return this.http.get<TWqxImportTempActivityMetric[]>(WebApi.ImportApi.getWqxImportTempActivityMetric(userIdx));
   }
+  GetImportTempSampleHeaders(): Observable<string> {
+    const httpOptions = { responseType: 'text' as 'json' };
+    return this.http.get<string>(WebApi.ImportApi.getImportTempSampleHeaders(), httpOptions);
+  }
 }

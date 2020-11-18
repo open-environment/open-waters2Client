@@ -1,26 +1,24 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NbThemeService, NbToastrService } from '@nebular/theme';
-import { ChartComponent } from 'angular2-chartjs';
+import { Subject, Subscription } from 'rxjs';
 import { AuthService } from '../../../@core/auth/auth.service';
 import { User } from '../../../@core/data/users';
 import { CharDisplay } from '../../../@core/wqx-data/wqx-activity';
 import { WqxMonloc } from '../../../@core/wqx-data/wqx-monloc';
-import { WQXActivityService } from '../../../@core/wqx-services/wqx-activity-service';
-import { WqxMonlocService } from '../../../@core/wqx-services/wqx-monloc.service';
+import { ChartComponent } from 'angular2-chartjs';
 import * as $ from 'jquery';
 import 'datatables.net';
-import { Subject } from 'rxjs';
-
+import { WQXActivityService } from '../../../@core/wqx-services/wqx-activity-service';
+import { WqxMonlocService } from '../../../@core/wqx-services/wqx-monloc.service';
 
 @Component({
   selector: 'ngx-wqx-charting',
   templateUrl: './wqx-charting.component.html',
   styleUrls: ['./wqx-charting.component.scss'],
 })
-export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
+export class WqxChartingComponent implements OnInit, OnDestroy {
   @ViewChild('myChart', { static: true }) myChart: ChartComponent;
 
-  // dtOptions: DataTables.Settings = {};
   dtOptions: any = {};
   myTable: string = '';
   rows: any;
@@ -51,17 +49,17 @@ export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
   chkZero: boolean = false;
   selectedChartStyle: string = 'line';
 
-
-  constructor(private theme: NbThemeService,
+  monlocServiceSubscription: Subscription[] = [];
+  activityServiceSubscription: Subscription[] = [];
+  constructor(
+    private authService: AuthService,
+    private theme: NbThemeService,
+    private toasterSerivce: NbToastrService,
     private monlocService: WqxMonlocService,
-    private authService1: AuthService,
     private activityService: WQXActivityService,
-    private toasterSerivce: NbToastrService) {
+  ) {
 
-    const u = this.authService1.getUser();
-    console.log(u.profile.sub);
-    // this.currentUser = token.getPayload();
-    // TODO: need to fix this
+    const u = this.authService.getUser();
     if (this.user === undefined || this.user === null)
       this.user = {
         userIdx: 0,
@@ -137,6 +135,12 @@ export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     this.themeSubscription.unsubscribe();
     this.dtTrigger.unsubscribe();
+    this.monlocServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
+    this.activityServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
   }
 
   ngOnInit() {
@@ -148,27 +152,20 @@ export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
       buttons: ['copy', 'excel', 'pdf'],
     };
     this.dtTrigger.next();
-    this.activityService.GetTWqxResultSampledCharacteristics(this.currentOrgID).subscribe(
+    this.activityServiceSubscription.push(this.activityService.GetTWqxResultSampledCharacteristics(this.currentOrgID).subscribe(
       (result: CharDisplay[]) => {
-        console.log('GetTWqxResultSampledCharacteristics: valid');
-        console.log(result);
         this.characteristics = result;
       },
       (err) => {
-        console.log('GetTWqxResultSampledCharacteristics: failed');
         console.log(err);
       },
-    );
-    this.monlocService.GetWQX_MONLOC(true, this.currentOrgID, false)
+    ));
+    this.monlocServiceSubscription.push(this.monlocService.GetWQX_MONLOC(true, this.currentOrgID, false)
       .subscribe(
         (data) => {
           this.monlocs = data;
         },
-      );
-  }
-  ngAfterViewInit() {
-    // console.log(this.myChart);
-    // this.myChart.chart.ctx.canvas.height = 500;
+      ));
   }
 
   populateChart() {
@@ -210,11 +207,10 @@ export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
     const monloc = this.monlocSelectedMulti;
     const decimal = this.txtDecimals;
     const wqxInd = this.selectedDataInclude;
-    this.monlocService.GetChartData(this.currentOrgID,
+    this.monlocServiceSubscription.push(this.monlocService.GetChartData(this.currentOrgID,
       charType, characteristic, characteristic2,
       begDt, endDt, monloc, decimal, wqxInd).subscribe(
         (result) => {
-          console.log('GetChartData: valid');
           const jsonResult = JSON.parse(result += '');
           if (jsonResult && jsonResult.length > 0) {
             const aLabels = Array.of(jsonResult[0]);
@@ -247,18 +243,12 @@ export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
             } else {
               aDatasets1 = [];
               aRawData[0].forEach(element => {
-                console.log(element);
                 const xVal = element.acT_START_DT;
-                // const xVal = new Date(element.acT_START_DT);
-                // let formattedDt = formatDate(xVal, 'yyyy-MM-dd hh:mm:ssZZZZZ', 'en_US');
                 let yVal: number = +element.resulT_MSR;
                 if (decimal && +decimal > 0) {
                   yVal = +(parseFloat(element.resulT_MSR).toFixed(+decimal));
                 }
                 aDatasets1.push({ x: xVal, y: yVal });
-
-
-                // xDatasets2.push('{x: -10, y: 0},{ x: 0, y: 10},{x: 10, y: 5 }');
               });
               const myNewDataset = {
                 label: decodeURIComponent(characteristic),
@@ -278,13 +268,12 @@ export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         },
         (err) => {
-          console.log('GetChartData: failed');
           console.log(err);
         },
         () => {
           this.showChart = 'show';
         },
-      );
+      ));
   }
   PopulateTable(aRawData: any[]) {
     this.dtTableShow = true;
@@ -292,13 +281,12 @@ export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dtTrigger.next();
   }
   onChageChartType(chartType: string) {
-    console.log(chartType);
+    // Event Stub
   }
   onChageDataInclude(dataInclude: string) {
-    console.log(dataInclude);
+    // Event Stub
   }
   showClicked() {
-    console.log(this.monlocSelectedMulti);
     if (this.selectedCharacteristic) {
       this.populateChart();
     } else {
@@ -311,12 +299,14 @@ export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
     this.options = JSON.parse(JSON.stringify(obj));
   }
   onChageChartStyle(chartStyle) {
+    // Event Stub
   }
   onChageCharacteristic(characteristic) {
     if (characteristic) {
       this.showSecondCharacteristic = true;
     }
   }
+
   getDecimals(val: string) {
     let yVal: string = val;
     if (this.txtDecimals && +this.txtDecimals > 0) {
@@ -324,8 +314,6 @@ export class WqxChartingComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     return yVal;
   }
-  private random() {
-    return Math.round(Math.random() * 100);
-  }
+
 }
 

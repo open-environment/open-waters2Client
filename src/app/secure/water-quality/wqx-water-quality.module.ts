@@ -69,10 +69,6 @@ import { WqxImportMetricComponent } from './wqx-import-metric/wqx-import-metric.
     NbStepperModule,
     NbTooltipModule,
     NbSpinnerModule,
-    AgmCoreModule.forRoot({
-      //apiKey: 'AIzaSyCEohIbvKCfnAfGgT0omUpaifCQdBLLAz0',
-      apiKey: 'AIzaSyDfIwM8J3FoXCAcBSwBzyB18xxGWsUg9ik',
-    }),
   ],
   declarations: [
     ...wqxWQRoutedComponents,

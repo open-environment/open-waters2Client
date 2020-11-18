@@ -1,8 +1,7 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { WqxRefData } from '../../../../@core/wqx-data/wqx-organization';
 import { WQXRefDataService } from '../../../../@core/wqx-services/wqx-refdata-service';
 import { User } from '../../../../@core/data/users';
-import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { WqxRefCounty } from '../../../../@core/wqx-data/wqx-refdata';
 import { NbToastrService, NbWindowRef, NbWindowService } from '@nebular/theme';
 import { WqxMonlocService } from '../../../../@core/wqx-services/wqx-monloc.service';
@@ -11,13 +10,14 @@ import { WqxMonloc } from '../../../../@core/wqx-data/wqx-monloc';
 import { AuthService } from '../../../../@core/auth/auth.service';
 import { AgmMap } from '@agm/core';
 import { WqxMapWindowComponent } from '../wqx-map-window/wqx-map-window.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ngx-wqx-monloc-edit',
   templateUrl: './wqx-monloc-edit.component.html',
   styleUrls: ['./wqx-monloc-edit.component.scss'],
 })
-export class WqxMonlocEditComponent implements OnInit, AfterViewInit {
+export class WqxMonlocEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   user: User;
   currentOrgId: string;
@@ -60,10 +60,10 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit {
   wellTypeSelected: string = '';
   configWinRef: NbWindowRef;
 
+  refDataServiceSubscription: Subscription[] = [];
+  monlocServiceSubscription: Subscription[] = [];
 
-
-  constructor(private authService: NbAuthService,
-    private authService1: AuthService,
+  constructor(private authService: AuthService,
     private refDataService: WQXRefDataService,
     private toastrService: NbToastrService,
     private monlocService: WqxMonlocService,
@@ -71,11 +71,8 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit {
     private router: Router,
     private windowService: NbWindowService) {
 
-    if (this.authService1.isAuthenticated() === true) {
-      const u = this.authService1.getUser();
-      console.log(u.profile.sub);
-      // this.currentUser = token.getPayload();
-      // TODO: need to fix this
+    if (this.authService.isAuthenticated() === true) {
+      const u = this.authService.getUser();
       if (this.user === undefined || this.user === null)
         this.user = {
           userIdx: 0,
@@ -92,12 +89,14 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit {
       this.currentOrgId = this.user.OrgID;
       this.populateDropdowns();
     }
-    /*  this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
-       if (token.isValid()) {
-         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-         console.log(this.user);
-       }
-     }); */
+  }
+  ngOnDestroy(): void {
+    this.refDataServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
+    this.monlocServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
   }
   ngAfterViewInit(): void {
 
@@ -124,7 +123,7 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit {
     this.chkWQXInd = true;
     this.chkActInd = true;
 
-    this.monlocService.GetWQX_MONLOC_ByID(this.monlocIdx).subscribe(
+    this.monlocServiceSubscription.push(this.monlocService.GetWQX_MONLOC_ByID(this.monlocIdx).subscribe(
       (data: WqxMonloc) => {
         this.txtMonLocID = data.monlocId;
         this.txtMonLocName = data.monlocName;
@@ -154,72 +153,68 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit {
         document.getElementById('focusField').focus();
       },
       (err) => { console.log(err); },
-    );
+    ));
   }
   populateDropdowns(): void {
 
-    this.refDataService.GetT_WQX_REF_DATA('MonitoringLocationType', true, true).subscribe(
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('MonitoringLocationType', true, true).subscribe(
       (data) => {
         this.monlocTypes = data;
       },
       (err) => { console.log(err); },
-    );
-    this.refDataService.GetT_WQX_REF_DATA('HorizontalCollectionMethod', true, true).subscribe(
+    ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('HorizontalCollectionMethod', true, true).subscribe(
       (data) => {
         this.horizMethods = data;
       },
       (err) => { console.log(err); },
-    );
-    this.refDataService.GetT_WQX_REF_DATA('HorizontalCoordinateReferenceSystemDatum', true, true).subscribe(
+    ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('HorizontalCoordinateReferenceSystemDatum', true, true).subscribe(
       (data) => {
         this.horizDatums = data;
       },
       (err) => { console.log(err); },
-    );
-    this.refDataService.GetT_WQX_REF_DATA('MeasureUnit', true, true).subscribe(
+    ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('MeasureUnit', true, true).subscribe(
       (data) => {
         this.vertUnits = data;
       },
       (err) => { console.log(err); },
-    );
-    this.refDataService.GetT_WQX_REF_DATA('VerticalCollectionMethod', true, true).subscribe(
+    ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('VerticalCollectionMethod', true, true).subscribe(
       (data) => {
         this.vertMethods = data;
       },
       (err) => { console.log(err); },
-    );
-    this.refDataService.GetT_WQX_REF_DATA('VerticalCoordinateReferenceSystemDatum', true, true).subscribe(
+    ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('VerticalCoordinateReferenceSystemDatum', true, true).subscribe(
       (data) => {
         this.vertDetums = data;
       },
       (err) => { console.log(err); },
-    );
-    this.refDataService.GetT_WQX_REF_DATA('State', true, true).subscribe(
+    ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('State', true, true).subscribe(
       (data) => {
-        console.log('state');
-        console.log(data);
         this.states = data;
       },
       (err) => { console.log(err); },
-    );
-    this.refDataService.GetT_WQX_REF_DATA('Country', true, true).subscribe(
+    ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('Country', true, true).subscribe(
       (data) => {
-        console.log('country');
-        console.log(data);
         this.countries = data;
       },
       (err) => { console.log(err); },
-    );
-    this.refDataService.GetT_WQX_REF_DATA('WellType', true, true).subscribe(
+    ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('WellType', true, true).subscribe(
       (data) => {
         this.wellTypes = data;
       },
       (err) => { console.log(err); },
-    );
+    ));
   }
   bindCounty(countyCode: string): void {
     if (this.stateSelected !== '') {
-      this.refDataService.GetT_WQX_REF_COUNTY(this.stateSelected).subscribe(
+      this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_COUNTY(this.stateSelected).subscribe(
         (data) => {
           this.counties = data;
           if (countyCode !== '' || countyCode != null) {
@@ -229,15 +224,13 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit {
           }
         },
         (err) => { console.log(err); },
-      );
+      ));
     }
   }
 
 
 
   onStateSelected(selectedItem): void {
-    console.log('onStateSelected');
-    console.log(selectedItem);
     this.stateSelected = selectedItem;
     this.bindCounty(selectedItem);
   }
@@ -256,8 +249,7 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit {
       let sms: number = 0;
       sms = parseInt(this.txtSourceMapScale, 10);
       if (isNaN(sms)) sms = 0;
-      console.log(this.chkLandInd);
-      this.monlocService.InsertOrUpdateWQX_MONLOC(this.monlocIdx, this.currentOrgId, this.txtMonLocID, this.txtMonLocName,
+      this.monlocServiceSubscription.push(this.monlocService.InsertOrUpdateWQX_MONLOC(this.monlocIdx, this.currentOrgId, this.txtMonLocID, this.txtMonLocName,
         (this.monlocTypeSelected === null) ? '' : this.monlocTypeSelected,
         this.txtMonLocDesc,
         this.txtHUC8,
@@ -282,7 +274,6 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit {
         (this.chkWQXInd === null) ? false : this.chkWQXInd,
         this.user.name).subscribe(
           (result) => {
-            console.log(result);
             if (result > 0) {
               this.toastrService.success('Data saved successfully.');
             } else {
@@ -294,7 +285,7 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit {
             this.toastrService.danger('Error saving data.');
             console.log(err);
           },
-        );
+        ));
     }
   }
 
@@ -308,9 +299,19 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit {
         {
           title: ``,
           hasBackdrop: true,
+          closeOnBackdropClick: true,
+          closeOnEsc: true,
           windowClass: 'mapWinClass',
           context: { lat: this.txtLatitude, lng: this.txtLongitude },
         });
+      this.configWinRef.stateChange.subscribe(
+        (data) => {
+          console.log(data);
+          if (data) {
+            if (data.newState !== 'full-screen') this.configWinRef.fullScreen();
+          }
+        },
+      );
       this.configWinRef.onClose.subscribe(
         (result) => {
           if (this.configWinRef.config !== null && this.configWinRef.config.context !== null) {
@@ -329,9 +330,19 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit {
         {
           title: ``,
           hasBackdrop: true,
+          closeOnEsc: true,
+          closeOnBackdropClick: true,
           windowClass: 'mapWinClass',
           context: { lat: '', lng: '' },
         });
+      this.configWinRef.stateChange.subscribe(
+        (data) => {
+          console.log(data);
+          if (data) {
+            if (data.newState !== 'full-screen') this.configWinRef.fullScreen();
+          }
+        },
+      );
       this.configWinRef.onClose.subscribe(
         (result) => {
           if (this.configWinRef.config !== null && this.configWinRef.config.context !== null) {

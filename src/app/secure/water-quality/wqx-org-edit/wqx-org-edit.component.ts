@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WqxOrganization, UserOrgDisplay, TOeUsers, ConnectTestResult, WqxRefData } from '../../../@core/wqx-data/wqx-organization';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organization-service';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
 import { User } from '../../../@core/data/users';
-import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
+import { NbAuthService } from '@nebular/auth';
 import { NbToastrService } from '@nebular/theme';
 import { AuthService } from '../../../@core/auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ngx-wqx-org-edit',
   templateUrl: './wqx-org-edit.component.html',
   styleUrls: ['./wqx-org-edit.component.scss'],
 })
-export class WqxOrgEditComponent implements OnInit {
+export class WqxOrgEditComponent implements OnInit, OnDestroy {
 
-  // @ViewChild('f', {static: false}) myForm: NgForm;
   user: User;
   tcs: WqxRefData[] = [];
   myTcs: WqxRefData[] = [];
@@ -59,19 +59,18 @@ export class WqxOrgEditComponent implements OnInit {
   txtAuthResult: string = '';
   txtSubmitResult: string = '';
 
+  organizationServiceSubscription: Subscription[] = [];
+  pubSubServiceSubscription: Subscription[] = [];
+
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
     private organizationService: WQXOrganizationService,
     private pubSubService: WqxPubsubServiceService,
-    private authService: NbAuthService,
-    private authService1: AuthService,
+    private authService: AuthService,
     private toasterService: NbToastrService) {
 
-    if (this.authService1.isAuthenticated() === true) {
-      const u = this.authService1.getUser();
-      console.log(u.profile.sub);
-      // this.currentUser = token.getPayload();
-      // TODO: need to fix this
+    if (this.authService.isAuthenticated() === true) {
+      const u = this.authService.getUser();
       if (this.user === undefined || this.user === null)
         this.user = {
           userIdx: 0,
@@ -87,24 +86,26 @@ export class WqxOrgEditComponent implements OnInit {
       this.user.isAdmin = u.isAdmin;
 
     }
-    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
-      if (token.isValid()) {
-        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-        console.log(this.user);
-      }
-    }); */
     if (this.orgEditId === null) {
       this.router.navigate(['/secure/water-quality/wqx-org']);
     }
     this.epaSubmissionGroup = '1';
     // this.loadPageData(this.orgEditId);
 
-    this.pubSubService.loadData.subscribe((data: any) => {
+    this.pubSubServiceSubscription.push(this.pubSubService.loadData.subscribe((data: any) => {
       if (data !== null && data !== '') {
         // this.loadPageData(data);
       }
-    });
+    }));
 
+  }
+  ngOnDestroy(): void {
+    this.organizationServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
+    this.pubSubServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
   }
 
   ngOnInit() {
@@ -134,17 +135,15 @@ export class WqxOrgEditComponent implements OnInit {
     // this is done in ngOnInit()
 
     // Populate Tribal Codes
-    this.organizationService.GetT_WQX_REF_DATA('Tribe', true, true).subscribe(
+    this.organizationServiceSubscription.push(this.organizationService.GetT_WQX_REF_DATA('Tribe', true, true).subscribe(
       (tribeData: any) => {
         this.tcs = tribeData;
 
         this.epaSubmissionGroup = '2';
         this.onrbCDXChange(this.epaSubmissionGroup);
 
-        this.organizationService.getWQXOrganizationById(this.orgEditId).subscribe(
+        this.organizationServiceSubscription.push(this.organizationService.getWQXOrganizationById(this.orgEditId).subscribe(
           (o: WqxOrganization) => {
-            console.log(o);
-
             if (o !== null) {
               this.txtOrgID = o.orgId;
               this.txtOrgIDReadOnly = false;
@@ -159,10 +158,8 @@ export class WqxOrgEditComponent implements OnInit {
               this.txtMailState = o.mailingAddState;
               this.txtMailZIP = o.mailingAddZip;
               if (o.cdxSubmitInd === true) {
-                // lblCDXSubmitInd.CssClass = "fldPass";
                 this.lblCDXSubmitInd = 'This Organization is able to submit to EPA.';
               } else {
-                // lblCDXSubmitInd.CssClass = "fldErr";
                 this.lblCDXSubmitInd = 'This Organization is unable to submit to EPA. Please correct this below.';
               }
 
@@ -181,36 +178,36 @@ export class WqxOrgEditComponent implements OnInit {
           (err) => {
             console.log(err);
           },
-        );
+        ));
 
       },
       (err) => {
         console.log(err);
       },
-    );
-
-
+    ));
   }
   loadOrgDropDowns() {
     // populate listbox with users already in organization
-    this.organizationService.GetT_OE_USERSInOrganization(this.orgEditId).subscribe(
+    this.organizationServiceSubscription.push(this.organizationService.GetT_OE_USERSInOrganization(this.orgEditId).subscribe(
       (uio: any) => {
-        console.log(uio);
         this.lbUserInRole = uio;
       },
-    );
+      (err) => {
+        console.log(err);
+      }
+    ));
 
     // populate listbox with users not in role
-    this.organizationService.GetT_OE_USERSNotInOrganization(this.orgEditId).subscribe(
+    this.organizationServiceSubscription.push(this.organizationService.GetT_OE_USERSNotInOrganization(this.orgEditId).subscribe(
       (unio: any) => {
-        console.log('unio');
-        console.log(unio);
         this.lbAllUsers = unio;
       },
-    );
+      (err) => {
+        console.log(err);
+      }
+    ));
   }
   btnTestNAASLocalClick(): void {
-    console.log('btnTestNAASLocalClick');
     this.pnlCDXResults = false;
     if (this.orgEditId === '' || this.orgEditId == null) {
       return;
@@ -222,130 +219,92 @@ export class WqxOrgEditComponent implements OnInit {
       this.toasterService.danger(this.lblMsg);
       return;
     }
-    this.organizationService.ConnectTestResult(this.orgEditId, 'LOCAL').subscribe(
+    this.organizationServiceSubscription.push(this.organizationService.ConnectTestResult(this.orgEditId, 'LOCAL').subscribe(
       (data: ConnectTestResult) => {
-        console.log('ConnectTestResult: valid');
-        console.log(data);
         this.pnlCDXResults = true;
         this.txtAuthResult = data.lblAuthResult;
-        if (data.msg !== null && data.msg !== '') {
-          console.log('data.msg has got value');
+        if (data.msg) {
           this.txtSubmitResult = data.msg;
-          console.log(this.txtSubmitResult);
-          this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
+          this.organizationServiceSubscription.push(this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
             (result) => {
-              console.log('InsertOrUpdateTWQXOrganization: valid');
-              console.log(result);
             },
             (err) => {
-              console.log('InsertOrUpdateTWQXOrganization: failed');
               console.log(err);
             },
-          );
+          ));
         } else {
-          console.log('data.msg has no value');
           this.txtSubmitResult = data.lblSubmitResult;
-          console.log(this.txtSubmitResult);
-          this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', true, '', this.user.name, '', '', '', '').subscribe(
+          this.organizationServiceSubscription.push(this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', true, '', this.user.name, '', '', '', '').subscribe(
             (result) => {
-              console.log('InsertOrUpdateTWQXOrganization: valid');
-              console.log(result);
             },
             (err) => {
-              console.log('InsertOrUpdateTWQXOrganization: failed');
               console.log(err);
             },
-          );
+          ));
         }
       },
       (err) => {
         this.toasterService.danger('Something went wrong!');
-        console.log(err);
-        this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
+        this.organizationServiceSubscription.push(this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
           (result2) => {
-            console.log('InsertOrUpdateTWQXOrganization2: valid');
-            console.log(result2);
           },
           (err2) => {
-            console.log('InsertOrUpdateTWQXOrganization2: failed');
             console.log(err2);
           },
-        );
+        ));
       },
-    );
+    ));
   }
   btnTestNAASGlobalClick(): void {
-    console.log('btnTestNAASGlobalClick');
     this.pnlCDXResults = false;
     if (this.orgEditId === '' || this.orgEditId == null) {
       return;
     }
     this.savePageData(false);
-    this.organizationService.ConnectTestResult(this.orgEditId, 'GLOBAL').subscribe(
+    this.organizationServiceSubscription.push(this.organizationService.ConnectTestResult(this.orgEditId, 'GLOBAL').subscribe(
       (data: ConnectTestResult) => {
-        console.log(data);
         this.pnlCDXResults = true;
         this.txtAuthResult = data.lblAuthResult;
-        if (data.msg !== null && data.msg !== '') {
-          console.log('data.msg has got value');
+        if (data.msg) {
           this.txtSubmitResult = data.msg;
-          console.log(this.txtSubmitResult);
-          this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
+          this.organizationServiceSubscription.push(this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
             (result) => {
-              console.log('InsertOrUpdateTWQXOrganization: valid');
-              console.log(result);
             },
             (err) => {
-              console.log('InsertOrUpdateTWQXOrganization: failed');
               console.log(err);
             },
-          );
+          ));
         } else {
-          console.log('data.msg has no value');
           this.txtSubmitResult = data.lblSubmitResult;
-          console.log(this.txtSubmitResult);
-          this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', true, '', this.user.name, '', '', '', '').subscribe(
+          this.organizationServiceSubscription.push(this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', true, '', this.user.name, '', '', '', '').subscribe(
             (result) => {
-              console.log('InsertOrUpdateTWQXOrganization: valid');
-              console.log(result);
             },
             (err) => {
-              console.log('InsertOrUpdateTWQXOrganization: failed');
               console.log(err);
             },
-          );
+          ));
         }
       },
       (err) => {
         this.toasterService.danger('Something went wrong!');
-        console.log(err);
-        this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
+        this.organizationServiceSubscription.push(this.organizationService.InsertOrUpdateTWQXOrganization(this.orgEditId, '', '', '', '', '', '', '', '', '', '', false, '', this.user.name, '', '', '', '').subscribe(
           (result2) => {
-            console.log('InsertOrUpdateTWQXOrganization2: valid');
-            console.log(result2);
           },
           (err2) => {
-            console.log('InsertOrUpdateTWQXOrganization2: failed');
             console.log(err2);
           },
-        );
+        ));
       },
-    );
+    ));
   }
   onSubmit() {
-    console.log('onSubmit called');
     this.savePageData(true);
   }
   savePageData(isSubmit: boolean) {
-    console.log('savePageData called');
-    console.log(this.epaSubmissionGroup);
     if (this.epaSubmissionGroup === '2') {
-      console.log('setting cdx values');
       this.txtCDX = '';
       this.txtCDXPwd = '';
     }
-    console.log(this.txtOrgName);
-    console.log(this.tribalCodeSelected);
     const orgID = (this.txtOrgID === null) ? '' : this.txtOrgID;
     const orgName = (this.txtOrgName === null) ? '' : this.txtOrgName;
     if (orgID === '' || orgName === '') {
@@ -353,7 +312,7 @@ export class WqxOrgEditComponent implements OnInit {
       return;
     }
     // save updates to Organization
-    this.organizationService.
+    this.organizationServiceSubscription.push(this.organizationService.
       InsertOrUpdateTWQXOrganization(
         orgID, orgName,
         (this.txtOrgDesc === null) ? '' : this.txtOrgDesc,
@@ -373,7 +332,6 @@ export class WqxOrgEditComponent implements OnInit {
         (this.txtMailZIP === null) ? '' : this.txtMailZIP,
       ).subscribe(
         (result) => {
-          console.log('InsertOrUpdateTWQXOrganization: valid:' + result);
           if (result === 1) {
             if (isSubmit === false) { return; }
             this.toasterService.success('Data Saved!');
@@ -383,10 +341,9 @@ export class WqxOrgEditComponent implements OnInit {
           }
         },
         (err) => {
-          console.log('InsertOrUpdateTWQXOrganization: err: ' + err);
           this.toasterService.danger('Error updating record.');
         },
-      );
+      ));
   }
   onCancelClicked(): void {
     this.router.navigate(['/secure/water-quality/wqx-org']);
@@ -401,8 +358,6 @@ export class WqxOrgEditComponent implements OnInit {
     }
   }
   onrbCDXChange(event: any) {
-    console.log('onrbCDXChange');
-    console.log(event);
     if (event === '1') {
       this.divCDXglobal = false;
       this.divCDXme = true;
@@ -419,38 +374,30 @@ export class WqxOrgEditComponent implements OnInit {
     }
   }
   onAddUserToOrg(): void {
-    console.log('user 1');
-    console.log(this.selectedUser1);
     if (this.selectedUser1 !== null) {
       const roleCD: string = (this.isChecked === true) ? 'A' : 'U';
-      this.organizationService.insertTWQXUserOrgs(this.orgEditId, this.selectedUser1.userIdx, roleCD, this.selectedUser1.fname).subscribe(
+      this.organizationServiceSubscription.push(this.organizationService.insertTWQXUserOrgs(this.orgEditId, this.selectedUser1.userIdx, roleCD, this.selectedUser1.fname).subscribe(
         (result) => {
-          console.log('insertTWQXUserOrgs: valid');
-          console.log(result);
           this.loadOrgDropDowns();
         },
         (err) => {
           this.toasterService.danger('User could not be added to organization.');
-          console.log('insertTWQXUserOrgs: failed');
           console.log(err);
         },
-      );
+      ));
     }
   }
   onRemoveUserFromOrg(): void {
     if (this.selectedUser2 !== null) {
-      this.organizationService.deleteTWqxUserOrgs(this.orgEditId, this.selectedUser2.useR_IDX).subscribe(
+      this.organizationServiceSubscription.push(this.organizationService.deleteTWqxUserOrgs(this.orgEditId, this.selectedUser2.useR_IDX).subscribe(
         (result) => {
-          console.log('deleteTWqxUserOrgs: valid');
-          console.log(result);
           this.loadOrgDropDowns();
         },
         (err) => {
           this.toasterService.danger('User could not be removed from organization.');
-          console.log('deleteTWqxUserOrgs: failed');
           console.log(err);
         },
-      );
+      ));
     }
   }
 

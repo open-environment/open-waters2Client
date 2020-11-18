@@ -212,7 +212,21 @@ export class RefDataComponent implements OnInit {
       return;
     }
     this.configWinRef = this.windowService.open(RefDataEntryComponent,
-      { title: ``, hasBackdrop: true, context: this.selectedTableName });
+      {
+        title: ``,
+        hasBackdrop: true,
+        context: this.selectedTableName,
+        closeOnBackdropClick: true,
+        closeOnEsc: true,
+      });
+    this.configWinRef.stateChange.subscribe(
+      (data) => {
+        console.log(data);
+        if (data) {
+          if (data.newState !== 'full-screen') this.configWinRef.fullScreen();
+        }
+      },
+    );
     this.configWinRef.onClose.subscribe(
       (result) => {
         console.log('window close event');

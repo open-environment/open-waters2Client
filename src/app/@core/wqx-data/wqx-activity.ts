@@ -1,5 +1,25 @@
 import { Observable } from 'rxjs';
 
+export interface Activity4Excel {
+  ActivityID: string;
+  MonitoringLoc: string;
+  Project: string;
+  Type: string;
+  Media: string;
+  SubMedia: string;
+  SampleDate: string;
+  EndDate: string;
+  SampleCollectionMethod: string;
+  CollectionEquipment: string;
+  EquipmentComment: string;
+  SamplePerMethod: string;
+  Depth: string;
+  TopDepth: string;
+  BottomDepth: string;
+  DepthReferencePoint: string;
+  Comment: string;
+  SendToEPA: string;
+}
 export interface WqxActivity {
   activityIdx: number;
   orgId: string;

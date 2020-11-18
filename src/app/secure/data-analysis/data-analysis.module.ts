@@ -36,7 +36,6 @@ import { DataTablesModule } from 'angular-datatables';
         NbCheckboxModule,
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyCEohIbvKCfnAfGgT0omUpaifCQdBLLAz0',
-            //apiKey: 'AIzaSyDfIwM8J3FoXCAcBSwBzyB18xxGWsUg9ik',
         }),
         ChartModule,
         DataTablesModule,

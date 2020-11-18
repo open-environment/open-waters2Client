@@ -1,5 +1,16 @@
 import { Observable } from 'rxjs';
 
+export interface WqxProject4Excel {
+  ID: string;
+  Name: string;
+  Description: string;
+  SamplingDesignType: string;
+  QAPPApproval: string;
+  QAPPApprovalAgency: string;
+  Active: string;
+  SendToEPA: string;
+}
+
 export interface WqxProject {
   projectIdx: number;
   OrgId: string;

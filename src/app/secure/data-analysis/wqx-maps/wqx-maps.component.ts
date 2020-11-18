@@ -1,6 +1,7 @@
 import { ERROR_COMPONENT_TYPE } from '@angular/compiler';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../../@core/auth/auth.service';
 import { User } from '../../../@core/data/users';
 import { VWqxActivityLatest } from '../../../@core/wqx-data/wqx-activity';
@@ -13,7 +14,7 @@ import { WqxMonlocService } from '../../../@core/wqx-services/wqx-monloc.service
   templateUrl: './wqx-maps.component.html',
   styleUrls: ['./wqx-maps.component.scss'],
 })
-export class WqxMapsComponent implements OnInit, AfterViewInit {
+export class WqxMapsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('mapContainer', { static: false }) gmap: ElementRef;
   title = 'angular-gmap';
 
@@ -44,15 +45,17 @@ export class WqxMapsComponent implements OnInit, AfterViewInit {
   marker2: any;
   markers: any;
 
-  gmarkers: any;
+  gmarkers: google.maps.Marker[] = [];
 
+  activityServiceSubscription: Subscription[] = [];
+  monlocServiceSubscription: Subscription[] = [];
 
-  constructor(private authService: AuthService,
-    private activityService: WQXActivityService,
+  constructor(
     private router: Router,
+    private authService: AuthService,
+    private activityService: WQXActivityService,
     private monlocService: WqxMonlocService) {
     const u = this.authService.getUser();
-    // TODO: need to fix this
     if (this.user === undefined || this.user === null)
       this.user = {
         userIdx: 0,
@@ -71,18 +74,6 @@ export class WqxMapsComponent implements OnInit, AfterViewInit {
       this.currentOrgId = localStorage.getItem('selectedOrgId');
     }
   }
-  ngAfterViewInit(): void {
-    this.marker1 = new google.maps.Marker({
-      position: this.coordinates,
-      map: this.map,
-      title: `This <b>is the</b> <i>titile</i> of marker1
-              <hr/>
-              <p>and another line goes here...</p>`,
-    });
-    this.mapInitializer();
-
-  }
-
   ngOnInit() {
     this.cols = [
       { field: 'monlocName', header: 'Location' },
@@ -90,19 +81,31 @@ export class WqxMapsComponent implements OnInit, AfterViewInit {
       { field: 'alkalinityTotal', header: 'Alkalinity (mg/l)' },
     ];
 
-    this.activityService.GetVWqxActivityLatest(this.currentOrgId).subscribe(
+    this.activityServiceSubscription.push(this.activityService.GetVWqxActivityLatest(this.currentOrgId).subscribe(
       (result: VWqxActivityLatest[]) => {
-        console.log('GetVWqxActivityLatest: valid');
-        console.log(result);
         this.latestActivities = result;
       },
       (err) => {
-        console.log('GetVWqxActivityLatest: failed');
         console.log(err);
       },
-    );
+    ));
   }
-
+  ngOnDestroy(): void {
+    this.activityServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
+    this.monlocServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
+  }
+  ngAfterViewInit(): void {
+    this.marker1 = new google.maps.Marker({
+      position: this.coordinates,
+      map: this.map,
+      title: ``,
+    });
+    this.mapInitializer();
+  }
   mapInitializer() {
     this.map = new google.maps.Map(this.gmap.nativeElement, this.mapOptions);
     this.infowindow = new google.maps.InfoWindow({ content: '...' });
@@ -122,68 +125,60 @@ export class WqxMapsComponent implements OnInit, AfterViewInit {
   }
 
   loadAllMarkers(): void {
-    this.monlocService.GetSitesAsync(true, this.currentOrgId, false).subscribe(
+    this.monlocServiceSubscription.push(this.monlocService.GetSitesAsync(true, this.currentOrgId, false).subscribe(
       (result: MapMarkerModel[]) => {
-        console.log('GetSitesAsync: valid');
-        console.log(result);
-        result.forEach(element => {
-          const myLatLng = new google.maps.LatLng(+element.lat, +element.lng);
-          const marker = new google.maps.Marker({
-            position: myLatLng,
-            map: this.map,
-            title: element.infoTitle,
-          });
-          this.bounds.extend(myLatLng);
-          if (marker != null) {
-            google.maps.event.addListener(marker, 'click', function () {
-              const infWindow = new google.maps.InfoWindow({
-                content: element.infoBody,
-              });
-              // this.infowindow.setContent('<div class=fltbox><div class="mapInfoTitle">' + element.infoTitle + '</div><div class=mapInfoMain>' + element.infoBody + '</div></div>');
-              infWindow.open(this.map, marker);
+        if (result) {
+          console.log(result);
+          result.forEach(element => {
+            const myLatLng = new google.maps.LatLng(+element.lat, +element.lng);
+            const marker = new google.maps.Marker({
+              position: myLatLng,
+              map: this.map,
+              title: element.infoTitle,
             });
+            this.bounds.extend(myLatLng);
+            if (marker != null) {
+              google.maps.event.addListener(marker, 'click', function () {
+                const infWindow = new google.maps.InfoWindow({
+                  content: element.infoBody,
+                });
+                // this.infowindow.setContent('<div class=fltbox><div class="mapInfoTitle">' + element.infoTitle + '</div><div class=mapInfoMain>' + element.infoBody + '</div></div>');
+                infWindow.open(this.map, marker);
+              });
 
-            // this.gmarkers.push(marker);
+              this.gmarkers.push(marker);
+            }
+          });
+          if (this.markers) {
+            this.markers.forEach(markerInfo => {
+              // creating a new marker object
+              const marker = new google.maps.Marker({
+                ...markerInfo,
+              });
+
+              // creating a new info window with markers info
+              const infoWindow = new google.maps.InfoWindow({
+                content: marker.getTitle(),
+              });
+
+              // Add click event to open info window on marker
+              marker.addListener('click', () => {
+                infoWindow.open(marker.getMap(), marker);
+              });
+
+              // Adding marker to google map
+              marker.setMap(this.map);
+            });
           }
-        });
+
+        }
       },
       (err) => {
-        console.log('GetSitesAsync: failed');
-        console.log(ERROR_COMPONENT_TYPE);
+        console.log(err);
       },
-    );
-    /* this.markers = [
-      {
-        position: new google.maps.LatLng(40.73061, 73.935242),
-        map: this.map,
-        title: 'Marker 1',
-      },
-      {
-        position: new google.maps.LatLng(32.06485, 34.763226),
-        map: this.map,
-        title: 'Marker 2',
-      },
-    ]; */
-    console.log(this.markers);
-    this.markers.forEach(markerInfo => {
-      //Creating a new marker object
-      const marker = new google.maps.Marker({
-        ...markerInfo
-      });
+    ));
 
-      // creating a new info window with markers info
-      const infoWindow = new google.maps.InfoWindow({
-        content: marker.getTitle(),
-      });
 
-      // Add click event to open info window on marker
-      marker.addListener("click", () => {
-        infoWindow.open(marker.getMap(), marker);
-      });
-
-      // Adding marker to google map
-      marker.setMap(this.map);
-    });
   }
 
   onShowData() {

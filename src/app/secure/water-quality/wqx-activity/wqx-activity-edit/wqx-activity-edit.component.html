@@ -343,23 +343,27 @@
                     <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
                       <tr [pEditableRow]="rowData">
                         <td style="text-align:center">
+                          <div class="row">
+                            <div class="col"><button nbButton ghost status="basic" *ngIf="!editing"
+                                (click)="onRowEditInit(rowData)" pInitEditableRow style="padding: 0px;font-size:1rem;">
+                                <nb-icon icon="edit-outline"></nb-icon>
+                              </button></div>
+                            <div class="col"><button nbButton ghost status="basic" *ngIf="!editing"
+                                (click)="onRowDelete(rowData)" pInitEditableRow style="padding: 0px;font-size:1rem;">
+                                <nb-icon icon="trash-2-outline"></nb-icon>
+                              </button></div>
+                            <div class="col"><button nbButton ghost status="success" *ngIf="editing"
+                                (click)="onRowEditSave(rowData)" pSaveEditableRow
+                                style="margin-right: .5em;padding: 0px;font-size:1rem;">
+                                <nb-icon icon="checkmark"></nb-icon>
+                              </button></div>
+                            <div class="col"><button nbButton ghost status="danger" *ngIf="editing"
+                                (click)="onRowEditCancel(rowData, ri)" pCancelEditableRow
+                                style="padding: 0px;font-size:1rem;">
+                                <nb-icon icon="close-outline"></nb-icon>
+                              </button></div>
+                          </div>
 
-                          <button nbButton ghost status="basic" *ngIf="!editing" (click)="onRowEditInit(rowData)"
-                            pInitEditableRow>
-                            <nb-icon icon="edit-outline"></nb-icon>
-                          </button>
-                          <button nbButton ghost status="basic" *ngIf="!editing" (click)="onRowDelete(rowData)"
-                            pInitEditableRow>
-                            <nb-icon icon="trash-2-outline"></nb-icon>
-                          </button>
-                          <button nbButton ghost status="success" *ngIf="editing" (click)="onRowEditSave(rowData)"
-                            pSaveEditableRow style="margin-right: .5em">
-                            <nb-icon icon="checkmark"></nb-icon>
-                          </button>
-                          <button nbButton ghost status="danger" *ngIf="editing" (click)="onRowEditCancel(rowData, ri)"
-                            pCancelEditableRow>
-                            <nb-icon icon="close-outline"></nb-icon>
-                          </button>
                           <!--  <button *ngIf="!editing" pButton type="button" pInitEditableRow icon="pi pi-pencil"
                             class="ui-button-info" (click)="onRowEditInit(rowData)"></button> 
                           <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check"

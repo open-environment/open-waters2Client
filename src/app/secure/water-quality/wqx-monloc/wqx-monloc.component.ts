@@ -1,16 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { WqxMonlocConfig, WqxMonloc, WqxMonloc4Excel } from '../../../@core/wqx-data/wqx-monloc';
+import { Router } from '@angular/router';
 import { NbWindowService, NbWindowRef, NbToastrService } from '@nebular/theme';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../../@core/auth/auth.service';
+import { User } from '../../../@core/data/users';
+import { WqxMonlocConfig, WqxMonloc, WqxMonloc4Excel } from '../../../@core/wqx-data/wqx-monloc';
 import { MonlocConfigWindowComponent } from './monloc-config-window/monloc-config-window.component';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
-import { User } from '../../../@core/data/users';
-import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { WqxMonlocService } from '../../../@core/wqx-services/wqx-monloc.service';
-import { Router } from '@angular/router';
-import { AuthService } from '../../../@core/auth/auth.service';
-import { Subscription } from 'rxjs';
-import { zip, from } from 'rxjs';
-import { map, pluck } from 'rxjs/operators';
+
 
 @Component({
   selector: 'ngx-wqx-monloc',
@@ -21,29 +19,27 @@ export class WqxMonlocComponent implements OnInit, OnDestroy {
 
   user: User;
   currentOrgId: string;
-
-  pubSubServiceSubscription: Subscription[] = [];
-  monlocServiceSubscription: Subscription[] = [];
   chkDeletedInd: boolean = false;
-  i = 0;
 
   configWinRef: NbWindowRef;
   wqxMonlocSource: WqxMonloc[] = [];
   cols: any[];
   defaultCols: any[];
 
-  constructor(private windowService: NbWindowService,
-    private pubSubService: WqxPubsubServiceService,
-    private authService: NbAuthService,
-    private authService1: AuthService,
-    private monlocService: WqxMonlocService,
+  pubSubServiceSubscription: Subscription[] = [];
+  monlocServiceSubscription: Subscription[] = [];
+
+  constructor(
+    private windowService: NbWindowService,
     private router: Router,
-    private toasterService: NbToastrService) {
+    private toasterService: NbToastrService,
+    private pubSubService: WqxPubsubServiceService,
+    private authService: AuthService,
+    private monlocService: WqxMonlocService,
+  ) {
     localStorage.setItem('currentPage', 'monloc');
-    if (this.authService1.isAuthenticated() === true) {
-      const u = this.authService1.getUser();
-      // this.currentUser = token.getPayload();
-      // TODO: need to fix this
+    if (this.authService.isAuthenticated() === true) {
+      const u = this.authService.getUser();
       if (this.user === undefined || this.user === null)
         this.user = {
           userIdx: 0,
@@ -89,10 +85,8 @@ export class WqxMonlocComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
+  ngOnInit() { }
 
-
-  }
   populateCols() {
     this.defaultCols = [
       { field: 'monlocId', header: 'ID' },
@@ -135,7 +129,20 @@ export class WqxMonlocComponent implements OnInit, OnDestroy {
 
   onConfig(): void {
     this.configWinRef = this.windowService.open(MonlocConfigWindowComponent,
-      { title: ``, hasBackdrop: true });
+      {
+        title: ``,
+        hasBackdrop: true,
+        closeOnBackdropClick: true,
+        closeOnEsc: true,
+      });
+    this.configWinRef.stateChange.subscribe(
+      (data) => {
+        console.log(data);
+        if (data) {
+          if (data.newState !== 'full-screen') this.configWinRef.fullScreen();
+        }
+      },
+    );
   }
 
   onEditClicked(monloc: WqxMonloc) {
@@ -160,31 +167,8 @@ export class WqxMonlocComponent implements OnInit, OnDestroy {
       },
     ));
   }
-  pluckAndZip(items: string[]) {
 
-  }
   exportExcel() {
-    const dt = {} as ExcelData;
-
-    const monlocDataJson = JSON.stringify(this.wqxMonlocSource);
-    // const source = from([{ 'monlocIdx': 1054, 'orgId': 'MCNCREEK_WQX', 'monlocId': '11', 'monlocName': 'session name', 'monlocType': 'Cave', 'monlocDesc': 'desc text', 'hucEight': '12345678', 'hucTwelve': '123456789012', 'tribalLandInd': 'N', 'tribalLandName': 'tln', 'latitudeMsr': '40.7128', 'longitudeMsr': '74.006', 'sourceMapScale': 0, 'horizAccuracy': null, 'horizAccuracyUnit': null, 'horizCollMethod': 'Address Matching-Block Face', 'horizRefDatum': 'AMSMA', 'vertMeasure': '10', 'vertMeasureUnit': '#/100 gal', 'vertCollMethod': 'Altimetry', 'vertRefDatum': 'LTD', 'countryCode': '0S', 'stateCode': 'HI', 'countyCode': '007', 'wellType': 'Anode', 'aquiferName': '1', 'formationType': null, 'wellholeDepthMsr': null, 'wellholeDepthMsrUnit': null, 'wqxInd': false, 'wqxSubmitStatus': 'U', 'wqxUpdateDt': null, 'importMonlocId': null, 'actInd': true, 'createDt': '2020-10-15T22: 29: 18.453', 'createUserid': 'MTHULBOSMTBOIHHQADUTHVBL', 'updateDt': '2020-10-22T12: 54: 23.597', 'updateUserid': 'KSHITIJ_ATC', 'org': null, 'tAttainsAssessUnitsMloc': [], 'tWqxActivity': [], 'tWqxBioHabitatIndex': [] }, { 'monlocIdx': 1023, 'orgId': 'MCNCREEK_WQX', 'monlocId': '123', 'monlocName': 'mln', 'monlocType': 'River/Stream', 'monlocDesc': 'desc2', 'hucEight': '8', 'hucTwelve': '12', 'tribalLandInd': null, 'tribalLandName': 'tribal land', 'latitudeMsr': '40.6943\r\n', 'longitudeMsr': '-73.9249\r\n', 'sourceMapScale': 1, 'horizAccuracy': null, 'horizAccuracyUnit': null, 'horizCollMethod': 'INTERPOLATION-MAP', 'horizRefDatum': 'NAD27', 'vertMeasure': '111', 'vertMeasureUnit': 'ft', 'vertCollMethod': 'OTHER', 'vertRefDatum': 'OTHER', 'countryCode': 'US', 'stateCode': 'NJ', 'countyCode': '021', 'wellType': 'ANODE', 'aquiferName': 'Mixed (confined and unconfined) multiple aquifers', 'formationType': 'Hydrogeologic', 'wellholeDepthMsr': '112', 'wellholeDepthMsrUnit': 'ft', 'wqxInd': true, 'wqxSubmitStatus': 'U', 'wqxUpdateDt': null, 'importMonlocId': null, 'actInd': true, 'createDt': '2020-09-16T00: 46: 55.38', 'createUserid': 'ADMIN', 'updateDt': '2020-09-29T18: 49: 22.07', 'updateUserid': 'ADMIN', 'org': null, 'tAttainsAssessUnitsMloc': [], 'tWqxActivity': [], 'tWqxBioHabitatIndex': [] }, { 'monlocIdx': 1055, 'orgId': 'MCNCREEK_WQX', 'monlocId': '123a', 'monlocName': 'Test 1', 'monlocType': 'Wetland Palustrine Pond', 'monlocDesc': 'Test location 1', 'hucEight': '11111111', 'hucTwelve': '111111111111', 'tribalLandInd': 'N', 'tribalLandName': 'Test Land 1', 'latitudeMsr': '20.66', 'longitudeMsr': '80.99', 'sourceMapScale': null, 'horizAccuracy': null, 'horizAccuracyUnit': null, 'horizCollMethod': 'Address Matching-Primary Name', 'horizRefDatum': 'HARN', 'vertMeasure': '', 'vertMeasureUnit': '', 'vertCollMethod': 'GPS Carrier Phase Kinematic Relative Position', 'vertRefDatum': 'LTD', 'countryCode': 'US', 'stateCode': 'NY', 'countyCode': '061', 'wellType': '', 'aquiferName': '', 'formationType': null, 'wellholeDepthMsr': null, 'wellholeDepthMsrUnit': null, 'wqxInd': false, 'wqxSubmitStatus': 'U', 'wqxUpdateDt': null, 'importMonlocId': null, 'actInd': true, 'createDt': '2020-10-15T22: 29: 18.46', 'createUserid': 'MTHULBOSMTBOIHHQADUTHVBL', 'updateDt': '2020-10-26T13: 14: 24.103', 'updateUserid': 'ADMIN', 'org': null, 'tAttainsAssessUnitsMloc': [], 'tWqxActivity': [], 'tWqxBioHabitatIndex': [] }, { 'monlocIdx': 1052, 'orgId': 'MCNCREEK_WQX', 'monlocId': '20203', 'monlocName': 'Monitoring Location 3', 'monlocType': 'Canal Irrigation', 'monlocDesc': 'Test Location 3', 'hucEight': '20203202', 'hucTwelve': '202032020320', 'tribalLandInd': 'N', 'tribalLandName': 'Test 3', 'latitudeMsr': '20.3', 'longitudeMsr': '80.3', 'sourceMapScale': null, 'horizAccuracy': null, 'horizAccuracyUnit': null, 'horizCollMethod': 'Classical Surveying Techniques', 'horizRefDatum': 'HARN', 'vertMeasure': null, 'vertMeasureUnit': null, 'vertCollMethod': 'GPS Code (Pseudo Range) Precise Position', 'vertRefDatum': 'UNKWN', 'countryCode': 'US', 'stateCode': 'IN', 'countyCode': '175', 'wellType': null, 'aquiferName': null, 'formationType': null, 'wellholeDepthMsr': null, 'wellholeDepthMsrUnit': null, 'wqxInd': true, 'wqxSubmitStatus': 'Y', 'wqxUpdateDt': null, 'importMonlocId': null, 'actInd': true, 'createDt': '2020-10-15T11: 16: 39.89', 'createUserid': 'ADMIN', 'updateDt': null, 'updateUserid': null, 'org': null, 'tAttainsAssessUnitsMloc': [], 'tWqxActivity': [], 'tWqxBioHabitatIndex': [] }, { 'monlocIdx': 1053, 'orgId': 'MCNCREEK_WQX', 'monlocId': '20203a', 'monlocName': 'Monitoring Location 3', 'monlocType': 'Canal Irrigation', 'monlocDesc': 'Test Location 3', 'hucEight': '20203202', 'hucTwelve': '202032020320', 'tribalLandInd': 'N', 'tribalLandName': 'Test 3', 'latitudeMsr': '20.3', 'longitudeMsr': '80.3', 'sourceMapScale': null, 'horizAccuracy': null, 'horizAccuracyUnit': null, 'horizCollMethod': 'Classical Surveying Techniques', 'horizRefDatum': 'HARN', 'vertMeasure': '', 'vertMeasureUnit': '', 'vertCollMethod': 'GPS Code (Pseudo Range) Precise Position', 'vertRefDatum': 'UNKWN', 'countryCode': 'US', 'stateCode': 'IN', 'countyCode': '175', 'wellType': '', 'aquiferName': '', 'formationType': null, 'wellholeDepthMsr': null, 'wellholeDepthMsrUnit': null, 'wqxInd': false, 'wqxSubmitStatus': 'U', 'wqxUpdateDt': null, 'importMonlocId': null, 'actInd': true, 'createDt': '2020-10-15T22: 29: 18.403', 'createUserid': 'MTHULBOSMTBOIHHQADUTHVBL', 'updateDt': '2020-10-26T13: 14: 37.397', 'updateUserid': 'ADMIN', 'org': null, 'tAttainsAssessUnitsMloc': [], 'tWqxActivity': [], 'tWqxBioHabitatIndex': [] }]);
-    const source = from(this.wqxMonlocSource);
-    /*     const pluckedMonlocIds = source.pipe(pluck('monlocId'));
-        const subscribeMonlocIds = pluckedMonlocIds.subscribe(val => {
-          if (!dt.MonlocID) dt.MonlocID = [];
-          dt.MonlocID.push(val);
-        });
-        const pluckedMonlocNames = source.pipe(pluck('monlocName'));
-        const subscribeMonlocNames = pluckedMonlocNames.subscribe(val => {
-          if (!dt.MonlocName) dt.MonlocName = [];
-          dt.MonlocName.push(val);
-        });
-        console.log(dt);
-        zip(from(dt.MonlocID), from(dt.MonlocName)).pipe(
-          map(([MonlocID, MonlocName]) => ({ MonlocID, MonlocName })),
-        ).subscribe(x => console.log(x)); */
-    // const dtJson = JSON.stringify(dt);
-    // console.log(dtJson);
     const temp: WqxMonloc4Excel[] = [];
     this.wqxMonlocSource.map(x => {
       const t = {} as WqxMonloc4Excel;
@@ -220,10 +204,10 @@ export class WqxMonlocComponent implements OnInit, OnDestroy {
       temp.push(t);
     });
 
+    console.log(temp);
     import('xlsx').then(xlsx => {
-      // const worksheet = xlsx.utils.json_to_sheet(this.wqxMonlocSource);
       const worksheet = xlsx.utils.json_to_sheet(temp);
-      const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+      const workbook = { Sheets: { 'MonLocExport': worksheet }, SheetNames: ['MonLocExport'] };
       const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
       this.saveAsExcelFile(excelBuffer, 'MonLocExport');
     });
@@ -237,16 +221,10 @@ export class WqxMonlocComponent implements OnInit, OnDestroy {
       const data: Blob = new Blob([buffer], {
         type: EXCEL_TYPE,
       });
-      // FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
       FileSaver.saveAs(data, fileName + EXCEL_EXTENSION);
     });
   }
   onSendToEPA(monlocIdx: number) {
     this.router.navigate(['/secure/water-quality/wqx-hist'], { queryParams: { TableCD: 'MLOC', TableIdx: monlocIdx } });
   }
-}
-export interface ExcelData {
-  // Fields will be header in exported excel
-  MonlocID: string[];
-  MonlocName: string[];
 }

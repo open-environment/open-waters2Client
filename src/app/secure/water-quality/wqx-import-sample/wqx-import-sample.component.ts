@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
 import { AuthService } from '../../../@core/auth/auth.service';
 import { User } from '../../../@core/data/users';
-import { TWqxImportTempMonloc, ImportSampleResultDisplay } from '../../../@core/wqx-data/wqx-import';
+import { ImportSampleResultDisplay } from '../../../@core/wqx-data/wqx-import';
 import { WqxImportService } from '../../../@core/wqx-services/wqx-import.service';
+
 
 @Component({
   selector: 'ngx-wqx-import-sample',
@@ -23,16 +23,11 @@ export class WqxImportSampleComponent implements OnInit {
   activityReplaceType: string = 'R';
   cols: any[];
 
-  constructor(private activatedRout: ActivatedRoute,
-    private authService: NbAuthService,
-    private authService1: AuthService,
+  constructor(private authService: AuthService,
     private importService: WqxImportService,
     private router: Router) {
-    if (this.authService1.isAuthenticated() === true) {
-      const u = this.authService1.getUser();
-      console.log(u.profile.sub);
-      // this.currentUser = token.getPayload();
-      // TODO: need to fix this
+    if (this.authService.isAuthenticated() === true) {
+      const u = this.authService.getUser();
       if (this.user === undefined || this.user === null)
         this.user = {
           userIdx: 0,
@@ -47,38 +42,348 @@ export class WqxImportSampleComponent implements OnInit {
       this.user.OrgID = u.OrgID;
       this.user.isAdmin = u.isAdmin;
       this.currentOrgId = this.user.OrgID;
-
+      if (localStorage.getItem('selectedOrgId') !== null) {
+        this.currentOrgId = localStorage.getItem('selectedOrgId');
+      }
       this.importService.GetWQX_IMPORT_TEMP_SAMPLEByUserIdx(this.user.userIdx).subscribe(
         (data: ImportSampleResultDisplay[]) => {
-          console.log('GetWQX_IMPORT_TEMP_SAMPLEByUserIdx: valid');
           console.log(data);
-          this.importSamples = data;
+          const colList: string[] = 'ACT_COMMENT,ACT_MEDIA,ACT_START_DT,ACT_SUBMEDIA,ACT_TYPE,ACTIVITY_ID,IMPORT_STATUS_CD,IMPORT_STATUS_DESC,MONLOC_ID,ORG_ID,PROJECT_ID,PROJECT_IDX,TEMP_SAMPLE_IDX,USER_ID'.split(',');
+          this.populateGrid(data);
         },
         (err) => {
-          console.log('GetWQX_IMPORT_TEMP_SAMPLEByUserIdx: falied');
           console.log(err);
         },
       );
     }
-    /* this.authService.onTokenChange().subscribe((token: NbAuthJWTToken) => {
-      if (token.isValid()) {
-        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable
-        console.log(this.user);
-        console.log('called GetWQX_IMPORT_TEMP_SAMPLEByUserIdx wtih userIdx: ' + this.user.userIdx);
-      }
-    }); */
   }
 
-  ngOnInit() {
-    if (localStorage.getItem('selectedOrgId') !== null) {
-      this.currentOrgId = localStorage.getItem('selectedOrgId');
+  populateGrid(data: ImportSampleResultDisplay[]) {
+    let colList: string[] = [];
+    this.importService.GetImportTempSampleHeaders().subscribe(
+      (result) => {
+        if (result) {
+          console.log(result);
+          colList = result.split(',');
+          if (colList.length > 0 && colList[0]) {
+            const filteredCols = [];
+            this.cols.forEach(element => {
+              const foundCol = colList.find(item => this.getElemName(item) === element.field);
+              if (foundCol) {
+                filteredCols.push(element);
+              }
+            });
+            this.cols = filteredCols;
+            this.importSamples = data;
+          }
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+    );
+
+  }
+
+  getElemName(element) {
+    switch (element) {
+      case 'USER_ID':
+        return 'userId';
+        break;
+      case 'TOP_DEPTHHEIGHT_MSR_UNIT':
+        return 'topDepthheightMsrUnit';
+        break;
+      case 'TOP_DEPTHHEIGHT_MSR':
+        return 'topDepthheightMsr';
+        break;
+      case 'TEMP_SAMPLE_IDX':
+        return 'tempSampleIdx';
+        break;
+      case 'SAMP_PREP_THERM_PRESERV':
+        return 'sampPrepThermPreserv';
+        break;
+      case 'SAMP_PREP_STORAGE_DESC':
+        return 'sampPrepStorageDesc';
+        break;
+      case 'SAMP_PREP_NAME':
+        return 'sampPrepName';
+        break;
+      case 'SAMP_PREP_IDX':
+        return 'sampPrepIdx';
+        break;
+      case 'SAMP_PREP_ID':
+        return 'sampPrepId';
+        break;
+      case 'SAMP_PREP_CTX':
+        return 'sampPrepCtx';
+        break;
+      case 'SAMP_PREP_CONT_TYPE':
+        return 'sampPrepContType';
+        break;
+      case 'SAMP_PREP_CONT_COLOR':
+        return 'sampPrepContColor';
+        break;
+      case 'SAMP_PREP_CHEM_PRESERV':
+        return 'sampPrepChemPreserv';
+        break;
+      case 'SAMP_COLL_METHOD_NAME':
+        return 'sampCollMethodName';
+        break;
+      case 'SAMP_COLL_METHOD_IDX':
+        return 'sampCollMethodIdx';
+        break;
+      case 'SAMP_COLL_METHOD_ID':
+        return 'sampCollMethodId';
+        break;
+      case 'SAMP_COLL_METHOD_CTX':
+        return 'sampCollMethodCtx';
+        break;
+      case 'SAMP_COLL_EQUIP_COMMENT':
+        return 'sampCollEquipComment';
+        break;
+      case 'SAMP_COLL_EQUIP':
+        return 'sampCollEquip';
+        break;
+      case 'RELATIVE_DEPTH_NAME':
+        return 'relativeDepthName';
+        break;
+      case 'PROJECT_IDX':
+        return 'projectIdx';
+        break;
+      case 'PROJECT_ID':
+        return 'projectId';
+        break;
+      case 'ORG_ID':
+        return 'orgId';
+        break;
+      case 'MONLOC_IDX':
+        return 'monlocIdx';
+        break;
+      case 'MONLOC_ID':
+        return 'monlocId';
+        break;
+      case 'IMPORT_STATUS_DESC':
+        return 'importStatusDesc';
+        break;
+      case 'IMPORT_STATUS_CD':
+        return 'importStatusCd';
+        break;
+      case 'DEPTH_REF_POINT':
+        return 'depthRefPoint';
+        break;
+      case 'BOT_DEPTHHEIGHT_MSR_UNIT':
+        return 'bioDepthheightMsrUni';
+        break;
+      case 'BOT_DEPTHHEIGHT_MSR':
+        return 'bioDepthheightMsr';
+        break;
+      case 'BIO_TOXICITY_TEST_TYPE':
+        return 'bioToxicityTestType';
+        break;
+      case 'BIO_SAMP_COMPONENT_SEQ':
+        return 'bioSampComponentSeq';
+        break;
+      case 'BIO_SAMP_COMPONENT':
+        return 'bioSampComponent';
+        break;
+      case 'BIO_REACH_WID_MSR_UNIT':
+        return 'bioReachWidMsrUni';
+        break;
+      case 'BIO_REACH_WID_MSR':
+        return 'bioReachWidMsr';
+        break;
+      case 'BIO_REACH_LEN_MSR_UNIT':
+        return 'bioReachLenMsrUni';
+        break;
+      case 'BIO_REACH_LEN_MSR':
+        return 'bioReachLenMsr';
+        break;
+      case 'BIO_PASS_COUNT':
+        return 'bioPassCount';
+        break;
+      case 'BIO_NET_TYPE':
+        return 'bioNetType';
+        break;
+      case 'BIO_NET_MESHSIZE_MSR':
+        return 'bioNetMeshsizeMsr';
+        break;
+      case 'BIO_NET_AREA_MSR_UNIT':
+        return 'bioNetAreaMsrUnit';
+        break;
+      case 'BIO_NET_AREA_MSR':
+        return 'bioNetAreadMsr';
+        break;
+      case 'BIO_MESHSIZE_MSR_UNIT':
+        return 'bioMeshsizeMsrUnit';
+        break;
+      case 'BIO_DURATION_MSR_UNIT':
+        return 'bioDurationdMsrUnit';
+        break;
+      case 'BIO_DURATION_MSR':
+        return 'bioDurationdMsr';
+        break;
+      case 'BIO_CURR_SPEED_MSR_UNIT':
+        return 'bioCurrSpeedMsrUnit';
+        break;
+      case 'BIO_CURR_SPEED_MSR':
+        return 'bioCurrSpeedMsr';
+        break;
+      case 'BIO_BOAT_SPEED_MSR_UNIT':
+        return 'bioBoatSpeedMsrUnit';
+        break;
+      case 'BIO_BOAT_SPEED_MSR':
+        return 'bioBoatSpeedMsr';
+        break;
+      case 'BIO_ASSEMBLAGE_SAMPLED':
+        return 'bioAssemblageSampled';
+        break;
+      case 'ACTIVITY_IDX':
+        return 'activityIdx';
+        break;
+      case 'ACTIVITY_ID':
+        return 'activityId';
+        break;
+      case 'ACT_TYPE':
+        return 'actType';
+        break;
+      case 'ACT_TIME_ZONE':
+        return 'actTimeZone';
+        break;
+      case 'ACT_SUBMEDIA':
+        return 'actSubmedia';
+        break;
+      case 'ACT_START_DT':
+        return 'actStartDt';
+        break;
+      case 'ACT_MEDIA':
+        return 'actMedia';
+        break;
+      case 'ACT_END_DT':
+        return 'actEndDt';
+        break;
+      case 'ACT_DEPTHHEIGHT_MSR_UNIT':
+        return 'actDepthheightMsrUnit';
+        break;
+      case 'ACT_DEPTHHEIGHT_MSR':
+        return 'actDepthheightMsr';
+        break;
+      case 'ACT_COMMENT':
+        return 'actComment';
+        break;
+      default:
+        return '';
+        break;
     }
+  }
+  iterateHeaders(data) {
+    const impStruct = {
+      tempSampleIdx: '',
+      orgId: '',
+      /* projectId: '',
+      monlocId: '',
+      activityId: '',
+      actType: '',
+      actMedia: '',
+      actSubmedia: '',
+      actStartDt: '',
+      actEndDt: '',
+      ctTimeZone: '',
+      relativeDepthName: '',
+      actDepthheightMsr: '',
+      actDepthheightMsrUnit: '',
+      topDepthheightMsr: '',
+      topDepthheightMsrUnit: '',
+      botDepthheightMsr: '',
+      botDepthheightMsrUnit: '',
+      depthRefPoint: '',
+      actComment: '',
+      bioAssemblageSampled: '',
+      bioDurationMsr: '',
+      bioDurationMsrUnit: '',
+      bioSampComponent: '',
+      bioSampComponentSeq: '',
+      sampCollMethodId: '',
+      sampCollMethodCtx: '',
+      sampCollEquip: '',
+      sampCollEquipComment: '',
+      sampPrepId: '',
+      sampPrepCtx: '',
+
+      tempResultIdx: '',
+      dataLoggerLine: '',
+      resultDetectCondition: '',
+      charName: '',
+      methodSpeciationName: '',
+      resultSampFraction: '',
+      resultMsr: '',
+      resultMsrUnit: '',
+      resultMsrQual: '',
+      resultStatus: '',
+      statisticBaseCode: '',
+      resultValueType: '',
+      weightBasis: '',
+      timeBasis: '',
+      tempBasis: '',
+      particlesizeBasis: '',
+      precisionValue: '',
+      biasValue: '',
+      resultComment: '',
+      resDepthHeightMsg: '',
+      resDepthHeightMsrUnit: '',
+
+      bioIntentName: '',
+      bioIndividualId: '',
+      bioSubjectTaxonomy: '',
+      bioUnidentifiedSpeciesId: '',
+      bioSampleTissueAnatomy: '',
+      grpSummCountWeightMsr: '',
+      grpSummCountWeightMsrUnit: '',
+      freqClassCode: '',
+      freqClassUnit: '',
+      analyticMethodId: '',
+      analyticMethodCtx: '',
+      labName: '',
+      labAnalysisStartDt: '',
+      labAnalysisEndDt: '',
+      resultLabCommentCode: '',
+      methodDetectionLevel: '',
+      labReportingLevel: '',
+      pql: '',
+      lowerQuantLimit: '',
+      upperQuantLimit: '',
+      detectionLimitUnit: '',
+      labSampPrepStartDt: '',
+      dilutionFactor: '',
+      importStatusCd: '',
+      importStatusDesc: '', */
+    };
+    type objType = typeof impStruct;
+    const headers: Array<Object> = Object.keys(impStruct).map(key => {
+      return { text: key, value: key };
+    });
+    console.log(headers);
+    headers.forEach(header => {
+      let isInculded: boolean = this.isHeaderIncluded(data, header);
+    });
+
+  }
+  isHeaderIncluded(data, header) {
+    let isInculded: boolean = false;
+    data.forEach(element => {
+      console.log(element);
+      console.log(header);
+      console.log(element[header]);
+    });
+    return isInculded;
+  }
+  ngOnInit() {
+
     this.cols = [
       { field: 'importStatusCd', header: 'Import Status' },
       { field: 'importStatusDesc', header: 'Import Errors' },
       { field: 'projectId', header: 'Project ID' },
       { field: 'monlocId', header: 'Monloc ID' },
-      { field: 'activityId', header: 'Activity IDe' },
+      { field: 'activityId', header: 'Activity ID' },
       { field: 'actType', header: 'Activity Type' },
       { field: 'actMedia', header: 'Activity Media' },
       { field: 'actSubmedia', header: 'Sub-Media' },
@@ -139,36 +444,24 @@ export class WqxImportSampleComponent implements OnInit {
       { field: 'labSampPrepStartDt', header: 'Lab Prep Start Date' },
       { field: 'dilutionFactor', header: 'Dilution Factor' },
     ];
-
-    /* this.activatedRoute.queryParams.subscribe(params => {
-      this.orgEditId = params['userid'];
-    }); */
   }
 
   selectRow(checkValue) {
-    console.log(checkValue);
   }
   onRowSelect(event) {
-    // console.log('nRowSelect');
-    // console.log(event.data);
   }
 
   onRowUnselect(event) {
-    // console.log('onRowUnselect');
-    // console.log(event.data);
   }
   onBtnImportClicked() {
-    console.log('btnImportClicked!');
 
     this.importService.ProcessImportTempSample(this.wqxSubmitStatus, this.activityReplaceType, this.user.userIdx).subscribe(
       (result) => {
-        console.log('ProcessImport: valid');
-        console.log(result);
-        this.router.navigate(['/secure/water-quality/wqx-import']);
       },
       (err) => {
-        console.log('ProcessImport: failed');
         console.log(err);
+      },
+      () => {
         this.router.navigate(['/secure/water-quality/wqx-import']);
       },
     );
@@ -204,19 +497,17 @@ export class WqxImportSampleComponent implements OnInit {
 
   }
   onButtonCancelImportClicked() {
-    console.log('onButtonCancelImportClicked!');
     this.importService.CancelProcessImportTempSample(this.user.userIdx).subscribe(
       (result) => {
-        console.log('CancelProcessImportTempSample: valid');
-        console.log(result);
         this.router.navigate(['/secure/water-quality/wqx-import']);
       },
       (err) => {
-        console.log('CancelProcessImportTempSample: failed');
         console.log(err);
       },
     );
   }
+
+
 }
 
 

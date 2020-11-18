@@ -98,11 +98,28 @@
           </td>
         </tr>
       </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [attr.colspan]="10">
+            No organizations found.
+          </td>
+        </tr>
+      </ng-template>
     </p-table>
   </nb-card-body>
   <nb-card-footer>
-    <button nbButton class="success" size="tiny" (click)="onAddNewClick()">
-      <nb-icon icon="plus-square-outline"></nb-icon>Add New
-    </button>
+    <div class="row">
+      <div class="col">
+        <button nbButton class="success" size="tiny" (click)="onAddNewClick()">
+          <nb-icon icon="plus-square-outline"></nb-icon>Add New
+        </button>
+        <span class="float-right">
+          <button nbButton (click)="exportExcel()" size="tiny" status="info" class="mr-3">
+            <nb-icon icon="download-outline"></nb-icon> Excel
+          </button>
+        </span>
+      </div>
+    </div>
+
   </nb-card-footer>
 </nb-card>

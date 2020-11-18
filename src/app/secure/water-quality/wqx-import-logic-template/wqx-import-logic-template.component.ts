@@ -196,7 +196,21 @@ export class WqxImportLogicTemplateComponent implements OnInit {
     console.log('onDefine');
     console.log(this.currentOrgId);
     this.configWinRef = this.windowService.open(ImportTemplateConfigComponent,
-      { title: ``, hasBackdrop: true, context: this.currentOrgId });
+      {
+        title: ``,
+        hasBackdrop: true,
+        context: this.currentOrgId,
+        closeOnBackdropClick: true,
+        closeOnEsc: true,
+      });
+    this.configWinRef.stateChange.subscribe(
+      (data) => {
+        console.log(data);
+        if (data) {
+          if (data.newState !== 'full-screen') this.configWinRef.fullScreen();
+        }
+      },
+    );
     this.configWinRef.onClose.subscribe(
       (result) => {
         console.log('window close event');

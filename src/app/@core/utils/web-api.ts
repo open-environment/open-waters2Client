@@ -107,6 +107,9 @@ export module WebApi {
     public static readonly getWqxImportTempActivityMetric =
       (userIdx: number) =>
         `${environment.api.owUrl}/api/import/getWqxImportTempActivityMetric?userIdx=${userIdx}`
+    public static readonly getImportTempSampleHeaders =
+      () =>
+        `${environment.api.owUrl}/api/import/getImportTempSampleHeaders`
   }
   export class UtilityApi {
     public static readonly checkUserAuthentication =

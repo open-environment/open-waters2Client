@@ -22,12 +22,14 @@
             <td style="text-align:center">
               <div class="row">
                 <div class="col">
-                  <button nbButton size="tiny" status="success" (click)="onEditClicked(rowData)" class="mr-2">
+                  <button nbButton size="tiny" status="success" (click)="onEditClicked(rowData)" class="mr-2"
+                    style="padding: 0px;font-size:1rem;">
                     <nb-icon icon="edit-outline"></nb-icon>
                   </button>
                 </div>
                 <div class="col">
-                  <button nbButton size="tiny" status="danger" (click)="onDeleteClicked(rowData)">
+                  <button nbButton size="tiny" status="danger" (click)="onDeleteClicked(rowData)"
+                    style="padding: 0px;font-size:1rem;">
                     <nb-icon icon="close-outline"></nb-icon>
                   </button>
                 </div>
@@ -89,8 +91,13 @@
                   </div>
                 </div>
               </div>
-
-
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [attr.colspan]="columns.length + 2">
+              No monitoring locations found.
             </td>
           </tr>
         </ng-template>

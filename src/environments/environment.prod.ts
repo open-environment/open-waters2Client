@@ -16,14 +16,23 @@ export const environment = {
     // post_logout_redirect_uri: 'http://localhost:4200/signoutcallbackoidc',
     // silent_redirect_uri: 'http://localhost:4200/silent-refresh.html',
 
-    // AppleTech Stagin
+    // Local IIS
     // =================
-    owUrl: 'http://208.109.10.214:89',
-    authUrl: 'https://208.109.10.214:443',
+    owUrl: 'https://localhost:44443',
+    authUrl: 'https://localhost:443',
     client_id: 'open_waters',
-    redirect_uri: 'http://208.109.10.214:88/signinoidc',
-    post_logout_redirect_uri: 'http://208.109.10.214:88/signoutcallbackoidc',
-    silent_redirect_uri: 'http://208.109.10.214:88/silent-refresh.html',
+    redirect_uri: 'http://localhost:88/signinoidc',
+    post_logout_redirect_uri: 'http://localhost:88/signoutcallbackoidc',
+    silent_redirect_uri: 'http://localhost:88/silent-refresh.html',
+
+    // AppleTech Staging
+    // =================
+    // owUrl: 'http://208.109.10.214:89',
+    // authUrl: 'https://208.109.10.214:443',
+    // client_id: 'open_waters',
+    // redirect_uri: 'http://208.109.10.214:88/signinoidc',
+    // post_logout_redirect_uri: 'http://208.109.10.214:88/signoutcallbackoidc',
+    // silent_redirect_uri: 'http://208.109.10.214:88/silent-refresh.html',
 
 
     // Azure
