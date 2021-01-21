@@ -95,18 +95,28 @@ export class WQXRefDataService extends WqxRefDataData {
     bioIntentName: string, bioIndividualId: string, bioTaxonomy: string, bioSampleTissueAnatomy: string,
     analyticMethodIdx: number, labIdx: number, labanalysisStartDt: string, detectionLimit: string, pql: string,
     lowerQuantLimit: string, upperQuantLimit: string, labSampPrepIdx: number, labSampPrepStartDt: string, dilutionFactor: string,
-    freqClassCode: string, freqClassUnit: string, createUser: string) {
-    console.log(WebApi.TWQXRefDataApi.insertOrUpdateTWqxResult(resultIdx, activityIdx, resultDetectCondition,
-      charName, resultSampFraction, resultMsr, resultMsrUnit, resultStatus, resultValueType, resultComment,
-      bioIntentName, bioIndividualId, bioTaxonomy, bioSampleTissueAnatomy, analyticMethodIdx, labIdx, labanalysisStartDt, detectionLimit, pql,
-      lowerQuantLimit, upperQuantLimit, labSampPrepIdx, labSampPrepStartDt, dilutionFactor,
-      freqClassCode, freqClassUnit, createUser));
+    freqClassCode: string, freqClassUnit: string,
+    targetCount: string, proportionSampProcNumeric: number, resultSampPointType: string, resultSampPointPlaceInSeries:
+      string, resultSampPointCommentText: string, recordIdentifierUserSupplied: string, subjectTaxonomicNameUserSupplied:
+      string, subjectTaxonomicNameUserSuppliedRefText: string, groupSummaryCount: string, functionalFeedingGroupName:
+      string, comparableAnalMethodIdentifier: string, comparableAnalMethodIdentifierCtx: string,
+    comparableAnalMethodModificationText: string, labCommentText: string, detectionQuantLimitCommentText: string,
+    labSampSplitRatio: string,
+    createUser: string) {
     const httpOptions = {};
     return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateTWqxResult(resultIdx, activityIdx, resultDetectCondition,
       charName, resultSampFraction, resultMsr, resultMsrUnit, resultStatus, resultValueType, resultComment,
       bioIntentName, bioIndividualId, bioTaxonomy, bioSampleTissueAnatomy, analyticMethodIdx, labIdx, labanalysisStartDt, detectionLimit, pql,
       lowerQuantLimit, upperQuantLimit, labSampPrepIdx, labSampPrepStartDt, dilutionFactor,
-      freqClassCode, freqClassUnit, createUser), '', httpOptions);
+      freqClassCode, freqClassUnit,
+      targetCount, proportionSampProcNumeric, resultSampPointType,
+      resultSampPointPlaceInSeries, resultSampPointCommentText,
+      recordIdentifierUserSupplied, subjectTaxonomicNameUserSupplied,
+      subjectTaxonomicNameUserSuppliedRefText, groupSummaryCount,
+      functionalFeedingGroupName, comparableAnalMethodIdentifier,
+      comparableAnalMethodIdentifierCtx, comparableAnalMethodModificationText,
+      labCommentText, detectionQuantLimitCommentText, labSampSplitRatio,
+      createUser), '', httpOptions);
   }
   GetT_WQX_REF_TAXA_ByOrg(orgId: string): Observable<WqxRefData[]> {
     return this.http.get<WqxRefData[]>(WebApi.TWQXRefDataApi.getTWqxRefTaxaByOrg(orgId));

@@ -20,19 +20,22 @@ export class WqxMapWindowComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       console.log('Resizing');
       if (this.windowRef.config !== null && this.windowRef.config.context !== null) {
+        console.log('1');
         let data = {} as DummyLatLng;
         data = JSON.parse(JSON.stringify(this.windowRef.config.context));
         console.log(data);
         this.lat = +data.lat;
         this.lng = +data.lng;
+        console.log(this.agmMap);
         this.agmMap.latitude = +this.lat.toFixed(4);
         this.agmMap.longitude = +this.lng.toFixed(4);
-        this.agmMap.triggerResize();
+        this.agmMap.triggerResize(true);
       } else {
-        this.agmMap.triggerResize();
+        console.log('2');
+        this.agmMap.triggerResize(true);
       }
 
-    }, 100);
+    }, 1000);
   }
 
   ngOnInit() {

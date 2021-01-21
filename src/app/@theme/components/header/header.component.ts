@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMenuService, NbSidebarService } from '@nebular/theme';
 import { User } from '../../../@core/data/users';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { WQXOrganizationService } from '../../../@core/wqx-services/wqx-organization-service';
 import { WqxOrganization } from '../../../@core/wqx-data/wqx-organization';
 import { WqxPubsubServiceService } from '../../../@core/wqx-services/wqx-pubsub-service.service';
 import { AuthService } from '../../../@core/auth/auth.service';
+import { environment } from '../../../../environments/environment';
 
 
 @Component({
@@ -27,17 +28,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
 
+  pubSubServiceSubscription: Subscription[] = [];
+  organizationServiceSubscription: Subscription[] = [];
+
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private authService: AuthService,
     private router: Router,
     private organizationService: WQXOrganizationService,
     private pubSubService: WqxPubsubServiceService) {
-    console.log('header component - constructor called');
     if (this.authService.isAuthenticated() === true) {
       const u = this.authService.getUser();
       // TODO: need to fix this
-      if (this.user === undefined || this.user === null)
+      if (!this.user)
         this.user = {
           userIdx: 0,
           name: '',
@@ -49,8 +52,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.user.userIdx = u.userIdx;
       this.user.name = u.name;
       this.user.OrgID = u.OrgID;
+
+      // Set organization in dropdown
       const hdrOrgJson = localStorage.getItem('headerOrgs');
+      console.log('1');
       if (hdrOrgJson) {
+        console.log('2');
         this.orgs = JSON.parse(hdrOrgJson);
         setTimeout(() => {
           if (localStorage.getItem('selectedOrgId') !== null) {
@@ -61,8 +68,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         }, 100);
       } else {
+        console.log('3');
         this.organizationService.GetWQX_USER_ORGS_ByUserIDX(+this.user.userIdx, true).subscribe(
           (data) => {
+            console.log('4');
+            console.log(data);
             data.forEach(element => {
               const newOrg = {} as WqxOrganization;
               newOrg.orgId = element.orgId;
@@ -78,14 +88,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
           (err) => {
             console.log(err);
           },
-        );
+        )
       }
 
     }
   }
 
   ngOnInit() {
-    console.log('header component - ngOnInit called');
     this.menuService.onItemClick().subscribe((event) => {
       this.onItemSelection(event.item.title);
     });
@@ -95,18 +104,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (title === 'Log out') {
       this.authService.signout();
     } else if (title === 'Profile') {
-      // Do something on Profile
+      this.router.navigate(['/secure/my-account']);
     }
   }
 
   ngOnDestroy() {
+    this.pubSubServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
+    this.organizationServiceSubscription.forEach(element => {
+      element.unsubscribe();
+    });
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   changeOrg(orgId: string) {
     console.log('changeOrg:' + orgId);
+
+    // Query: Since we don't subscribe we don't need to handle subscription?
+    // Need more study on this.
     this.pubSubService.setOrgId(orgId);
+
     localStorage.setItem('selectedOrgId', orgId);
   }
   toggleSidebar(): boolean {
@@ -119,6 +138,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return false;
   }
   ReturnToPortal() {
-    this.authService.signout();
+    // this.authService.signout();
+    window.location.href = environment.api.authUrl;
   }
 }

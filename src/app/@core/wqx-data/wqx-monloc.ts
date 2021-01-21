@@ -46,7 +46,11 @@ export interface WqxMonloc {
   horizCollMethod: string;
   horizRefDatum: string;
   vertMeasure: string;
+  drainageArea: string;
+  contributingDrainageArea: string;
   vertMeasureUnit: string;
+  drainageAreaUnit: string;
+  contributingDrainageAreaUnit: string;
   vertCollMethod: string;
   vertRefDatum: string;
   countryCode: string;
@@ -57,6 +61,18 @@ export interface WqxMonloc {
   formationType: string;
   wellholeDepthMsr: string;
   wellholeDepthMsrUnit: string;
+
+  horizontalCollectionMethodName: string;
+  horizontalCoordinateReferenceSystemDatumName: string;
+  aquiferTypeName: string;
+  nationalAquiferCode: string;
+  localAquiferCode: string;
+  localAquiferCodeCtx: string;
+  localAquiferDesc: string;
+  constructionDate: string;
+  wellDepthMeasure: string
+  wellDepthMeasureUnit: string
+
   wqxInd: boolean;
   wqxSubmitStatus: string;
   wqxUpdateDt: string;

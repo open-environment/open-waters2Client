@@ -25,13 +25,29 @@ export class WqxMonlocService extends WqxMonlocData {
     vertMeasure: string, vertMeasureUnit: string, vertCollMethod: string, vertRefDatum: string,
     countryCode: string, stateCode: string, countyCode: string, wellType: string, aquiferName: string,
     formationType: string, wellholeDepthMsr: string, wellholeDepthMsrUnit: string, wqxSubmitStatus: string,
-    wqxUpdateDate: string, actInd: boolean, wqxInd: boolean, createUser: string): Observable<number> {
+    wqxUpdateDate: string, actInd: boolean, wqxInd: boolean, createUser: string,
+    drainageArea: string, drainageAreaUnit: string,
+    contrDrainageArea: string, contrDrainageAreaUnit: string,
+    horizCollMethodName: string, horizCordRefSysDatum: string,
+    aquiferTypeName: string, nationalAquiferCode: string,
+    localAquiferCode: string, localAquiferCodeCtx: string,
+    localAquiferDesc: string,
+    constructionDate: string,
+    wellDepthMeasure: string, wellDepthMeasureUnit: string
+  ): Observable<number> {
     const httpOptions = {};
     return this.http.post<number>(WebApi.TWQXRefDataApi.InsertOrUpdateWQXMonLoc(monlocIdx, orgId, monlocId, monlocName,
       monlocType, monlocDesc, hucHeight, hucTwelve, tribalLandInd, tribalLandName, latitudeMsr, longitudeMsr, sourceMapScale,
       horizAccuracy, horizAccuracyUnit, horizCollMethod, horizRefDatum, vertMeasure, vertMeasureUnit, vertCollMethod, vertRefDatum,
       countryCode, stateCode, countyCode, wellType, aquiferName, formationType, wellholeDepthMsr, wellholeDepthMsrUnit, wqxSubmitStatus,
-      wqxUpdateDate, actInd, wqxInd, createUser), '', httpOptions);
+      wqxUpdateDate, actInd, wqxInd, createUser, drainageArea, drainageAreaUnit,
+      contrDrainageArea, contrDrainageAreaUnit,
+      horizCollMethodName, horizCordRefSysDatum,
+      aquiferTypeName, nationalAquiferCode,
+      localAquiferCode, localAquiferCodeCtx,
+      localAquiferDesc,
+      constructionDate,
+      wellDepthMeasure, wellDepthMeasureUnit), '', httpOptions);
   }
   GetWQX_MONLOC_ByID(monlocIdx: number): Observable<WqxMonloc> {
     return this.http.get<WqxMonloc>(WebApi.TWQXMonlocApi.GetWQXMonLocByID(monlocIdx));

@@ -101,8 +101,9 @@
       <div class="form-row">
         <div class="form-group col-4">Horiz. Collection Method</div>
         <div class="form-group col-8">
-          <nb-select name="ddlHorizMethod" status="primary" [(selected)]="horizMethodSelected" fullWidth>
-            <nb-option *ngFor="let horizMethod of horizMethods" [value]="horizMethod.value"> {{ horizMethod.value }}
+          <nb-select name="ddlHorizMethod" status="primary" [(selected)]="horizCollMethodNameSelected" fullWidth>
+            <nb-option *ngFor="let horizMethod of horizCollMethodNames" [value]="horizMethod.value"> {{
+              horizMethod.value }}
             </nb-option>
           </nb-select>
         </div>
@@ -195,6 +196,165 @@
             [ngClass]="{ 'is-invalid': f.submitted && vtxtAquifer.invalid }" maxlength="120">
         </div>
       </div>
+      <div class="form-row">
+        <div class="form-group col-4">Drainage Area:</div>
+        <div class="form-group col-8">
+          <div class="row">
+            <div class="col-5">
+              <input type="text" class="form-control" name="txtDrainageArea" [(ngModel)]="txtDrainageArea"
+                #vtxtDrainageArea="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtDrainageArea.invalid }"
+                maxlength="60">
+            </div>
+            <div class="col-2">
+              <label for="">Unit:</label>
+            </div>
+            <div class="col-5">
+              <nb-select name="ddlDrainageAreaUnit" status="primary" [(selected)]="drainageAreaSelected" fullWidth>
+                <nb-option *ngFor="let drainageArea of drainageAreas" [value]="drainageArea.value"> {{
+                  drainageArea.value }}
+                </nb-option>
+              </nb-select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-4">Contributing Drainage Area:</div>
+        <div class="form-group col-8">
+          <div class="row">
+            <div class="col-5">
+              <input type="text" class="form-control" name="txtContrDrainageArea" [(ngModel)]="txtContrDrainageArea"
+                #vtxtContrDrainageArea="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && vtxtContrDrainageArea.invalid }" maxlength="60">
+            </div>
+            <div class="col-2">
+              <label for="">Unit:</label>
+            </div>
+            <div class="col-5">
+              <nb-select name="ddlContrDrainageAreaUnit" status="primary" [(selected)]="contrDrainageAreaSelected"
+                fullWidth>
+                <nb-option *ngFor="let contrDrainageArea of contrDrainageAreas" [value]="contrDrainageArea.value"> {{
+                  contrDrainageArea.value }}
+                </nb-option>
+              </nb-select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-4">Aquifer Type Name</div>
+        <div class="form-group col-8">
+          <nb-select name="ddlAquiferTypeName" status="primary" [(selected)]="aquiferTypeNameSelected" fullWidth>
+            <nb-option *ngFor="let aquiferTypeName of aquiferTypeNames" [value]="aquiferTypeName.value">
+              {{
+              aquiferTypeName.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-4">National Aquifer Code</div>
+        <div class="form-group col-8">
+          <nb-select name="ddlNationalAquiferCode" status="primary" [(selected)]="nationalAquiferCodeSelected"
+            fullWidth>
+            <nb-option *ngFor="let nationalAquiferCode of nationalAquiferCodes" [value]="nationalAquiferCode.value">
+              {{
+              nationalAquiferCode.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-4">Local Aquifer Code</div>
+        <div class="form-group col-8">
+          <input type="text" class="form-control" name="txtLocalAquiferCode" [(ngModel)]="txtLocalAquiferCode"
+            #vtxtLocalAquiferCode="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtLocalAquiferCode.invalid }"
+            maxlength="120">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-4">Local Aquifer Code Context</div>
+        <div class="form-group col-8">
+          <nb-select name="ddlLocalAquiferCodeCtx" status="primary" [(selected)]="localAquiferCodeCtxSelected"
+            fullWidth>
+            <nb-option *ngFor="let localAquiferCodeCtx of localAquiferCodeCtxs" [value]="localAquiferCodeCtx.value">
+              {{
+              localAquiferCodeCtx.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-4">Local Aquifer Description Text</div>
+        <div class="form-group col-8">
+          <input type="text" class="form-control" name="txtLocalAquiferDesc" [(ngModel)]="txtLocalAquiferDesc"
+            #vtxtLocalAquifeDesc="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtLocalAquifeDesc.invalid }"
+            maxlength="512">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-4">Formation Type Text</div>
+        <div class="form-group col-8">
+          <nb-select name="ddlFormationTypeText" status="primary" [(selected)]="formationTypeTextSelected" fullWidth>
+            <nb-option *ngFor="let formationTypeText of formationTypeTexts" [value]="formationTypeText.value">
+              {{
+              formationTypeText.value }}</nb-option>
+          </nb-select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-4">Construction Date</div>
+        <div class="form-group col-8">
+          <p-calendar appendTo="body" [showIcon]="true" hideOnDateTimeSelect="true" [(ngModel)]="txtConstructionDate"
+            name="txtConstructionDate" showTime="true" hourFormat="24" [baseZIndex]="100000">
+          </p-calendar>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-4">Drainage Area:</div>
+        <div class="form-group col-8">
+          <div class="row">
+            <div class="col-5">
+              <input type="text" class="form-control" name="txtDrainageArea" [(ngModel)]="txtDrainageArea"
+                #vtxtDrainageArea="ngModel" [ngClass]="{ 'is-invalid': f.submitted && vtxtDrainageArea.invalid }"
+                maxlength="60">
+            </div>
+            <div class="col-2">
+              <label for="">Unit:</label>
+            </div>
+            <div class="col-5">
+              <nb-select name="ddlDrainageAreaUnit" status="primary" [(selected)]="drainageAreaSelected" fullWidth>
+                <nb-option *ngFor="let drainageArea of drainageAreas" [value]="drainageArea.value"> {{
+                  drainageArea.value }}
+                </nb-option>
+              </nb-select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-4">Well Depth Measure:</div>
+        <div class="form-group col-8">
+          <div class="row">
+            <div class="col-5">
+              <input type="text" class="form-control" name="txtWellDepthMeasure" [(ngModel)]="txtWellDepthMeasure"
+                #vtxtWellDepthMeasure="ngModel"
+                [ngClass]="{ 'is-invalid': f.submitted && vtxtWellDepthMeasure.invalid }" maxlength="60">
+            </div>
+            <div class="col-2">
+              <label for="">Unit:</label>
+            </div>
+            <div class="col-5">
+              <nb-select name="ddlWellDepthMeasureUnit" status="primary" [(selected)]="wellDepthMeasureSelected"
+                fullWidth>
+                <nb-option *ngFor="let wellDepthMeasure of wellDepthMeasures" [value]="wellDepthMeasure.value"> {{
+                  wellDepthMeasure.value }}
+                </nb-option>
+              </nb-select>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="form-row">
         <div class="form-group col-4">Active?</div>
         <div class="form-group col-8">

@@ -18,31 +18,32 @@ export const environment = {
 
     // Local IIS
     // =================
-    owUrl: 'https://localhost:44443',
-    authUrl: 'https://localhost:443',
-    client_id: 'open_waters',
-    redirect_uri: 'http://localhost:88/signinoidc',
-    post_logout_redirect_uri: 'http://localhost:88/signoutcallbackoidc',
-    silent_redirect_uri: 'http://localhost:88/silent-refresh.html',
+    /*  owUrl: 'https://localhost:1235',
+     // authUrl: 'https://localhost:44362',
+     authUrl: 'https://localhost:1234',
+     client_id: 'open_waters',
+     redirect_uri: 'https://localhost:1236/signinoidc',
+     post_logout_redirect_uri: 'https://localhost:1236/signoutcallbackoidc',
+     silent_redirect_uri: 'https://localhost:1236/silent-refresh.html', */
 
     // AppleTech Staging
     // =================
-    // owUrl: 'http://208.109.10.214:89',
+    // owUrl: 'https://208.109.10.214:44443',
     // authUrl: 'https://208.109.10.214:443',
     // client_id: 'open_waters',
-    // redirect_uri: 'http://208.109.10.214:88/signinoidc',
-    // post_logout_redirect_uri: 'http://208.109.10.214:88/signoutcallbackoidc',
-    // silent_redirect_uri: 'http://208.109.10.214:88/silent-refresh.html',
+    // redirect_uri: 'https://208.109.10.214:444/signinoidc',
+    // post_logout_redirect_uri: 'https://208.109.10.214:444/signoutcallbackoidc',
+    // silent_redirect_uri: 'https://208.109.10.214:444/silent-refresh.html',
 
 
     // Azure
     // ===========
-    // owUrl: 'https://open-water2webapi20200925122743.azurewebsites.net',
-    // authUrl: 'https://tribalportaltest.azurewebsites.net/',
-    // client_id: 'open_waters',
-    // redirect_uri: 'https://openwater2clientdev.azurewebsites.net/signinoidc',
-    // post_logout_redirect_uri: 'https://openwater2clientdev.azurewebsites.net/signoutcallbackoidc',
-    // silent_redirect_uri: 'https://openwater2clientdev.azurewebsites.net/silent-refresh.html',
+    owUrl: 'https://open-water2webapi20200925122743.azurewebsites.net',
+    authUrl: 'https://tribalportaltest.azurewebsites.net/',
+    client_id: 'open_waters',
+    redirect_uri: 'https://openwater2clientdev.azurewebsites.net/signinoidc',
+    post_logout_redirect_uri: 'https://openwater2clientdev.azurewebsites.net/signoutcallbackoidc',
+    silent_redirect_uri: 'https://openwater2clientdev.azurewebsites.net/silent-refresh.html',
   },
 };
 export const globals = {

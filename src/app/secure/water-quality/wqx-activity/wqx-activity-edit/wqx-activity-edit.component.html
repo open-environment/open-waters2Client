@@ -148,6 +148,15 @@
                           </nb-select>
                         </div>
                       </div>
+                      <div class="row">
+                        <div class="col">Sampling Component Name:</div>
+                        <div class="col">
+                          <input fieldSize="tiny" type="text" style="width:80%" nbInput name="txtSampCompName"
+                            [(ngModel)]="txtSampCompName" #vtxtSampCompName="ngModel" [ngClass]="{
+                                  'is-invalid': f.submitted && vtxtSampCompName.invalid
+                                }" maxlength="120" />
+                        </div>
+                      </div>
                     </div>
                     <div class="col-6">
                       <div class="row">
@@ -197,6 +206,24 @@
                           </nb-select>
                         </div>
                       </div>
+                      <div class="row">
+                        <div class="col">Activity ID User Supplied:</div>
+                        <div class="col">
+                          <input fieldSize="tiny" type="text" style="width:80%" nbInput name="txtActivityIDUserSupplied"
+                            [(ngModel)]="txtActivityIDUserSupplied" #vtxtActivityIDUserSupplied="ngModel" [ngClass]="{
+                                  'is-invalid': f.submitted && vtxtActivityIDUserSupplied.invalid
+                                }" maxlength="55" />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">Activity Location Description Text:</div>
+                        <div class="col">
+                          <input fieldSize="tiny" type="text" style="width:80%" nbInput name="txtActivityLocDescText"
+                            [(ngModel)]="txtActivityLocDescText" #vtxtActivityLocDescText="ngModel" [ngClass]="{
+                                  'is-invalid': f.submitted && vtxtActivityLocDescText.invalid
+                                }" maxlength="4000" />
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="row">
@@ -207,6 +234,60 @@
                           'is-invalid': f.submitted && vtxtActComments.invalid
                         }">
                       </textarea>
+                    </div>
+                  </div>
+                </nb-tab>
+                <nb-tab tabTitle="Activity Location">
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="row">
+                        <div class="col">
+                          Latitude Measure
+                        </div>
+                        <div class="col">
+                          <input fieldSize="tiny" type="text" style="width:80%" nbInput name="latMsr"
+                            [(ngModel)]="latMsr" #vlatMsr="ngModel" [ngClass]="{
+                                  'is-invalid': f.submitted && vlatMsr.invalid
+                                }" maxlength="12" />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          Horiz. Coll Method
+                        </div>
+                        <div class="col">
+                          <nb-select fullWidth status="primary" name="ddlActivityType"
+                            [(ngModel)]="horizCollMethodSelected" #vddlHorizCollMethod="ngModel" [ngClass]="{
+                              'is-invalid':
+                                f.submitted && vddlHorizCollMethod.invalid
+                            }" required>
+                            <nb-option *ngFor="let horizCollMethod of horizCollMethods" [value]="horizCollMethod.value">
+                              {{ horizCollMethod.value }}</nb-option>
+                          </nb-select>
+                          <div *ngIf="f.submitted && vddlHorizCollMethod.invalid" class="invalid-feedback">
+                            <div *ngIf="vddlHorizCollMethod.errors.required">Required</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="row">
+                        <div class="col">
+                          Longitude Measure
+                        </div>
+                        <div class="col">
+                          <input fieldSize="tiny" type="text" style="width:80%" nbInput name="longMsr"
+                            [(ngModel)]="longMsr" #vlongMsr="ngModel" [ngClass]="{
+                                  'is-invalid': f.submitted && vlongMsr.invalid
+                                }" maxlength="14" />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          Horiz. Co. Ref. Datum
+                        </div>
+                        <div class="col"></div>
+                      </div>
                     </div>
                   </div>
                 </nb-tab>
@@ -232,32 +313,132 @@
                             }" maxlength="15" />
                         </div>
                       </div>
+                      <div class="row">
+                        <div class="col">Measure Value:</div>
+                        <div class="col">
+                          <input type="text" fieldSize="tiny" nbInput name="txtMeasureValue"
+                            [(ngModel)]="txtMeasureValue" #vtxtMeasureValue="ngModel" [ngClass]="{
+                              'is-invalid':
+                                f.submitted && vtxtMeasureValue.invalid
+                            }" maxlength="15" />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">Habitat Selection Method:</div>
+                        <div class="col">
+                          <nb-select fullWidth status="primary" name="ddlHabitatSelMethod"
+                            [(selected)]="habitatSelMethodSelected">
+                            <nb-option *ngFor="let habitatSelMethod of habitatSelMethods"
+                              [value]="habitatSelMethod.value">
+                              {{ habitatSelMethod.value }}</nb-option>
+                          </nb-select>
+                        </div>
+                      </div>
                     </div>
                     <div class="col-6">
                       <div class="row">
                         <div class="col">Collection Duration:</div>
                         <div class="col">
-                          <input type="text" nbInput name="txtBioDuration" [(ngModel)]="txtBioDuration"
-                            #vtxtBioDuration="ngModel" [ngClass]="{
+                          <div class="row">
+                            <div class="col6">
+                              <input fieldSize="tiny" type="text" style="width:80%" nbInput name="txtBioDuration"
+                                [(ngModel)]="txtBioDuration" #vtxtBioDuration="ngModel" [ngClass]="{
                               'is-invalid':
                                 f.submitted && vtxtBioDuration.invalid
                             }" maxlength="12" />
-                          <nb-select fullWidth status="primary" name="ddlBioDurUnit" [(selected)]="bioDurUnitSelected">
-                            <nb-option value=""></nb-option>
-                            <nb-option value="seconds">seconds</nb-option>
-                            <nb-option value="minutes">minutes</nb-option>
-                            <nb-option value="hours">hours</nb-option>
-                          </nb-select>
+                            </div>
+                            <div class="col6">
+                              <nb-select fullWidth size="small" status="primary" name="ddlBioDurUnit"
+                                [(selected)]="bioDurUnitSelected">
+                                <nb-option value="">&nbsp;</nb-option>
+                                <nb-option value="seconds">seconds</nb-option>
+                                <nb-option value="minutes">minutes</nb-option>
+                                <nb-option value="hours">hours</nb-option>
+                              </nb-select>
+                            </div>
+                          </div>
+
+
                         </div>
                       </div>
                       <div class="row">
                         <div class="col">Components Sequence #:</div>
                         <div class="col">
-                          <input type="text" nbInput name="txtSampComponentSeq" [(ngModel)]="txtSampComponentSeq"
-                            #vtxtSampComponentSeq="ngModel" [ngClass]="{
+                          <input type="text" fieldSize="tiny" nbInput name="txtSampComponentSeq"
+                            [(ngModel)]="txtSampComponentSeq" #vtxtSampComponentSeq="ngModel" [ngClass]="{
                               'is-invalid':
                                 f.submitted && vtxtSampComponentSeq.invalid
                             }" maxlength="2" />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">Gear Procedure Unit Code:</div>
+                        <div class="col">
+                          <nb-select fullWidth status="primary" name="ddlGearProcUnit"
+                            [(selected)]="gearProcUnitSelected">
+                            <nb-option *ngFor="let gearProcUnit of gearProcUnits" [value]="gearProcUnit.value">
+                              {{ gearProcUnit.value }}</nb-option>
+                          </nb-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </nb-tab>
+                <nb-tab tabTitle="Sample Info">
+                  <div class="row">
+                    <div class="col">
+                      <div class="row">
+                        <div class="col">Method Name:</div>
+                        <div class="col">
+                          <input type="text" nbInput name="txtMethodName" [(ngModel)]="txtMethodName"
+                            #vtxtMethodName="ngModel" [ngClass]="{
+                              'is-invalid':
+                                f.submitted && vtxtMethodName.invalid
+                            }" maxlength="250" required />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">Thermal Preservative Used Name:</div>
+                        <div class="col">
+                          <nb-select fullWidth status="primary" name="ddlThermalPreservativeUsedName"
+                            [(selected)]="thermalPreservativeUsedNameSelected">
+                            <nb-option *ngFor="let thermalPreservativeUsedName of thermalPreservativeUsedNames"
+                              [value]="thermalPreservativeUsedName.value">
+                              {{ thermalPreservativeUsedName.value }}</nb-option>
+                          </nb-select>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">Hydrologic Event:</div>
+                        <div class="col">
+                          <nb-select fullWidth status="primary" name="ddlHydrologicEvent"
+                            [(selected)]="hydrologicEventSelected">
+                            <nb-option *ngFor="let hydrologicEvent of hydrologicEvents" [value]="hydrologicEvent.value">
+                              {{ hydrologicEvent.value }}</nb-option>
+                          </nb-select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="row">
+                        <div class="col">Sample Container Label Name:</div>
+                        <div class="col">
+                          <input type="text" nbInput name="txtSampContLabName" [(ngModel)]="txtSampContLabName"
+                            #vtxtSampContLabName="ngModel" [ngClass]="{
+                              'is-invalid':
+                                f.submitted && vtxtSampContLabName.invalid
+                            }" maxlength="250" />
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">Hydrologic Condition:</div>
+                        <div class="col">
+                          <nb-select fullWidth status="primary" name="ddlHydrologicCondition"
+                            [(selected)]="hydrologicConditionSelected">
+                            <nb-option *ngFor="let hydrologicCondition of hydrologicConditions"
+                              [value]="hydrologicCondition.value">
+                              {{ hydrologicCondition.value }}</nb-option>
+                          </nb-select>
                         </div>
                       </div>
                     </div>
@@ -303,15 +484,16 @@
                   <label nbLabel>Last Modified:</label>
                 </div>
                 <div class="col-8">
-                  <label ngDefaultControl name="lblModifyDate" [(ngModel)]="lblModifyDate"
-                    nbLabel>{{ lblModifyDate | date:'medium' }}</label></div>
+                  <label ngDefaultControl name="lblModifyDate" [(ngModel)]="lblModifyDate" nbLabel>{{ lblModifyDate |
+                    date:'medium' }}</label>
+                </div>
               </div>
             </div>
           </div>
           <div class="row" *ngIf="showResults === true">
             <div class="col-12">
               <nb-card>
-                <nb-card-header>RESULTS (click row to edit)</nb-card-header>
+                <nb-card-header>RESULTS</nb-card-header>
                 <nb-card-body>
                   <!-- <ng2-smart-table [settings]="activitySetting" [source]="results"
                     (deleteConfirm)="onDeleteConfirm($event)" (custom)="onCustom($event)"
@@ -337,7 +519,22 @@
                         <th>Biological Intent</th>
                         <th>Frequency Class</th>
                         <th>Comment</th>
-
+                        <th>Target Count</th>
+                        <th>Proportion Samp Proc</th>
+                        <th>Result Samp Point Type</th>
+                        <th>Result Samp Point Place In Series</th>
+                        <th>Result Samp Point Comment Text</th>
+                        <th>Record Identifier User Supplied</th>
+                        <th>Subject Taxonomic Name User Supplied</th>
+                        <th>Subject Taxonomic NameUser Supplied Ref Text</th>
+                        <th>Group Summary Count</th>
+                        <th>Functional Feeding Group Name</th>
+                        <th>Comparable Anal Method Identifier</th>
+                        <th>Comparable Anal Method Identifier Contaxt</th>
+                        <th>Comparable Anal Method Modification Text</th>
+                        <th>Lab Comment Text</th>
+                        <th>Detection Quant Limit Comment Text</th>
+                        <th>Lab Samp Split Ratio</th>
                       </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
@@ -568,6 +765,201 @@
                             </ng-template>
                             <ng-template pTemplate="output">
                               {{ rowData.resultComment }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Target Count -->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <p-dropdown [options]="targetCountList" [(ngModel)]="rowData.targetCount"
+                                name="targetCount" appendTo="body">
+                              </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{rowData.targetCount}}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!-- ProportionSampProcNumeric -->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.proportionSampProcNumeric"
+                                name="proportionSampProcNumeric">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.proportionSampProcNumeric }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--Result Samp Point Type -->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <p-dropdown [options]="resultSampPointTypeList" [(ngModel)]="rowData.resultSampPointType"
+                                name="targetCount" appendTo="body">
+                              </p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{rowData.resultSampPointType}}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--resultSampPointPlaceInSeries-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.resultSampPointPlaceInSeries"
+                                name="resultSampPointPlaceInSeries" maxlength="60">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.resultSampPointPlaceInSeries }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--resultSampPointCommentText-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.resultSampPointCommentText"
+                                name="resultSampPointCommentText" maxlength="4000">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.resultSampPointCommentText }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--recordIdentifierUserSupplied-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.recordIdentifierUserSupplied"
+                                name="recordIdentifierUserSupplied" maxlength="60">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.recordIdentifierUserSupplied }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--subjectTaxonomicNameUserSupplied-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.subjectTaxonomicNameUserSupplied"
+                                name="subjectTaxonomicNameUserSupplied" maxlength="255">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.subjectTaxonomicNameUserSupplied }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--subjectTaxonomicNameUserSuppliedRefText-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text"
+                                [(ngModel)]="rowData.subjectTaxonomicNameUserSuppliedRefText"
+                                name="subjectTaxonomicNameUserSuppliedRefText" maxlength="255">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.subjectTaxonomicNameUserSuppliedRefText }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--groupSummaryCount-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.groupSummaryCount"
+                                name="groupSummaryCount" maxlength="60">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.groupSummaryCount }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--functionalFeedingGroupName-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.functionalFeedingGroupName"
+                                name="functionalFeedingGroupName" maxlength="30">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.functionalFeedingGroupName }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--comparableAnalMethodIdentifier-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.comparableAnalMethodIdentifier"
+                                name="comparableAnalMethodIdentifier" maxlength="35">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.comparableAnalMethodIdentifier }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--comparableAnalMethodIdentifierCtx-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.comparableAnalMethodIdentifierCtx"
+                                name="comparableAnalMethodIdentifierCtx" maxlength="120">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.comparableAnalMethodIdentifierCtx }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--comparableAnalMethodModificationText-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.comparableAnalMethodModificationText"
+                                name="comparableAnalMethodModificationText" maxlength="4000">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.comparableAnalMethodModificationText }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--labCommentText-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.labCommentText" name="labCommentText"
+                                maxlength="4000">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.labCommentText }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--detectionQuantLimitCommentText-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.detectionQuantLimitCommentText"
+                                name="detectionQuantLimitCommentText" maxlength="4000">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.detectionQuantLimitCommentText }}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <!--labSampSplitRatio-->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input pInputText type="text" [(ngModel)]="rowData.labSampSplitRatio"
+                                name="labSampSplitRatio" maxlength="60">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ rowData.labSampSplitRatio }}
                             </ng-template>
                           </p-cellEditor>
                         </td>

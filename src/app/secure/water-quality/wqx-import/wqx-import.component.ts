@@ -205,7 +205,7 @@ export class WqxImportComponent implements OnInit, OnDestroy {
   download(blob: Blob, nameFile?: string) {
     saveAs(blob, nameFile);
   }
-  tempFunc() {
+  /* tempFunc() {
     this.router.navigate(['/secure/water-quality/wqx-import-sample']);
-  }
+  } */
 }

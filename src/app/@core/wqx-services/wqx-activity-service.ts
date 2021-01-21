@@ -38,7 +38,12 @@ export class WQXActivityService extends WqxActivityData {
     bioMeshsizeMsrUnit, bioBoatSpeedMsr: string, bioBoatSpeedMsrUnit: string, bioCurrSpeedMsr: string,
     bioCurrSpeedMsrUnit, bioToxicityTestType: string, sampCollMethodIdx: number, sampCollEquip: string, sampCollEquipComment: string,
     sampPrepIdx: number, sampPrepCountType: string, sampPrepContColor: string, sampPrepChemPeserv: string, sampPrepThermPreserv: string,
-    sampPrepStorageDesc, wqxSubmitStatus: string, actInd: boolean, wqxInd: boolean, creatUser: string, entryType: string) {
+    sampPrepStorageDesc, wqxSubmitStatus: string, actInd: boolean, wqxInd: boolean, creatUser: string, entryType: string,
+    activityIDUserSupplied: string, sampCompName: string, activityLocDescText: string,
+    measureValue: string, gearProcUnitSel: string, habitatSelMethod: string, methodName: string,
+    thermalPreservativeUsedName: string, hydrologicCondition: string, sampContLabName: string, hydrologicEvent: string,
+    horizCollMethod: string, horizCoRefSysDatumName: string, latitudeMsr: string, longitudeMsr: string,
+  ) {
     const httpOptions = {};
     return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateWqxActivity(activityIdx, orgId, projectIdx, monlocIdx, activityId,
       actType, actMedia, actSubMedia, actStartDate, actEndDt,
@@ -51,7 +56,12 @@ export class WQXActivityService extends WqxActivityData {
       bioMeshsizeMsrUnit, bioBoatSpeedMsr, bioBoatSpeedMsrUnit, bioCurrSpeedMsr,
       bioCurrSpeedMsrUnit, bioToxicityTestType, sampCollMethodIdx, sampCollEquip, sampCollEquipComment,
       sampPrepIdx, sampPrepCountType, sampPrepContColor, sampPrepChemPeserv, sampPrepThermPreserv,
-      sampPrepStorageDesc, wqxSubmitStatus, actInd, wqxInd, creatUser, entryType), '', httpOptions);
+      sampPrepStorageDesc, wqxSubmitStatus, actInd, wqxInd, creatUser, entryType,
+      activityIDUserSupplied, sampCompName, activityLocDescText,
+      measureValue, gearProcUnitSel, habitatSelMethod, methodName,
+      thermalPreservativeUsedName, hydrologicCondition, sampContLabName, hydrologicEvent,
+      horizCollMethod, horizCoRefSysDatumName, latitudeMsr, longitudeMsr,
+    ), '', httpOptions);
   }
   GetT_WQX_REF_DATA_ActivityTypeUsed(orgId: string): Observable<WqxRefData[]> {
     return this.http.get<WqxRefData[]>(WebApi.TWQXActivityApi.getTWqxRefDataActivityTypeUsed(orgId));

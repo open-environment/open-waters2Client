@@ -79,6 +79,21 @@ export interface WqxActivity {
   sampPrefIdx: number;
   tempSampIdx: number;
   entryType: string;
+  activityIdentifierUserSupplied: string;
+  samplingComponentName: string;
+  activityLocationDescriptionText: string;
+  measureValue: string;
+  gearProcedureUnitCode: string;
+  habitatSelectionMethod: string;
+  methodName: string;
+  thermalPreservativeUsedName: string;
+  hydrologicCondition: string;
+  sampleContainerLabelName; string;
+  hydrologicEvent: string;
+  horizCollMethod: string
+  horizCoRefSysDatumName: string;
+  latitudeMsr: string;
+  longitudeMsr: string;
 }
 
 export interface ActivityListDisplay {
@@ -182,6 +197,23 @@ export interface WqxResult {
   labSampPrepStartDt: string;
   labSampPrepEndDt: string;
   dilutionFactor: string;
+  targetCount: string;
+  proportionSampProcNumeric: number;
+  resultSampPointType: string;
+  resultSampPointPlaceInSeries: string;
+  resultSampPointCommentText: string;
+  recordIdentifierUserSupplied: string;
+  subjectTaxonomicNameUserSupplied: string;
+  subjectTaxonomicNameUserSuppliedRefText: string;
+  groupSummaryCount: string;
+  functionalFeedingGroupName: string;
+  comparableAnalMethodIdentifier: string;
+  comparableAnalMethodIdentifierCtx: string;
+  comparableAnalMethodModificationText: string;
+  labCommentText: string;
+  detectionQuantLimitCommentText: string;
+  labSampSplitRatio: string;
+
 }
 export interface VWqxActivityLatest {
   activityIdx: number;

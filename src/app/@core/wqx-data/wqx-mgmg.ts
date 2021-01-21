@@ -38,9 +38,9 @@ export interface TOeAppTasks {
 }
 
 export interface CDXCredentials {
-    userId: string;
+    userID: string;
     credential: string;
-    nodeUrl: string;
+    nodeURL: string;
 }
 export abstract class WqxMgmtData {
     abstract GetV_WQX_TRANSACTION_LOG(tableCd: string,

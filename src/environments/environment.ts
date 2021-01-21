@@ -14,8 +14,10 @@ export const environment = {
 
     // Local
     // =================
+    // owUrl: 'https://localhost:1235',
     owUrl: 'https://localhost:44327',
     authUrl: 'https://localhost:44362',
+    // authUrl: 'https://localhost:1234',
     client_id: 'open_waters',
     redirect_uri: 'http://localhost:4200/signinoidc',
     post_logout_redirect_uri: 'http://localhost:4200/signoutcallbackoidc',
@@ -29,8 +31,8 @@ export const environment = {
         client_id: 'open_waters',
         redirect_uri: 'http://localhost:4200/signinoidc',
         post_logout_redirect_uri: 'http://localhost:4200/signoutcallbackoidc',
-        silent_redirect_uri: 'http://localhost:4200/silent-refresh.html', */
-
+        silent_redirect_uri: 'http://localhost:4200/silent-refresh.html',
+     */
     // AppleTech Stagin
     // =================
     // owUrl: 'http://208.109.10.214:89',
@@ -42,12 +44,12 @@ export const environment = {
 
     // Azure
     // ===========
-    //  owUrl: 'https://open-water2webapi20200925122743.azurewebsites.net',
-    //  authUrl: 'https://tribalportaltest.azurewebsites.net/',
-    //  client_id: 'open_waters',
-    //  redirect_uri: 'https://openwater2clientdev.azurewebsites.net/signinoidc',
-    //  post_logout_redirect_uri: 'https://openwater2clientdev.azurewebsites.net/signoutcallbackoidc',
-    //  silent_redirect_uri: 'https://openwater2clientdev.azurewebsites.net/silent-refresh.html',
+    // owUrl: 'https://open-water2webapi20200925122743.azurewebsites.net',
+    // authUrl: 'https://tribalportaltest.azurewebsites.net/',
+    // client_id: 'open_waters',
+    // redirect_uri: 'https://openwater2clientdev.azurewebsites.net/signinoidc',
+    // post_logout_redirect_uri: 'https://openwater2clientdev.azurewebsites.net/signoutcallbackoidc',
+    // silent_redirect_uri: 'https://openwater2clientdev.azurewebsites.net/silent-refresh.html',
   },
 };
 export const globals = {

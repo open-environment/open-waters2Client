@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { WqxRefData } from '../../../../@core/wqx-data/wqx-organization';
 import { WQXRefDataService } from '../../../../@core/wqx-services/wqx-refdata-service';
 import { User } from '../../../../@core/data/users';
@@ -11,6 +11,7 @@ import { AuthService } from '../../../../@core/auth/auth.service';
 import { AgmMap } from '@agm/core';
 import { WqxMapWindowComponent } from '../wqx-map-window/wqx-map-window.component';
 import { Subscription } from 'rxjs';
+import { encode } from 'punycode';
 
 @Component({
   selector: 'ngx-wqx-monloc-edit',
@@ -34,18 +35,25 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit, OnDestroy 
   txtLongitude: string = '';
   txtSourceMapScale: string = '';
   txtVertMeasure: string = '';
+  txtDrainageArea: string = '';
+  txtContrDrainageArea: string = '';
   txtAquifer: string = '';
+  txtLocalAquiferCode: string = '';
   chkActInd: boolean = false;
   chkWQXInd: boolean = false;
 
   monlocTypes: WqxRefData[] = [];
   monlocTypeSelected: string = '';
-  horizMethods: WqxRefData[] = [];
-  horizMethodSelected: string = '';
+  horizCollMethodNames: WqxRefData[] = [];
+  horizCollMethodNameSelected: string = '';
   horizDatums: WqxRefData[] = [];
   horizDetumSelected: string = '';
   vertUnits: WqxRefData[] = [];
+  drainageAreas: WqxRefData[] = [];
+  contrDrainageAreas: WqxRefData[] = [];
   vertUnitSelected: string = '';
+  drainageAreaSelected: string = '';
+  contrDrainageAreaSelected: string = '';
   vertMethods: WqxRefData[] = [];
   vertMethodSelected: string = '';
   vertDetums: WqxRefData[] = [];
@@ -57,7 +65,27 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit, OnDestroy 
   countries: WqxRefData[] = [];
   countrySelected: string = '';
   wellTypes: WqxRefData[] = [];
+  horizCordRefSysDatums: WqxRefData[] = [];
+  aquiferTypeNames: WqxRefData[] = [];
+  nationalAquiferCodes: WqxRefData[] = [];
+  localAquiferCodes: WqxRefData[] = [];
+  localAquiferCodeCtxs: WqxRefData[] = [];
+  formationTypeTexts: WqxRefData[] = [];
+  wellDepthMeasures: WqxRefData[] = [];
+
   wellTypeSelected: string = '';
+
+  horizCordRefSysDatumSelected: string = '';
+  aquiferTypeNameSelected: string = '';
+  nationalAquiferCodeSelected: string = '';
+  formationTypeTextSelected: string = '';
+  localAquiferCodeSelected: string = '';
+  localAquiferCodeCtxSelected: string = '';
+  txtLocalAquiferDesc: string = '';
+  txtConstructionDate: Date;
+  txtWellDepthMeasure: string = '';
+  wellDepthMeasureSelected: string = '';
+
   configWinRef: NbWindowRef;
 
   refDataServiceSubscription: Subscription[] = [];
@@ -136,10 +164,14 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit, OnDestroy 
         this.txtLatitude = data.latitudeMsr;
         this.txtLongitude = data.longitudeMsr;
         this.txtSourceMapScale = data.sourceMapScale.toString();
-        this.horizMethodSelected = data.horizCollMethod;
+        this.horizCollMethodNameSelected = data.horizCollMethod;
         this.horizDetumSelected = data.horizRefDatum;
         this.txtVertMeasure = data.vertMeasure;
         this.vertUnitSelected = data.vertMeasureUnit;
+        this.txtDrainageArea = data.drainageArea;
+        this.drainageAreaSelected = data.drainageAreaUnit;
+        this.txtContrDrainageArea = data.contributingDrainageArea;
+        this.contrDrainageAreaSelected = data.contributingDrainageAreaUnit;
         this.vertMethodSelected = data.vertCollMethod;
         this.vertDetumSelected = data.vertRefDatum;
         this.stateSelected = data.stateCode;
@@ -148,6 +180,20 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit, OnDestroy 
         this.countrySelected = data.countryCode;
         this.wellTypeSelected = data.wellType;
         this.txtAquifer = data.aquiferName;
+        console.log(data.horizCollMethod);
+        console.log(data.horizontalCollectionMethodName);
+        //this.horizCollMethodNameSelected = data.horizontalCollectionMethodName ? data.horizontalCollectionMethodName.trim() : '';
+        this.horizCordRefSysDatumSelected = data.horizontalCoordinateReferenceSystemDatumName ? data.horizontalCoordinateReferenceSystemDatumName.trim() : '';
+        this.aquiferTypeNameSelected = data.aquiferTypeName ? data.aquiferTypeName.trim() : '';
+        this.nationalAquiferCodeSelected = data.nationalAquiferCode ? data.nationalAquiferCode.trim() : '';
+        this.txtLocalAquiferCode = data.localAquiferCode ? data.localAquiferCode.trim() : '';
+        this.localAquiferCodeCtxSelected = data.localAquiferCodeCtx ? data.localAquiferCodeCtx.trim() : '';
+        this.txtLocalAquiferDesc = data.localAquiferDesc ? data.localAquiferDesc.trim() : '';
+        this.formationTypeTextSelected = data.formationType ? data.formationType.trim() : '';
+        this.txtConstructionDate = new Date(data.constructionDate);
+        this.txtWellDepthMeasure = data.wellDepthMeasure ? data.wellDepthMeasure.trim() : '';
+        this.wellDepthMeasureSelected = data.wellDepthMeasureUnit ? data.wellDepthMeasureUnit.trim() : '';
+
         this.chkWQXInd = data.wqxInd;
         this.chkActInd = data.actInd;
         document.getElementById('focusField').focus();
@@ -165,7 +211,8 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit, OnDestroy 
     ));
     this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('HorizontalCollectionMethod', true, true).subscribe(
       (data) => {
-        this.horizMethods = data;
+
+        this.horizCollMethodNames = data;
       },
       (err) => { console.log(err); },
     ));
@@ -178,6 +225,9 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit, OnDestroy 
     this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('MeasureUnit', true, true).subscribe(
       (data) => {
         this.vertUnits = data;
+        this.drainageAreas = data;
+        this.contrDrainageAreas = data;
+        this.wellDepthMeasures = data;
       },
       (err) => { console.log(err); },
     ));
@@ -211,6 +261,43 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit, OnDestroy 
       },
       (err) => { console.log(err); },
     ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('HorizontalCollectionMethod', true, true).subscribe(
+      (data) => {
+        this.horizCollMethodNames = data;
+      },
+      (err) => { console.log(err); },
+    ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('HorizontalCoordinateReferenceSystemDatum', true, true).subscribe(
+      (data) => {
+        this.horizCordRefSysDatums = data;
+      },
+      (err) => { console.log(err); },
+    ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('AquiferType', true, true).subscribe(
+      (data) => {
+        this.aquiferTypeNames = data;
+      },
+      (err) => { console.log(err); },
+    ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('NationalAquifer', true, true).subscribe(
+      (data) => {
+        this.nationalAquiferCodes = data;
+      },
+      (err) => { console.log(err); },
+    ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('LocalAquiferContext', true, true).subscribe(
+      (data) => {
+        this.localAquiferCodeCtxs = data;
+      },
+      (err) => { console.log(err); },
+    ));
+    this.refDataServiceSubscription.push(this.refDataService.GetT_WQX_REF_DATA('WellFormationType', true, true).subscribe(
+      (data) => {
+        this.formationTypeTexts = data;
+      },
+      (err) => { console.log(err); },
+    ));
+
   }
   bindCounty(countyCode: string): void {
     if (this.stateSelected !== '') {
@@ -258,34 +345,79 @@ export class WqxMonlocEditComponent implements OnInit, AfterViewInit, OnDestroy 
         this.txtLandName,
         this.txtLatitude,
         this.txtLongitude, sms, '', '',
-        (this.horizMethodSelected === null) ? '' : this.horizMethodSelected,
-        this.horizDetumSelected,
-        this.txtVertMeasure,
-        (this.vertUnitSelected === null) ? '' : encodeURIComponent(this.vertUnitSelected),
-        (this.vertMethodSelected === null) ? '' : this.vertMethodSelected,
-        (this.vertDetumSelected === null) ? '' : this.vertDetumSelected,
-        (this.countrySelected === null) ? '' : this.countrySelected,
-        (this.stateSelected === null) ? '' : this.stateSelected,
-        (this.countySelected === null) ? '' : this.countySelected,
-        (this.wellTypeSelected === null) ? '' : this.wellTypeSelected,
-        (this.txtAquifer === null) ? '' : this.txtAquifer,
-        '', '', '', 'U', '',
-        (this.chkActInd === null) ? false : this.chkActInd,
-        (this.chkWQXInd === null) ? false : this.chkWQXInd,
-        this.user.name).subscribe(
-          (result) => {
-            if (result > 0) {
-              this.toastrService.success('Data saved successfully.');
-            } else {
-              this.toastrService.danger('Error saving data.');
-            }
-            this.router.navigate(['/secure/water-quality/wqx-monloc']);
-          },
-          (err) => {
+        (this.horizCollMethodNameSelected === null
+          || this.horizCollMethodNameSelected === undefined) ? '' : this.horizCollMethodNameSelected,
+        (this.horizDetumSelected === null
+          || this.horizDetumSelected === undefined) ? '' : encodeURIComponent(this.horizDetumSelected),
+        (this.txtVertMeasure === null
+          || this.txtVertMeasure === undefined) ? '' : encodeURIComponent(this.txtVertMeasure),
+        (this.vertUnitSelected === null
+          || this.vertUnitSelected === undefined) ? '' : encodeURIComponent(this.vertUnitSelected),
+        (this.vertMethodSelected === null
+          || this.vertMethodSelected === undefined) ? '' : this.vertMethodSelected,
+        (this.vertDetumSelected === null
+          || this.vertDetumSelected === undefined) ? '' : this.vertDetumSelected,
+        (this.countrySelected === null
+          || this.countrySelected === undefined) ? '' : this.countrySelected,
+        (this.stateSelected === null
+          || this.stateSelected === undefined) ? '' : this.stateSelected,
+        (this.countySelected === null
+          || this.countySelected === undefined) ? '' : this.countySelected,
+        (this.wellTypeSelected === null
+          || this.wellTypeSelected === undefined) ? '' : this.wellTypeSelected,
+        (this.txtAquifer === null
+          || this.txtAquifer === undefined) ? '' : this.txtAquifer,
+        (this.formationTypeTextSelected === null
+          || this.formationTypeTextSelected === undefined) ? '' : encodeURIComponent(this.formationTypeTextSelected),
+        '', '', 'U', '',
+        (this.chkActInd === null
+          || this.chkActInd === undefined) ? false : this.chkActInd,
+        (this.chkWQXInd === null
+          || this.chkWQXInd === undefined) ? false : this.chkWQXInd,
+        this.user.name,
+        (this.txtDrainageArea === null
+          || this.txtDrainageArea === undefined) ? '' : encodeURIComponent(this.txtDrainageArea),
+        (this.drainageAreaSelected === null
+          || this.drainageAreaSelected === undefined) ? '' : encodeURIComponent(this.drainageAreaSelected),
+        (this.txtContrDrainageArea === null
+          || this.txtContrDrainageArea === undefined) ? '' : encodeURIComponent(this.txtContrDrainageArea),
+        (this.contrDrainageAreaSelected === null
+          || this.contrDrainageAreaSelected === undefined) ? '' : encodeURIComponent(this.contrDrainageAreaSelected),
+
+        (this.horizCollMethodNameSelected === null
+          || this.horizCollMethodNameSelected === undefined) ? '' : encodeURIComponent(this.horizCollMethodNameSelected),
+        (this.horizCordRefSysDatumSelected === null
+          || this.horizCordRefSysDatumSelected === undefined) ? '' : encodeURIComponent(this.horizCordRefSysDatumSelected),
+        (this.aquiferTypeNameSelected === null
+          || this.aquiferTypeNameSelected === undefined) ? '' : encodeURIComponent(this.aquiferTypeNameSelected),
+        (this.nationalAquiferCodeSelected === null
+          || this.nationalAquiferCodeSelected === undefined) ? '' : encodeURIComponent(this.nationalAquiferCodeSelected),
+        (this.txtLocalAquiferCode === null
+          || this.txtLocalAquiferCode === undefined) ? '' : encodeURIComponent(this.txtLocalAquiferCode),
+        (this.localAquiferCodeCtxSelected === null
+          || this.localAquiferCodeCtxSelected === undefined) ? '' : encodeURIComponent(this.localAquiferCodeCtxSelected),
+        (this.txtLocalAquiferDesc === null
+          || this.txtLocalAquiferDesc === undefined) ? '' : encodeURIComponent(this.txtLocalAquiferDesc),
+        (this.txtConstructionDate === null
+          || this.txtConstructionDate === undefined) ? '' : this.txtConstructionDate.toUTCString(),
+        (this.txtWellDepthMeasure === null
+          || this.txtWellDepthMeasure === undefined) ? '' : encodeURIComponent(this.txtWellDepthMeasure),
+        (this.wellDepthMeasureSelected === null
+          || this.wellDepthMeasureSelected === undefined) ? '' : encodeURIComponent(this.wellDepthMeasureSelected)
+      ).subscribe(
+        (result) => {
+          if (result > 0) {
+            this.toastrService.success('Data saved successfully.');
+          } else {
             this.toastrService.danger('Error saving data.');
-            console.log(err);
-          },
-        ));
+          }
+          this.router.navigate(['/secure/water-quality/wqx-monloc']);
+        },
+        (err) => {
+          this.toastrService.danger('Error saving data.');
+          console.log(err);
+        },
+      ));
     }
   }
 

@@ -24,6 +24,8 @@
             <nb-option value="VerticalCoordinateReferenceSystemDatum">Vertical Reference Datum</nb-option>
             <nb-option value="WellFormationType">Well Formation Type</nb-option>
             <nb-option value="WellType">Well Type</nb-option>
+            <nb-option value="NationalAquifer">National Aquifer Code</nb-option>
+            <nb-option value="LocalAquiferContext">Local Aquifer Context</nb-option>
           </nb-option-group>
           <nb-option-group title="--ACTIVITY--">
             <nb-option value="ActivityMedia">Activity Media</nb-option>
@@ -43,6 +45,10 @@
             <nb-option value="ThermalPreservativeUsed">Thermal Preservative Used</nb-option>
             <nb-option value="TimeZone">TimeZone</nb-option>
             <nb-option value="ToxicityTestType">Toxicity Test Type</nb-option>
+            <nb-option value="GearProcedureUnit">Gear Procedure Unit Code</nb-option>
+            <nb-option value="HabitatSelectionMethod">Habitat Selection Method</nb-option>
+            <nb-option value="HydrologicCondition">Hydrologic Condition</nb-option>
+            <nb-option value="HydrologicEvent">Hydrologic Event</nb-option>
           </nb-option-group>
           <nb-option-group title="--RESULTS--">
             <nb-option value="AnalyticalMethod">Analytical Method</nb-option>
@@ -67,6 +73,8 @@
             <nb-option value="StatisticalBase">StatisticalBase</nb-option>
             <nb-option value="Taxon">Taxon</nb-option>
             <nb-option value="Voltinism">Voltinism</nb-option>
+            <nb-option value="TargetCount">Target Count</nb-option>
+            <nb-option value="ResultSamplingPointType">Result Sampling Point Type</nb-option>
           </nb-option-group>
         </nb-select>
       </div>
@@ -499,7 +507,8 @@
                       <button nbButton size="tiny" status="success" pInitEditableRow
                         [disabled]="!(refAnal.analyticMethodCtx === currentOrgID)">
                         <nb-icon icon="edit-outline"></nb-icon>
-                      </button></div>
+                      </button>
+                    </div>
                     <div class="col"><button nbButton size="tiny" status="danger" *ngIf="!editing"
                         (click)="onRowDelete3(refAnal)">
                         <nb-icon icon="trash-2-outline"></nb-icon>

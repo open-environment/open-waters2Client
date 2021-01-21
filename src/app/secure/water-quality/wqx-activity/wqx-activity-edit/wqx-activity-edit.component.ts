@@ -4,7 +4,7 @@ import { WqxProject } from '../../../../@core/wqx-data/wqx-project';
 import { WqxRefData } from '../../../../@core/wqx-data/wqx-organization';
 import { WqxRefSampColMethod, WqxRefCharacteristic, AnalMethodDisplay, WqxRefCharLimits } from '../../../../@core/wqx-data/wqx-refdata';
 import { User } from '../../../../@core/data/users';
-import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
+import { NbAuthService } from '@nebular/auth';
 import { WqxPubsubServiceService } from '../../../../@core/wqx-services/wqx-pubsub-service.service';
 import { WQXRefDataService } from '../../../../@core/wqx-services/wqx-refdata-service';
 import { WQXOrganizationService } from '../../../../@core/wqx-services/wqx-organization-service';
@@ -12,11 +12,9 @@ import { WqxMonlocService } from '../../../../@core/wqx-services/wqx-monloc.serv
 import { WQXProjectService } from '../../../../@core/wqx-services/wqx-project-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WQXActivityService } from '../../../../@core/wqx-services/wqx-activity-service';
-import { NbToastrService, NbListItemComponent } from '@nebular/theme';
+import { NbToastrService } from '@nebular/theme';
 import { finalize } from 'rxjs/operators';
 import { WqxActivity, WqxResult } from '../../../../@core/wqx-data/wqx-activity';
-import { LocalDataSource } from 'ng2-smart-table';
-import { NgModel } from '@angular/forms';
 import { SelectItem } from 'primeng/primeng';
 import { AuthService } from '../../../../@core/auth/auth.service';
 
@@ -27,7 +25,7 @@ import { AuthService } from '../../../../@core/auth/auth.service';
 })
 export class WqxActivityEditComponent implements OnInit {
 
-  populateCounter: number = 12; // when data is loaded counter is decremented by 1
+  populateCounter: number = 20; // when data is loaded counter is decremented by 1
   populateCounterHandle: any;
   maxIteration: number = 10; // we wait for 5 secs max
   user: User;
@@ -44,6 +42,8 @@ export class WqxActivityEditComponent implements OnInit {
   statusList: SelectItem[] = [];
   bioIntentList: SelectItem[] = [];
   freqClassList: SelectItem[] = [];
+  targetCountList: SelectItem[] = [];
+  resultSampPointTypeList: SelectItem[] = [];
 
   activitySetting = {
     hideSubHeader: true,
@@ -147,6 +147,46 @@ export class WqxActivityEditComponent implements OnInit {
   showResults: boolean = true;
   showMatrics: boolean = true;
 
+  txtActivityIDUserSupplied: string = '';
+  txtSampCompName: string = '';
+  txtActivityLocDescText: string = '';
+  txtMeasureValue: string = '';
+  gearProcUnitSelected: string = '';
+  gearProcUnits: WqxRefData[] = [];
+  habitatSelMethodSelected: string = '';
+  habitatSelMethods: WqxRefData[] = [];
+  txtMethodName: string = '';
+  thermalPreservativeUsedNameSelected: string = '';
+  thermalPreservativeUsedNames: WqxRefData[] = [];
+  hydrologicConditionSelected: string = '';
+  hydrologicConditions: WqxRefData[] = [];
+  txtSampContLabName: string = '';
+  hydrologicEventSelected: string = '';
+  hydrologicEvents: WqxRefData[] = [];
+
+  targetCount: string;
+  proportionSampProcNumeric: string;
+  resultSampPointType: string;
+  resultSampPointPlaceInSeries: string;
+  resultSampPointCommentText: string;
+  recordIdentifierUserSupplied: string;
+  subjectTaxonomicNameUserSupplied: string;
+  subjectTaxonomicNameUserSuppliedRefText: string;
+  groupSummaryCount: string;
+  functionalFeedingGroupName: string;
+  comparableAnalMethodIdentifier: string;
+  comparableAnalMethodIdentifierCtx: string;
+  comparableAnalMethodModificationText: string;
+  labCommentText: string;
+  detectionQuantLimitCommentText: string;
+  labSampSplitRatio: string;
+
+  latMsr: string;
+  longMsr: string;
+  horizCollMethodSelected: string = '';
+  horizCollMethods: WqxRefData[] = [];
+  horizRefDatumSelected: string = '';
+  horizRefDatums: WqxRefData[] = [];
   constructor(private authService: NbAuthService,
     private authService1: AuthService,
     private pubSubService: WqxPubsubServiceService,
@@ -165,9 +205,6 @@ export class WqxActivityEditComponent implements OnInit {
     // need to fix this
     if (this.authService1.isAuthenticated() === true) {
       const u = this.authService1.getUser();
-      console.log(u.profile.sub);
-      // this.currentUser = token.getPayload();
-      // TODO: need to fix this
       if (this.user === undefined || this.user === null)
         this.user = {
           userIdx: 0,
@@ -186,7 +223,6 @@ export class WqxActivityEditComponent implements OnInit {
       if (localStorage.getItem('selectedOrgId') !== null) {
         this.currentOrgId = localStorage.getItem('selectedOrgId');
         // Get Default TimeZone
-        console.log('Set Default Timezone');
         this.organizationService.getWQXOrganizationById(this.currentOrgId).subscribe(
           (result) => {
             if (result !== null) {
@@ -220,8 +256,6 @@ export class WqxActivityEditComponent implements OnInit {
   }
 
   ngOnInit() {
-
-
     this.resultCols = [
       { 'col': 'Characteristic', show: true },
       { 'col': 'Taxonomy', show: true },
@@ -256,7 +290,6 @@ export class WqxActivityEditComponent implements OnInit {
 
     });
     // display warning if no reference data imported yet
-    console.log('display warning if no reference data imported yet');
     this.refDataService.GetT_WQX_REF_DATA_Count()
       .pipe(
         finalize(() => {
@@ -265,7 +298,6 @@ export class WqxActivityEditComponent implements OnInit {
       )
       .subscribe(
         (result) => {
-          console.log(result);
           if (result === 0) {
             this.lblMsg = 'You must import reference data from EPA before you can enter sample data.';
             this.lblMsgShow = true;
@@ -277,7 +309,6 @@ export class WqxActivityEditComponent implements OnInit {
       );
 
     // redirect to org settings page if no org chars defined yet
-    console.log('redirect to org settings page if no org chars defined yet');
     this.refDataService.GetT_WQX_REF_CHAR_ORG_Count(this.currentOrgId)
       .pipe(
         finalize(() => {
@@ -286,7 +317,6 @@ export class WqxActivityEditComponent implements OnInit {
       )
       .subscribe(
         (result) => {
-          console.log(result);
           if (result === 0) {
             this.lblMsg = 'You must define the characteristics that your organization will use (Organization screen) before you can enter sample data.';
             this.lblMsgShow = true;
@@ -298,7 +328,6 @@ export class WqxActivityEditComponent implements OnInit {
       );
 
     // ONLY ALLOW EDIT FOR AUTHORIZED USERS OF ORG
-    console.log('ONLY ALLOW EDIT FOR AUTHORIZED USERS OF ORG');
     this.organizationService.CanUserEditOrg(this.user.userIdx, this.currentOrgId)
       .pipe(
         finalize(() => {
@@ -307,7 +336,6 @@ export class WqxActivityEditComponent implements OnInit {
       )
       .subscribe(
         (result) => {
-          console.log(result);
           this.canUserEdit = result;
         },
         (err) => { console.log(err); },
@@ -405,12 +433,90 @@ export class WqxActivityEditComponent implements OnInit {
           this.sampCalls = data;
         },
       );
+    this.refDataService.GetT_WQX_REF_DATA('GearProcedureUnit', true, true)
+      .pipe(
+        finalize(() => {
+          this.populateCounter--;
+        }),
+      )
+      .subscribe(
+        (data) => {
+          this.gearProcUnits = data;
+        },
+      );
+    this.refDataService.GetT_WQX_REF_DATA('HabitatSelectionMethod', true, true)
+      .pipe(
+        finalize(() => {
+          this.populateCounter--;
+        }),
+      )
+      .subscribe(
+        (data) => {
+          this.habitatSelMethods = data;
+        },
+      );
+    this.refDataService.GetT_WQX_REF_DATA('ThermalPreservativeUsed', true, true)
+      .pipe(
+        finalize(() => {
+          this.populateCounter--;
+        }),
+      )
+      .subscribe(
+        (data) => {
+          this.thermalPreservativeUsedNames = data;
+        },
+      );
+    this.refDataService.GetT_WQX_REF_DATA('HydrologicCondition', true, true)
+      .pipe(
+        finalize(() => {
+          this.populateCounter--;
+        }),
+      )
+      .subscribe(
+        (data) => {
+          this.hydrologicConditions = data;
+        },
+      );
+    this.refDataService.GetT_WQX_REF_DATA('HydrologicEvent', true, true)
+      .pipe(
+        finalize(() => {
+          this.populateCounter--;
+        }),
+      )
+      .subscribe(
+        (data) => {
+          this.hydrologicEvents = data;
+        },
+      );
+    this.refDataService.GetT_WQX_REF_DATA('HorizontalCollectionMethod', true, true)
+      .pipe(
+        finalize(() => {
+          this.populateCounter--;
+        }),
+      )
+      .subscribe(
+        (data) => {
+          this.horizCollMethods = data;
+        },
+      );
+    this.refDataService.GetT_WQX_REF_DATA('HorizontalCoordinateRefrenceSystemDatum', true, true)
+      .pipe(
+        finalize(() => {
+          this.populateCounter--;
+        }),
+      )
+      .subscribe(
+        (data) => {
+          this.hydrologicEvents = data;
+        },
+      );
   }
 
   populateData(isFirst: boolean) {
     if (this.activityIdx !== null && this.activityIdx > 0) {
       this.activityService.GetWQX_ACTIVITY_ByID(this.activityIdx).subscribe(
         (data: WqxActivity) => {
+          console.log(data);
           this.txtActivityID = data.activityId;
           this.txtStartDate = new Date(data.actStartDt);
           // timezone???
@@ -423,6 +529,7 @@ export class WqxActivityEditComponent implements OnInit {
 
           // populate activity tab
           this.activityTypeSelected = data.actType;
+          alert(this.activityTypeSelected);
           this.activityMediaSelected = data.actMedia;
           this.activitySubMediaSelected = data.actSubmedia;
           if (data.actEndDt !== null) this.txtEndDate = new Date(data.actEndDt);
@@ -431,6 +538,11 @@ export class WqxActivityEditComponent implements OnInit {
           this.equipSelected = data.sampCollEquip;
           this.sampCollSelected = (data.sampCollMethodIdx !== null) ? data.sampCollMethodIdx : 0;
           this.txtActComments = data.actComment;
+
+          // populate activity location tab
+          this.latMsr = data.latitudeMsr;
+          this.longMsr = data.longitudeMsr;
+          this.horizCollMethodSelected = data.horizCollMethod;
 
           // populate bio tab
           this.assemblageSelected = data.bioAssemblageSampled;
@@ -444,6 +556,18 @@ export class WqxActivityEditComponent implements OnInit {
             this.entryTypeSelected = 'C';
           }
 
+          this.txtActivityIDUserSupplied = data.activityIdentifierUserSupplied;
+          this.txtSampCompName = data.samplingComponentName;
+          this.txtActivityLocDescText = data.activityLocationDescriptionText;
+          this.txtMeasureValue = data.measureValue;
+          this.gearProcUnitSelected = data.gearProcedureUnitCode;
+          this.habitatSelMethodSelected = data.habitatSelectionMethod;
+          this.txtMethodName = data.methodName;
+          this.thermalPreservativeUsedNameSelected = data.thermalPreservativeUsedName;
+          this.hydrologicConditionSelected = data.hydrologicCondition;
+          this.txtSampContLabName = data.sampleContainerLabelName;
+          this.hydrologicEventSelected = data.hydrologicEvent;
+
           // populate results
           this.populateResultsGrid();
         },
@@ -451,8 +575,6 @@ export class WqxActivityEditComponent implements OnInit {
     }
   }
   onSubmit(f) {
-    /*     console.log(f);
-        return; */
     this.activityTypeSelected = (this.activityTypeSelected === null || this.activityTypeSelected === undefined) ? '' : this.activityTypeSelected;
     this.activityMediaSelected = (this.activityMediaSelected === null || this.activityMediaSelected === undefined) ? '' : this.activityMediaSelected;
     this.activitySubMediaSelected = (this.activitySubMediaSelected === null || this.activitySubMediaSelected === undefined) ? '' : this.activitySubMediaSelected;
@@ -466,29 +588,54 @@ export class WqxActivityEditComponent implements OnInit {
     const monlocIdx: number = isNaN(this.monlocSelected) ? 0 : this.monlocSelected;
     const sampCompSeq: number = isNaN(+this.txtSampComponentSeq) ? 0 : +this.txtSampComponentSeq;
     const sampColl: number = isNaN(this.sampCollSelected) ? 0 : this.sampCollSelected;
+
+    const actIdUserSup: string = (this.txtActivityIDUserSupplied === null || this.txtActivityIDUserSupplied === undefined) ? '' : this.txtActivityIDUserSupplied;
+    const sampCompName: string = (this.txtSampCompName === null || this.txtSampCompName === undefined) ? '' : this.txtSampCompName;
+    const actLocDesc: string = (this.txtActivityLocDescText === null || this.txtActivityLocDescText === undefined) ? '' : this.txtActivityLocDescText;
+    const msrVal: string = (this.txtMeasureValue === null || this.txtMeasureValue === undefined) ? '' : this.txtMeasureValue;
+    const gearProcUnitSel: string = (this.gearProcUnitSelected === null || this.gearProcUnitSelected === undefined) ? '' : encodeURIComponent(this.gearProcUnitSelected);
+    const habSelMethodSel: string = (this.habitatSelMethodSelected === null || this.habitatSelMethodSelected === undefined) ? '' : this.habitatSelMethodSelected;
+    const methodName: string = (this.txtMethodName === null || this.txtMethodName === undefined) ? '' : this.txtMethodName.trim();
+    const thermPresUsedNmSel: string = (this.thermalPreservativeUsedNameSelected === null || this.thermalPreservativeUsedNameSelected === undefined) ? '' : this.thermalPreservativeUsedNameSelected;
+    const hydroConSel: string = (this.hydrologicConditionSelected === null || this.hydrologicConditionSelected === undefined) ? '' : this.hydrologicConditionSelected;
+    const sampContLabNm: string = (this.txtSampContLabName === null || this.txtSampContLabName === undefined) ? '' : this.txtSampContLabName;
+    const hydroEventSel: string = (this.hydrologicEventSelected === null || this.hydrologicEventSelected === undefined) ? '' : this.hydrologicEventSelected.trim();
+    const horizCollMethodSelectedVar: string = (this.horizCollMethodSelected === null || this.horizCollMethodSelected === undefined) ? '' : this.horizCollMethodSelected.trim();
+    const horizRefDatumSelectedVar: string = (this.horizRefDatumSelected === null || this.horizRefDatumSelected === undefined) ? '' : this.horizRefDatumSelected.trim();
+    const latMsrVar: string = (this.latMsr === null || this.latMsr === undefined) ? '' : this.latMsr.trim();
+    const longMsrVar: string = (this.longMsr === null || this.longMsr === undefined) ? '' : this.longMsr.trim();
+
     this.activityService.InsertOrUpdateWQX_ACTIVITY(actId, this.currentOrgId, projIdx, monlocIdx,
-      this.txtActivityID, this.activityTypeSelected, this.activityMediaSelected, this.activitySubMediaSelected,
+      this.txtActivityID, encodeURIComponent(this.activityTypeSelected), this.activityMediaSelected, this.activitySubMediaSelected,
       this.txtStartDate.toUTCString(), this.txtEndDate.toUTCString(), '', '', this.txtDepth, this.depthUnitSelected, '', '', '', '', '',
       this.txtActComments, this.assemblageSelected, this.txtBioDuration, this.bioDurUnitSelected, this.txtSamplingComponent,
       sampCompSeq, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', sampColl, this.equipSelected,
-      '', 0, '', '', '', '', '', 'U', this.chkActInd, this.chkWQXInd, this.user.name, this.entryTypeSelected).subscribe(
-        (result) => {
-          if (result > 0) {
-            this.toasterService.success('Record updated succesfully.');
-            this.showResults = true;
-          } else {
-            this.toasterService.danger('Error updating record.');
-          }
-        },
-        (err) => { this.toasterService.danger('Error updating record.'); },
-      );
+      '', 0, '', '', '', '', '', 'U', this.chkActInd, this.chkWQXInd, this.user.name, this.entryTypeSelected,
+      actIdUserSup, sampCompName, actLocDesc, msrVal, gearProcUnitSel, habSelMethodSel, methodName,
+      thermPresUsedNmSel, hydroConSel, sampContLabNm, hydroEventSel,
+      horizCollMethodSelectedVar, horizRefDatumSelectedVar, encodeURIComponent(latMsrVar), encodeURIComponent(longMsrVar),
+    ).subscribe(
+      (result) => {
+        if (result > 0) {
+          this.toasterService.success('Record updated succesfully.');
+          this.showResults = true;
+        } else {
+
+          this.toasterService.danger('Error updating record.');
+        }
+      },
+      (err) => {
+
+        console.log(err);
+        this.toasterService.danger('Error updating record.');
+      },
+    );
   }
   populateResultsGrid() {
 
     // display metrics grid
     // pnlMetrics.Visible = grdMetrics.Rows.Count > 0 || ddlEntryType.SelectedValue == "H" || ddlEntryType.SelectedValue == "T";
 
-    console.log('populateResultsGrid');
     this.refDataService.GetT_WQX_REF_CHARACTERISTIC_ByOrg(this.currentOrgId, false).subscribe(
       (data: WqxRefCharacteristic[]) => {
         if (data !== null && data !== undefined) {
@@ -532,6 +679,32 @@ export class WqxActivityEditComponent implements OnInit {
           this.unitList.push({ label: '', value: null });
           data.forEach(obj => {
             this.unitList.push({ label: obj.text, value: obj.value });
+          });
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+    );
+    this.refDataService.GetT_WQX_REF_DATA('TargetCount', true, true).subscribe(
+      (data: WqxRefData[]) => {
+        if (data !== null && data !== undefined) {
+          this.targetCountList.push({ label: '', value: null });
+          data.forEach(obj => {
+            this.targetCountList.push({ label: obj.text, value: obj.value });
+          });
+        }
+      },
+      (err) => {
+        console.log(err);
+      },
+    );
+    this.refDataService.GetT_WQX_REF_DATA('ResultSamplingPointType', true, true).subscribe(
+      (data: WqxRefData[]) => {
+        if (data !== null && data !== undefined) {
+          this.resultSampPointTypeList.push({ label: '', value: null });
+          data.forEach(obj => {
+            this.resultSampPointTypeList.push({ label: obj.value, value: obj.value });
           });
         }
       },
@@ -617,6 +790,7 @@ export class WqxActivityEditComponent implements OnInit {
     this.activityService.GetT_WQX_RESULT(this.activityIdx).subscribe(
       (data) => {
         // this.results = new LocalDataSource(data);
+        console.log(data);
         this.results = data;
       },
     );
@@ -636,12 +810,11 @@ export class WqxActivityEditComponent implements OnInit {
   onSaveConfirm(event): void {
 
     const d = event.newData;
-    console.log(d);
     // this.refDataService.InsertOrUpdateT_WQX_RESULT();
     event.confirm.resolve();
   }
   onCustom(event): void {
-    console.log(event.data);
+    // console.log(event.data);
   }
 
   onRowEditInit(result: WqxResult) {
@@ -663,17 +836,24 @@ export class WqxActivityEditComponent implements OnInit {
     );
   }
   onRowEditSave(result: WqxResult) {
-    console.log('onRowEditSave');
-    console.log(result);
     // ***VALIDATION***
     let isValid: boolean = true;
-    if (isNaN(+result.resultMsr) === true ||
-      result.resultMsr === 'ND' ||
-      result.resultMsr === 'NR' ||
-      result.resultMsr === 'PAQL' ||
-      result.resultMsr === 'PBQL' ||
-      result.resultMsr === 'DNQ') {
+    if (result.resultMsr === undefined) {
       isValid = false;
+    }
+    if (isValid === true && result.resultMsr === null) {
+      isValid = false;
+    }
+    if (isValid === true &&
+      +result.resultMsr <= 0 &&
+      result.resultMsr.toUpperCase() !== 'ND' &&
+      result.resultMsr.toString().toUpperCase() !== 'NR' &&
+      result.resultMsr.toString().toUpperCase() !== 'PAQL' &&
+      result.resultMsr.toString().toUpperCase() !== 'PBQL' &&
+      result.resultMsr.toString().toUpperCase() !== 'DNQ') {
+      isValid = false;
+    }
+    if (isValid === false) {
       this.toasterService.danger('Result must be numeric, or one of the following values: ND, NR, PAQL, PBQL, DNQ');
     } else {
       // if numeric, then check if result is within valid range (if available for the char/unit pairing)
@@ -690,8 +870,43 @@ export class WqxActivityEditComponent implements OnInit {
         );
       }
     }
+    const bioIntentNameVar: string = (result.bioIntentName === null || result.bioIntentName === undefined) ? '' : result.bioIntentName;
+    const bioSubjectTaxonomyVar: string = (result.bioSubjectTaxonomy === null || result.bioSubjectTaxonomy === undefined) ? '' : result.bioSubjectTaxonomy;
+    const comparableAnalMethodIdentifierCtxVar: string = (result.comparableAnalMethodIdentifierCtx === null || result.comparableAnalMethodIdentifierCtx === undefined) ? '' : result.comparableAnalMethodIdentifierCtx;
+    const comparableAnalMethodModificationTextVar: string = (result.comparableAnalMethodModificationText === null || result.comparableAnalMethodModificationText === undefined) ? '' : result.comparableAnalMethodModificationText;
+    if (bioSubjectTaxonomyVar === '') {
+      this.toasterService.danger('Bio Subject Taxonomy is required.');
+      isValid = false;
+    }
+    if (bioIntentNameVar === '') {
+      this.toasterService.danger('Bio Intent Name is required.');
+      isValid = false;
+    }
+    if (comparableAnalMethodIdentifierCtxVar === '') {
+      this.toasterService.danger('Comparable Anal Method Identifier Context is required.');
+      isValid = false;
+    }
+    if (comparableAnalMethodModificationTextVar === '') {
+      this.toasterService.danger('Comparable Anal Method Identifier Context Text is required.');
+      isValid = false;
+    }
     if (isValid) {
       const r = result;
+      const targetCountVar: string = (r.targetCount === null || r.targetCount === undefined) ? '' : r.targetCount;
+      const proportionSampProcNumericVar: number = (r.proportionSampProcNumeric === null || r.proportionSampProcNumeric === undefined) ? 0 : +r.proportionSampProcNumeric;
+      const resultSampPointTypeVar: string = (r.resultSampPointType === null || r.resultSampPointType === undefined) ? '' : r.resultSampPointType;
+      const resultSampPointPlaceInSeriesVar: string = (r.resultSampPointPlaceInSeries === null || r.resultSampPointPlaceInSeries === undefined) ? '' : r.resultSampPointPlaceInSeries;
+      const resultSampPointCommentTextVar: string = (r.resultSampPointCommentText === null || r.resultSampPointCommentText === undefined) ? '' : r.resultSampPointCommentText;
+      const recordIdentifierUserSuppliedVar: string = (r.recordIdentifierUserSupplied === null || r.recordIdentifierUserSupplied === undefined) ? '' : r.recordIdentifierUserSupplied;
+      const subjectTaxonomicNameUserSuppliedVar: string = (r.subjectTaxonomicNameUserSupplied === null || r.subjectTaxonomicNameUserSupplied === undefined) ? '' : r.subjectTaxonomicNameUserSupplied;
+      const subjectTaxonomicNameUserSuppliedRefTextVar: string = (r.subjectTaxonomicNameUserSuppliedRefText === null || r.subjectTaxonomicNameUserSuppliedRefText === undefined) ? '' : r.subjectTaxonomicNameUserSuppliedRefText;
+      const groupSummaryCountVar: string = (r.groupSummaryCount === null || r.groupSummaryCount === undefined) ? '' : r.groupSummaryCount;
+      const functionalFeedingGroupNameVar: string = (r.functionalFeedingGroupName === null || r.functionalFeedingGroupName === undefined) ? '' : r.functionalFeedingGroupName;
+      const comparableAnalMethodIdentifierVar: string = (r.comparableAnalMethodIdentifier === null || r.comparableAnalMethodIdentifier === undefined) ? '' : r.comparableAnalMethodIdentifier;
+
+      const labCommentTextVar: string = (r.labCommentText === null || r.labCommentText === undefined) ? '' : r.labCommentText;
+      const detectionQuantLimitCommentTextVar: string = (r.detectionQuantLimitCommentText === null || r.detectionQuantLimitCommentText === undefined) ? '' : r.detectionQuantLimitCommentText;
+      const labSampSplitRatioVar: string = (r.labSampSplitRatio === null || r.labSampSplitRatio === undefined) ? '' : r.labSampSplitRatio;
       this.refDataService.InsertOrUpdateT_WQX_RESULT(
         r.resultIdx, r.activityIdx,
         (r.resultDetectCondition === null) ? '' : r.resultDetectCondition,
@@ -702,13 +917,13 @@ export class WqxActivityEditComponent implements OnInit {
         (r.resultStatus === null) ? '' : encodeURIComponent(r.resultStatus),
         (r.resultValueType === null) ? '' : encodeURIComponent(r.resultValueType),
         (r.resultComment === null) ? '' : r.resultComment,
-        (r.bioIntentName === null) ? '' : encodeURIComponent(r.bioIntentName),
+        encodeURIComponent(bioIntentNameVar),
         (r.bioIndividualId === null) ? '' : r.bioIndividualId,
         (r.bioSubjectTaxonomy === null) ? '' : encodeURIComponent(r.bioSubjectTaxonomy),
         (r.bioSampleTissueAnatomy === null) ? '' : r.bioSampleTissueAnatomy,
         (r.analyticMethodIdx === null) ? 0 : r.analyticMethodIdx,
         (r.labIdx === null) ? 0 : r.labIdx,
-        (r.labAnalysisStartDt === null) ? '' : r.labAnalysisStartDt.toUTCString(),
+        (r.labAnalysisStartDt === null) ? '' : new Date(r.labAnalysisStartDt).toUTCString(),
         (r.detectionLimit === null) ? '' : r.detectionLimit,
         (r.pql === null) ? '' : r.pql,
         (r.lowerQuantLimit === null) ? '' : r.lowerQuantLimit,
@@ -718,6 +933,13 @@ export class WqxActivityEditComponent implements OnInit {
         (r.dilutionFactor === null) ? '' : r.dilutionFactor,
         (r.freqClassCode === null) ? '' : encodeURIComponent(r.freqClassCode),
         (r.freqClassUnit === null) ? '' : encodeURIComponent(r.freqClassUnit),
+        targetCountVar, proportionSampProcNumericVar, resultSampPointTypeVar,
+        resultSampPointPlaceInSeriesVar, resultSampPointCommentTextVar,
+        recordIdentifierUserSuppliedVar, subjectTaxonomicNameUserSuppliedVar,
+        subjectTaxonomicNameUserSuppliedRefTextVar, groupSummaryCountVar,
+        functionalFeedingGroupNameVar, comparableAnalMethodIdentifierVar,
+        comparableAnalMethodIdentifierCtxVar, comparableAnalMethodModificationTextVar,
+        labCommentTextVar, detectionQuantLimitCommentTextVar, labSampSplitRatioVar,
         this.user.name).subscribe(
           (result2) => {
             if (result2 > 0) {
@@ -822,6 +1044,22 @@ export class WqxActivityEditComponent implements OnInit {
       labSampPrepStartDt: '',
       labSampPrepEndDt: '',
       dilutionFactor: '',
+      targetCount: '',
+      resultSampPointType: '',
+      proportionSampProcNumeric: 0,
+      resultSampPointPlaceInSeries: '',
+      resultSampPointCommentText: '',
+      recordIdentifierUserSupplied: '',
+      subjectTaxonomicNameUserSupplied: '',
+      subjectTaxonomicNameUserSuppliedRefText: '',
+      groupSummaryCount: '',
+      functionalFeedingGroupName: '',
+      comparableAnalMethodIdentifier: '',
+      comparableAnalMethodIdentifierCtx: '',
+      comparableAnalMethodModificationText: '',
+      labCommentText: '',
+      detectionQuantLimitCommentText: '',
+      labSampSplitRatio: '',
     };
     return nr;
   }

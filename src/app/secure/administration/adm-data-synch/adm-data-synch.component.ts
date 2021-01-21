@@ -118,17 +118,21 @@ export class AdmDataSynchComponent implements OnInit, OnDestroy {
 
   }
   pullRefDataFromEPA() {
+    console.log('1');
     this.loading2 = true;
     console.log(this.selectedTableName);
     this.refDataServiceSubscription.push(this.refDataService.WQXImport_RefData(this.selectedTableName).subscribe(
       (result: number) => {
+        console.log('2');
         this.msg2 = 1;
       },
       (err) => {
+        console.log('3');
         console.log(err);
         this.msg2 = 0;
       },
       () => {
+        console.log('4');
         this.loading2 = false;
         this.flipcard2.toggle();
       },
@@ -136,5 +140,6 @@ export class AdmDataSynchComponent implements OnInit, OnDestroy {
   }
   RefDataSelect(tableName: string) {
     this.selectedTableName = tableName;
+    console.log(this.selectedTableName);
   }
 }
