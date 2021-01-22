@@ -246,6 +246,9 @@ export module WebApi {
         `${environment.api.owUrl}/api/project/wqxImportProject?orgId=${orgId}&userIdx=${userIdx}`
   }
   export class TWQXActivityApi {
+    public static readonly insertOrUpdateWqxActivity =
+      () =>
+        `${environment.api.owUrl}/api/activity/insertOrUpdateWqxActivity`
     public static readonly getAllActivities =
       (ActInd: boolean, OrgID: string, MonLocIDX: number, startDt: string, endDt: string, ActType: string, WQXPending: boolean, ProjectIDX: number) =>
         `${environment.api.owUrl}/api/activity/getAllActivities?ActInd=${ActInd}&OrgID=${OrgID}&MonLocIDX=${MonLocIDX}&startDt=${startDt}&endDt=${endDt}&ActType=${ActType}&WQXPending=${WQXPending}&ProjectIDX=${ProjectIDX}`

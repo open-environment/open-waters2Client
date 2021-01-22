@@ -64,7 +64,7 @@ export class WqxActivityComponent implements OnInit, OnDestroy {
 
   actTypes: WqxRefData[] = [];
   actTypeSelected: string;
-  chkDeletedInd: boolean = true;
+  chkDeletedInd: boolean = false;
 
   projects: WqxProject[] = [];
   projectSelected: string;
@@ -192,14 +192,14 @@ export class WqxActivityComponent implements OnInit, OnDestroy {
   populateData(isFirst: boolean) {
     this.populateCols();
     this.cols = this.defaultCols;
-    this.activityServiceSubscription.push(this.activityService.getWqxActivityDisplay(this.chkDeletedInd,
+
+    this.activityServiceSubscription.push(this.activityService.getWqxActivityDisplay(!this.chkDeletedInd,
       this.currentOrgId, isNaN(+this.monlocSelected) === true ? 0 : +this.monlocSelected,
       (this.txtStartDate === undefined) ? '' : this.txtStartDate.toUTCString(),
       (this.txtEndDate === undefined) ? '' : this.txtEndDate.toUTCString(), (this.actTypeSelected === undefined) ? '' : this.actTypeSelected, false, isNaN(+this.projectSelected) === true ? 0 : +this.projectSelected,
       ((this.wqxStatusSelected === undefined) ? '' : this.wqxStatusSelected)).subscribe(
         (data) => {
           this._activitySource = data;
-          console.log(this._activitySource);
         },
         (err) => {
           console.log(err);

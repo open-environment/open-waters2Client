@@ -128,7 +128,6 @@ export class WqxMapsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.monlocServiceSubscription.push(this.monlocService.GetSitesAsync(true, this.currentOrgId, false).subscribe(
       (result: MapMarkerModel[]) => {
         if (result) {
-          console.log(result);
           result.forEach(element => {
             const myLatLng = new google.maps.LatLng(+element.lat, +element.lng);
             const marker = new google.maps.Marker({

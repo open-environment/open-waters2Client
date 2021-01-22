@@ -45,10 +45,7 @@ export class MyAccountComponent implements OnInit {
       this.currentOrgId = this.user.OrgID;
       this.organizationService.GetMyAccountByUserIdx(this.user.userIdx).subscribe(
         (result: any) => {
-          console.log('GetMyAccountByUserIdx: valid');
-          console.log(result);
           this.txtUserName = result.user.userId;
-          console.log(this.txtUserName);
           this.txtFName = result.user.fname;
           this.txtLName = result.user.lname;
           this.txtEmail = result.user.email;

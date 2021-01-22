@@ -58,7 +58,6 @@ export class WqxOrgNewComponent {
     this.service.getVWQXAllOrgs()
       .subscribe(
         (data) => {
-          console.log(data);
           this.source.load(data);
         },
         (err) => {

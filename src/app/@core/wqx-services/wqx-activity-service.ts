@@ -45,7 +45,78 @@ export class WQXActivityService extends WqxActivityData {
     horizCollMethod: string, horizCoRefSysDatumName: string, latitudeMsr: string, longitudeMsr: string,
   ) {
     const httpOptions = {};
-    return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateWqxActivity(activityIdx, orgId, projectIdx, monlocIdx, activityId,
+    let body = {} as WqxActivity;
+    body.activityIdx = activityIdx;
+    body.orgId = orgId;
+    body.projectIdx = projectIdx;
+    body.monlocIdx = monlocIdx;
+    body.activityId = activityId;
+    body.actType = actType;
+    body.actMedia = actMedia
+    body.actSubmedia = actSubMedia;
+    body.actStartDt = actStartDate;
+    body.actEndDt = actEndDt;
+    body.actTimeZone = actTimeZone;
+    body.relativeDepthName = relativeDepthName;
+    body.actDepthheightMsr = actDepthHeightMsr;
+    body.actDepthheightMsrUnit = actDepthHeightMsrUnit;
+    body.topDepthHeightMSR = topDepthHeightMsr;
+    body.topDepthHeightMSRUnit = topDepthHeightMsrUnit;
+    body.botDepthHeightMSR = botDepthHeightMsr;
+    body.botDepthHeightMSRUnit = botDepthHeightMsrUnit;
+    body.depthRefPoint = depthRefPoint;
+    body.actComment = actComment;
+    body.bioAssemblageSampled = bioAssemblageSampled;
+    body.bioDurationMsr = bioDurationMsr;
+    body.bioDurationMsrUnit = bioDurationMsrUnit;
+    body.bioSampComponent = bioSampComponent;
+    body.bioSampComponentSeq = bioSampComponentSeq.toString();
+    body.bioReachLenMSR = bioReachLenMsr;
+    body.bioReachLenMSRUnit = bioReachLenMsrUnit;
+    body.bioReachWidMSR = bioReachWidMsr;
+    body.bioReachWidMSRUnit = bioReachWidMsrUnit;
+    body.bioPassCount = bioPassCount;
+    body.bioNetType = bioNetType;
+    body.bioNetAreaMSR = bioNetAreaMsr;
+    body.bioNetAreaMSRUnit = bioNetAreaMsrUnit;
+    body.bioNetMeshSizeMSR = bioNetMeshsizeMsr;
+    body.bioNetMeshSizeMSRUnit = bioMeshsizeMsrUnit;
+    body.bioBoatSpeedMSR = bioBoatSpeedMsr;
+    body.bioBoatSpeedMSRUnit = bioBoatSpeedMsrUnit;
+    body.bioCurrentSpeedMSR = bioCurrSpeedMsr;
+    body.bioCurrentSpeedMSRUnit = bioCurrSpeedMsrUnit;
+    body.bioToxicityTestType = bioToxicityTestType;
+    body.sampCollMethodIdx = sampCollMethodIdx;
+    body.sampCollMethodIdx = +sampCollEquip;
+    body.sampCollEquipComment = sampCollEquipComment;
+    body.sampPrefIdx = sampPrepIdx;
+    body.sampPrepCountType = sampPrepCountType;
+    body.sampPrepCountColor = sampPrepContColor;
+    body.sampPrepChemPreserv = sampPrepChemPeserv;
+    body.sampPrepThermPreserv = sampPrepThermPreserv;
+    body.sampPrepStorageDesc = sampPrepStorageDesc;
+    body.wqxSubmitStatus = wqxSubmitStatus;
+    body.actInd = actInd;
+    body.wqxInd = wqxInd;
+    body.createUserId = creatUser;
+    body.entryType = entryType;
+    body.activityIdentifierUserSupplied = activityIDUserSupplied;
+    body.samplingComponentName = sampCompName;
+    body.activityLocationDescriptionText = activityLocDescText;
+    body.measureValue = measureValue;
+    body.gearProcedureUnitCode = gearProcUnitSel;
+    body.habitatSelectionMethod = habitatSelMethod;
+    body.methodName = methodName;
+    body.thermalPreservativeUsedName = thermalPreservativeUsedName;
+    body.hydrologicCondition = hydrologicCondition;
+    body.sampleContainerLabelName = sampContLabName;
+    body.hydrologicEvent = hydrologicEvent;
+    body.horizCollMethod = horizCollMethod;
+    body.horizCoRefSysDatumName = horizCoRefSysDatumName;
+    body.latitudeMsr = latitudeMsr;
+    body.longitudeMsr = longitudeMsr;
+    return this.http.post<number>(WebApi.TWQXActivityApi.insertOrUpdateWqxActivity(), body, httpOptions);
+    /* return this.http.post<number>(WebApi.TWQXRefDataApi.insertOrUpdateWqxActivity(activityIdx, orgId, projectIdx, monlocIdx, activityId,
       actType, actMedia, actSubMedia, actStartDate, actEndDt,
       actTimeZone, relativeDepthName, actDepthHeightMsr, actDepthHeightMsrUnit,
       topDepthHeightMsr, topDepthHeightMsrUnit, botDepthHeightMsr, botDepthHeightMsrUnit,
@@ -61,7 +132,7 @@ export class WQXActivityService extends WqxActivityData {
       measureValue, gearProcUnitSel, habitatSelMethod, methodName,
       thermalPreservativeUsedName, hydrologicCondition, sampContLabName, hydrologicEvent,
       horizCollMethod, horizCoRefSysDatumName, latitudeMsr, longitudeMsr,
-    ), '', httpOptions);
+    ), '', httpOptions); */
   }
   GetT_WQX_REF_DATA_ActivityTypeUsed(orgId: string): Observable<WqxRefData[]> {
     return this.http.get<WqxRefData[]>(WebApi.TWQXActivityApi.getTWqxRefDataActivityTypeUsed(orgId));

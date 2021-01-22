@@ -407,7 +407,6 @@ export class ECommerceComponent implements OnInit, AfterViewInit {
     this.stepper.disableStepNavigation = !this.stepper.disableStepNavigation;
   }
   setStapperState(isFirst: boolean) {
-    console.log(this.stepData);
     let stopAtStep: number = -1;
     let i: number = 0;
     this.stepper.steps.forEach(step => {

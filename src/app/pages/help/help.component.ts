@@ -17,14 +17,12 @@ export class HelpComponent implements OnInit {
   downloadFile(fileName) {
     this.adminService.DownloadFile(fileName).subscribe(
       (result: any) => {
-        console.log('DownloadFile: valid');
-        console.log(result);
         // const contentDisposition = result.headers.get('content-disposition');
         // const filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
         this.download(result.body, fileName);
       },
       (err) => {
-        console.log('DownloadFile: failed');
+        //console.log('DownloadFile: failed');
         console.log(err);
       },
     );

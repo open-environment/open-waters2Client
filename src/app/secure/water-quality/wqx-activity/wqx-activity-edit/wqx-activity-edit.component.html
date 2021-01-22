@@ -48,7 +48,7 @@
               </div>
               <div class="row">
                 <div class="col-12">
-                  <nb-checkbox status="danger" [checked]="chkActInd">
+                  <nb-checkbox status="danger" [checked]="chkActInd" (checkedChange)="actIndChkToggle($event)">
                     Active?
                   </nb-checkbox>
                 </div>
@@ -83,7 +83,8 @@
               </div>
               <div class="row">
                 <div class="col-12">
-                  <nb-checkbox status="danger" name="chkWQXInd" [checked]="chkWQXInd">
+                  <nb-checkbox status="danger" name="chkWQXInd" [checked]="chkWQXInd"
+                    (checkedChange)="wqxIndChkToggle($event)">
                     Send to EPA?
                   </nb-checkbox>
                 </div>
@@ -286,7 +287,19 @@
                         <div class="col">
                           Horiz. Co. Ref. Datum
                         </div>
-                        <div class="col"></div>
+                        <div class="col">
+                          <nb-select fullWidth status="primary" name="ddlhorizRefDatums"
+                            [(ngModel)]="horizRefDatumSelected" #vhorizRefDatumSelected="ngModel" [ngClass]="{
+                              'is-invalid':
+                                f.submitted && vhorizRefDatumSelected.invalid
+                            }" required>
+                            <nb-option *ngFor="let horizRefDatum of horizRefDatums" [value]="horizRefDatum.value">
+                              {{ horizRefDatum.value }}</nb-option>
+                          </nb-select>
+                          <div *ngIf="f.submitted && vhorizRefDatumSelected.invalid" class="invalid-feedback">
+                            <div *ngIf="vhorizRefDatumSelected.errors.required">Required</div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -306,8 +319,8 @@
                       <div class="row">
                         <div class="col">Sampling Component:</div>
                         <div class="col">
-                          <input type="text" nbInput name="txtSamplingComponent" [(ngModel)]="txtSamplingComponent"
-                            #vtxtSamplingComponent="ngModel" [ngClass]="{
+                          <input type="text" fieldSize="tiny" nbInput name="txtSamplingComponent"
+                            [(ngModel)]="txtSamplingComponent" #vtxtSamplingComponent="ngModel" [ngClass]="{
                               'is-invalid':
                                 f.submitted && vtxtSamplingComponent.invalid
                             }" maxlength="15" />
@@ -330,7 +343,8 @@
                             [(selected)]="habitatSelMethodSelected">
                             <nb-option *ngFor="let habitatSelMethod of habitatSelMethods"
                               [value]="habitatSelMethod.value">
-                              {{ habitatSelMethod.value }}</nb-option>
+                              {{ habitatSelMethod.value }}
+                            </nb-option>
                           </nb-select>
                         </div>
                       </div>
@@ -414,7 +428,9 @@
                           <nb-select fullWidth status="primary" name="ddlHydrologicEvent"
                             [(selected)]="hydrologicEventSelected">
                             <nb-option *ngFor="let hydrologicEvent of hydrologicEvents" [value]="hydrologicEvent.value">
-                              {{ hydrologicEvent.value }}</nb-option>
+                              {{ hydrologicEvent.value }}
+
+                            </nb-option>
                           </nb-select>
                         </div>
                       </div>
@@ -437,7 +453,9 @@
                             [(selected)]="hydrologicConditionSelected">
                             <nb-option *ngFor="let hydrologicCondition of hydrologicConditions"
                               [value]="hydrologicCondition.value">
-                              {{ hydrologicCondition.value }}</nb-option>
+                              {{ hydrologicCondition.value }}
+
+                            </nb-option>
                           </nb-select>
                         </div>
                       </div>

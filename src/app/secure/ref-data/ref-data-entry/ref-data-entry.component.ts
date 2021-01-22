@@ -16,7 +16,6 @@ export class RefDataEntryComponent implements OnInit {
 
   ngOnInit() {
     this.ctx = this.windowRef.config.context.toString();
-    console.log(this.ctx);
   }
 
   onSubmit(f) {

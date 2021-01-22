@@ -22,50 +22,50 @@ export class ExtloginComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    console.log('External login called...');
+    //console.log('External login called...');
     this.sideBarService.collapse();
     this.activatedRoute.queryParams.subscribe(params => {
       this.payload = params['pl'];
       // console.log('payload:' + this.payload);
       if (this.payload !== null && this.payload !== undefined) {
-        console.log('CheckUserAuthentication: calling');
+        //console.log('CheckUserAuthentication: calling');
         this.utilityService.CheckUserAuthentication(this.payload).subscribe(
           (result: ExtLoginUser) => {
-            console.log('CheckUserAuthentication: called valid');
-            console.log(result);
+            //console.log('CheckUserAuthentication: called valid');
+            //console.log(result);
             // console.log(result.username);
             this.data = 'data:' + result.username;
-            console.log(result.userexist);
+            //console.log(result.userexist);
             if (result.userexist === true) {
-              console.log('CheckUserAuthentication: user exist');
+              //console.log('CheckUserAuthentication: user exist');
               this.tryLogin(result);
             } else {
               this.lblMsg += '<br/> Creating new user.';
               // Get new user information
-              console.log('CreateAndGetNewUserData: calling');
+              //console.log('CreateAndGetNewUserData: calling');
               this.utilityService.CreateAndGetNewUserData(result.userid).subscribe(
                 (newUser: ExtLoginUser) => {
-                  console.log('CreateAndGetNewUserData: called valid');
-                  console.log(newUser);
+                  //console.log('CreateAndGetNewUserData: called valid');
+                  //console.log(newUser);
                   if (newUser.userexist === true) {
-                    console.log('CreateAndGetNewUserData: user exist');
+                    //console.log('CreateAndGetNewUserData: user exist');
                     this.tryLogin(newUser);
                   } else {
-                    console.log('CreateAndGetNewUserData: user not exist');
-                    console.log('User sync failed...');
+                    //console.log('CreateAndGetNewUserData: user not exist');
+                    //console.log('User sync failed...');
                     this.lblMsg += '<br/> User sync failed...';
                   }
                 },
                 (err) => {
-                  console.log('CreateAndGetNewUserData: called failed');
-                  console.log(err);
+                  //console.log('CreateAndGetNewUserData: called failed');
+                  //console.log(err);
                   this.lblMsg += '<br/> User sync failed....';
                 },
               );
             }
           },
           (err) => {
-            console.log('CheckUserAuthentication: called error');
+            //console.log('CheckUserAuthentication: called error');
             this.data = 'err: ' + err;
             this.lblMsg += '<br/> User sync failed.....';
           },
@@ -76,42 +76,42 @@ export class ExtloginComponent implements OnInit {
 
 
   private tryLogin(result: ExtLoginUser) {
-    console.log('tryLogin called...');
-    console.log(result);
-    console.log('authenticate: calling...');
-    console.log('email:' + result.username);
-    console.log('password:' + result.password);
+    //console.log('tryLogin called...');
+    //console.log(result);
+    //console.log('authenticate: calling...');
+    //console.log('email:' + result.username);
+    //console.log('password:' + result.password);
     this.authService.authenticate('email', { email: result.username, password: 'Mehta@2020' }).subscribe(
       (authresult) => {
-        console.log('authenticate: valid');
+        //console.log('authenticate: valid');
         if (authresult !== null && authresult !== undefined) {
-          console.log(authresult);
+          //console.log(authresult);
           const _token = authresult.getToken();
           if (_token !== null && _token !== undefined) {
-            console.log(_token);
+            //console.log(_token);
             const _tokenStr = _token.getValue();
             if (_tokenStr !== null && _tokenStr !== undefined) {
-              console.log(_tokenStr);
+              //console.log(_tokenStr);
               // console.log(_tokenStr);
-              console.log('refreshToken: calling...');
+              //console.log('refreshToken: calling...');
               this.authService.refreshToken('email', { token: _tokenStr }).subscribe(
                 (refreshResult) => {
-                  console.log('refreshToken: valid...navigate home');
+                  //console.log('refreshToken: valid...navigate home');
                   // console.log('refreshResult');
                   this.sideBarService.expand();
                   this.router.navigateByUrl('/login');
                 },
                 (refreshErr) => {
-                  console.log('refreshToken: error');
-                  console.log('refreshErr');
+                  //console.log('refreshToken: error');
+                  //console.log('refreshErr');
                 },
               );
             } else {
-              console.log('_tokenStr is null');
+              //console.log('_tokenStr is null');
               this.lblMsg += '<br/> Token is null....';
             }
           } else {
-            console.log('_token is null');
+            //console.log('_token is null');
             this.lblMsg += '<br/> Token is null....';
           }
         } else {
@@ -119,8 +119,8 @@ export class ExtloginComponent implements OnInit {
         }
       },
       (autherr) => {
-        console.log('authenticate: error');
-        console.log(autherr);
+        //console.log('authenticate: error');
+        //console.log(autherr);
         this.lblMsg += '<br/> Authentication error....';
       });
   }

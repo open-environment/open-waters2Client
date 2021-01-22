@@ -70,7 +70,6 @@ export class AppSettingsComponent implements OnInit, OnDestroy {
   }
 
   onRowEditSave(appSetting: TOeAppSettings) {
-    console.log(appSetting);
     this.adminService.UpdateTOeAppSetting(appSetting).subscribe(
       (result: any) => { },
       (err) => {

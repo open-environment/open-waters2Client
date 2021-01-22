@@ -416,6 +416,7 @@ export class WqxActivityEditComponent implements OnInit {
       )
       .subscribe(
         (data) => {
+          console.log(this.currentOrgId);
           this.projects = data;
         },
         (err) => {
@@ -499,7 +500,7 @@ export class WqxActivityEditComponent implements OnInit {
           this.horizCollMethods = data;
         },
       );
-    this.refDataService.GetT_WQX_REF_DATA('HorizontalCoordinateRefrenceSystemDatum', true, true)
+    this.refDataService.GetT_WQX_REF_DATA('HorizontalCoordinateReferenceSystemDatum', true, true)
       .pipe(
         finalize(() => {
           this.populateCounter--;
@@ -507,7 +508,7 @@ export class WqxActivityEditComponent implements OnInit {
       )
       .subscribe(
         (data) => {
-          this.hydrologicEvents = data;
+          this.horizRefDatums = data;
         },
       );
   }
@@ -516,7 +517,6 @@ export class WqxActivityEditComponent implements OnInit {
     if (this.activityIdx !== null && this.activityIdx > 0) {
       this.activityService.GetWQX_ACTIVITY_ByID(this.activityIdx).subscribe(
         (data: WqxActivity) => {
-          console.log(data);
           this.txtActivityID = data.activityId;
           this.txtStartDate = new Date(data.actStartDt);
           // timezone???
@@ -529,7 +529,6 @@ export class WqxActivityEditComponent implements OnInit {
 
           // populate activity tab
           this.activityTypeSelected = data.actType;
-          alert(this.activityTypeSelected);
           this.activityMediaSelected = data.actMedia;
           this.activitySubMediaSelected = data.actSubmedia;
           if (data.actEndDt !== null) this.txtEndDate = new Date(data.actEndDt);
@@ -543,7 +542,7 @@ export class WqxActivityEditComponent implements OnInit {
           this.latMsr = data.latitudeMsr;
           this.longMsr = data.longitudeMsr;
           this.horizCollMethodSelected = data.horizCollMethod;
-
+          this.horizRefDatumSelected = data.horizCoRefSysDatumName
           // populate bio tab
           this.assemblageSelected = data.bioAssemblageSampled;
           this.txtBioDuration = data.bioDurationMsr;
@@ -575,7 +574,7 @@ export class WqxActivityEditComponent implements OnInit {
     }
   }
   onSubmit(f) {
-    this.activityTypeSelected = (this.activityTypeSelected === null || this.activityTypeSelected === undefined) ? '' : this.activityTypeSelected;
+    const activityTypeSelectedVar: string = (this.activityTypeSelected === null || this.activityTypeSelected === undefined) ? '' : this.activityTypeSelected;
     this.activityMediaSelected = (this.activityMediaSelected === null || this.activityMediaSelected === undefined) ? '' : this.activityMediaSelected;
     this.activitySubMediaSelected = (this.activitySubMediaSelected === null || this.activitySubMediaSelected === undefined) ? '' : this.activitySubMediaSelected;
     this.depthUnitSelected = (this.depthUnitSelected === null || this.depthUnitSelected === undefined) ? '' : this.depthUnitSelected;
@@ -593,7 +592,7 @@ export class WqxActivityEditComponent implements OnInit {
     const sampCompName: string = (this.txtSampCompName === null || this.txtSampCompName === undefined) ? '' : this.txtSampCompName;
     const actLocDesc: string = (this.txtActivityLocDescText === null || this.txtActivityLocDescText === undefined) ? '' : this.txtActivityLocDescText;
     const msrVal: string = (this.txtMeasureValue === null || this.txtMeasureValue === undefined) ? '' : this.txtMeasureValue;
-    const gearProcUnitSel: string = (this.gearProcUnitSelected === null || this.gearProcUnitSelected === undefined) ? '' : encodeURIComponent(this.gearProcUnitSelected);
+    const gearProcUnitSel: string = (this.gearProcUnitSelected === null || this.gearProcUnitSelected === undefined) ? '' : this.gearProcUnitSelected;
     const habSelMethodSel: string = (this.habitatSelMethodSelected === null || this.habitatSelMethodSelected === undefined) ? '' : this.habitatSelMethodSelected;
     const methodName: string = (this.txtMethodName === null || this.txtMethodName === undefined) ? '' : this.txtMethodName.trim();
     const thermPresUsedNmSel: string = (this.thermalPreservativeUsedNameSelected === null || this.thermalPreservativeUsedNameSelected === undefined) ? '' : this.thermalPreservativeUsedNameSelected;
@@ -606,14 +605,14 @@ export class WqxActivityEditComponent implements OnInit {
     const longMsrVar: string = (this.longMsr === null || this.longMsr === undefined) ? '' : this.longMsr.trim();
 
     this.activityService.InsertOrUpdateWQX_ACTIVITY(actId, this.currentOrgId, projIdx, monlocIdx,
-      this.txtActivityID, encodeURIComponent(this.activityTypeSelected), this.activityMediaSelected, this.activitySubMediaSelected,
+      this.txtActivityID, activityTypeSelectedVar, this.activityMediaSelected, this.activitySubMediaSelected,
       this.txtStartDate.toUTCString(), this.txtEndDate.toUTCString(), '', '', this.txtDepth, this.depthUnitSelected, '', '', '', '', '',
       this.txtActComments, this.assemblageSelected, this.txtBioDuration, this.bioDurUnitSelected, this.txtSamplingComponent,
       sampCompSeq, '', '', '', '', 0, '', '', '', '', '', '', '', '', '', '', sampColl, this.equipSelected,
       '', 0, '', '', '', '', '', 'U', this.chkActInd, this.chkWQXInd, this.user.name, this.entryTypeSelected,
       actIdUserSup, sampCompName, actLocDesc, msrVal, gearProcUnitSel, habSelMethodSel, methodName,
       thermPresUsedNmSel, hydroConSel, sampContLabNm, hydroEventSel,
-      horizCollMethodSelectedVar, horizRefDatumSelectedVar, encodeURIComponent(latMsrVar), encodeURIComponent(longMsrVar),
+      horizCollMethodSelectedVar, horizRefDatumSelectedVar, latMsrVar, longMsrVar,
     ).subscribe(
       (result) => {
         if (result > 0) {
@@ -790,7 +789,6 @@ export class WqxActivityEditComponent implements OnInit {
     this.activityService.GetT_WQX_RESULT(this.activityIdx).subscribe(
       (data) => {
         // this.results = new LocalDataSource(data);
-        console.log(data);
         this.results = data;
       },
     );
@@ -1062,5 +1060,11 @@ export class WqxActivityEditComponent implements OnInit {
       labSampSplitRatio: '',
     };
     return nr;
+  }
+  wqxIndChkToggle(e) {
+    this.chkWQXInd = e;
+  }
+  actIndChkToggle(e) {
+    this.chkActInd = e;
   }
 }

@@ -55,9 +55,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       // Set organization in dropdown
       const hdrOrgJson = localStorage.getItem('headerOrgs');
-      console.log('1');
       if (hdrOrgJson) {
-        console.log('2');
         this.orgs = JSON.parse(hdrOrgJson);
         setTimeout(() => {
           if (localStorage.getItem('selectedOrgId') !== null) {
@@ -68,11 +66,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         }, 100);
       } else {
-        console.log('3');
+
         this.organizationService.GetWQX_USER_ORGS_ByUserIDX(+this.user.userIdx, true).subscribe(
           (data) => {
-            console.log('4');
-            console.log(data);
+
+
             data.forEach(element => {
               const newOrg = {} as WqxOrganization;
               newOrg.orgId = element.orgId;
@@ -120,8 +118,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   changeOrg(orgId: string) {
-    console.log('changeOrg:' + orgId);
-
     // Query: Since we don't subscribe we don't need to handle subscription?
     // Need more study on this.
     this.pubSubService.setOrgId(orgId);

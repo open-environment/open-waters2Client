@@ -62,6 +62,7 @@ export interface WqxActivity {
   bioCurrentSpeedMSRUnit: string;
   bioToxicityTestType: string;
   sampCollEquip: string;
+  sampCollEquipComment: string;
   sampPrepCountType: string;
   sampPrepCountColor: string;
   sampPrepChemPreserv: string;
